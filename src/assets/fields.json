@@ -1,0 +1,36 @@
+{
+  "Arena": {},
+  "Yami": {
+    "Spellcaster": 1.3,
+    "Fiend": 1.3,
+    "Fairy": 0.7
+  },
+  "Wasteland": {
+    "Zombie": 1.3,
+    "Dinosaur": 1.3,
+    "Rock": 1.3
+  },
+  "Mountain": {
+    "Dragon": 1.3,
+    "Winged Beast": 1.3,
+    "Thunder": 1.3
+  },
+  "Sogen": {
+    "Beast-Warrior": 1.3,
+    "Warrior": 1.3
+  },
+  "Umi": {
+    "Aqua": 1.3,
+    "Thunder": 1.3,
+    "Sea Serpent": 1.3,
+    "Fish": 1.3,
+    "Machine": 0.7,
+    "Pyro": 0.7
+  },
+  "Forest": {
+    "Plant": 1.3,
+    "Beast-Warrior": 1.3,
+    "Insect": 1.3,
+    "Beast": 1.3
+  }
+}

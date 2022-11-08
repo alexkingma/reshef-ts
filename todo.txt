@@ -1,0 +1,74 @@
+recreate RoD
+
+goal:
+  recreate as much of reshef as possible, excluding some minor balancing/duel mechanics aspects
+  all graphics/sounds/plot stuff should be as accurate as possible
+
+rough order of tasks:
+  headless duel engine (dump game state in console)
+  duel UI
+  world exploration (shop, deck editing, challenge different players/sprites, etc.)
+  basic opponent AI (make two versions: one with canon AI, one with actual smart AI)
+  create a line of all (major) duellists at all stages of the game, effectively a practice tool with no fluff/dialogue/cutscenes
+  pit the duellists against each other to determine their Elo, including new and old AI versions
+  recreate dialogue/events/cutscenes/plot (VERY low priority)
+
+eventual improvements over original game:
+	no cursor/effect monster spam
+	can sell last card in trunk
+	remove unsellable cards from shop sell menu
+	cards sell for 25% of buy price instead of 5%
+	place SoRL and field spells on field
+	rebalance cost of cards (not purely determined by the higher of atk/def)
+	prevent discarding from hand (or maybe just don't send discarded cards to graveyard, delete them outright)
+	show opponent hand when panning up
+	allow deck to go above 40 cards while editing it (and to go up to 60 if desired? why not if you have the DC for it?)
+	rebalance DC/DL given by harder duellists
+	make bonz 1 a wasteland field
+	prevent starting a new game from deleting save data
+	alignment gives 500 atk/def bonus, not isntakill effect
+	setting def mode and failing to attack during SoRL doesn't lock card with "E" state
+	remove intro logos
+	fiend bonuses grant 2-300 atk/def instead of multiplying
+	code system is replaced by a brochure (another "shop" interface) that lets you browse all cards and "buy" them into the shop for a function of their price (~20%)
+  make type/effects of monsters more accurate
+  make spell/trap effects more accurate
+  lp is restored after each duel
+eventual/complex ideas:
+  expand graveyard to be more than one card
+  allow more than 5 cards in hand
+  move field spells to their own zone
+
+engine features:
+  game state
+    hand
+    field
+    monster zones
+    spell/trap zones
+    deck
+    graveyard
+    lp
+    cursorPos
+    whoseTurn
+  draw card
+  summon monster
+  play trap/spell
+  attack monster
+  destroy monster
+  attack directly
+  subtract lp
+  add lp
+  change monster position
+  activate spell
+  activate trap
+  activate monster effect
+  shuffle
+
+
+redux toolkit slices:
+  duel -- all that shit above, for each player/opponent
+  player -- dl/dc, money, deck/trunk contents, coords/dirFacing
+  trunk -- viewMode (atk/def, align, cost, etc.), sortOrder, cursorIdx
+  shop -- cards in stock, sortKey, cursorPos
+  world -- story/plot flags, available locations, npcs (coords/dirFacing, who has been duelled, conversation flags)
+

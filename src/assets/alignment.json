@@ -1,0 +1,46 @@
+{
+  "Fiend": {
+    "strong": "Dreams",
+    "weak": "Light"
+  },
+  "Dreams": {
+    "strong": "Dark",
+    "weak": "Fiend"
+  },
+  "Dark": {
+    "strong": "Light",
+    "weak": "Dreams"
+  },
+  "Light": {
+    "strong": "Fiend",
+    "weak": "Dark"
+  },
+  "Earth": {
+    "strong": "Thunder",
+    "weak": "Wind"
+  },
+  "Thunder": {
+    "strong": "Water",
+    "weak": ""
+  },
+  "Water": {
+    "strong": "Fire",
+    "weak": "Thunder"
+  },
+  "Fire": {
+    "strong": "Forest",
+    "weak": "Water"
+  },
+  "Forest": {
+    "strong": "Wind",
+    "weak": "Fire"
+  },
+  "Wind": {
+    "strong": "Earth",
+    "weak": "Forest"
+  },
+  "Divine": {
+    "strong": "",
+    "weak": ""
+  }
+}
