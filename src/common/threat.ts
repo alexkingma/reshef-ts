@@ -18,7 +18,10 @@ const getTributeThreatMultiplier = (card: MonsterCard) => {
   return TRIBUTE_THREAT_MULTIPLIER_MAP[numTributes];
 };
 
-export const getDeckTributeAtkDefMap = (deck: Deck, field: Field) => {
+export const getDeckTributeAtkDefMap = (
+  deck: CardQuantityMap,
+  field: Field
+) => {
   // compute max/min atkDef for each tribute tier in a deck
   return Object.keys(deck).reduce((map, cardName) => {
     const cardData = getCardData(cardName as CardName, field);
@@ -77,7 +80,7 @@ export const getCardThreat = (
   return atkDef * relativeMultiplier * getTributeThreatMultiplier(card);
 };
 
-export const getCardThreatMap = (deck: Deck, field: Field) => {
+export const getCardThreatMap = (deck: CardQuantityMap, field: Field) => {
   let totalDeckThreat = 0;
   const tributeAtkDefRange = getDeckTributeAtkDefMap(deck, field);
   const cardThreatMap = Object.entries(deck).reduce((map, [cardName, qty]) => {

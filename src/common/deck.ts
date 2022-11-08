@@ -18,7 +18,7 @@ export const getCardData = (cardName: CardName, field: Field): Card => {
   return card;
 };
 
-export const getDeckCapacity = (deck: Deck) => {
+export const getDeckCapacity = (deck: CardQuantityMap) => {
   let rawDC = 0;
   let effectiveDC = 0;
   let count999 = 0;
@@ -34,13 +34,13 @@ export const getDeckCapacity = (deck: Deck) => {
   return { effectiveDC, rawDC, count999 };
 };
 
-export const getDeckCapacityString = (deck: Deck) => {
+export const getDeckCapacityString = (deck: CardQuantityMap) => {
   const { effectiveDC, rawDC } = getDeckCapacity(deck);
   if (effectiveDC === rawDC) return rawDC.toLocaleString();
   return `${effectiveDC.toLocaleString()} (${rawDC.toLocaleString()})`;
 };
 
-export const getAverageCardCost = (deck: Deck) => {
+export const getAverageCardCost = (deck: CardQuantityMap) => {
   const { effectiveDC, rawDC, count999 } = getDeckCapacity(deck);
   const numCards = Object.values(deck).reduce((sum, qty) => sum + qty, 0);
   return {
@@ -52,7 +52,7 @@ export const getAverageCardCost = (deck: Deck) => {
 export const getAverageAnteCost = (cardNames: CardName[]) => {
   const tempDeck = cardNames.reduce(
     (deck, cardName: CardName) => ({ ...deck, [cardName]: 1 }),
-    {} as Deck
+    {} as CardQuantityMap
   );
   return getAverageCardCost(tempDeck);
 };
@@ -76,7 +76,10 @@ export const sortDeck = (a: Card, b: Card): number => {
   return atkDefA - atkDefB || a.atk - b.atk || a.def - b.def;
 };
 
-export const getDeckCards = (deck: Deck, field: Field): DeckCard[] => {
+export const getDeckCards = (
+  deck: CardQuantityMap,
+  field: Field
+): DeckCard[] => {
   const cardThreatMap = getCardThreatMap(deck, field);
   return Object.entries(deck)
     .map(([cardName, qty]: [string, number]) => {

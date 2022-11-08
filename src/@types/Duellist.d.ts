@@ -1,6 +1,6 @@
 interface Duellist {
   name: string;
-  deck: Deck;
+  deck: CardQuantityMap;
   lp: number;
   location: string;
   payout: number;
@@ -11,7 +11,7 @@ interface Duellist {
 
 type Field = keyof typeof import("../assets/fields.json");
 
-type Deck = {
+type CardQuantityMap = {
   [card in CardName]?: number;
 };
 
