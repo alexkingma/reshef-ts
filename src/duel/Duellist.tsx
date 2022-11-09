@@ -1,54 +1,22 @@
-import React, { useReducer } from "react";
-import produce from "immer";
+import React from "react";
 
-import { draw, generateNewDuellistDuelState, shuffle } from "./duelUtil";
+import useDuelReducer from "./useDuellistReducer";
 
 interface Props {
   name: string;
   cardQuantMap: CardQuantityMap;
 }
 
-interface DuelAction {
-  type: string;
-  payload?: any;
-}
-
-const duelReducer = (
-  state: DuellistDuelState,
-  action: DuelAction
-): DuellistDuelState =>
-  produce(state, (draft) => {
-    const reducers = {
-      shuffle: () => {
-        draft.deck = shuffle(draft.deck);
-      },
-      drawCard: () => {
-        const { card, deck } = draw(draft.deck);
-        draft.deck = deck;
-        draft.hand.push(card);
-      },
-      addLP: () => {
-        draft.lp += action.payload;
-      },
-    };
-    const reducer = reducers[action.type as keyof typeof reducers];
-    if (!reducer) {
-      throw new Error(`Unknown reducer called: ${action.type}!`);
-    }
-    reducer();
-  });
-
 export const Duellist = ({ name, cardQuantMap }: Props) => {
-  const initialState = generateNewDuellistDuelState(cardQuantMap);
-  const [state, dispatch] = useReducer(duelReducer, initialState);
+  const { state, addLP, subtractLP, shuffle, drawCard } =
+    useDuelReducer(cardQuantMap);
 
   return (
     <div>
       <h5>{name}</h5>
       LP: {state.lp}&nbsp;
-      <button onClick={() => dispatch({ type: "addLP", payload: 1000 })}>
-        +1000
-      </button>
+      <button onClick={() => addLP(1500)}>+1500</button>
+      <button onClick={() => subtractLP(200)}>-200</button>
       <div>
         Hand:
         <ol>
@@ -65,8 +33,8 @@ export const Duellist = ({ name, cardQuantMap }: Props) => {
           ))}
         </ol>
       </div>
-      <button onClick={() => dispatch({ type: "shuffle" })}>Shuffle</button>
-      <button onClick={() => dispatch({ type: "drawCard" })}>Draw</button>
+      <button onClick={shuffle}>Shuffle</button>
+      <button onClick={drawCard}>Draw</button>
     </div>
   );
 };
