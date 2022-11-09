@@ -21,11 +21,13 @@ type SpellTrapZone =
   | EmptyZone
   | (OccupiedZone & { card: SpellOrTrapOrRitualCard });
 
+type HandZone = EmptyZone | OccupiedZone;
+
 type Deck = Card[];
 
 interface DuellistDuelState {
   lp: number;
-  hand: Card[];
+  hand: HandZone[];
   deck: Deck;
   graveyard: CardName | null;
   activeField: Field;

@@ -1,5 +1,6 @@
 import cards from "../assets/cards";
 import { getCardData } from "../common/deck";
+import { Orientation } from "./common";
 
 export const getInitialDuelState = (
   cardQuantMap1: CardQuantityMap,
@@ -43,7 +44,13 @@ export const generateNewDuellistDuelState = (
   const deck = initialiseDeck(cardMap);
   return {
     lp: 8000,
-    hand: deck.splice(0, 5),
+    hand: deck
+      .splice(0, 5)
+      .map((card) => ({
+        isOccupied: true,
+        card,
+        orientation: Orientation.FaceDown,
+      })),
     deck: deck,
     graveyard: null,
     activeField: "Arena",

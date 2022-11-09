@@ -4,13 +4,9 @@ import { BattlePosition } from "./common";
 
 interface Props {
   monsterZones: MonsterZone[];
-  summonMonster: () => void;
 }
 
-export const DuellistMonsterZones = ({
-  monsterZones,
-  summonMonster,
-}: Props) => {
+export const DuellistMonsterZones = ({ monsterZones }: Props) => {
   return (
     <div>
       Monster Zones:
@@ -32,7 +28,6 @@ export const DuellistMonsterZones = ({
           );
         })}
       </ol>
-      <button onClick={() => summonMonster()}>Summon</button>
     </div>
   );
 };

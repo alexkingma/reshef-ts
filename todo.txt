@@ -43,7 +43,7 @@ pending duel features:
   duel state
     cursorPos
     whoseTurn
-    hasSummonedMonster
+    hasNormalSummoned
     numTributedMonsters
     focusedMonster -- for when two selections are needed (X monster attacks Y enemy; X spell powers up Y monster)
   set trap/spell
@@ -54,6 +54,7 @@ pending duel features:
   attack directly
   change monster position
   activate monster effect
+  end turn
 
 major chunks of game state:
   duel -- see above

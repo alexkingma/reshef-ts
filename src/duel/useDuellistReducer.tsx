@@ -19,7 +19,8 @@ enum DuellistActionType {
   SubtractLP = "SUBTRACT_LP",
   Shuffle = "SHUFFLE",
   DrawCard = "DRAW_CARD",
-  SummonMonster = "SUMMON_MONSTER",
+  NormalSummon = "NORMAL_SUMMON",
+  SpecialSummon = "SPECIAL_SUMMON",
 }
 
 const duellistReducer = (
@@ -34,7 +35,11 @@ const duellistReducer = (
       [DuellistActionType.DrawCard]: () => {
         const { card, deck } = draw(draft.deck);
         draft.deck = deck;
-        draft.hand.push(card);
+        draft.hand.push({
+          isOccupied: true,
+          card,
+          orientation: Orientation.FaceDown,
+        });
       },
       [DuellistActionType.AddLP]: () => {
         draft.lp += action.payload;
@@ -42,7 +47,29 @@ const duellistReducer = (
       [DuellistActionType.SubtractLP]: () => {
         draft.lp = Math.max(draft.lp - action.payload, 0);
       },
-      [DuellistActionType.SummonMonster]: () => {
+      [DuellistActionType.NormalSummon]: () => {
+        // remove monster from hand at given index, summon it to the field
+        // TODO: allow selection of zone to summon at
+        const handIdx = action.payload;
+        let nextFreeZoneIdx = draft.monsterZones.findIndex(
+          (zone) => !zone.isOccupied
+        );
+        if (nextFreeZoneIdx === -1) {
+          // no free monster zones, just overwrite first slot for now
+          nextFreeZoneIdx = 0;
+        }
+        const card = (draft.hand[handIdx] as OccupiedZone).card as MonsterCard;
+        draft.hand[handIdx] = { isOccupied: false };
+        draft.monsterZones[nextFreeZoneIdx] = {
+          isOccupied: true,
+          card,
+          orientation: Orientation.FaceUp,
+          battlePosition: BattlePosition.Attack,
+          powerUpLevel: 0,
+          hasAttacked: false,
+        };
+      },
+      [DuellistActionType.SpecialSummon]: () => {
         // TODO: add payload args for which monster to summon and in which zone
         let nextFreeZoneIdx = draft.monsterZones.findIndex(
           (zone) => !zone.isOccupied
@@ -81,7 +108,8 @@ const useDuelReducer = (cardQuantMap: CardQuantityMap) => {
         dispatch({ type: DuellistActionType.SubtractLP, payload }),
       shuffle: () => dispatch({ type: DuellistActionType.Shuffle }),
       drawCard: () => dispatch({ type: DuellistActionType.DrawCard }),
-      summonMonster: () => dispatch({ type: DuellistActionType.SummonMonster }),
+      normalSummon: (payload: number) =>
+        dispatch({ type: DuellistActionType.NormalSummon, payload }),
     },
   };
 };
