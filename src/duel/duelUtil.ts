@@ -37,7 +37,7 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
   return map;
 };
 
-const generateNewDuellistDuelState = (
+export const generateNewDuellistDuelState = (
   cardMap: CardQuantityMap
 ): DuellistDuelState => {
   const deck = initialiseDeck(cardMap);
