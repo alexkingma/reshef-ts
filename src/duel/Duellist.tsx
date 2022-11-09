@@ -4,6 +4,7 @@ import { DuellistDeck } from "./DuellistDeck";
 import { DuellistHand } from "./DuellistHand";
 import { DuellistLP } from "./DuellistLP";
 import { DuellistMonsterZones } from "./DuellistMonsterZones";
+import { DuellistSpellTrapZones } from "./DuellistSpellTrapZones";
 import useDuelReducer from "./useDuellistReducer";
 
 interface Props {
@@ -13,8 +14,8 @@ interface Props {
 
 export const Duellist = ({ name, cardQuantMap }: Props) => {
   const { state, dispatchActions } = useDuelReducer(cardQuantMap);
-  const { lp, hand, deck, monsterZones } = state;
-  const { addLP, subtractLP, shuffle, drawCard, normalSummon } =
+  const { lp, hand, deck, monsterZones, spellTrapZones } = state;
+  const { addLP, subtractLP, shuffle, drawCard, normalSummon, setSpellTrap } =
     dispatchActions;
 
   return (
@@ -22,7 +23,12 @@ export const Duellist = ({ name, cardQuantMap }: Props) => {
       <h5>{name}</h5>
       <DuellistLP lp={lp} addLP={addLP} subtractLP={subtractLP} />
       <DuellistMonsterZones monsterZones={monsterZones} />
-      <DuellistHand hand={hand} normalSummon={normalSummon} />
+      <DuellistSpellTrapZones spellTrapZones={spellTrapZones} />
+      <DuellistHand
+        hand={hand}
+        normalSummon={normalSummon}
+        setSpellTrap={setSpellTrap}
+      />
       <DuellistDeck deck={deck} shuffle={shuffle} drawCard={drawCard} />
     </div>
   );

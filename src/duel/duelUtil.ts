@@ -44,13 +44,11 @@ export const generateNewDuellistDuelState = (
   const deck = initialiseDeck(cardMap);
   return {
     lp: 8000,
-    hand: deck
-      .splice(0, 5)
-      .map((card) => ({
-        isOccupied: true,
-        card,
-        orientation: Orientation.FaceDown,
-      })),
+    hand: deck.splice(0, 5).map((card) => ({
+      isOccupied: true,
+      card,
+      orientation: Orientation.FaceDown,
+    })),
     deck: deck,
     graveyard: null,
     activeField: "Arena",
@@ -88,4 +86,21 @@ export const draw = (deck: Deck) => {
     throw new Error("Out of cards!");
   }
   return { card, deck: deck.slice(1) };
+};
+
+export const getFirstEmptyZoneIdx = (
+  zones: (OccupiedZone | EmptyZone)[],
+  defaultToFirst: boolean = true
+) => {
+  let nextFreeZoneIdx = zones.findIndex((zone) => !zone.isOccupied);
+  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx;
+  if (defaultToFirst) {
+    // no free zones, return the default index
+    return 0;
+  } else {
+    // sometimes we want to know that no zones are available, but not return a default
+    throw new Error(
+      "No free zones found, catch this error to implement custom logic."
+    );
+  }
 };

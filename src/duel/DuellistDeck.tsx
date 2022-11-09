@@ -10,15 +10,15 @@ export const DuellistDeck = ({ deck, shuffle, drawCard }: Props) => {
   return (
     <>
       <div>
-        Deck:
+        Deck:&nbsp;
+        <button onClick={shuffle}>Shuffle</button>
+        <button onClick={drawCard}>Draw</button>
         <ol>
           {deck.map((card, idx) => (
             <li key={idx}>{card.name}</li>
           ))}
         </ol>
       </div>
-      <button onClick={shuffle}>Shuffle</button>
-      <button onClick={drawCard}>Draw</button>
     </>
   );
 };

@@ -1,8 +1,12 @@
 import { useReducer } from "react";
 import produce from "immer";
 
-import { draw, generateNewDuellistDuelState, shuffle } from "./duelUtil";
-import { getRandomCardData } from "../common/deck";
+import {
+  draw,
+  generateNewDuellistDuelState,
+  getFirstEmptyZoneIdx,
+  shuffle,
+} from "./duelUtil";
 import { Orientation, BattlePosition } from "./common";
 
 interface DuellistAction {
@@ -21,6 +25,7 @@ enum DuellistActionType {
   DrawCard = "DRAW_CARD",
   NormalSummon = "NORMAL_SUMMON",
   SpecialSummon = "SPECIAL_SUMMON",
+  SetSpellTrap = "SET_SPELL_TRAP",
 }
 
 const duellistReducer = (
@@ -33,13 +38,20 @@ const duellistReducer = (
         draft.deck = shuffle(draft.deck);
       },
       [DuellistActionType.DrawCard]: () => {
+        let zoneIdx: number;
+        try {
+          zoneIdx = getFirstEmptyZoneIdx(draft.hand, false);
+        } catch (e) {
+          // no space available in hand, don't draw a card
+          return;
+        }
         const { card, deck } = draw(draft.deck);
         draft.deck = deck;
-        draft.hand.push({
+        draft.hand[zoneIdx] = {
           isOccupied: true,
           card,
           orientation: Orientation.FaceDown,
-        });
+        };
       },
       [DuellistActionType.AddLP]: () => {
         draft.lp += action.payload;
@@ -51,16 +63,10 @@ const duellistReducer = (
         // remove monster from hand at given index, summon it to the field
         // TODO: allow selection of zone to summon at
         const handIdx = action.payload;
-        let nextFreeZoneIdx = draft.monsterZones.findIndex(
-          (zone) => !zone.isOccupied
-        );
-        if (nextFreeZoneIdx === -1) {
-          // no free monster zones, just overwrite first slot for now
-          nextFreeZoneIdx = 0;
-        }
+        const zoneIdx = getFirstEmptyZoneIdx(draft.monsterZones);
         const card = (draft.hand[handIdx] as OccupiedZone).card as MonsterCard;
         draft.hand[handIdx] = { isOccupied: false };
-        draft.monsterZones[nextFreeZoneIdx] = {
+        draft.monsterZones[zoneIdx] = {
           isOccupied: true,
           card,
           orientation: Orientation.FaceUp,
@@ -70,25 +76,20 @@ const duellistReducer = (
         };
       },
       [DuellistActionType.SpecialSummon]: () => {
-        // TODO: add payload args for which monster to summon and in which zone
-        let nextFreeZoneIdx = draft.monsterZones.findIndex(
-          (zone) => !zone.isOccupied
-        );
-        if (nextFreeZoneIdx === -1) {
-          // no free monster zones, just overwrite first slot for now
-          nextFreeZoneIdx = 0;
-        }
-        let card: Card;
-        do {
-          card = getRandomCardData();
-        } while (card.category !== "Monster");
-        draft.monsterZones[nextFreeZoneIdx] = {
+        // TODO
+      },
+      [DuellistActionType.SetSpellTrap]: () => {
+        // remove spell/trap from hand at given index, set it on the field
+        // TODO: allow selection of zone to summon at
+        const handIdx = action.payload;
+        const zoneIdx = getFirstEmptyZoneIdx(draft.spellTrapZones);
+        const card = (draft.hand[handIdx] as OccupiedZone)
+          .card as SpellOrTrapOrRitualCard;
+        draft.hand[handIdx] = { isOccupied: false };
+        draft.spellTrapZones[zoneIdx] = {
           isOccupied: true,
           card,
-          orientation: Orientation.FaceUp,
-          battlePosition: BattlePosition.Attack,
-          powerUpLevel: 0,
-          hasAttacked: false,
+          orientation: Orientation.FaceDown,
         };
       },
     };
@@ -110,6 +111,8 @@ const useDuelReducer = (cardQuantMap: CardQuantityMap) => {
       drawCard: () => dispatch({ type: DuellistActionType.DrawCard }),
       normalSummon: (payload: number) =>
         dispatch({ type: DuellistActionType.NormalSummon, payload }),
+      setSpellTrap: (payload: number) =>
+        dispatch({ type: DuellistActionType.SetSpellTrap, payload }),
     },
   };
 };
