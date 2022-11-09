@@ -1,21 +1,25 @@
-enum MonsterPosition {
-  Attack = "ATTACK_POSITION",
-  Defence = "DEFENCE_POSITION",
+interface EmptyZone {
+  isOccupied: false;
 }
 
-enum CardVisibility {
-  FaceDown = "FACE_DOWN",
-  FaceUp = "FACE_UP",
+interface OccupiedZone {
+  isOccupied: true;
+  card: Card;
+  orientation: Orientation;
 }
 
-interface Zone {
-  card: Card | null;
-  cardPos: CardVisibility;
-}
+type MonsterZone =
+  | EmptyZone
+  | (OccupiedZone & {
+      card: MonsterCard;
+      battlePosition: BattlePosition;
+      powerUpLevel: number;
+      hasAttacked: boolean;
+    });
 
-type MonsterZone = Zone & {
-  pos: MonsterPosition;
-};
+type SpellTrapZone =
+  | EmptyZone
+  | (OccupiedZone & { card: SpellOrTrapOrRitualCard });
 
 type Deck = Card[];
 
@@ -26,7 +30,7 @@ interface DuellistDuelState {
   graveyard: CardName | null;
   activeField: Field;
   monsterZones: MonsterZone[];
-  spellTrapZones: Zone[];
+  spellTrapZones: SpellTrapZone[];
 }
 
 interface DuelState {

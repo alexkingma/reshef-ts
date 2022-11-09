@@ -8,14 +8,16 @@ export const getFieldMultipliers = (field: Field) => {
   return fields[field] as { [key in CardType]: number };
 };
 
-export const getCardData = (cardName: CardName, field: Field): Card => {
-  const card = { ...cards.find((c) => c.name === cardName)! };
-  if (card.category === "Monster") {
-    const fieldBuffMap = getFieldMultipliers(field);
-    card.atk = Math.floor(card.atk * (fieldBuffMap[card.type] || 1));
-    card.def = Math.floor(card.def * (fieldBuffMap[card.type] || 1));
-  }
-  return card;
+export const getCardData = (cardName: CardName): Card => {
+  return { ...cards.find((c) => c.name === cardName)! };
+};
+
+export const getRandomCardData = (): Card => {
+  return {
+    ...cards.find(
+      (c, idx) => idx === Math.floor(Math.random() * cards.length)
+    )!,
+  };
 };
 
 export const getDeckCapacity = (deck: CardQuantityMap) => {
@@ -23,7 +25,7 @@ export const getDeckCapacity = (deck: CardQuantityMap) => {
   let effectiveDC = 0;
   let count999 = 0;
   Object.entries(deck).forEach(([cardName, quant]) => {
-    const baseCost = getCardData(cardName as CardName, "Arena").cost;
+    const baseCost = getCardData(cardName as CardName).cost;
     rawDC += baseCost * quant;
     if (baseCost === 999) {
       count999++;
@@ -83,7 +85,7 @@ export const getDeckCards = (
   const cardThreatMap = getCardThreatMap(deck, field);
   return Object.entries(deck)
     .map(([cardName, qty]: [string, number]) => {
-      const card = getCardData(cardName as CardName, field);
+      const card = getCardData(cardName as CardName);
       const threat = cardThreatMap[cardName as CardName]!;
       return { qty, threat, ...card };
     })

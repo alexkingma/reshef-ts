@@ -39,34 +39,24 @@ eventual/complex ideas:
   allow more than 5 cards in hand
   move field spells to their own zone
 
-engine features:
-  game state
-    hand
-    field
-    monster zones
-    spell/trap zones
-    deck
-    graveyard
-    lp
+pending duel features:
+  duel state
     cursorPos
     whoseTurn
-  draw card
-  summon monster
-  play trap/spell
+    hasSummonedMonster
+    numTributedMonsters
+    focusedMonster -- for when two selections are needed (X monster attacks Y enemy; X spell powers up Y monster)
+  set trap/spell
+  activate spell
+  activate trap
   attack monster
   destroy monster
   attack directly
-  subtract lp
-  add lp
   change monster position
-  activate spell
-  activate trap
   activate monster effect
-  shuffle
 
-
-redux toolkit slices:
-  duel -- all that shit above, for each player/opponent
+major chunks of game state:
+  duel -- see above
   player -- dl/dc, money, deck/trunk contents, coords/dirFacing
   trunk -- viewMode (atk/def, align, cost, etc.), sortOrder, cursorIdx
   shop -- cards in stock, sortKey, cursorPos

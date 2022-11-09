@@ -24,7 +24,7 @@ export const getDeckTributeAtkDefMap = (
 ) => {
   // compute max/min atkDef for each tribute tier in a deck
   return Object.keys(deck).reduce((map, cardName) => {
-    const cardData = getCardData(cardName as CardName, field);
+    const cardData = getCardData(cardName as CardName);
     if (cardData.category !== "Monster") return map;
     const atkDef = Math.max(cardData.atk, cardData.def * DEF_MULTIPLIER);
     const numTributes = getNumTributes(cardData);
@@ -84,7 +84,7 @@ export const getCardThreatMap = (deck: CardQuantityMap, field: Field) => {
   let totalDeckThreat = 0;
   const tributeAtkDefRange = getDeckTributeAtkDefMap(deck, field);
   const cardThreatMap = Object.entries(deck).reduce((map, [cardName, qty]) => {
-    const card = getCardData(cardName as CardName, field);
+    const card = getCardData(cardName as CardName);
     if (card.category !== "Monster") return map;
     const { max, min } = tributeAtkDefRange[getNumTributes(card)];
     const cardThreat = getCardThreat(card, min, max) * qty;

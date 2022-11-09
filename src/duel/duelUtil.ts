@@ -47,14 +47,16 @@ export const generateNewDuellistDuelState = (
     deck: deck,
     graveyard: null,
     activeField: "Arena",
-    monsterZones: [],
-    spellTrapZones: [],
+    monsterZones: Array.from({ length: 5 }).map(() => ({ isOccupied: false })),
+    spellTrapZones: Array.from({ length: 5 }).map(() => ({
+      isOccupied: false,
+    })),
   };
 };
 
 export const initialiseDeck = (cardQuantMap: CardQuantityMap): Deck => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [cardName, qty]) => {
-    const cardData = getCardData(cardName as CardName, "Arena");
+    const cardData = getCardData(cardName as CardName);
     const cards: Card[] = Array.from({ length: qty });
     cards.fill(cardData);
     deck.push(...cards);
