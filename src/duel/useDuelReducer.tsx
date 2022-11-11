@@ -1,14 +1,39 @@
 import { useReducer } from "react";
-import produce from "immer";
+import produce, { current } from "immer";
 
 import {
   draw,
   generateNewDuellistDuelState,
   getFirstEmptyZoneIdx,
+  getHighestAtkZoneIdx,
   shuffle,
 } from "./duelUtil";
 import { Orientation, BattlePosition } from "./common";
 import { attackMonster } from "./combatUtil";
+
+enum DuellistActionType {
+  AddLP = "ADD_LP",
+  SubtractLP = "SUBTRACT_LP",
+  Shuffle = "SHUFFLE",
+  DrawCard = "DRAW_CARD",
+  NormalSummon = "NORMAL_SUMMON",
+  SpecialSummon = "SPECIAL_SUMMON",
+  SetSpellTrap = "SET_SPELL_TRAP",
+}
+
+interface DuellistAction {
+  duellistKey: DuellistKey;
+  type: DuellistActionType;
+  payload?: any;
+}
+
+type DuellistReducers = {
+  [key in DuellistActionType]: (state: DuellistDuelState) => void;
+};
+
+enum DuelActionType {
+  AttackMonster = "ATTACK_MONSTER",
+}
 
 interface DuelAction {
   duellistKey: DuellistKey;
@@ -17,42 +42,42 @@ interface DuelAction {
 }
 
 type DuelReducers = {
-  [key in DuelActionType]: (state: DuellistDuelState) => void;
+  [key in DuelActionType]: (state: DuelState) => void;
 };
 
-enum DuelActionType {
-  AddLP = "ADD_LP",
-  SubtractLP = "SUBTRACT_LP",
-  Shuffle = "SHUFFLE",
-  DrawCard = "DRAW_CARD",
-  NormalSummon = "NORMAL_SUMMON",
-  SpecialSummon = "SPECIAL_SUMMON",
-  SetSpellTrap = "SET_SPELL_TRAP",
-  AttackMonster = "ATTACK_MONSTER",
-}
-
-export interface PartialDispatchActions {
+export interface DuellistPartialDispatchActions {
   addLP: (payload: number) => void;
   subtractLP: (payload: number) => void;
   shuffle: () => void;
   drawCard: () => void;
   normalSummon: (payload: number) => void;
   setSpellTrap: (payload: number) => void;
-  attackMonster: (payload: number) => void;
 }
 
-export type DispatchActions = PrependArgInFunctionMap<
-  PartialDispatchActions,
+export type DuellistDispatchActions = PrependArgInFunctionMap<
+  DuellistPartialDispatchActions,
   [duellistKey: DuellistKey]
 >;
 
-const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
+export interface DuelPartialDispatchActions {
+  attackMonster: (payload: any) => void;
+}
+
+export type DuelDispatchActions = PrependArgInFunctionMap<
+  DuelPartialDispatchActions,
+  [duellistKey: DuellistKey]
+>;
+
+const duelReducer = (
+  state: DuelState,
+  action: DuelAction | DuellistAction
+): DuelState =>
   produce(state, (draft) => {
-    const duelReducers: DuelReducers = {
-      [DuelActionType.Shuffle]: (duellistState: DuellistDuelState) => {
+    const duellistReducers: DuellistReducers = {
+      [DuellistActionType.Shuffle]: (duellistState: DuellistDuelState) => {
         duellistState.deck = shuffle(duellistState.deck);
       },
-      [DuelActionType.DrawCard]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.DrawCard]: (duellistState: DuellistDuelState) => {
         let zoneIdx: number;
         try {
           zoneIdx = getFirstEmptyZoneIdx(duellistState.hand, false);
@@ -68,13 +93,13 @@ const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
           orientation: Orientation.FaceDown,
         };
       },
-      [DuelActionType.AddLP]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.AddLP]: (duellistState: DuellistDuelState) => {
         duellistState.lp += action.payload;
       },
-      [DuelActionType.SubtractLP]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.SubtractLP]: (duellistState: DuellistDuelState) => {
         duellistState.lp = Math.max(duellistState.lp - action.payload, 0);
       },
-      [DuelActionType.NormalSummon]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.NormalSummon]: (duellistState: DuellistDuelState) => {
         // remove monster from hand at given index, summon it to the field
         // TODO: allow selection of zone to summon at
         const handIdx = action.payload;
@@ -90,10 +115,12 @@ const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
           hasAttacked: false,
         };
       },
-      [DuelActionType.SpecialSummon]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.SpecialSummon]: (
+        duellistState: DuellistDuelState
+      ) => {
         // TODO
       },
-      [DuelActionType.SetSpellTrap]: (duellistState: DuellistDuelState) => {
+      [DuellistActionType.SetSpellTrap]: (duellistState: DuellistDuelState) => {
         // remove spell/trap from hand at given index, set it on the field
         // TODO: allow selection of zone to summon at
         const handIdx = action.payload;
@@ -107,30 +134,53 @@ const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
           orientation: Orientation.FaceDown,
         };
       },
-      [DuelActionType.AttackMonster]: (duellistState: DuellistDuelState) => {
+    };
+    const duelReducers: DuelReducers = {
+      [DuelActionType.AttackMonster]: (duelState: DuelState) => {
         // remove spell/trap from hand at given index, set it on the field
         // TODO: allow selection of zone to summon at
-        const attackerIdx = action.payload;
-        const attackerZone = duellistState.monsterZones[
+        const { isPlayer, attackerIdx } = action.payload;
+        const attackerState = duelState[isPlayer ? "p1" : "p2"];
+        const targetState = duelState[isPlayer ? "p2" : "p1"];
+        const attackerZone = attackerState.monsterZones[
           attackerIdx
         ] as OccupiedMonsterZone;
-        // const targetIdx = getHighestAtkZoneIdx(duellistState.monsterZones);
-        // const targetZone = duellistState.monsterZones[
-        //   attackerIdx
-        // ] as OccupiedMonsterZone;
-        // const { attackerDestroyed, attackerLpLoss } = attackMonster(
-        //   attackerZone,
-        //   targetZone
-        // );
-        // if (attackerDestroyed) {
-        //   duellistState.monsterZones[attackerIdx] = { isOccupied: false };
-        // }
-        // if (attackerLpLoss) {
-        //   duellistState.lp -= attackerLpLoss;
-        // }
+        const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
+        if (targetIdx === -1) {
+          // no monsters, attack directly
+          targetState.lp -= attackerZone.card.atk;
+          return;
+        }
+        const targetZone = targetState.monsterZones[
+          targetIdx
+        ] as OccupiedMonsterZone;
+        const {
+          attackerDestroyed,
+          targetDestroyed,
+          attackerLpLoss,
+          targetLpLoss,
+        } = attackMonster(attackerZone, targetZone);
+        if (attackerDestroyed) {
+          attackerState.monsterZones[attackerIdx] = { isOccupied: false };
+        }
+        if (targetDestroyed) {
+          targetState.monsterZones[targetIdx] = { isOccupied: false };
+        }
+        if (attackerLpLoss) {
+          attackerState.lp -= attackerLpLoss;
+        }
+        if (targetLpLoss) {
+          targetState.lp -= targetLpLoss;
+        }
       },
     };
-    duelReducers[action.type](draft[action.duellistKey]);
+    if (Object.values(DuelActionType).includes(action.type as DuelActionType)) {
+      const { type } = action as DuelAction;
+      duelReducers[type](draft);
+    } else {
+      const { type, duellistKey } = action as DuellistAction;
+      duellistReducers[type](draft[duellistKey]);
+    }
   });
 
 const useDuelReducer = (
@@ -145,22 +195,36 @@ const useDuelReducer = (
 
   return {
     state,
-    dispatchActions: {
+    duellistDispatchActions: {
       addLP: (duellistKey: DuellistKey, payload: number) =>
-        dispatch({ duellistKey, type: DuelActionType.AddLP, payload }),
+        dispatch({ duellistKey, type: DuellistActionType.AddLP, payload }),
       subtractLP: (duellistKey: DuellistKey, payload: number) =>
-        dispatch({ duellistKey, type: DuelActionType.SubtractLP, payload }),
+        dispatch({ duellistKey, type: DuellistActionType.SubtractLP, payload }),
       shuffle: (duellistKey: DuellistKey) =>
-        dispatch({ duellistKey, type: DuelActionType.Shuffle }),
+        dispatch({ duellistKey, type: DuellistActionType.Shuffle }),
       drawCard: (duellistKey: DuellistKey) =>
-        dispatch({ duellistKey, type: DuelActionType.DrawCard }),
+        dispatch({ duellistKey, type: DuellistActionType.DrawCard }),
       normalSummon: (duellistKey: DuellistKey, payload: number) =>
-        dispatch({ duellistKey, type: DuelActionType.NormalSummon, payload }),
+        dispatch({
+          duellistKey,
+          type: DuellistActionType.NormalSummon,
+          payload,
+        }),
       setSpellTrap: (duellistKey: DuellistKey, payload: number) =>
-        dispatch({ duellistKey, type: DuelActionType.SetSpellTrap, payload }),
+        dispatch({
+          duellistKey,
+          type: DuellistActionType.SetSpellTrap,
+          payload,
+        }),
+    } as DuellistDispatchActions,
+    duelDispatchActions: {
       attackMonster: (duellistKey: DuellistKey, payload: number) =>
-        dispatch({ duellistKey, type: DuelActionType.AttackMonster, payload }),
-    } as DispatchActions,
+        dispatch({
+          duellistKey,
+          type: DuelActionType.AttackMonster,
+          payload: { isPlayer: duellistKey === "p1", attackerIdx: payload },
+        }),
+    } as DuelDispatchActions,
   };
 };
 

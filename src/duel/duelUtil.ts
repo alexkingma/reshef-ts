@@ -104,3 +104,15 @@ export const getFirstEmptyZoneIdx = (
     );
   }
 };
+
+export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]): number => {
+  let idx = -1;
+  let highestAtk = -1;
+  monsterZones.forEach((zone, i) => {
+    if (zone.isOccupied && zone.card.atk > highestAtk) {
+      highestAtk = zone.card.atk;
+      idx = i;
+    }
+  });
+  return idx;
+};

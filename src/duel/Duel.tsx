@@ -2,27 +2,34 @@ import React from "react";
 
 import { Duellist } from "./Duellist";
 import { getTempCardQuantMap } from "./duelUtil";
-import useDuelReducer, { PartialDispatchActions } from "./useDuelReducer";
+import useDuelReducer, {
+  DuelDispatchActions,
+  DuellistDispatchActions,
+  DuellistPartialDispatchActions,
+  DuelPartialDispatchActions,
+} from "./useDuelReducer";
 
 export const Duel = () => {
   const playerCardMap = getTempCardQuantMap();
   const opponentCardMap = getTempCardQuantMap();
 
-  const { state, dispatchActions } = useDuelReducer(
-    playerCardMap,
-    opponentCardMap
-  );
+  const { state, duellistDispatchActions, duelDispatchActions } =
+    useDuelReducer(playerCardMap, opponentCardMap);
 
-  const getPartialDuellistDispatchActions = (duellistKey: DuellistKey) => {
-    return (
-      Object.entries(dispatchActions) as Entries<PartialDispatchActions>
-    ).reduce((map, [fnName, fn]) => {
-      return {
-        ...map,
-        // @ts-ignore
-        [fnName]: (...args: unknown[]) => fn(duellistKey, ...args),
-      };
-    }, {} as PartialDispatchActions);
+  const getPartialDispatchActions = <T, P>(
+    dispatchActionMap: T extends P ? any : any,
+    duellistKey: DuellistKey
+  ) => {
+    return (Object.entries(dispatchActionMap) as Entries<P>).reduce(
+      (map, [fnName, fn]) => {
+        return {
+          ...map,
+          // @ts-ignore
+          [fnName]: (...args: unknown[]) => fn(duellistKey, ...args),
+        };
+      },
+      {} as P
+    );
   };
 
   return (
@@ -36,12 +43,26 @@ export const Duel = () => {
       <Duellist
         name="Player"
         {...state.p1}
-        {...getPartialDuellistDispatchActions("p1")}
+        {...getPartialDispatchActions<
+          DuellistDispatchActions,
+          DuellistPartialDispatchActions
+        >(duellistDispatchActions, "p1")}
+        {...getPartialDispatchActions<
+          DuelDispatchActions,
+          DuelPartialDispatchActions
+        >(duelDispatchActions, "p1")}
       />
       <Duellist
         name="Opponent"
         {...state.p2}
-        {...getPartialDuellistDispatchActions("p2")}
+        {...getPartialDispatchActions<
+          DuellistDispatchActions,
+          DuellistPartialDispatchActions
+        >(duellistDispatchActions, "p2")}
+        {...getPartialDispatchActions<
+          DuelDispatchActions,
+          DuelPartialDispatchActions
+        >(duelDispatchActions, "p2")}
       />
     </div>
   );

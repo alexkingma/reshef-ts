@@ -5,10 +5,14 @@ import { DuellistHand } from "./DuellistHand";
 import { DuellistLP } from "./DuellistLP";
 import { DuellistMonsterZones } from "./DuellistMonsterZones";
 import { DuellistSpellTrapZones } from "./DuellistSpellTrapZones";
-import { PartialDispatchActions } from "./useDuelReducer";
+import {
+  DuellistPartialDispatchActions,
+  DuelPartialDispatchActions,
+} from "./useDuelReducer";
 
 type Props = DuellistDuelState &
-  PartialDispatchActions & {
+  DuellistPartialDispatchActions &
+  DuelPartialDispatchActions & {
     name: string;
   };
 
@@ -22,19 +26,25 @@ export const Duellist = ({
   monsterZones,
   spellTrapZones,
 
-  // dispatch/action combos
+  // duellist dispatch/action combos
   addLP,
   subtractLP,
   shuffle,
   drawCard,
   normalSummon,
   setSpellTrap,
+
+  // cross-board dispatch/action combos
+  attackMonster,
 }: Props) => {
   return (
     <div>
       <h5>{name}</h5>
       <DuellistLP lp={lp} addLP={addLP} subtractLP={subtractLP} />
-      <DuellistMonsterZones monsterZones={monsterZones} />
+      <DuellistMonsterZones
+        monsterZones={monsterZones}
+        attackMonster={attackMonster}
+      />
       <DuellistSpellTrapZones spellTrapZones={spellTrapZones} />
       <DuellistHand
         hand={hand}

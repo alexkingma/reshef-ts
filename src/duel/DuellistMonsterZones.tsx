@@ -1,10 +1,15 @@
 import React from "react";
 
 import { BattlePosition } from "./common";
+import { DuelPartialDispatchActions } from "./useDuelReducer";
 
-type Props = Pick<DuellistDuelState, "monsterZones">;
+type Props = Pick<DuellistDuelState, "monsterZones"> &
+  Pick<DuelPartialDispatchActions, "attackMonster">;
 
-export const DuellistMonsterZones = ({ monsterZones }: Props) => {
+export const DuellistMonsterZones = ({
+  monsterZones,
+  attackMonster,
+}: Props) => {
   return (
     <div>
       Monster Zones:
@@ -22,6 +27,7 @@ export const DuellistMonsterZones = ({ monsterZones }: Props) => {
             <li key={idx}>
               {pos === BattlePosition.Attack ? "[]" : "=="} {card.name} (
               {card.atk}/{card.def})
+              <button onClick={() => attackMonster(idx)}>Attack</button>
             </li>
           );
         })}

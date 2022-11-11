@@ -25,7 +25,7 @@ const attackAttackPosMonster = (diff: number) => {
   } else if (diff < 0) {
     // less ATK, attacker destroyed
     attackerDestroyed = true;
-    attackerLpLoss = diff;
+    attackerLpLoss = Math.abs(diff);
   } else {
     // equal ATK, both destroyed
     attackerDestroyed = true;
@@ -50,7 +50,7 @@ const attackDefencePosMonster = (diff: number) => {
     targetDestroyed = true;
   } else if (diff < 0) {
     // less ATK, neither destroyed
-    attackerLpLoss = diff;
+    attackerLpLoss = Math.abs(diff);
   } else {
     // equal ATK, neither destroyed
   }
