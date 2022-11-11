@@ -1,3 +1,4 @@
+import { default as alignmentMap } from "../assets/alignment.json";
 import cards from "../assets/cards";
 import { default as fields } from "../assets/fields.json";
 import { getCardThreatMap } from "./threat";
@@ -90,4 +91,9 @@ export const getDeckCards = (
       return { qty, threat, ...card };
     })
     .sort(sortDeck);
+};
+
+export const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
+  const { strong, weak } = alignmentMap[attacker];
+  return { isStrong: strong === target, isWeak: weak === target };
 };

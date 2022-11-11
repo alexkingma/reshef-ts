@@ -16,7 +16,10 @@ export const DuellistHand = ({ hand, normalSummon, setSpellTrap }: Props) => {
               <>
                 {zone.card.name}{" "}
                 {zone.card.category === "Monster" ? (
-                  <button onClick={() => normalSummon(idx)}>Summon</button>
+                  <>
+                    {"{" + zone.card.alignment + "}"}
+                    <button onClick={() => normalSummon(idx)}>Summon</button>
+                  </>
                 ) : (
                   <button onClick={() => setSpellTrap(idx)}>Set</button>
                 )}
