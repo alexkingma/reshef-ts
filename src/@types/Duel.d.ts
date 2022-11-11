@@ -8,18 +8,18 @@ interface OccupiedZone {
   orientation: Orientation;
 }
 
-type MonsterZone =
-  | EmptyZone
-  | (OccupiedZone & {
-      card: MonsterCard;
-      battlePosition: BattlePosition;
-      powerUpLevel: number;
-      hasAttacked: boolean;
-    });
+type MonsterZone = EmptyZone | OccupiedMonsterZone;
 
-type SpellTrapZone =
-  | EmptyZone
-  | (OccupiedZone & { card: SpellOrTrapOrRitualCard });
+type OccupiedMonsterZone = OccupiedZone & {
+  card: MonsterCard;
+  battlePosition: BattlePosition;
+  powerUpLevel: number;
+  hasAttacked: boolean;
+};
+
+type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;
+
+type OccupiedSpellTrapZone = OccupiedZone & { card: SpellOrTrapOrRitualCard };
 
 type HandZone = EmptyZone | OccupiedZone;
 

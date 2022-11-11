@@ -14,9 +14,10 @@ export const DuellistDeck = ({ deck, shuffle, drawCard }: Props) => {
         <button onClick={shuffle}>Shuffle</button>
         <button onClick={drawCard}>Draw</button>
         <ol>
-          {deck.map((card, idx) => (
+          {deck.slice(0, 5).map((card, idx) => (
             <li key={idx}>{card.name}</li>
           ))}
+          {deck.length > 5 ? <i>{deck.length - 5} more...</i> : ""}
         </ol>
       </div>
     </>
