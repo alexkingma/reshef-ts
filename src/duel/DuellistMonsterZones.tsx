@@ -2,9 +2,7 @@ import React from "react";
 
 import { BattlePosition } from "./common";
 
-interface Props {
-  monsterZones: MonsterZone[];
-}
+type Props = Pick<DuellistDuelState, "monsterZones">;
 
 export const DuellistMonsterZones = ({ monsterZones }: Props) => {
   return (

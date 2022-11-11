@@ -5,16 +5,12 @@ import { DuellistHand } from "./DuellistHand";
 import { DuellistLP } from "./DuellistLP";
 import { DuellistMonsterZones } from "./DuellistMonsterZones";
 import { DuellistSpellTrapZones } from "./DuellistSpellTrapZones";
+import { PartialDispatchActions } from "./useDuelReducer";
 
-type Props = DuellistDuelState & {
-  name: string;
-  addLP: any;
-  subtractLP: any;
-  shuffle: any;
-  drawCard: any;
-  normalSummon: any;
-  setSpellTrap: any;
-};
+type Props = DuellistDuelState &
+  PartialDispatchActions & {
+    name: string;
+  };
 
 export const Duellist = ({
   name,

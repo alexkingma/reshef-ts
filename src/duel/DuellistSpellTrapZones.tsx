@@ -1,8 +1,6 @@
 import React from "react";
 
-interface Props {
-  spellTrapZones: SpellTrapZone[];
-}
+type Props = Pick<DuellistDuelState, "spellTrapZones">;
 
 export const DuellistSpellTrapZones = ({ spellTrapZones }: Props) => {
   return (

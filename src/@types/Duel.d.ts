@@ -41,3 +41,5 @@ interface DuelState {
   // whoseTurn: 1 | 2;
   // cursorPos: number;
 }
+
+type DuellistKey = keyof DuelState;

@@ -1,10 +1,9 @@
 import React from "react";
 
-interface Props {
-  deck: Deck;
-  shuffle: () => void;
-  drawCard: () => void;
-}
+import { PartialDispatchActions } from "./useDuelReducer";
+
+type Props = Pick<DuellistDuelState, "deck"> &
+  Pick<PartialDispatchActions, "shuffle" | "drawCard">;
 
 export const DuellistDeck = ({ deck, shuffle, drawCard }: Props) => {
   return (

@@ -10,8 +10,6 @@ import {
 import { Orientation, BattlePosition } from "./common";
 import { attackMonster } from "./combatUtil";
 
-export type DuellistKey = "p1" | "p2";
-
 interface DuelAction {
   duellistKey: DuellistKey;
   type: DuelActionType;
@@ -32,6 +30,21 @@ enum DuelActionType {
   SetSpellTrap = "SET_SPELL_TRAP",
   AttackMonster = "ATTACK_MONSTER",
 }
+
+export interface PartialDispatchActions {
+  addLP: (payload: number) => void;
+  subtractLP: (payload: number) => void;
+  shuffle: () => void;
+  drawCard: () => void;
+  normalSummon: (payload: number) => void;
+  setSpellTrap: (payload: number) => void;
+  attackMonster: (payload: number) => void;
+}
+
+export type DispatchActions = PrependArgInFunctionMap<
+  PartialDispatchActions,
+  [duellistKey: DuellistKey]
+>;
 
 const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
   produce(state, (draft) => {
@@ -147,7 +160,7 @@ const useDuelReducer = (
         dispatch({ duellistKey, type: DuelActionType.SetSpellTrap, payload }),
       attackMonster: (duellistKey: DuellistKey, payload: number) =>
         dispatch({ duellistKey, type: DuelActionType.AttackMonster, payload }),
-    },
+    } as DispatchActions,
   };
 };
 
