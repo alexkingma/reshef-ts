@@ -5,7 +5,7 @@ import { DuellistHand } from "./DuellistHand";
 import { DuellistLP } from "./DuellistLP";
 import { DuellistMonsterZones } from "./DuellistMonsterZones";
 import { DuellistSpellTrapZones } from "./DuellistSpellTrapZones";
-import { DuelPartialDispatchActions } from "./useDuelReducer";
+import { DuelPartialDispatchActions } from "./coreDuelReducers";
 
 type Props = DuellistDuelState &
   DuelPartialDispatchActions & {
