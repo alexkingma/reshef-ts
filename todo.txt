@@ -46,9 +46,6 @@ pending duel features:
     hasNormalSummoned
     numTributedMonsters
     focusedMonster -- for when two selections are needed (X monster attacks Y enemy; X spell powers up Y monster)
-  attack monster
-  destroy monster
-  attack directly
   change monster position
   activate spell
   activate trap

@@ -1,9 +1,9 @@
 import React from "react";
 
-import { DuellistPartialDispatchActions } from "./useDuelReducer";
+import { DuelPartialDispatchActions } from "./useDuelReducer";
 
 type Props = Pick<DuellistDuelState, "hand"> &
-  Pick<DuellistPartialDispatchActions, "normalSummon" | "setSpellTrap">;
+  Pick<DuelPartialDispatchActions, "normalSummon" | "setSpellTrap">;
 
 export const DuellistHand = ({ hand, normalSummon, setSpellTrap }: Props) => {
   return (

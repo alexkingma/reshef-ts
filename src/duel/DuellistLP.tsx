@@ -1,9 +1,9 @@
 import React from "react";
 
-import { DuellistPartialDispatchActions } from "./useDuelReducer";
+import { DuelPartialDispatchActions } from "./useDuelReducer";
 
 type Props = Pick<DuellistDuelState, "lp"> &
-  Pick<DuellistPartialDispatchActions, "addLP" | "subtractLP">;
+  Pick<DuelPartialDispatchActions, "addLP" | "subtractLP">;
 
 export const DuellistLP = ({ lp, addLP, subtractLP }: Props) => {
   return (
