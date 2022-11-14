@@ -4,6 +4,7 @@ interface Duellist {
   lp: number;
   location: string;
   payout: number;
+  dc: 0 | 1 | 3 | 10 | 20;
   field: Field;
   ante: CardName[];
   inRoute: boolean;
