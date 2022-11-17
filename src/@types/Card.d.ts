@@ -41,6 +41,7 @@ interface BaseCard {
   id: number;
   name: CardName;
   cost: number;
+  limit?: 1 | 2;
   category: CardCategory;
 }
 

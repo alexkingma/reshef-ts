@@ -219,6 +219,7 @@ const cards: Card[] = [
     atk: 200,
     def: 300,
     code: 812492,
+    limit: 1,
   },
   {
     id: 18,
@@ -232,6 +233,7 @@ const cards: Card[] = [
     atk: 200,
     def: 300,
     code: 4451953,
+    limit: 1,
   },
   {
     id: 19,
@@ -245,6 +247,7 @@ const cards: Card[] = [
     atk: 200,
     def: 300,
     code: 7090363,
+    limit: 1,
   },
   {
     id: 20,
@@ -258,6 +261,7 @@ const cards: Card[] = [
     atk: 200,
     def: 300,
     code: 790234,
+    limit: 1,
   },
   {
     id: 21,
@@ -271,6 +275,7 @@ const cards: Card[] = [
     atk: 1000,
     def: 1000,
     code: 3339694,
+    limit: 1,
   },
   {
     id: 22,
@@ -726,6 +731,7 @@ const cards: Card[] = [
     atk: 500,
     def: 400,
     code: 8775634,
+    limit: 1,
   },
   {
     id: 57,
@@ -739,6 +745,7 @@ const cards: Card[] = [
     atk: 2600,
     def: 2500,
     code: 1414144,
+    limit: 1,
   },
   {
     id: 58,
@@ -869,6 +876,7 @@ const cards: Card[] = [
     atk: 3500,
     def: 3000,
     code: 4857937,
+    limit: 1,
   },
   {
     id: 68,
@@ -934,6 +942,7 @@ const cards: Card[] = [
     atk: 0,
     def: 2000,
     code: 4024059,
+    limit: 1,
   },
   {
     id: 73,
@@ -1077,6 +1086,7 @@ const cards: Card[] = [
     atk: 1200,
     def: 2500,
     code: 6212,
+    limit: 1,
   },
   {
     id: 84,
@@ -2508,6 +2518,7 @@ const cards: Card[] = [
     cost: 150,
     category: "Magic",
     code: 19613556,
+    limit: 1,
   },
   {
     id: 195,
@@ -3016,6 +3027,7 @@ const cards: Card[] = [
     atk: 4000,
     def: 4000,
     code: -1,
+    limit: 1,
   },
   {
     id: 235,
@@ -3068,6 +3080,7 @@ const cards: Card[] = [
     atk: 4000,
     def: 4000,
     code: -1,
+    limit: 1,
   },
   {
     id: 239,
@@ -3094,6 +3107,7 @@ const cards: Card[] = [
     atk: 4000,
     def: 4000,
     code: -1,
+    limit: 1,
   },
   {
     id: 241,
@@ -3835,6 +3849,7 @@ const cards: Card[] = [
     atk: 0,
     def: 0,
     code: -1,
+    limit: 1,
   },
   {
     id: 298,
@@ -4077,6 +4092,7 @@ const cards: Card[] = [
     cost: 15,
     category: "Trap",
     code: 50045299,
+    limit: 1,
   },
   {
     id: 330,
@@ -4126,6 +4142,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 53129443,
+    limit: 1,
   },
   {
     id: 337,
@@ -4133,6 +4150,7 @@ const cards: Card[] = [
     cost: 150,
     category: "Magic",
     code: 12580477,
+    limit: 1,
   },
   {
     id: 338,
@@ -4153,6 +4171,7 @@ const cards: Card[] = [
     name: "Goblin's Secret Remedy",
     cost: 15,
     category: "Magic",
+    limit: 2,
     code: 11868825,
   },
   {
@@ -4160,6 +4179,7 @@ const cards: Card[] = [
     name: "Soul of the Pure",
     cost: 50,
     category: "Magic",
+    limit: 2,
     code: 47852924,
   },
   {
@@ -4168,6 +4188,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 84257639,
+    limit: 1,
   },
   {
     id: 343,
@@ -4188,6 +4209,7 @@ const cards: Card[] = [
     name: "Final Flame",
     cost: 15,
     category: "Magic",
+    limit: 2,
     code: 73134081,
   },
   {
@@ -4196,6 +4218,7 @@ const cards: Card[] = [
     cost: 50,
     category: "Magic",
     code: 19523799,
+    limit: 1,
   },
   {
     id: 347,
@@ -4203,6 +4226,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 46918794,
+    limit: 1,
   },
   {
     id: 348,
@@ -4210,6 +4234,7 @@ const cards: Card[] = [
     cost: 300,
     category: "Magic",
     code: 72302403,
+    limit: 1,
   },
   {
     id: 349,
@@ -4302,6 +4327,7 @@ const cards: Card[] = [
     atk: 2300,
     def: 2100,
     code: 3395107,
+    limit: 1,
   },
   {
     id: 357,
@@ -4315,6 +4341,7 @@ const cards: Card[] = [
     atk: 1600,
     def: 1800,
     code: 7034578,
+    limit: 1,
   },
   {
     id: 358,
@@ -4354,6 +4381,7 @@ const cards: Card[] = [
     atk: 2800,
     def: 2300,
     code: 6912313,
+    limit: 1,
   },
   {
     id: 361,
@@ -4380,6 +4408,7 @@ const cards: Card[] = [
     atk: 0,
     def: 3000,
     code: 3201284,
+    limit: 1,
   },
   {
     id: 363,
@@ -4406,6 +4435,7 @@ const cards: Card[] = [
     atk: 3000,
     def: 2500,
     code: 540569,
+    limit: 1,
   },
   {
     id: 365,
@@ -4419,6 +4449,7 @@ const cards: Card[] = [
     atk: 2100,
     def: 1800,
     code: 3189039,
+    limit: 1,
   },
   {
     id: 366,
@@ -4536,6 +4567,7 @@ const cards: Card[] = [
     atk: 3750,
     def: 3400,
     code: 2583357,
+    limit: 1,
   },
   {
     id: 375,
@@ -4614,6 +4646,7 @@ const cards: Card[] = [
     atk: 4500,
     def: 3800,
     code: 2399534,
+    limit: 1,
   },
   {
     id: 381,
@@ -5030,6 +5063,7 @@ const cards: Card[] = [
     atk: 4000,
     def: 4000,
     code: 5140497,
+    limit: 1,
   },
   {
     id: 413,
@@ -7247,6 +7281,7 @@ const cards: Card[] = [
     cost: 500,
     category: "Trap",
     code: 94212438,
+    limit: 1,
   },
   {
     id: 584,
@@ -7254,6 +7289,7 @@ const cards: Card[] = [
     cost: 999,
     category: "Trap",
     code: 31893528,
+    limit: 1,
   },
   {
     id: 585,
@@ -7261,6 +7297,7 @@ const cards: Card[] = [
     cost: 999,
     category: "Trap",
     code: 67287533,
+    limit: 1,
   },
   {
     id: 586,
@@ -7268,6 +7305,7 @@ const cards: Card[] = [
     cost: 999,
     category: "Trap",
     code: 94772232,
+    limit: 1,
   },
   {
     id: 587,
@@ -7275,6 +7313,7 @@ const cards: Card[] = [
     cost: 999,
     category: "Trap",
     code: 30170981,
+    limit: 1,
   },
   {
     id: 588,
@@ -7451,6 +7490,7 @@ const cards: Card[] = [
     cost: 250,
     category: "Magic",
     code: 83764718,
+    limit: 1,
   },
   {
     id: 602,
@@ -7490,6 +7530,7 @@ const cards: Card[] = [
     atk: 2000,
     def: 1400,
     code: 7605281,
+    limit: 1,
   },
   {
     id: 605,
@@ -7516,6 +7557,7 @@ const cards: Card[] = [
     atk: 1200,
     def: 800,
     code: 433564,
+    limit: 1,
   },
   {
     id: 607,
@@ -8011,6 +8053,7 @@ const cards: Card[] = [
     atk: 2200,
     def: 800,
     code: 1372287,
+    limit: 1,
   },
   {
     id: 646,
@@ -8125,6 +8168,7 @@ const cards: Card[] = [
     cost: 200,
     category: "Magic",
     code: 22046459,
+    limit: 1,
   },
   {
     id: 658,
@@ -8152,6 +8196,7 @@ const cards: Card[] = [
     name: "Crush Card",
     cost: 100,
     category: "Magic",
+    limit: 2,
     code: 57728570,
   },
   {
@@ -8254,6 +8299,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 18144506,
+    limit: 1,
   },
   {
     id: 673,
@@ -8399,6 +8445,7 @@ const cards: Card[] = [
     name: "Widespread Ruin",
     cost: 100,
     category: "Trap",
+    limit: 2,
     code: 77754944,
   },
   {
@@ -8448,6 +8495,7 @@ const cards: Card[] = [
     cost: 200,
     category: "Trap",
     code: 53582587,
+    limit: 1,
   },
   {
     id: 693,
@@ -8495,6 +8543,7 @@ const cards: Card[] = [
     atk: 5000,
     def: 5000,
     code: 9926715,
+    limit: 1,
   },
   {
     id: 698,
@@ -8508,6 +8557,7 @@ const cards: Card[] = [
     atk: 5000,
     def: 5000,
     code: 6287354,
+    limit: 1,
   },
   {
     id: 699,
@@ -8515,6 +8565,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 44656491,
+    limit: 1,
   },
   {
     id: 700,
@@ -8535,6 +8586,7 @@ const cards: Card[] = [
     atk: 1950,
     def: 1850,
     code: 484903,
+    limit: 1,
   },
   {
     id: 702,
@@ -8548,6 +8600,7 @@ const cards: Card[] = [
     atk: 2000,
     def: 1850,
     code: 3024363,
+    limit: 1,
   },
   {
     id: 703,
@@ -8561,6 +8614,7 @@ const cards: Card[] = [
     atk: 2750,
     def: 2500,
     code: 7623234,
+    limit: 1,
   },
   {
     id: 704,
@@ -8574,6 +8628,7 @@ const cards: Card[] = [
     atk: 2050,
     def: 2500,
     code: 362744,
+    limit: 1,
   },
   {
     id: 705,
@@ -8587,6 +8642,7 @@ const cards: Card[] = [
     atk: 2850,
     def: 2350,
     code: 3911115,
+    limit: 1,
   },
   {
     id: 706,
@@ -8600,6 +8656,7 @@ const cards: Card[] = [
     atk: 2350,
     def: 2400,
     code: 6651679,
+    limit: 1,
   },
   {
     id: 707,
@@ -8626,6 +8683,7 @@ const cards: Card[] = [
     atk: 2900,
     def: 2450,
     code: 3899950,
+    limit: 1,
   },
   {
     id: 709,
@@ -8639,6 +8697,7 @@ const cards: Card[] = [
     atk: 2450,
     def: 2000,
     code: 6539320,
+    limit: 1,
   },
   {
     id: 710,
@@ -8652,6 +8711,7 @@ const cards: Card[] = [
     atk: 2550,
     def: 2500,
     code: 9178221,
+    limit: 1,
   },
   {
     id: 711,
@@ -8717,6 +8777,7 @@ const cards: Card[] = [
     atk: 2000,
     def: 2350,
     code: 6345907,
+    limit: 1,
   },
   {
     id: 716,
@@ -8730,6 +8791,7 @@ const cards: Card[] = [
     atk: 2550,
     def: 2150,
     code: 9084418,
+    limit: 1,
   },
   {
     id: 717,
@@ -8743,6 +8805,7 @@ const cards: Card[] = [
     atk: 2450,
     def: 2550,
     code: 2693278,
+    limit: 1,
   },
   {
     id: 718,
@@ -8756,6 +8819,7 @@ const cards: Card[] = [
     atk: 2350,
     def: 2150,
     code: 6233748,
+    limit: 1,
   },
   {
     id: 719,
@@ -8769,6 +8833,7 @@ const cards: Card[] = [
     atk: 1900,
     def: 1850,
     code: 9972153,
+    limit: 1,
   },
   {
     id: 720,
@@ -8782,6 +8847,7 @@ const cards: Card[] = [
     atk: 2000,
     def: 1800,
     code: 2511023,
+    limit: 1,
   },
   {
     id: 721,
@@ -8795,6 +8861,7 @@ const cards: Card[] = [
     atk: 2800,
     def: 2600,
     code: 3020847,
+    limit: 1,
   },
   {
     id: 722,
@@ -8919,6 +8986,7 @@ const cards: Card[] = [
     atk: 0,
     def: 0,
     code: 6463146,
+    limit: 1,
   },
   {
     id: 732,
@@ -8958,6 +9026,7 @@ const cards: Card[] = [
     atk: 0,
     def: 0,
     code: 6351981,
+    limit: 1,
   },
   {
     id: 735,
@@ -9563,6 +9632,7 @@ const cards: Card[] = [
     cost: 250,
     category: "Magic",
     code: 87910978,
+    limit: 1,
   },
   {
     id: 782,
@@ -9584,6 +9654,7 @@ const cards: Card[] = [
     cost: 500,
     category: "Magic",
     code: 4031928,
+    limit: 1,
   },
   {
     id: 785,
@@ -9591,6 +9662,7 @@ const cards: Card[] = [
     cost: 100,
     category: "Magic",
     code: 40703222,
+    limit: 1,
   },
   {
     id: 786,
@@ -9619,6 +9691,7 @@ const cards: Card[] = [
     cost: 150,
     category: "Magic",
     code: 55144522,
+    limit: 1,
   },
   {
     id: 790,
