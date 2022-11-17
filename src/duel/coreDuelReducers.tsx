@@ -16,6 +16,7 @@ export enum DuelActionType {
   SpecialSummon = "SPECIAL_SUMMON",
   SetSpellTrap = "SET_SPELL_TRAP",
   AttackMonster = "ATTACK_MONSTER",
+  ChangeBattlePosition = "CHANGE_BATTLE_POSITION",
 }
 
 export interface DuelAction {
@@ -40,6 +41,7 @@ export interface DuelPartialDispatchActions {
   normalSummon: (payload: number) => void;
   setSpellTrap: (payload: number) => void;
   attackMonster: (payload: number) => void;
+  changeBattlePosition: (payload: number) => void;
 }
 
 export type DuelDispatchActions = PrependArgInFunctionMap<
@@ -133,6 +135,18 @@ export const coreDuelReducers: DuelReducers = {
       targetState.lp -= targetLpLoss;
     }
   },
+  [DuelActionType.ChangeBattlePosition]: ({
+    originatorState,
+    payload: monsterIdx,
+  }) => {
+    const zone = originatorState.monsterZones[
+      monsterIdx
+    ] as OccupiedMonsterZone;
+    zone.battlePosition =
+      zone.battlePosition === BattlePosition.Attack
+        ? BattlePosition.Defence
+        : BattlePosition.Attack;
+  },
 };
 
 export const getCoreDuelDispatchActions = (
@@ -162,6 +176,12 @@ export const getCoreDuelDispatchActions = (
     dispatch({
       duellistKey,
       type: DuelActionType.AttackMonster,
+      payload,
+    }),
+  changeBattlePosition: (duellistKey: DuellistKey, payload: number) =>
+    dispatch({
+      duellistKey,
+      type: DuelActionType.ChangeBattlePosition,
       payload,
     }),
 });

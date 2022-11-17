@@ -29,6 +29,7 @@ export const Duellist = ({
   drawCard,
   normalSummon,
   setSpellTrap,
+  changeBattlePosition,
 
   // cross-board dispatch/action combos
   attackMonster,
@@ -40,6 +41,7 @@ export const Duellist = ({
       <DuellistMonsterZones
         monsterZones={monsterZones}
         attackMonster={attackMonster}
+        changeBattlePosition={changeBattlePosition}
       />
       <DuellistSpellTrapZones spellTrapZones={spellTrapZones} />
       <DuellistHand

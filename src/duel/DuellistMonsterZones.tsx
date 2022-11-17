@@ -4,11 +4,12 @@ import { BattlePosition } from "./common";
 import { DuelPartialDispatchActions } from "./coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "monsterZones"> &
-  Pick<DuelPartialDispatchActions, "attackMonster">;
+  Pick<DuelPartialDispatchActions, "attackMonster" | "changeBattlePosition">;
 
 export const DuellistMonsterZones = ({
   monsterZones,
   attackMonster,
+  changeBattlePosition,
 }: Props) => {
   return (
     <div>
@@ -28,6 +29,9 @@ export const DuellistMonsterZones = ({
               {pos === BattlePosition.Attack ? "[]" : "=="} {card.name} (
               {card.atk}/{card.def})
               <button onClick={() => attackMonster(idx)}>Attack</button>
+              <button onClick={() => changeBattlePosition(idx)}>
+                Change Pos
+              </button>
             </li>
           );
         })}
