@@ -5,25 +5,20 @@ export const attackMonster = (
   attacker: OccupiedMonsterZone,
   target: OccupiedMonsterZone
 ) => {
-  const diff = attacker.card.atk - target.card.atk;
+  const isDefending = target.battlePosition === BattlePosition.Defence;
+  const diff =
+    attacker.card.atk - (isDefending ? target.card.def : target.card.atk);
   const { isWeak, isStrong } = getAlignmentResult(
     attacker.card.alignment,
     target.card.alignment
   );
 
   const attackerDestroyed =
-    !isStrong &&
-    (isWeak || (diff <= 0 && target.battlePosition === BattlePosition.Attack));
+    !isStrong && (isWeak || (diff <= 0 && !isDefending));
   const targetDestroyed =
-    !isWeak &&
-    (isStrong ||
-      diff > 0 ||
-      (diff === 0 && target.battlePosition === BattlePosition.Attack));
-  const attackerLpLoss = targetDestroyed || diff > 0 ? 0 : Math.abs(diff);
-  const targetLpLoss =
-    attackerDestroyed || target.battlePosition === BattlePosition.Defence
-      ? 0
-      : Math.max(diff, 0);
+    !isWeak && (isStrong || diff > 0 || (diff === 0 && !isDefending));
+  const attackerLpLoss = targetDestroyed || diff >= 0 ? 0 : Math.abs(diff);
+  const targetLpLoss = attackerDestroyed || diff <= 0 || isDefending ? 0 : diff;
 
   return {
     attackerDestroyed,

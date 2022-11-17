@@ -2,12 +2,13 @@ import { getCardData } from "../../common/deck";
 import { attackMonster } from "../combatUtil";
 import { BattlePosition, Orientation } from "../common";
 
-let weakDark: OccupiedMonsterZone;
-let strongDark: OccupiedMonsterZone;
-let weakDreams: OccupiedMonsterZone;
-let strongDreams: OccupiedMonsterZone;
-let weakLight: OccupiedMonsterZone;
-let strongLight: OccupiedMonsterZone;
+let dark_700_600: OccupiedMonsterZone;
+let dark_800_700: OccupiedMonsterZone;
+let dark_2500_2100: OccupiedMonsterZone;
+let dreams_700_700: OccupiedMonsterZone;
+let dreams_2800_2000: OccupiedMonsterZone;
+let light_700_600: OccupiedMonsterZone;
+let light_3000_2500: OccupiedMonsterZone;
 
 const createZone = (cardName: CardName): OccupiedMonsterZone => ({
   card: getCardData(cardName) as MonsterCard,
@@ -19,120 +20,175 @@ const createZone = (cardName: CardName): OccupiedMonsterZone => ({
 });
 
 beforeEach(() => {
-  weakDark = createZone("Kuriboh");
-  strongDark = createZone("Dark Magician");
-  weakDreams = createZone("The Bewitching Phantom Thief");
-  strongDreams = createZone("Mirage Knight");
-  weakLight = createZone("Key Mace");
-  strongLight = createZone("Blue-Eyes White Dragon");
+  dark_700_600 = createZone("Phantom Dewan");
+  dark_800_700 = createZone("Nemuriko");
+  dark_2500_2100 = createZone("Dark Magician");
+  dreams_700_700 = createZone("The Bewitching Phantom Thief");
+  dreams_2800_2000 = createZone("Mirage Knight");
+  light_700_600 = createZone("Hourglass of Life");
+  light_3000_2500 = createZone("Blue-Eyes White Dragon");
 });
 
 describe("neutral alignment", () => {
   describe("attackMonster", () => {
-    test("high atk vs low atk, attack pos", () => {
+    test("high atk vs low atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(strongDark, weakDark);
+      } = attackMonster(dark_2500_2100, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
-      expect(targetLpLoss).toEqual(2200);
+      expect(targetLpLoss).toEqual(1800);
     });
 
-    test("low atk vs high atk, attack pos", () => {
+    test("low atk vs high atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakDark, strongDark);
+      } = attackMonster(dark_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
-      expect(attackerLpLoss).toEqual(2200);
+      expect(attackerLpLoss).toEqual(1800);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("high atk vs low atk, def pos", () => {
-      weakDark.battlePosition = BattlePosition.Defence;
+    test("high atk vs low def", () => {
+      dark_700_600.battlePosition = BattlePosition.Defence;
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(strongDark, weakDark);
+      } = attackMonster(dark_2500_2100, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("low atk vs high atk, def pos", () => {
-      strongDark.battlePosition = BattlePosition.Defence;
+    test("low atk vs high def", () => {
+      dark_2500_2100.battlePosition = BattlePosition.Defence;
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakDark, strongDark);
+      } = attackMonster(dark_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(false);
-      expect(attackerLpLoss).toEqual(2200);
+      expect(attackerLpLoss).toEqual(1400);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/atk", () => {
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(dark_2500_2100, dark_2500_2100);
+      expect(attackerDestroyed).toEqual(true);
+      expect(targetDestroyed).toEqual(true);
+      expect(attackerLpLoss).toEqual(0);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/def", () => {
+      dark_800_700.battlePosition = BattlePosition.Defence;
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(dark_700_600, dark_800_700);
+      expect(attackerDestroyed).toEqual(false);
+      expect(targetDestroyed).toEqual(false);
+      expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
   });
 
   describe("strong alignment", () => {
-    test("high atk vs low atk, attack pos", () => {
+    test("high atk vs low atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(strongDreams, weakDark);
+      } = attackMonster(dreams_2800_2000, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
-      expect(targetLpLoss).toEqual(2500);
+      expect(targetLpLoss).toEqual(2100);
     });
 
-    test("low atk vs high atk, attack pos", () => {
+    test("low atk vs high atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakDreams, strongDark);
-      expect(attackerDestroyed).toEqual(false);
-      expect(targetDestroyed).toEqual(true);
-      expect(attackerLpLoss).toEqual(0);
-      expect(targetLpLoss).toEqual(0);
-    });
-
-    test("high atk vs low atk, def pos", () => {
-      weakDark.battlePosition = BattlePosition.Defence;
-      const {
-        attackerDestroyed,
-        targetDestroyed,
-        attackerLpLoss,
-        targetLpLoss,
-      } = attackMonster(strongDreams, weakDark);
+      } = attackMonster(dreams_700_700, dark_2500_2100);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("low atk vs high atk, def pos", () => {
-      strongDark.battlePosition = BattlePosition.Defence;
+    test("high atk vs low def", () => {
+      dark_700_600.battlePosition = BattlePosition.Defence;
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakDreams, strongDark);
+      } = attackMonster(dreams_2800_2000, dark_700_600);
+      expect(attackerDestroyed).toEqual(false);
+      expect(targetDestroyed).toEqual(true);
+      expect(attackerLpLoss).toEqual(0);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("low atk vs high def", () => {
+      dark_2500_2100.battlePosition = BattlePosition.Defence;
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(dreams_700_700, dark_2500_2100);
+      expect(attackerDestroyed).toEqual(false);
+      expect(targetDestroyed).toEqual(true);
+      expect(attackerLpLoss).toEqual(0);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/atk", () => {
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(dreams_700_700, dark_700_600);
+      expect(attackerDestroyed).toEqual(false);
+      expect(targetDestroyed).toEqual(true);
+      expect(attackerLpLoss).toEqual(0);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/def", () => {
+      dark_800_700.battlePosition = BattlePosition.Defence;
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(dreams_700_700, dark_800_700);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -141,57 +197,84 @@ describe("neutral alignment", () => {
   });
 
   describe("weak alignment", () => {
-    test("high atk vs low atk, attack pos", () => {
+    test("high atk vs low atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(strongLight, weakDark);
+      } = attackMonster(light_3000_2500, dark_700_600);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("low atk vs high atk, attack pos", () => {
+    test("low atk vs high atk", () => {
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakLight, strongDark);
+      } = attackMonster(light_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
-      expect(attackerLpLoss).toEqual(2100);
+      expect(attackerLpLoss).toEqual(1800);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("high atk vs low atk, def pos", () => {
-      weakDark.battlePosition = BattlePosition.Defence;
+    test("high atk vs low def", () => {
+      dark_700_600.battlePosition = BattlePosition.Defence;
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(strongLight, weakDark);
+      } = attackMonster(light_3000_2500, dark_700_600);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
 
-    test("low atk vs high atk, def pos", () => {
-      strongDark.battlePosition = BattlePosition.Defence;
+    test("low atk vs high def", () => {
+      dark_2500_2100.battlePosition = BattlePosition.Defence;
       const {
         attackerDestroyed,
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(weakLight, strongDark);
+      } = attackMonster(light_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
-      expect(attackerLpLoss).toEqual(2100);
+      expect(attackerLpLoss).toEqual(1400);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/atk", () => {
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(light_700_600, dark_700_600);
+      expect(attackerDestroyed).toEqual(true);
+      expect(targetDestroyed).toEqual(false);
+      expect(attackerLpLoss).toEqual(0);
+      expect(targetLpLoss).toEqual(0);
+    });
+
+    test("equal atk/def", () => {
+      dark_800_700.battlePosition = BattlePosition.Defence;
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(light_700_600, dark_800_700);
+      expect(attackerDestroyed).toEqual(true);
+      expect(targetDestroyed).toEqual(false);
+      expect(attackerLpLoss).toEqual(0);
       expect(targetLpLoss).toEqual(0);
     });
   });
