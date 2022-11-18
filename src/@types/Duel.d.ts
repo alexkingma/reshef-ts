@@ -30,7 +30,6 @@ interface DuellistDuelState {
   hand: HandZone[];
   deck: Deck;
   graveyard: CardName | null;
-  activeField: Field;
   monsterZones: MonsterZone[];
   spellTrapZones: SpellTrapZone[];
 }
@@ -38,8 +37,20 @@ interface DuellistDuelState {
 interface DuelState {
   p1: DuellistDuelState;
   p2: DuellistDuelState;
-  // whoseTurn: 1 | 2;
-  // cursorPos: number;
+  activeTurn: Turn;
+  activeField: Field;
+  cursorPos: FieldCoords;
+  // focusedCard: FieldCoords; // for multi-selection (X mon attacks Y mon, Spell A powers up Monster B, etc.)
 }
 
-type DuellistKey = keyof DuelState;
+interface Turn {
+  duellistKey: DuellistKey;
+  hasNormalSummoned: boolean;
+  numTributedMonsters: number;
+}
+
+type FieldCol = 0 | 1 | 2 | 3 | 4;
+
+type FieldCoords = [rowIdx: FieldRow, colIdx: FieldCol];
+
+type DuellistKey = "p1" | "p2";

@@ -34,19 +34,18 @@ eventual improvements over original game:
   make type/effects of monsters more accurate
   make spell/trap effects more accurate
   lp is restored after each duel
+  move default zone selection to the middle of the board, or as close as possible while still empty
+  use the actual art for cards, especially in close-up combat shots
 eventual/complex ideas:
   expand graveyard to be more than one card
   allow more than 5 cards in hand
   move field spells to their own zone
+  notify player when cards they ordered have arrived at the shop (once a variable number of duels have transpired, scaling vaguely on cost/rarity of card)
 
 pending duel features:
-  duel state
-    cursorPos
-    whoseTurn
-    hasNormalSummoned
-    numTributedMonsters
-    focusedMonster -- for when two selections are needed (X monster attacks Y enemy; X spell powers up Y monster)
-  activate spell
+  tribute monster
+  discard card
+  activate spell (just power-ups, to start)
   activate trap
   activate monster effect
   end turn

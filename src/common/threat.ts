@@ -1,3 +1,4 @@
+import { Field } from "../duel/common";
 import { getCardData, getNumTributes, NumTributes } from "./deck";
 
 type DeckTributeAtkDefMap = {

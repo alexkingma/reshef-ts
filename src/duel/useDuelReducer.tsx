@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import produce from "immer";
 
-import { generateNewDuellistDuelState } from "./duelUtil";
+import { getInitialDuelState } from "./duelUtil";
 import {
   getCoreDuelDispatchActions,
   coreDuelReducers,
@@ -16,6 +16,7 @@ const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
     reducers[action.type]({
       originatorState,
       targetState,
+      activeTurn: draft.activeTurn,
       payload: action.payload,
     });
   });
@@ -24,10 +25,7 @@ const useDuelReducer = (
   p1CardMap: CardQuantityMap,
   p2CardMap: CardQuantityMap
 ) => {
-  const initialState = {
-    p1: generateNewDuellistDuelState(p1CardMap),
-    p2: generateNewDuellistDuelState(p2CardMap),
-  };
+  const initialState = getInitialDuelState(p1CardMap, p2CardMap);
   const [state, dispatch] = useReducer(duelReducer, initialState);
 
   return {

@@ -10,8 +10,6 @@ interface Duellist {
   inRoute: boolean;
 }
 
-type Field = keyof typeof import("../assets/fields.json");
-
 type CardQuantityMap = {
   [card in CardName]?: number;
 };

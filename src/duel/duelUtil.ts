@@ -1,6 +1,6 @@
 import cards from "../assets/cards";
 import { getCardData } from "../common/deck";
-import { Orientation } from "./common";
+import { Field, FieldRow, Orientation } from "./common";
 
 export const getInitialDuelState = (
   cardQuantMap1: CardQuantityMap,
@@ -9,6 +9,13 @@ export const getInitialDuelState = (
   return {
     p1: generateNewDuellistDuelState(cardQuantMap1),
     p2: generateNewDuellistDuelState(cardQuantMap2),
+    activeTurn: {
+      duellistKey: "p1",
+      hasNormalSummoned: false,
+      numTributedMonsters: 0,
+    },
+    activeField: Field.Arena,
+    cursorPos: [FieldRow.PlayerHand, 0],
   };
 };
 
@@ -51,7 +58,6 @@ export const generateNewDuellistDuelState = (
     })),
     deck: deck,
     graveyard: null,
-    activeField: "Arena",
     monsterZones: Array.from({ length: 5 }).map(() => ({ isOccupied: false })),
     spellTrapZones: Array.from({ length: 5 }).map(() => ({
       isOccupied: false,

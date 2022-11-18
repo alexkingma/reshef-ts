@@ -1,6 +1,7 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import cards from "../assets/cards";
 import { default as fields } from "../assets/fields.json";
+import { Field } from "../duel/common";
 import { getCardThreatMap } from "./threat";
 
 export type NumTributes = 0 | 1 | 2 | 3;

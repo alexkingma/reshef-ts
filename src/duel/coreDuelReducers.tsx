@@ -29,6 +29,7 @@ type DuelReducers = {
   [key in DuelActionType]: (args: {
     originatorState: DuellistDuelState;
     targetState: DuellistDuelState;
+    activeTurn: Turn;
     payload: any;
   }) => void;
 };
@@ -75,7 +76,11 @@ export const coreDuelReducers: DuelReducers = {
   [DuelActionType.SubtractLP]: ({ originatorState, payload: lpLoss }) => {
     originatorState.lp = Math.max(originatorState.lp - lpLoss, 0);
   },
-  [DuelActionType.NormalSummon]: ({ originatorState, payload: handIdx }) => {
+  [DuelActionType.NormalSummon]: ({
+    originatorState,
+    activeTurn,
+    payload: handIdx,
+  }) => {
     // remove monster from hand at given index, summon it to the field
     const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
     const { card } = originatorState.hand[handIdx] as OccupiedMonsterZone;
@@ -88,6 +93,7 @@ export const coreDuelReducers: DuelReducers = {
       powerUpLevel: 0,
       hasAttacked: false,
     };
+    activeTurn.hasNormalSummoned = true;
   },
   [DuelActionType.SpecialSummon]: ({ originatorState }) => {
     // TODO
@@ -134,6 +140,7 @@ export const coreDuelReducers: DuelReducers = {
     if (targetLpLoss) {
       targetState.lp -= targetLpLoss;
     }
+    attackerZone.hasAttacked = true;
   },
   [DuelActionType.ChangeBattlePosition]: ({
     originatorState,
