@@ -1,11 +1,11 @@
+import { attackMonster } from "./combatUtil";
+import { BattlePosition, Orientation } from "./common";
 import {
   draw,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   shuffle,
 } from "./duelUtil";
-import { Orientation, BattlePosition } from "./common";
-import { attackMonster } from "./combatUtil";
 
 export enum DuelActionType {
   AddLP = "ADD_LP",

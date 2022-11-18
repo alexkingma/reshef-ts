@@ -1,12 +1,12 @@
-import { useReducer } from "react";
 import produce from "immer";
+import { useReducer } from "react";
 
-import { getInitialDuelState } from "./duelUtil";
 import {
-  getCoreDuelDispatchActions,
   coreDuelReducers,
   DuelAction,
+  getCoreDuelDispatchActions,
 } from "./coreDuelReducers";
+import { getInitialDuelState } from "./duelUtil";
 
 const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
   produce(state, (draft) => {
