@@ -1,11 +1,11 @@
 import React from "react";
 
-import { DuellistDeck } from "./DuellistDeck";
-import { DuellistHand } from "./DuellistHand";
+import { DuellistDeck } from "./Deck";
+import { DuellistHand } from "./Hand";
 import { DuellistLP } from "./DuellistLP";
-import { DuellistMonsterZones } from "./DuellistMonsterZones";
-import { DuellistSpellTrapZones } from "./DuellistSpellTrapZones";
-import { DuelPartialDispatchActions } from "./coreDuelReducers";
+import { DuellistMonsterZones } from "./MonsterZones";
+import { DuellistSpellTrapZones } from "./SpellTrapZones";
+import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = DuellistDuelState &
   DuelPartialDispatchActions & {

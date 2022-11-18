@@ -1,12 +1,12 @@
 import React from "react";
 
 import { Duellist } from "./Duellist";
-import { getTempCardQuantMap } from "./duelUtil";
-import useDuelReducer from "./useDuelReducer";
+import { getTempCardQuantMap } from "../duelUtil";
+import useDuelReducer from "../useDuelReducer";
 import {
   DuelDispatchActions,
   DuelPartialDispatchActions,
-} from "./coreDuelReducers";
+} from "../coreDuelReducers";
 
 export const Duel = () => {
   const playerCardMap = getTempCardQuantMap();

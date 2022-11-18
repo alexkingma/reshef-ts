@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Duel } from "./duel/Duel";
+import { Duel } from "./duel/components/Duel";
 
 import "./App.css";
 

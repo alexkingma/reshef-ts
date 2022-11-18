@@ -1,7 +1,7 @@
 import React from "react";
 
-import { BattlePosition } from "./common";
-import { DuelPartialDispatchActions } from "./coreDuelReducers";
+import { BattlePosition } from "../common";
+import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "monsterZones"> &
   Pick<DuelPartialDispatchActions, "attackMonster" | "changeBattlePosition">;

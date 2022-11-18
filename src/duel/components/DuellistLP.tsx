@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DuelPartialDispatchActions } from "./coreDuelReducers";
+import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "lp"> &
   Pick<DuelPartialDispatchActions, "addLP" | "subtractLP">;

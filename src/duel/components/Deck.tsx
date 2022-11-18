@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DuelPartialDispatchActions } from "./coreDuelReducers";
+import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "deck"> &
   Pick<DuelPartialDispatchActions, "shuffle" | "drawCard">;
