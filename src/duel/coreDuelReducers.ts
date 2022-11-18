@@ -4,6 +4,7 @@ import {
   draw,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
+  getOtherDuellistKey,
   shuffle,
 } from "./duelUtil";
 
@@ -17,6 +18,7 @@ export enum DuelActionType {
   SetSpellTrap = "SET_SPELL_TRAP",
   AttackMonster = "ATTACK_MONSTER",
   ChangeBattlePosition = "CHANGE_BATTLE_POSITION",
+  EndTurn = "END_TURN",
 }
 
 export interface DuelAction {
@@ -35,14 +37,15 @@ type DuelReducers = {
 };
 
 export interface DuelPartialDispatchActions {
-  addLP: (payload: number) => void;
-  subtractLP: (payload: number) => void;
+  addLP: (lp: number) => void;
+  subtractLP: (lp: number) => void;
   shuffle: () => void;
   drawCard: () => void;
-  normalSummon: (payload: number) => void;
-  setSpellTrap: (payload: number) => void;
-  attackMonster: (payload: number) => void;
-  changeBattlePosition: (payload: number) => void;
+  normalSummon: (monsterIdx: number) => void;
+  setSpellTrap: (handIdx: number) => void;
+  attackMonster: (targetIdx: number) => void;
+  changeBattlePosition: (monsterIdx: number) => void;
+  endTurn: () => void;
 }
 
 export type DuelDispatchActions = PrependArgInFunctionMap<
@@ -154,6 +157,16 @@ export const coreDuelReducers: DuelReducers = {
         ? BattlePosition.Defence
         : BattlePosition.Attack;
   },
+  [DuelActionType.EndTurn]: ({ originatorState, activeTurn }) => {
+    // reset all turn-based params, then hand over to other player
+    originatorState.monsterZones.forEach((zone) => {
+      if (!zone.isOccupied) return;
+      zone.hasAttacked = false;
+    });
+    activeTurn.duellistKey = getOtherDuellistKey(activeTurn.duellistKey);
+    activeTurn.hasNormalSummoned = false;
+    activeTurn.numTributedMonsters = 0;
+  },
 };
 
 export const getCoreDuelDispatchActions = (
@@ -191,4 +204,6 @@ export const getCoreDuelDispatchActions = (
       type: DuelActionType.ChangeBattlePosition,
       payload,
     }),
+  endTurn: (duellistKey: DuellistKey) =>
+    dispatch({ duellistKey, type: DuelActionType.EndTurn }),
 });

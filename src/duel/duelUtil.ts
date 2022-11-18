@@ -122,3 +122,7 @@ export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]): number => {
   });
   return idx;
 };
+
+export const getOtherDuellistKey = (key: DuellistKey) => {
+  return key === "p1" ? "p2" : "p1";
+};

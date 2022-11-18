@@ -44,11 +44,11 @@ eventual/complex ideas:
 
 pending duel features:
   tribute monster
+  block attacks/normal summons after one per turn
   discard card
   activate spell (just power-ups, to start)
   activate trap
   activate monster effect
-  end turn
 
 major chunks of game state:
   duel -- see above

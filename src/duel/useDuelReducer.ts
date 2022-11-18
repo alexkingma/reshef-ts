@@ -6,13 +6,13 @@ import {
   DuelAction,
   getCoreDuelDispatchActions,
 } from "./coreDuelReducers";
-import { getInitialDuelState } from "./duelUtil";
+import { getInitialDuelState, getOtherDuellistKey } from "./duelUtil";
 
 const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
   produce(state, (draft) => {
     const reducers = { ...coreDuelReducers };
     const originatorState = draft[action.duellistKey];
-    const targetState = draft[action.duellistKey === "p1" ? "p2" : "p1"];
+    const targetState = draft[getOtherDuellistKey(action.duellistKey)];
     reducers[action.type]({
       originatorState,
       targetState,

@@ -39,11 +39,13 @@ export const Duel = () => {
     >
       <Duellist
         name="Player"
+        isMyTurn={state.activeTurn.duellistKey === "p1"}
         {...state.p1}
         {...getPartialDispatchActions("p1")}
       />
       <Duellist
         name="Opponent"
+        isMyTurn={state.activeTurn.duellistKey === "p2"}
         {...state.p2}
         {...getPartialDispatchActions("p2")}
       />

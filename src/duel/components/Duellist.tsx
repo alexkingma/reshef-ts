@@ -2,7 +2,7 @@ import React from "react";
 
 import { DuellistDeck } from "./Deck";
 import { DuellistHand } from "./Hand";
-import { DuellistLP } from "./DuellistLP";
+import { DuellistStatus } from "./DuellistStatus";
 import { DuellistMonsterZones } from "./MonsterZones";
 import { DuellistSpellTrapZones } from "./SpellTrapZones";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
@@ -10,10 +10,12 @@ import { DuelPartialDispatchActions } from "../coreDuelReducers";
 type Props = DuellistDuelState &
   DuelPartialDispatchActions & {
     name: string;
+    isMyTurn: boolean;
   };
 
 export const Duellist = ({
   name,
+  isMyTurn,
 
   // duellistState
   lp,
@@ -30,6 +32,7 @@ export const Duellist = ({
   normalSummon,
   setSpellTrap,
   changeBattlePosition,
+  endTurn,
 
   // cross-board dispatch/action combos
   attackMonster,
@@ -37,7 +40,13 @@ export const Duellist = ({
   return (
     <div>
       <h5>{name}</h5>
-      <DuellistLP lp={lp} addLP={addLP} subtractLP={subtractLP} />
+      <DuellistStatus
+        lp={lp}
+        addLP={addLP}
+        subtractLP={subtractLP}
+        isMyTurn={isMyTurn}
+        endTurn={endTurn}
+      />
       <DuellistMonsterZones
         monsterZones={monsterZones}
         attackMonster={attackMonster}
