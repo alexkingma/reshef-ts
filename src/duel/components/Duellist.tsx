@@ -63,6 +63,7 @@ export const Duellist = ({
       />
       <DuellistMonsterZones
         monsterZones={monsterZones}
+        isMyTurn={isMyTurn}
         attackMonster={attackMonster}
         changeBattlePosition={changeBattlePosition}
         tribute={tribute}

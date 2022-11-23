@@ -126,24 +126,28 @@ export const coreDuelReducers: DuelReducers = {
     if (targetIdx === -1) {
       // no monsters, attack directly
       targetState.lp -= attackerZone.card.atk;
-      return;
-    }
-    const targetZone = targetState.monsterZones[
-      targetIdx
-    ] as OccupiedMonsterZone;
-    const { attackerDestroyed, targetDestroyed, attackerLpLoss, targetLpLoss } =
-      attackMonster(attackerZone, targetZone);
-    if (attackerDestroyed) {
-      originatorState.monsterZones[attackerIdx] = { isOccupied: false };
-    }
-    if (targetDestroyed) {
-      targetState.monsterZones[targetIdx] = { isOccupied: false };
-    }
-    if (attackerLpLoss) {
-      originatorState.lp -= attackerLpLoss;
-    }
-    if (targetLpLoss) {
-      targetState.lp -= targetLpLoss;
+    } else {
+      const targetZone = targetState.monsterZones[
+        targetIdx
+      ] as OccupiedMonsterZone;
+      const {
+        attackerDestroyed,
+        targetDestroyed,
+        attackerLpLoss,
+        targetLpLoss,
+      } = attackMonster(attackerZone, targetZone);
+      if (attackerDestroyed) {
+        originatorState.monsterZones[attackerIdx] = { isOccupied: false };
+      }
+      if (targetDestroyed) {
+        targetState.monsterZones[targetIdx] = { isOccupied: false };
+      }
+      if (attackerLpLoss) {
+        originatorState.lp -= attackerLpLoss;
+      }
+      if (targetLpLoss) {
+        targetState.lp -= targetLpLoss;
+      }
     }
     attackerZone.hasAttacked = true;
   },

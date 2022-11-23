@@ -43,7 +43,6 @@ eventual/complex ideas:
   notify player when cards they ordered have arrived at the shop (once a variable number of duels have transpired, scaling vaguely on cost/rarity of card)
 
 pending duel features:
-  limit attacks to one per monster per turn
   discard card
   activate spell (just power-ups, to start)
   activate trap

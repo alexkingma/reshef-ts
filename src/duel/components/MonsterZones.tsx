@@ -7,10 +7,13 @@ type Props = Pick<DuellistDuelState, "monsterZones"> &
   Pick<
     DuelPartialDispatchActions,
     "attackMonster" | "changeBattlePosition" | "tribute"
-  >;
+  > & {
+    isMyTurn: boolean;
+  };
 
 export const DuellistMonsterZones = ({
   monsterZones,
+  isMyTurn,
   attackMonster,
   changeBattlePosition,
   tribute,
@@ -27,12 +30,14 @@ export const DuellistMonsterZones = ({
               </li>
             );
           }
-          const { card, battlePosition: pos } = zone;
+          const { card, battlePosition: pos, hasAttacked } = zone;
           return (
             <li key={idx}>
               {pos === BattlePosition.Attack ? "[]" : "=="} {card.name} (
               {card.atk}/{card.def})
-              <button onClick={() => attackMonster(idx)}>Attack</button>
+              {!hasAttacked && isMyTurn ? (
+                <button onClick={() => attackMonster(idx)}>Attack</button>
+              ) : null}
               <button onClick={() => changeBattlePosition(idx)}>
                 Change Pos
               </button>
