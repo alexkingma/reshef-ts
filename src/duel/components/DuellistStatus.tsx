@@ -21,10 +21,11 @@ export const DuellistStatus = ({
         <h5>{name}</h5>
         {isMyTurn ? <button onClick={endTurn}>End Turn</button> : null}
       </div>
-      <br />
-      LP: {lp}&nbsp;
-      <button onClick={() => addLP(1500)}>+1500</button>
-      <button onClick={() => subtractLP(200)}>-200</button>
+      <div>
+        LP: {lp}&nbsp;
+        <button onClick={() => addLP(1500)}>+1500</button>
+        <button onClick={() => subtractLP(200)}>-200</button>
+      </div>
     </>
   );
 };

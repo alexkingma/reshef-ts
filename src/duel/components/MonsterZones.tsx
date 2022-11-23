@@ -4,12 +4,16 @@ import { BattlePosition } from "../common";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "monsterZones"> &
-  Pick<DuelPartialDispatchActions, "attackMonster" | "changeBattlePosition">;
+  Pick<
+    DuelPartialDispatchActions,
+    "attackMonster" | "changeBattlePosition" | "tribute"
+  >;
 
 export const DuellistMonsterZones = ({
   monsterZones,
   attackMonster,
   changeBattlePosition,
+  tribute,
 }: Props) => {
   return (
     <div>
@@ -32,6 +36,7 @@ export const DuellistMonsterZones = ({
               <button onClick={() => changeBattlePosition(idx)}>
                 Change Pos
               </button>
+              <button onClick={() => tribute(idx)}>Tribute</button>
             </li>
           );
         })}

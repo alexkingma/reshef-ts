@@ -19,6 +19,7 @@ export enum DuelActionType {
   AttackMonster = "ATTACK_MONSTER",
   ChangeBattlePosition = "CHANGE_BATTLE_POSITION",
   EndTurn = "END_TURN",
+  Tribute = "TRIBUTE",
 }
 
 export interface DuelAction {
@@ -46,6 +47,7 @@ export interface DuelPartialDispatchActions {
   attackMonster: (targetIdx: number) => void;
   changeBattlePosition: (monsterIdx: number) => void;
   endTurn: () => void;
+  tribute: (monsterIdx: number) => void;
 }
 
 export type DuelDispatchActions = PrependArgInFunctionMap<
@@ -167,6 +169,14 @@ export const coreDuelReducers: DuelReducers = {
     activeTurn.hasNormalSummoned = false;
     activeTurn.numTributedMonsters = 0;
   },
+  [DuelActionType.Tribute]: ({
+    originatorState,
+    activeTurn,
+    payload: monsterIdx,
+  }) => {
+    originatorState.monsterZones[monsterIdx] = { isOccupied: false };
+    activeTurn.numTributedMonsters++;
+  },
 };
 
 export const getCoreDuelDispatchActions = (
@@ -206,4 +216,10 @@ export const getCoreDuelDispatchActions = (
     }),
   endTurn: (duellistKey: DuellistKey) =>
     dispatch({ duellistKey, type: DuelActionType.EndTurn }),
+  tribute: (duellistKey: DuellistKey, payload: number) =>
+    dispatch({
+      duellistKey,
+      type: DuelActionType.Tribute,
+      payload,
+    }),
 });
