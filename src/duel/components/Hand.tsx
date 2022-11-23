@@ -3,9 +3,16 @@ import React from "react";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "hand"> &
-  Pick<DuelPartialDispatchActions, "normalSummon" | "setSpellTrap">;
+  Pick<DuelPartialDispatchActions, "normalSummon" | "setSpellTrap"> & {
+    canNormalSummon: (card: MonsterCard) => boolean;
+  };
 
-export const DuellistHand = ({ hand, normalSummon, setSpellTrap }: Props) => {
+export const DuellistHand = ({
+  hand,
+  canNormalSummon,
+  normalSummon,
+  setSpellTrap,
+}: Props) => {
   return (
     <div>
       Hand:
@@ -18,7 +25,9 @@ export const DuellistHand = ({ hand, normalSummon, setSpellTrap }: Props) => {
                 {zone.card.category === "Monster" ? (
                   <>
                     {"{" + zone.card.alignment + "}"}
-                    <button onClick={() => normalSummon(idx)}>Summon</button>
+                    {canNormalSummon(zone.card) ? (
+                      <button onClick={() => normalSummon(idx)}>Summon</button>
+                    ) : null}
                   </>
                 ) : (
                   <button onClick={() => setSpellTrap(idx)}>Set</button>

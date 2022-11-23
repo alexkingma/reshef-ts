@@ -6,16 +6,21 @@ import { DuellistStatus } from "./DuellistStatus";
 import { DuellistMonsterZones } from "./MonsterZones";
 import { DuellistSpellTrapZones } from "./SpellTrapZones";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
+import { getNumTributesRequired } from "../duelUtil";
 
 type Props = DuellistDuelState &
+  Pick<DuelState, "activeTurn"> &
   DuelPartialDispatchActions & {
     name: string;
-    isMyTurn: boolean;
+    duellistKey: DuellistKey;
   };
 
 export const Duellist = ({
   name,
-  isMyTurn,
+  duellistKey,
+
+  // turn state
+  activeTurn,
 
   // duellistState
   lp,
@@ -38,6 +43,14 @@ export const Duellist = ({
   // cross-board dispatch/action combos
   attackMonster,
 }: Props) => {
+  const isMyTurn = activeTurn.duellistKey === duellistKey;
+
+  const canNormalSummon = (card: MonsterCard) => {
+    const { hasNormalSummoned, numTributedMonsters } = activeTurn;
+    if (!isMyTurn || hasNormalSummoned) return false;
+    return numTributedMonsters >= getNumTributesRequired(card);
+  };
+
   return (
     <div>
       <DuellistStatus
@@ -57,6 +70,7 @@ export const Duellist = ({
       <DuellistSpellTrapZones spellTrapZones={spellTrapZones} />
       <DuellistHand
         hand={hand}
+        canNormalSummon={canNormalSummon}
         normalSummon={normalSummon}
         setSpellTrap={setSpellTrap}
       />
