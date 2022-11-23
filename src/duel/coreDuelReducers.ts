@@ -10,8 +10,6 @@ import {
 } from "./duelUtil";
 
 export enum DuelActionType {
-  AddLP = "ADD_LP",
-  SubtractLP = "SUBTRACT_LP",
   Shuffle = "SHUFFLE",
   DrawCard = "DRAW_CARD",
   NormalSummon = "NORMAL_SUMMON",
@@ -40,8 +38,6 @@ type DuelReducers = {
 };
 
 export interface DuelPartialDispatchActions {
-  addLP: (lp: number) => void;
-  subtractLP: (lp: number) => void;
   shuffle: () => void;
   drawCard: () => void;
   normalSummon: (monsterIdx: number) => void;
@@ -77,12 +73,6 @@ export const coreDuelReducers: DuelReducers = {
       card,
       orientation: Orientation.FaceDown,
     };
-  },
-  [DuelActionType.AddLP]: ({ originatorState, payload: lpGain }) => {
-    originatorState.lp += lpGain;
-  },
-  [DuelActionType.SubtractLP]: ({ originatorState, payload: lpLoss }) => {
-    originatorState.lp = Math.max(originatorState.lp - lpLoss, 0);
   },
   [DuelActionType.NormalSummon]: ({
     originatorState,
@@ -194,10 +184,6 @@ export const coreDuelReducers: DuelReducers = {
 export const getCoreDuelDispatchActions = (
   dispatch: (value: DuelAction) => void
 ): DuelDispatchActions => ({
-  addLP: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({ duellistKey, type: DuelActionType.AddLP, payload }),
-  subtractLP: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({ duellistKey, type: DuelActionType.SubtractLP, payload }),
   shuffle: (duellistKey: DuellistKey) =>
     dispatch({ duellistKey, type: DuelActionType.Shuffle }),
   drawCard: (duellistKey: DuellistKey) =>

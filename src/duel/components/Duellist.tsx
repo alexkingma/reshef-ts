@@ -30,8 +30,6 @@ export const Duellist = ({
   spellTrapZones,
 
   // duellist dispatch/action combos
-  addLP,
-  subtractLP,
   shuffle,
   drawCard,
   normalSummon,
@@ -58,8 +56,6 @@ export const Duellist = ({
         name={name}
         lp={lp}
         isMyTurn={isMyTurn}
-        addLP={addLP}
-        subtractLP={subtractLP}
         endTurn={endTurn}
       />
       <DuellistMonsterZones
