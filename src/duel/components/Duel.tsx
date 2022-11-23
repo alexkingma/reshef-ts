@@ -37,6 +37,14 @@ export const Duel = () => {
         margin: "0 400px",
       }}
     >
+      <div>
+        <h5>Turn Info</h5>
+        <p>Num Tributes: {state.activeTurn.numTributedMonsters}</p>
+        <p>
+          Has Normal Summoned:{" "}
+          {state.activeTurn.hasNormalSummoned ? "YES" : "NO"}
+        </p>
+      </div>
       <Duellist
         name="Player"
         isMyTurn={state.activeTurn.duellistKey === "p1"}
