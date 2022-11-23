@@ -1,6 +1,10 @@
-import { getAlignmentResult } from "../common/deck";
+import { default as alignmentMap } from "../assets/alignment.json";
 import { BattlePosition } from "./common";
 
+const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
+  const { strong, weak } = alignmentMap[attacker];
+  return { isStrong: strong === target, isWeak: weak === target };
+};
 export const attackMonster = (
   attacker: OccupiedMonsterZone,
   target: OccupiedMonsterZone

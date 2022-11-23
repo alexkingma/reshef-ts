@@ -1,4 +1,4 @@
-import { getCardData } from "../../common/deck";
+import { getCard } from "../../common/card";
 import { attackMonster } from "../combatUtil";
 import { BattlePosition, Orientation } from "../common";
 
@@ -11,7 +11,7 @@ let light_700_600: OccupiedMonsterZone;
 let light_3000_2500: OccupiedMonsterZone;
 
 const createZone = (cardName: CardName): OccupiedMonsterZone => ({
-  card: getCardData(cardName) as MonsterCard,
+  card: getCard(cardName) as MonsterCard,
   battlePosition: BattlePosition.Attack,
   hasAttacked: false,
   isOccupied: true,

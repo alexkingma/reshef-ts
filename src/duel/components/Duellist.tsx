@@ -39,12 +39,12 @@ export const Duellist = ({
 }: Props) => {
   return (
     <div>
-      <h5>{name}</h5>
       <DuellistStatus
+        name={name}
         lp={lp}
+        isMyTurn={isMyTurn}
         addLP={addLP}
         subtractLP={subtractLP}
-        isMyTurn={isMyTurn}
         endTurn={endTurn}
       />
       <DuellistMonsterZones

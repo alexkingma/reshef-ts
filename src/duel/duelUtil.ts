@@ -1,5 +1,5 @@
 import cards from "../assets/cards";
-import { getCardData } from "../common/deck";
+import { getCard } from "../common/card";
 import { Field, FieldRow, Orientation } from "./common";
 
 export const getInitialDuelState = (
@@ -67,7 +67,7 @@ export const generateNewDuellistDuelState = (
 
 export const initialiseDeck = (cardQuantMap: CardQuantityMap): Deck => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [cardName, qty]) => {
-    const cardData = getCardData(cardName as CardName);
+    const cardData = getCard(cardName as CardName);
     const cards: Card[] = Array.from({ length: qty });
     cards.fill(cardData);
     deck.push(...cards);
@@ -125,4 +125,8 @@ export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]): number => {
 
 export const getOtherDuellistKey = (key: DuellistKey) => {
   return key === "p1" ? "p2" : "p1";
+};
+
+export const getNumTributes = ({ level }: MonsterCard): 0 | 1 | 2 | 3 => {
+  return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };

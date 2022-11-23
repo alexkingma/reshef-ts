@@ -13,8 +13,3 @@ interface Duellist {
 type CardQuantityMap = {
   [card in CardName]?: number;
 };
-
-type DeckCard = Card & {
-  qty: number;
-  threat: number;
-};
