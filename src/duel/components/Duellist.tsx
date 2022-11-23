@@ -39,6 +39,7 @@ export const Duellist = ({
   changeBattlePosition,
   endTurn,
   tribute,
+  discard,
 
   // cross-board dispatch/action combos
   attackMonster,
@@ -67,13 +68,20 @@ export const Duellist = ({
         attackMonster={attackMonster}
         changeBattlePosition={changeBattlePosition}
         tribute={tribute}
+        discard={discard}
       />
-      <DuellistSpellTrapZones spellTrapZones={spellTrapZones} />
+      <DuellistSpellTrapZones
+        spellTrapZones={spellTrapZones}
+        isMyTurn={isMyTurn}
+        discard={discard}
+      />
       <DuellistHand
         hand={hand}
+        isMyTurn={isMyTurn}
         canNormalSummon={canNormalSummon}
         normalSummon={normalSummon}
         setSpellTrap={setSpellTrap}
+        discard={discard}
       />
       <DuellistDeck deck={deck} shuffle={shuffle} drawCard={drawCard} />
     </div>

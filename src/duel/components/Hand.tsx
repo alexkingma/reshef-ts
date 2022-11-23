@@ -1,17 +1,24 @@
 import React from "react";
+import { FieldRow } from "../common";
 
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "hand"> &
-  Pick<DuelPartialDispatchActions, "normalSummon" | "setSpellTrap"> & {
+  Pick<
+    DuelPartialDispatchActions,
+    "normalSummon" | "setSpellTrap" | "discard"
+  > & {
+    isMyTurn: boolean;
     canNormalSummon: (card: MonsterCard) => boolean;
   };
 
 export const DuellistHand = ({
   hand,
+  isMyTurn,
   canNormalSummon,
   normalSummon,
   setSpellTrap,
+  discard,
 }: Props) => {
   return (
     <div>
@@ -32,6 +39,15 @@ export const DuellistHand = ({
                 ) : (
                   <button onClick={() => setSpellTrap(idx)}>Set</button>
                 )}
+                {isMyTurn ? (
+                  <button
+                    onClick={() =>
+                      discard([FieldRow.PlayerHand, idx as FieldCol])
+                    }
+                  >
+                    Discard
+                  </button>
+                ) : null}
               </>
             ) : (
               <i>Empty</i>

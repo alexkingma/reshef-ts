@@ -132,3 +132,19 @@ export const getNumTributesRequired = ({
 }: MonsterCard): 0 | 1 | 2 | 3 => {
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
+
+export const getZoneKey = (
+  row: FieldRow
+): keyof Pick<
+  DuellistDuelState,
+  "monsterZones" | "spellTrapZones" | "hand"
+> => {
+  switch (row) {
+    case FieldRow.PlayerMonster:
+      return "monsterZones";
+    case FieldRow.PlayerSpellTrap:
+      return "spellTrapZones";
+    default:
+      return "hand";
+  }
+};

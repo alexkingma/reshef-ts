@@ -5,6 +5,7 @@ import {
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   getOtherDuellistKey,
+  getZoneKey,
   shuffle,
 } from "./duelUtil";
 
@@ -20,6 +21,7 @@ export enum DuelActionType {
   ChangeBattlePosition = "CHANGE_BATTLE_POSITION",
   EndTurn = "END_TURN",
   Tribute = "TRIBUTE",
+  Discard = "DISCARD",
 }
 
 export interface DuelAction {
@@ -48,6 +50,7 @@ export interface DuelPartialDispatchActions {
   changeBattlePosition: (monsterIdx: number) => void;
   endTurn: () => void;
   tribute: (monsterIdx: number) => void;
+  discard: (coords: FieldCoords) => void;
 }
 
 export type DuelDispatchActions = PrependArgInFunctionMap<
@@ -181,6 +184,11 @@ export const coreDuelReducers: DuelReducers = {
     originatorState.monsterZones[monsterIdx] = { isOccupied: false };
     activeTurn.numTributedMonsters++;
   },
+  [DuelActionType.Discard]: ({ originatorState, payload: coords }) => {
+    const [row, col] = coords as FieldCoords;
+    const zoneKey = getZoneKey(row);
+    originatorState[zoneKey][col] = { isOccupied: false };
+  },
 };
 
 export const getCoreDuelDispatchActions = (
@@ -224,6 +232,12 @@ export const getCoreDuelDispatchActions = (
     dispatch({
       duellistKey,
       type: DuelActionType.Tribute,
+      payload,
+    }),
+  discard: (duellistKey: DuellistKey, payload: FieldCoords) =>
+    dispatch({
+      duellistKey,
+      type: DuelActionType.Discard,
       payload,
     }),
 });

@@ -1,12 +1,12 @@
 import React from "react";
 
-import { BattlePosition } from "../common";
+import { BattlePosition, FieldRow } from "../common";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
 type Props = Pick<DuellistDuelState, "monsterZones"> &
   Pick<
     DuelPartialDispatchActions,
-    "attackMonster" | "changeBattlePosition" | "tribute"
+    "attackMonster" | "changeBattlePosition" | "tribute" | "discard"
   > & {
     isMyTurn: boolean;
   };
@@ -17,6 +17,7 @@ export const DuellistMonsterZones = ({
   attackMonster,
   changeBattlePosition,
   tribute,
+  discard,
 }: Props) => {
   return (
     <div>
@@ -42,6 +43,13 @@ export const DuellistMonsterZones = ({
                 Change Pos
               </button>
               <button onClick={() => tribute(idx)}>Tribute</button>
+              <button
+                onClick={() =>
+                  discard([FieldRow.PlayerMonster, idx as FieldCol])
+                }
+              >
+                Discard
+              </button>
             </li>
           );
         })}
