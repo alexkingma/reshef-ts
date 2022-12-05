@@ -1,17 +1,22 @@
 import React from "react";
+import { useAppSelector } from "../../hooks";
+import { selectDuellist } from "../duelSlice";
+import useDuelActions from "../useDuelActions";
 
-import { DuelPartialDispatchActions } from "../coreDuelReducers";
+interface Props {
+  duellistKey: DuellistKey;
+}
 
-type Props = Pick<Duellist, "deck"> &
-  Pick<DuelPartialDispatchActions, "shuffle" | "drawCard">;
+export const DuellistDeck = ({ duellistKey }: Props) => {
+  const { deck } = useAppSelector(selectDuellist(duellistKey));
+  const { shuffle, draw } = useDuelActions(duellistKey);
 
-export const DuellistDeck = ({ deck, shuffle, drawCard }: Props) => {
   return (
     <>
       <div>
         Deck:&nbsp;
-        <button onClick={shuffle}>Shuffle</button>
-        <button onClick={drawCard}>Draw</button>
+        <button onClick={() => shuffle()}>Shuffle</button>
+        <button onClick={() => draw()}>Draw</button>
         <ol>
           {deck.slice(0, 5).map((card, idx) => (
             <li key={idx}>{card.name}</li>

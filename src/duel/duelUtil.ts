@@ -138,39 +138,15 @@ export const getZoneKey = (
   }
 };
 
-export const getNumCardsInHand = (hand: HandZone[]) => {
-  return hand.filter((z) => z.isOccupied).length;
-};
-
-export const clearGraveyard = (duellist: Duellist) => {
-  duellist.graveyard = null;
-};
-
-export const clearZone = (row: Zone[], idx: number) => {
-  // does NOT send anything to graveyard
-  row[idx] = { isOccupied: false };
-};
-
-const setRowOrientation = (row: Zone[], orientation: Orientation) => {
-  row.forEach((zone, idx, row) => {
-    if (!zone.isOccupied) return;
-    (row[idx] as OccupiedZone).orientation = orientation;
-  });
-};
-
-export const setRowFaceUp = (row: Zone[]) => {
-  setRowOrientation(row, Orientation.FaceUp);
-};
-
-export const setRowFaceDown = (row: Zone[]) => {
-  setRowOrientation(row, Orientation.FaceDown);
+export const getNumCardsInRow = (row: Zone[]) => {
+  return row.filter((z) => z.isOccupied).length;
 };
 
 export const containsCard = (row: Zone[], cardName: CardName) => {
   return !!row.find((r) => r.isOccupied && r.card.name === cardName);
 };
 
-export const getOccupiedMonsterZone = (
+export const generateOccupiedMonsterZone = (
   card: MonsterCard
 ): OccupiedMonsterZone => ({
   // use this to avoid boilerplate elsewhere

@@ -1,7 +1,7 @@
 import { getCard } from "../../common/card";
 import { attackMonster } from "../combatUtil";
-import { BattlePosition, Orientation } from "../common";
-import { getOccupiedMonsterZone } from "../duelUtil";
+import { BattlePosition } from "../common";
+import { generateOccupiedMonsterZone } from "../duelUtil";
 
 let dark_700_600: OccupiedMonsterZone;
 let dark_800_700: OccupiedMonsterZone;
@@ -12,7 +12,7 @@ let light_700_600: OccupiedMonsterZone;
 let light_3000_2500: OccupiedMonsterZone;
 
 const createZone = (cardName: CardName): OccupiedMonsterZone => ({
-  ...getOccupiedMonsterZone(getCard(cardName) as MonsterCard),
+  ...generateOccupiedMonsterZone(getCard(cardName) as MonsterCard),
 });
 
 beforeEach(() => {

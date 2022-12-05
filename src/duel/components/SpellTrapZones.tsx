@@ -1,31 +1,17 @@
 import React from "react";
-import { FieldRow, Spell } from "../common";
-import { DuelPartialDispatchActions } from "../coreDuelReducers";
-import { SpellDispatchActions } from "../spellEffectReducers";
+import { useAppSelector } from "../../hooks";
+import { FieldRow } from "../common";
+import { selectDuellist, selectIsMyTurn } from "../duelSlice";
+import useDuelActions from "../useDuelActions";
 
-type Props = Pick<Duellist, "spellTrapZones"> &
-  Pick<DuelPartialDispatchActions, "discard"> & {
-    duellistKey: DuellistKey;
-    isMyTurn: boolean;
-    spellEffectDispatches: SpellDispatchActions;
-  };
+interface Props {
+  duellistKey: DuellistKey;
+}
 
-export const DuellistSpellTrapZones = ({
-  duellistKey,
-  spellTrapZones,
-  isMyTurn,
-  discard,
-  spellEffectDispatches,
-}: Props) => {
-  const activateSpellEffect = (cardName: CardName, idx: FieldCol) => {
-    const spellDispatch = spellEffectDispatches[cardName as Spell];
-    if (!spellDispatch) {
-      console.log(`Spell effect not implemented for card: ${cardName}`);
-      return;
-    }
-    spellDispatch(duellistKey);
-    discard([FieldRow.PlayerSpellTrap, idx]);
-  };
+export const DuellistSpellTrapZones = ({ duellistKey }: Props) => {
+  const { spellTrapZones } = useAppSelector(selectDuellist(duellistKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const { activateSpellEffect, discard } = useDuelActions(duellistKey);
 
   return (
     <div>
@@ -45,11 +31,7 @@ export const DuellistSpellTrapZones = ({
               {card.name}
               {isMyTurn ? (
                 <>
-                  <button
-                    onClick={() =>
-                      activateSpellEffect(card.name, idx as FieldCol)
-                    }
-                  >
+                  <button onClick={() => activateSpellEffect(idx as FieldCol)}>
                     Activate
                   </button>
                   <button

@@ -1,80 +1,36 @@
-import { destroyAtCoords, draw } from "./cardEffectUtil";
+import { clearZone, destroyAtCoords, draw } from "./cardEffectUtil";
 import { attackMonster } from "./combatUtil";
-import { BattlePosition, FieldRow, Orientation } from "./common";
+import { BattlePosition, FieldRow, Orientation, Spell } from "./common";
+import { ReducerArg } from "./duelSlice";
 import {
-  clearZone,
+  generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
-  getOccupiedMonsterZone,
   getOtherDuellistKey,
   shuffle,
 } from "./duelUtil";
-import { ReducerArgs } from "./useDuelReducer";
+import { spellEffectReducers } from "./spellEffectReducers";
 
-export enum DuelActionType {
-  Shuffle = "SHUFFLE",
-  DrawCard = "DRAW_CARD",
-  NormalSummon = "NORMAL_SUMMON",
-  SpecialSummon = "SPECIAL_SUMMON",
-  SetSpellTrap = "SET_SPELL_TRAP",
-  AttackMonster = "ATTACK_MONSTER",
-  ChangeBattlePosition = "CHANGE_BATTLE_POSITION",
-  EndTurn = "END_TURN",
-  Tribute = "TRIBUTE",
-  Discard = "DISCARD",
-}
-
-export interface CoreDuelAction {
-  duellistKey: DuellistKey;
-  type: DuelActionType;
-  payload?: any;
-}
-
-type DuelReducers = {
-  [key in DuelActionType]: (args: ReducerArgs) => void;
-};
-
-export interface DuelPartialDispatchActions {
-  shuffle: () => void;
-  drawCard: () => void;
-  normalSummon: (monsterIdx: number) => void;
-  setSpellTrap: (handIdx: number) => void;
-  attackMonster: (targetIdx: number) => void;
-  changeBattlePosition: (monsterIdx: number) => void;
-  endTurn: () => void;
-  tribute: (monsterIdx: number) => void;
-  discard: (coords: FieldCoords) => void;
-}
-
-export type DuelDispatchActions = PrependArgInFunctionMap<
-  DuelPartialDispatchActions,
-  [duellistKey: DuellistKey]
->;
-
-export const coreDuelReducers: DuelReducers = {
-  [DuelActionType.Shuffle]: ({ originatorState }) => {
+export const coreDuelReducers = {
+  shuffle: ({ originatorState }: ReducerArg) => {
     originatorState.deck = shuffle(originatorState.deck);
   },
-  [DuelActionType.DrawCard]: draw(),
-  [DuelActionType.NormalSummon]: ({
-    originatorState,
-    activeTurn,
-    payload: handIdx,
-  }) => {
+  draw: draw(),
+  normalSummon: (
+    { originatorState, activeTurn }: ReducerArg,
+    handIdx: FieldCol
+  ) => {
     // remove monster from hand at given index, summon it to the field
     const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones, true);
     const { card } = originatorState.hand[handIdx] as OccupiedMonsterZone;
     clearZone(originatorState.hand, handIdx);
     originatorState.monsterZones[zoneIdx] = {
-      ...getOccupiedMonsterZone(card),
+      ...generateOccupiedMonsterZone(card),
       orientation: Orientation.FaceDown,
     };
     activeTurn.hasNormalSummoned = true;
   },
-  [DuelActionType.SpecialSummon]: ({ originatorState }) => {
-    // TODO
-  },
-  [DuelActionType.SetSpellTrap]: ({ originatorState, payload: handIdx }) => {
+  setSpellTrap: ({ originatorState }: ReducerArg, handIdx: FieldCol) => {
     // remove spell/trap from hand at given index, set it on the field
     const zoneIdx = getFirstEmptyZoneIdx(originatorState.spellTrapZones, true);
     const { card } = originatorState.hand[handIdx] as OccupiedSpellTrapZone;
@@ -85,11 +41,10 @@ export const coreDuelReducers: DuelReducers = {
       orientation: Orientation.FaceDown,
     };
   },
-  [DuelActionType.AttackMonster]: ({
-    originatorState,
-    targetState,
-    payload: attackerIdx,
-  }) => {
+  attackMonster: (
+    { originatorState, targetState }: ReducerArg,
+    attackerIdx: FieldCol
+  ) => {
     const attackerZone = originatorState.monsterZones[
       attackerIdx
     ] as OccupiedMonsterZone;
@@ -122,10 +77,10 @@ export const coreDuelReducers: DuelReducers = {
     }
     attackerZone.hasAttacked = true;
   },
-  [DuelActionType.ChangeBattlePosition]: ({
-    originatorState,
-    payload: monsterIdx,
-  }) => {
+  changeBattlePosition: (
+    { originatorState }: ReducerArg,
+    monsterIdx: FieldCol
+  ) => {
     const zone = originatorState.monsterZones[
       monsterIdx
     ] as OccupiedMonsterZone;
@@ -134,7 +89,7 @@ export const coreDuelReducers: DuelReducers = {
         ? BattlePosition.Defence
         : BattlePosition.Attack;
   },
-  [DuelActionType.EndTurn]: ({ originatorState, activeTurn }) => {
+  endTurn: ({ originatorState, activeTurn }: ReducerArg) => {
     // reset all turn-based params, then hand over to other player
     originatorState.monsterZones.forEach((zone) => {
       if (!zone.isOccupied) return;
@@ -144,62 +99,30 @@ export const coreDuelReducers: DuelReducers = {
     activeTurn.hasNormalSummoned = false;
     activeTurn.numTributedMonsters = 0;
   },
-  [DuelActionType.Tribute]: ({
-    originatorState,
-    activeTurn,
-    payload: monsterIdx,
-  }) => {
+  tribute: (
+    { originatorState, activeTurn }: ReducerArg,
+    monsterIdx: FieldCol
+  ) => {
     destroyAtCoords(originatorState, [FieldRow.PlayerMonster, monsterIdx]);
     activeTurn.numTributedMonsters++;
   },
-  [DuelActionType.Discard]: ({ originatorState, payload: coords }) => {
+  discard: ({ originatorState }: ReducerArg, coords: FieldCoords) => {
     destroyAtCoords(originatorState, coords);
   },
-};
+  activateSpellEffect: (arg: ReducerArg, spellIdx: FieldCol) => {
+    const { originatorState } = arg;
 
-export const getCoreDuelDispatchActions = (
-  dispatch: (value: CoreDuelAction) => void
-): DuelDispatchActions => ({
-  shuffle: (duellistKey: DuellistKey) =>
-    dispatch({ duellistKey, type: DuelActionType.Shuffle }),
-  drawCard: (duellistKey: DuellistKey) =>
-    dispatch({ duellistKey, type: DuelActionType.DrawCard }),
-  normalSummon: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.NormalSummon,
-      payload,
-    }),
-  setSpellTrap: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.SetSpellTrap,
-      payload,
-    }),
-  attackMonster: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.AttackMonster,
-      payload,
-    }),
-  changeBattlePosition: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.ChangeBattlePosition,
-      payload,
-    }),
-  endTurn: (duellistKey: DuellistKey) =>
-    dispatch({ duellistKey, type: DuelActionType.EndTurn }),
-  tribute: (duellistKey: DuellistKey, payload: number) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.Tribute,
-      payload,
-    }),
-  discard: (duellistKey: DuellistKey, payload: FieldCoords) =>
-    dispatch({
-      duellistKey,
-      type: DuelActionType.Discard,
-      payload,
-    }),
-});
+    const { card } = originatorState.spellTrapZones[
+      spellIdx
+    ] as OccupiedSpellTrapZone;
+    const spellDispatch = spellEffectReducers[card.name as Spell];
+    if (!spellDispatch) {
+      console.log(`Spell effect not implemented for card: ${card.name}`);
+      return;
+    }
+    spellDispatch(arg);
+
+    // discard after activation
+    clearZone(originatorState.spellTrapZones, spellIdx);
+  },
+};

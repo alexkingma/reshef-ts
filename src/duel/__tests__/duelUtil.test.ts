@@ -1,15 +1,15 @@
 import { getCard } from "../../common/card";
-import { getHighestAtkZoneIdx, getOccupiedMonsterZone } from "../duelUtil";
+import { generateOccupiedMonsterZone, getHighestAtkZoneIdx } from "../duelUtil";
 
 describe("getHighestAtkZoneIdx", () => {
   const empty: EmptyZone = {
     isOccupied: false,
   };
   const weak = {
-    ...getOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
+    ...generateOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
   };
   const strong = {
-    ...getOccupiedMonsterZone(getCard("Dark Magician") as MonsterCard),
+    ...generateOccupiedMonsterZone(getCard("Dark Magician") as MonsterCard),
   };
 
   test("weak vs strong", () => {

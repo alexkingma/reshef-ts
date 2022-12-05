@@ -1,24 +1,19 @@
 import React from "react";
-
+import { useAppSelector } from "../../hooks";
 import { BattlePosition, FieldRow } from "../common";
-import { DuelPartialDispatchActions } from "../coreDuelReducers";
+import { selectDuellist, selectIsMyTurn } from "../duelSlice";
+import useDuelActions from "../useDuelActions";
 
-type Props = Pick<Duellist, "monsterZones"> &
-  Pick<
-    DuelPartialDispatchActions,
-    "attackMonster" | "changeBattlePosition" | "tribute" | "discard"
-  > & {
-    isMyTurn: boolean;
-  };
+interface Props {
+  duellistKey: DuellistKey;
+}
 
-export const DuellistMonsterZones = ({
-  monsterZones,
-  isMyTurn,
-  attackMonster,
-  changeBattlePosition,
-  tribute,
-  discard,
-}: Props) => {
+export const DuellistMonsterZones = ({ duellistKey }: Props) => {
+  const { monsterZones } = useAppSelector(selectDuellist(duellistKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const { changeBattlePosition, tribute, discard, attackMonster } =
+    useDuelActions(duellistKey);
+
   return (
     <div>
       Monster Zones:
@@ -37,12 +32,14 @@ export const DuellistMonsterZones = ({
               {pos === BattlePosition.Attack ? "[]" : "=="} {card.name} (
               {card.atk}/{card.def})
               {!hasAttacked && isMyTurn ? (
-                <button onClick={() => attackMonster(idx)}>Attack</button>
+                <button onClick={() => attackMonster(idx as FieldCol)}>
+                  Attack
+                </button>
               ) : null}
-              <button onClick={() => changeBattlePosition(idx)}>
+              <button onClick={() => changeBattlePosition(idx as FieldCol)}>
                 Change Pos
               </button>
-              <button onClick={() => tribute(idx)}>Tribute</button>
+              <button onClick={() => tribute(idx as FieldCol)}>Tribute</button>
               <button
                 onClick={() =>
                   discard([FieldRow.PlayerMonster, idx as FieldCol])

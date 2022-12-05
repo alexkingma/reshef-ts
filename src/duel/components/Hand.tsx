@@ -1,25 +1,26 @@
 import React from "react";
+import { useAppSelector } from "../../hooks";
 import { FieldRow } from "../common";
+import { selectActiveTurn, selectDuellist, selectIsMyTurn } from "../duelSlice";
+import { getNumTributesRequired } from "../duelUtil";
+import useDuelActions from "../useDuelActions";
 
-import { DuelPartialDispatchActions } from "../coreDuelReducers";
+interface Props {
+  duellistKey: DuellistKey;
+}
 
-type Props = Pick<Duellist, "hand"> &
-  Pick<
-    DuelPartialDispatchActions,
-    "normalSummon" | "setSpellTrap" | "discard"
-  > & {
-    isMyTurn: boolean;
-    canNormalSummon: (card: MonsterCard) => boolean;
+export const DuellistHand = ({ duellistKey }: Props) => {
+  const { hand } = useAppSelector(selectDuellist(duellistKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const { hasNormalSummoned, numTributedMonsters } =
+    useAppSelector(selectActiveTurn);
+  const { normalSummon, setSpellTrap, discard } = useDuelActions(duellistKey);
+
+  const canNormalSummon = (card: MonsterCard) => {
+    if (!isMyTurn || hasNormalSummoned) return false;
+    return numTributedMonsters >= getNumTributesRequired(card);
   };
 
-export const DuellistHand = ({
-  hand,
-  isMyTurn,
-  canNormalSummon,
-  normalSummon,
-  setSpellTrap,
-  discard,
-}: Props) => {
   return (
     <div>
       Hand:
@@ -33,11 +34,15 @@ export const DuellistHand = ({
                   <>
                     {"{" + zone.card.alignment + "}"}
                     {canNormalSummon(zone.card) ? (
-                      <button onClick={() => normalSummon(idx)}>Summon</button>
+                      <button onClick={() => normalSummon(idx as FieldCol)}>
+                        Summon
+                      </button>
                     ) : null}
                   </>
                 ) : (
-                  <button onClick={() => setSpellTrap(idx)}>Set</button>
+                  <button onClick={() => setSpellTrap(idx as FieldCol)}>
+                    Set
+                  </button>
                 )}
                 {isMyTurn ? (
                   <button

@@ -1,6 +1,8 @@
 import { getCard } from "../common/card";
 import {
   burn,
+  clearGraveyard,
+  clearZone,
   destroy1500PlusAtk,
   destroyHighestAtk,
   destroyMonsterType,
@@ -9,39 +11,22 @@ import {
   heal,
   powerUp,
   setField,
-} from "./cardEffectUtil";
-import { BattlePosition, Field, FieldRow, Orientation, Spell } from "./common";
-import {
-  clearGraveyard,
-  clearZone,
-  containsCard,
-  getFirstEmptyZoneIdx,
-  getHighestAtkZoneIdx,
-  getNumCardsInHand,
-  getOccupiedMonsterZone,
   setRowFaceDown,
   setRowFaceUp,
+} from "./cardEffectUtil";
+import { BattlePosition, Field, FieldRow, Orientation, Spell } from "./common";
+import { ReducerArg } from "./duelSlice";
+import {
+  containsCard,
+  generateOccupiedMonsterZone,
+  getFirstEmptyZoneIdx,
+  getHighestAtkZoneIdx,
+  getNumCardsInRow,
 } from "./duelUtil";
-import { ReducerArgs } from "./useDuelReducer";
-
-export interface SpellEffectAction {
-  duellistKey: DuellistKey;
-  type: Spell;
-  payload?: any;
-}
 
 type SpellEffectReducers = {
-  [key in Spell]: (args: ReducerArgs) => void;
+  [key in Spell]: (arg: ReducerArg, payload?: any) => void;
 };
-
-export type SpellPartialDispatchActions = {
-  [key in Spell]: () => void;
-};
-
-export type SpellDispatchActions = PrependArgInFunctionMap<
-  SpellPartialDispatchActions,
-  [duellistKey: DuellistKey]
->;
 
 export const spellEffectReducers: SpellEffectReducers = {
   // burn
@@ -50,8 +35,8 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.FinalFlame]: burn(200),
   [Spell.Ookazi]: burn(500),
   [Spell.TremendousFire]: burn(1000),
-  [Spell.RestructerRevolution]: (state) =>
-    burn(getNumCardsInHand(state.targetState.hand) * 200)(state),
+  [Spell.RestructerRevolution]: (arg) =>
+    burn(getNumCardsInRow(arg.targetState.hand) * 200)(arg),
 
   // heal
   [Spell.MooyanCurry]: heal(200),
@@ -152,7 +137,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     try {
       const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
       originatorState.monsterZones[zoneIdx] = {
-        ...getOccupiedMonsterZone(getCard("Change Slime") as MonsterCard),
+        ...generateOccupiedMonsterZone(getCard("Change Slime") as MonsterCard),
         hasAttacked: true,
       };
       activeTurn.hasNormalSummoned = true;
@@ -177,7 +162,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     try {
       const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
       originatorState.monsterZones[zoneIdx] = {
-        ...getOccupiedMonsterZone(
+        ...generateOccupiedMonsterZone(
           getCard(targetState.graveyard) as MonsterCard
         ),
       };
@@ -223,7 +208,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     originatorState.monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;
       row[idx] = {
-        ...getOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
+        ...generateOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
         hasAttacked: true,
       };
     });
@@ -232,17 +217,4 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.TheInexperiencedSpy]: ({ targetState }) => {
     setRowFaceUp(targetState.hand);
   },
-};
-
-export const getSpellEffectDispatchActions = (
-  dispatch: (value: SpellEffectAction) => void
-): SpellDispatchActions => {
-  return Object.values(Spell).reduce(
-    (map, cardName) => ({
-      ...map,
-      [cardName]: (duellistKey: DuellistKey) =>
-        dispatch({ duellistKey, type: cardName }),
-    }),
-    {} as SpellDispatchActions
-  );
 };

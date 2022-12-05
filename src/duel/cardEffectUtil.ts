@@ -1,34 +1,33 @@
 import { Field, FieldRow, Orientation } from "./common";
+import { ReducerArg } from "./duelSlice";
 import {
-  clearZone,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   getZoneKey,
 } from "./duelUtil";
-import { ReducerArgs } from "./useDuelReducer";
 
 export const burn =
   (amt: number) =>
-  ({ targetState }: ReducerArgs) => {
+  ({ targetState }: ReducerArg) => {
     targetState.lp -= amt;
   };
 
 export const heal =
   (amt: number) =>
-  ({ originatorState }: ReducerArgs) => {
-    originatorState.lp -= amt;
+  ({ originatorState }: ReducerArg) => {
+    originatorState.lp += amt;
   };
 
 export const powerUp =
   (levels: number = 1) =>
-  ({ targetState, payload: monsterIdx }: ReducerArgs) => {
+  ({ targetState }: ReducerArg, monsterIdx: FieldCol) => {
     const zone = targetState.monsterZones[monsterIdx] as OccupiedMonsterZone;
     zone.powerUpLevel += levels;
   };
 
 export const setField =
   (newField: Field) =>
-  ({ state }: ReducerArgs) => {
+  ({ state }: ReducerArg) => {
     state.activeField = newField;
   };
 
@@ -42,7 +41,7 @@ const destroyRow = (state: Duellist, row: FieldRow) => {
 
 export const destroyRows =
   (rowsToDestroy: FieldRow[]) =>
-  ({ originatorState, targetState }: ReducerArgs) => {
+  ({ originatorState, targetState }: ReducerArg) => {
     // player rows
     rowsToDestroy
       .filter((r) =>
@@ -77,7 +76,7 @@ export const destroyAtCoords = (state: Duellist, coords: FieldCoords) => {
 
 export const destroyHighestAtk =
   () =>
-  ({ targetState }: ReducerArgs) => {
+  ({ targetState }: ReducerArg) => {
     if (!targetState.monsterZones.filter((z) => z.isOccupied).length) {
       // no monsters exist, destroy nothing
       return;
@@ -91,7 +90,7 @@ export const destroyHighestAtk =
 
 const destroyMonsterConditional =
   (condition: (c: MonsterCard) => boolean) =>
-  ({ targetState }: ReducerArgs) => {
+  ({ targetState }: ReducerArg) => {
     const validColIdxs = targetState.monsterZones.reduce(
       (validCols, z, idx) => {
         if (z.isOccupied && condition(z.card)) {
@@ -123,7 +122,7 @@ export const destroyMonsterType = (type: CardType) =>
 
 export const draw =
   (numCards: number = 1) =>
-  ({ originatorState }: ReducerArgs) => {
+  ({ originatorState }: ReducerArg) => {
     for (let i = 0; i < numCards; i++) {
       let zoneIdx: number;
       try {
@@ -146,3 +145,27 @@ export const draw =
       };
     }
   };
+
+export const clearGraveyard = (duellist: Duellist) => {
+  duellist.graveyard = null;
+};
+
+export const clearZone = (row: Zone[], idx: number) => {
+  // does NOT send anything to graveyard
+  row[idx] = { isOccupied: false };
+};
+
+const setRowOrientation = (row: Zone[], orientation: Orientation) => {
+  row.forEach((zone, idx, row) => {
+    if (!zone.isOccupied) return;
+    (row[idx] as OccupiedZone).orientation = orientation;
+  });
+};
+
+export const setRowFaceUp = (row: Zone[]) => {
+  setRowOrientation(row, Orientation.FaceUp);
+};
+
+export const setRowFaceDown = (row: Zone[]) => {
+  setRowOrientation(row, Orientation.FaceDown);
+};

@@ -1,24 +1,24 @@
 import React from "react";
+import { useAppSelector } from "../../hooks";
+import { selectDuellist, selectIsMyTurn } from "../duelSlice";
 
-import { DuelPartialDispatchActions } from "../coreDuelReducers";
+import useDuelActions from "../useDuelActions";
 
-type Props = Pick<Duellist, "lp" | "graveyard"> & {
+interface Props {
+  duellistKey: DuellistKey;
   name: string;
-  isMyTurn: boolean;
-} & Pick<DuelPartialDispatchActions, "endTurn">;
+}
 
-export const DuellistStatus = ({
-  name,
-  lp,
-  graveyard,
-  isMyTurn,
-  endTurn,
-}: Props) => {
+export const DuellistStatus = ({ duellistKey, name }: Props) => {
+  const { lp, graveyard } = useAppSelector(selectDuellist(duellistKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const { endTurn } = useDuelActions(duellistKey);
+
   return (
     <>
       <div style={{ display: "flex" }}>
         <h5>{name}</h5>
-        {isMyTurn ? <button onClick={endTurn}>End Turn</button> : null}
+        {isMyTurn ? <button onClick={() => endTurn()}>End Turn</button> : null}
       </div>
       <div>LP: {lp}</div>
       <div>Graveyard: {graveyard}</div>
