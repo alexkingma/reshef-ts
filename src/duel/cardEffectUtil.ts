@@ -32,7 +32,7 @@ export const setField =
     state.activeField = newField;
   };
 
-const destroyRow = (state: DuellistDuelState, row: FieldRow) => {
+const destroyRow = (state: Duellist, row: FieldRow) => {
   state[getZoneKey(row)].forEach((zone, idx) => {
     if (zone.isOccupied) {
       destroyAtCoords(state, [row, idx as FieldCol]);
@@ -66,10 +66,7 @@ export const destroyRows =
       .forEach((r) => destroyRow(targetState, r));
   };
 
-export const destroyAtCoords = (
-  state: DuellistDuelState,
-  coords: FieldCoords
-) => {
+export const destroyAtCoords = (state: Duellist, coords: FieldCoords) => {
   const [row, col] = coords;
   const zone = state[getZoneKey(row)][col];
   if (zone.isOccupied && zone.card.category === "Monster") {

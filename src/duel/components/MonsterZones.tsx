@@ -3,7 +3,7 @@ import React from "react";
 import { BattlePosition, FieldRow } from "../common";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
-type Props = Pick<DuellistDuelState, "monsterZones"> &
+type Props = Pick<Duellist, "monsterZones"> &
   Pick<
     DuelPartialDispatchActions,
     "attackMonster" | "changeBattlePosition" | "tribute" | "discard"

@@ -3,7 +3,7 @@ import { FieldRow } from "../common";
 
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
-type Props = Pick<DuellistDuelState, "hand"> &
+type Props = Pick<Duellist, "hand"> &
   Pick<
     DuelPartialDispatchActions,
     "normalSummon" | "setSpellTrap" | "discard"

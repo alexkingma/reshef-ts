@@ -9,8 +9,8 @@ import { DuelPartialDispatchActions } from "../coreDuelReducers";
 import { getNumTributesRequired } from "../duelUtil";
 import { SpellDispatchActions } from "../spellEffectReducers";
 
-type Props = DuellistDuelState &
-  Pick<DuelState, "activeTurn"> &
+type Props = Duellist &
+  Pick<Duel, "activeTurn"> &
   DuelPartialDispatchActions & {
     name: string;
     duellistKey: DuellistKey;
@@ -24,7 +24,7 @@ export const Duellist = ({
   // turn state
   activeTurn,
 
-  // duellistState
+  // duellist state
   lp,
   deck,
   graveyard,

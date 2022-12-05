@@ -27,7 +27,7 @@ type HandZone = EmptyZone | OccupiedZone;
 
 type Deck = Card[];
 
-interface DuellistDuelState {
+interface Duellist {
   lp: number;
   hand: HandZone[];
   deck: Deck;
@@ -36,9 +36,9 @@ interface DuellistDuelState {
   spellTrapZones: SpellTrapZone[];
 }
 
-interface DuelState {
-  p1: DuellistDuelState;
-  p2: DuellistDuelState;
+interface Duel {
+  p1: Duellist;
+  p2: Duellist;
   activeTurn: Turn;
   activeField: Field;
   cursorPos: FieldCoords;

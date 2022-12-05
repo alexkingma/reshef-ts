@@ -2,7 +2,7 @@ import React from "react";
 
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
-type Props = Pick<DuellistDuelState, "deck"> &
+type Props = Pick<Duellist, "deck"> &
   Pick<DuelPartialDispatchActions, "shuffle" | "drawCard">;
 
 export const DuellistDeck = ({ deck, shuffle, drawCard }: Props) => {

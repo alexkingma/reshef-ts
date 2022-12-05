@@ -6,7 +6,7 @@ import {
   coreDuelReducers,
   getCoreDuelDispatchActions,
 } from "./coreDuelReducers";
-import { getInitialDuelState, getOtherDuellistKey } from "./duelUtil";
+import { getInitialDuel, getOtherDuellistKey } from "./duelUtil";
 import {
   getSpellEffectDispatchActions,
   SpellEffectAction,
@@ -14,16 +14,16 @@ import {
 } from "./spellEffectReducers";
 
 export interface ReducerArgs {
-  state: DuelState;
-  originatorState: DuellistDuelState;
-  targetState: DuellistDuelState;
+  state: Duel;
+  originatorState: Duellist;
+  targetState: Duellist;
   activeTurn: Turn;
   payload: any;
 }
 
 type DuelAction = CoreDuelAction | SpellEffectAction;
 
-const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
+const duelReducer = (state: Duel, action: DuelAction): Duel =>
   produce(state, (draft) => {
     const reducers = { ...coreDuelReducers, ...spellEffectReducers };
     const originatorState = draft[action.duellistKey];
@@ -41,7 +41,7 @@ const useDuelReducer = (
   p1CardMap: CardQuantityMap,
   p2CardMap: CardQuantityMap
 ) => {
-  const initialState = getInitialDuelState(p1CardMap, p2CardMap);
+  const initialState = getInitialDuel(p1CardMap, p2CardMap);
   const [state, dispatch] = useReducer(duelReducer, initialState);
 
   return {

@@ -3,7 +3,7 @@ import { FieldRow, Spell } from "../common";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 import { SpellDispatchActions } from "../spellEffectReducers";
 
-type Props = Pick<DuellistDuelState, "spellTrapZones"> &
+type Props = Pick<Duellist, "spellTrapZones"> &
   Pick<DuelPartialDispatchActions, "discard"> & {
     duellistKey: DuellistKey;
     isMyTurn: boolean;

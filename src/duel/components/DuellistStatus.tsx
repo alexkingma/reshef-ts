@@ -2,7 +2,7 @@ import React from "react";
 
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 
-type Props = Pick<DuellistDuelState, "lp" | "graveyard"> & {
+type Props = Pick<Duellist, "lp" | "graveyard"> & {
   name: string;
   isMyTurn: boolean;
 } & Pick<DuelPartialDispatchActions, "endTurn">;

@@ -1,4 +1,4 @@
-interface Duellist {
+interface Duellable {
   name: string;
   deck: CardQuantityMap;
   lp: number;

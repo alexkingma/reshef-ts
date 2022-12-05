@@ -2,13 +2,13 @@ import cards from "../assets/cards";
 import { getCard } from "../common/card";
 import { BattlePosition, Field, FieldRow, Orientation } from "./common";
 
-export const getInitialDuelState = (
+export const getInitialDuel = (
   cardQuantMap1: CardQuantityMap,
   cardQuantMap2: CardQuantityMap
-): DuelState => {
+): Duel => {
   return {
-    p1: generateNewDuellistDuelState(cardQuantMap1),
-    p2: generateNewDuellistDuelState(cardQuantMap2),
+    p1: generateNewDuellist(cardQuantMap1),
+    p2: generateNewDuellist(cardQuantMap2),
     activeTurn: {
       duellistKey: "p1",
       hasNormalSummoned: false,
@@ -45,9 +45,7 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
   return map;
 };
 
-export const generateNewDuellistDuelState = (
-  cardMap: CardQuantityMap
-): DuellistDuelState => {
+export const generateNewDuellist = (cardMap: CardQuantityMap): Duellist => {
   const deck = initialiseDeck(cardMap);
   return {
     lp: 8000,
@@ -127,10 +125,7 @@ export const getNumTributesRequired = ({
 
 export const getZoneKey = (
   row: FieldRow
-): keyof Pick<
-  DuellistDuelState,
-  "monsterZones" | "spellTrapZones" | "hand"
-> => {
+): keyof Pick<Duellist, "monsterZones" | "spellTrapZones" | "hand"> => {
   switch (row) {
     case FieldRow.PlayerMonster:
     case FieldRow.OpponentMonster:
@@ -147,8 +142,8 @@ export const getNumCardsInHand = (hand: HandZone[]) => {
   return hand.filter((z) => z.isOccupied).length;
 };
 
-export const clearGraveyard = (duellistState: DuellistDuelState) => {
-  duellistState.graveyard = null;
+export const clearGraveyard = (duellist: Duellist) => {
+  duellist.graveyard = null;
 };
 
 export const clearZone = (row: Zone[], idx: number) => {

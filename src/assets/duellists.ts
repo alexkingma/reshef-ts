@@ -1,4 +1,4 @@
-export const duellists: Duellist[] = [
+export const duellists: Duellable[] = [
   {
     name: "Player (Initial Deck)",
     deck: {
