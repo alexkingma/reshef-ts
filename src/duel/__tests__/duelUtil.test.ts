@@ -1,26 +1,15 @@
 import { getCard } from "../../common/card";
-import { BattlePosition, Orientation } from "../common";
-import { getHighestAtkZoneIdx } from "../duelUtil";
+import { getHighestAtkZoneIdx, getOccupiedMonsterZone } from "../duelUtil";
 
 describe("getHighestAtkZoneIdx", () => {
   const empty: EmptyZone = {
     isOccupied: false,
   };
   const weak = {
-    card: getCard("Kuriboh") as MonsterCard,
-    battlePosition: BattlePosition.Attack,
-    hasAttacked: false,
-    isOccupied: true,
-    orientation: Orientation.FaceUp,
-    powerUpLevel: 0,
+    ...getOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
   };
   const strong = {
-    card: getCard("Dark Magician") as MonsterCard,
-    battlePosition: BattlePosition.Attack,
-    hasAttacked: false,
-    isOccupied: true,
-    orientation: Orientation.FaceUp,
-    powerUpLevel: 0,
+    ...getOccupiedMonsterZone(getCard("Dark Magician") as MonsterCard),
   };
 
   test("weak vs strong", () => {

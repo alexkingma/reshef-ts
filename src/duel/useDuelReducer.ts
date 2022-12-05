@@ -2,18 +2,34 @@ import produce from "immer";
 import { useReducer } from "react";
 
 import {
+  CoreDuelAction,
   coreDuelReducers,
-  DuelAction,
   getCoreDuelDispatchActions,
 } from "./coreDuelReducers";
 import { getInitialDuelState, getOtherDuellistKey } from "./duelUtil";
+import {
+  getSpellEffectDispatchActions,
+  SpellEffectAction,
+  spellEffectReducers,
+} from "./spellEffectReducers";
+
+export interface ReducerArgs {
+  state: DuelState;
+  originatorState: DuellistDuelState;
+  targetState: DuellistDuelState;
+  activeTurn: Turn;
+  payload: any;
+}
+
+type DuelAction = CoreDuelAction | SpellEffectAction;
 
 const duelReducer = (state: DuelState, action: DuelAction): DuelState =>
   produce(state, (draft) => {
-    const reducers = { ...coreDuelReducers };
+    const reducers = { ...coreDuelReducers, ...spellEffectReducers };
     const originatorState = draft[action.duellistKey];
     const targetState = draft[getOtherDuellistKey(action.duellistKey)];
     reducers[action.type]({
+      state: draft, // only use when other props cannot be lastingly referenced in reducer
       originatorState,
       targetState,
       activeTurn: draft.activeTurn,
@@ -30,8 +46,11 @@ const useDuelReducer = (
 
   return {
     state,
-    dispatchActions: {
+    coreDispatches: {
       ...getCoreDuelDispatchActions(dispatch),
+    },
+    spellEffectDispatches: {
+      ...getSpellEffectDispatchActions(dispatch),
     },
   };
 };

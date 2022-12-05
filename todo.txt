@@ -43,7 +43,7 @@ eventual/complex ideas:
   notify player when cards they ordered have arrived at the shop (once a variable number of duels have transpired, scaling vaguely on cost/rarity of card)
 
 pending duel features:
-  activate spell (just power-ups, to start)
+  check win/lose conditions -- basic useEffect dependency for game loop?
   activate trap
   activate monster effect
 
@@ -54,3 +54,43 @@ major chunks of game state:
   shop -- cards in stock, sortKey, cursorPos
   world -- story/plot flags, available locations, npcs (coords/dirFacing, who has been duelled, conversation flags)
 
+
+duel loop:
+  scheduling system, to inform about timed future events
+    SoRL -- active for 5 additional turns (counting both players' turns) after the current turn, then destroy
+    brain control -- active for the current turn only
+  start of turn events (after drawing/checking for deck-out)
+    one-time effects -- Mirage Knight, Cocoon of Evolution, Newdoria, Viser Des, DCJ, Satellite Cannon, etc.
+  after every state-changing effect
+    Exodia in hand
+    FINAL on board
+    deck-out flag is set
+    LP has reached 0
+    graveyard card auto-effects
+    monsters on field (perpetual) auto-effects -- Slifer, Hoshiningen, Witch's Apprentice, Machine King, etc.
+  actions that trigger a check
+    draw
+    summon monster
+    monster attack
+    monster effect activate
+    tribute
+    spell/trap set
+    spell/trap activate
+    discard
+
+
+power-up prop for monsters is split into two:
+  permanent power-ups -- from spells (Bright Castle) or manual effect monsters (Hourglass of Life, Viser Des)
+  temporary power-ups -- dependent on a card (Hoshiningen) remaining on the field; re-calculated after every action
+this way we can safely retain knowledge of permanent power-ups while constantly reconfiguring the temporary de/buffs
+
+
+
+message log?
+just a bunch of <p> elements that auto-populate along the side of the screen as actions play out
+saves on debugging stuff with console log since i can see what happened and where it went wrong more clearly
+  "X [Dark, 2500/2100] attacked Y [Forest, 700/700]"
+  "X was destroyed"
+  "Player lost Z LP"
+  "Player activated [card]"
+  "LP healed by 500"

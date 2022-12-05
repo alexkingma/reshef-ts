@@ -1,3 +1,5 @@
+type Zone = EmptyZone | OccupiedZone;
+
 interface EmptyZone {
   isOccupied: false;
 }

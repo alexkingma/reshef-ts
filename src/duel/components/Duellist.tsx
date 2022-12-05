@@ -7,12 +7,14 @@ import { DuellistMonsterZones } from "./MonsterZones";
 import { DuellistSpellTrapZones } from "./SpellTrapZones";
 import { DuelPartialDispatchActions } from "../coreDuelReducers";
 import { getNumTributesRequired } from "../duelUtil";
+import { SpellDispatchActions } from "../spellEffectReducers";
 
 type Props = DuellistDuelState &
   Pick<DuelState, "activeTurn"> &
   DuelPartialDispatchActions & {
     name: string;
     duellistKey: DuellistKey;
+    spellEffectDispatches: SpellDispatchActions;
   };
 
 export const Duellist = ({
@@ -24,8 +26,9 @@ export const Duellist = ({
 
   // duellistState
   lp,
-  hand,
   deck,
+  graveyard,
+  hand,
   monsterZones,
   spellTrapZones,
 
@@ -41,6 +44,9 @@ export const Duellist = ({
 
   // cross-board dispatch/action combos
   attackMonster,
+
+  // spell effect dispatcher
+  spellEffectDispatches,
 }: Props) => {
   const isMyTurn = activeTurn.duellistKey === duellistKey;
 
@@ -55,6 +61,7 @@ export const Duellist = ({
       <DuellistStatus
         name={name}
         lp={lp}
+        graveyard={graveyard}
         isMyTurn={isMyTurn}
         endTurn={endTurn}
       />
@@ -67,9 +74,11 @@ export const Duellist = ({
         discard={discard}
       />
       <DuellistSpellTrapZones
+        duellistKey={duellistKey}
         spellTrapZones={spellTrapZones}
         isMyTurn={isMyTurn}
         discard={discard}
+        spellEffectDispatches={spellEffectDispatches}
       />
       <DuellistHand
         hand={hand}

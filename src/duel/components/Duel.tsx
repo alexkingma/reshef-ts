@@ -12,14 +12,14 @@ export const Duel = () => {
   const playerCardMap = getTempCardQuantMap();
   const opponentCardMap = getTempCardQuantMap();
 
-  const { state, dispatchActions } = useDuelReducer(
+  const { state, coreDispatches, spellEffectDispatches } = useDuelReducer(
     playerCardMap,
     opponentCardMap
   );
 
   const getPartialDispatchActions = (duellistKey: DuellistKey) => {
     return (
-      Object.entries(dispatchActions) as Entries<DuelDispatchActions>
+      Object.entries(coreDispatches) as Entries<DuelDispatchActions>
     ).reduce((map, [fnName, fn]) => {
       return {
         ...map,
@@ -38,7 +38,8 @@ export const Duel = () => {
       }}
     >
       <div>
-        <h5>Turn Info</h5>
+        <h5>General Duel Info</h5>
+        <p>Field: {state.activeField}</p>
         <p>Num Tributes: {state.activeTurn.numTributedMonsters}</p>
         <p>
           Has Normal Summoned:{" "}
@@ -49,6 +50,7 @@ export const Duel = () => {
         name="Player"
         duellistKey="p1"
         activeTurn={state.activeTurn}
+        spellEffectDispatches={spellEffectDispatches}
         {...state.p1}
         {...getPartialDispatchActions("p1")}
       />
@@ -56,6 +58,7 @@ export const Duel = () => {
         name="Opponent"
         duellistKey="p2"
         activeTurn={state.activeTurn}
+        spellEffectDispatches={spellEffectDispatches}
         {...state.p2}
         {...getPartialDispatchActions("p2")}
       />

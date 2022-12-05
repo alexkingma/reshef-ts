@@ -1,6 +1,6 @@
 import cards from "../assets/cards";
 import { getCard } from "../common/card";
-import { Field, FieldRow, Orientation } from "./common";
+import { BattlePosition, Field, FieldRow, Orientation } from "./common";
 
 export const getInitialDuelState = (
   cardQuantMap1: CardQuantityMap,
@@ -86,20 +86,12 @@ export const shuffle = (deck: Deck): Deck => {
   return deck;
 };
 
-export const draw = (deck: Deck) => {
-  const card = deck[0];
-  if (!card) {
-    throw new Error("Out of cards!");
-  }
-  return { card, deck: deck.slice(1) };
-};
-
 export const getFirstEmptyZoneIdx = (
-  zones: (OccupiedZone | EmptyZone)[],
-  defaultToFirst: boolean = true
+  zones: Zone[],
+  defaultToFirst: boolean = false
 ) => {
   let nextFreeZoneIdx = zones.findIndex((zone) => !zone.isOccupied);
-  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx;
+  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx as FieldCol;
   if (defaultToFirst) {
     // no free zones, return the default index
     return 0;
@@ -111,7 +103,7 @@ export const getFirstEmptyZoneIdx = (
   }
 };
 
-export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]): number => {
+export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]) => {
   let idx = -1;
   let highestAtk = -1;
   monsterZones.forEach((zone, i) => {
@@ -120,7 +112,7 @@ export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]): number => {
       idx = i;
     }
   });
-  return idx;
+  return idx as FieldCol | -1;
 };
 
 export const getOtherDuellistKey = (key: DuellistKey) => {
@@ -141,10 +133,56 @@ export const getZoneKey = (
 > => {
   switch (row) {
     case FieldRow.PlayerMonster:
+    case FieldRow.OpponentMonster:
       return "monsterZones";
     case FieldRow.PlayerSpellTrap:
+    case FieldRow.OpponentSpellTrap:
       return "spellTrapZones";
     default:
       return "hand";
   }
 };
+
+export const getNumCardsInHand = (hand: HandZone[]) => {
+  return hand.filter((z) => z.isOccupied).length;
+};
+
+export const clearGraveyard = (duellistState: DuellistDuelState) => {
+  duellistState.graveyard = null;
+};
+
+export const clearZone = (row: Zone[], idx: number) => {
+  // does NOT send anything to graveyard
+  row[idx] = { isOccupied: false };
+};
+
+const setRowOrientation = (row: Zone[], orientation: Orientation) => {
+  row.forEach((zone, idx, row) => {
+    if (!zone.isOccupied) return;
+    (row[idx] as OccupiedZone).orientation = orientation;
+  });
+};
+
+export const setRowFaceUp = (row: Zone[]) => {
+  setRowOrientation(row, Orientation.FaceUp);
+};
+
+export const setRowFaceDown = (row: Zone[]) => {
+  setRowOrientation(row, Orientation.FaceDown);
+};
+
+export const containsCard = (row: Zone[], cardName: CardName) => {
+  return !!row.find((r) => r.isOccupied && r.card.name === cardName);
+};
+
+export const getOccupiedMonsterZone = (
+  card: MonsterCard
+): OccupiedMonsterZone => ({
+  // use this to avoid boilerplate elsewhere
+  isOccupied: true,
+  card,
+  battlePosition: BattlePosition.Attack,
+  orientation: Orientation.FaceUp,
+  hasAttacked: false,
+  powerUpLevel: 0,
+});

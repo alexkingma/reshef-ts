@@ -1,13 +1,15 @@
+import { destroyAtCoords, draw } from "./cardEffectUtil";
 import { attackMonster } from "./combatUtil";
-import { BattlePosition, Orientation } from "./common";
+import { BattlePosition, FieldRow, Orientation } from "./common";
 import {
-  draw,
+  clearZone,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
+  getOccupiedMonsterZone,
   getOtherDuellistKey,
-  getZoneKey,
   shuffle,
 } from "./duelUtil";
+import { ReducerArgs } from "./useDuelReducer";
 
 export enum DuelActionType {
   Shuffle = "SHUFFLE",
@@ -22,19 +24,14 @@ export enum DuelActionType {
   Discard = "DISCARD",
 }
 
-export interface DuelAction {
+export interface CoreDuelAction {
   duellistKey: DuellistKey;
   type: DuelActionType;
   payload?: any;
 }
 
 type DuelReducers = {
-  [key in DuelActionType]: (args: {
-    originatorState: DuellistDuelState;
-    targetState: DuellistDuelState;
-    activeTurn: Turn;
-    payload: any;
-  }) => void;
+  [key in DuelActionType]: (args: ReducerArgs) => void;
 };
 
 export interface DuelPartialDispatchActions {
@@ -58,38 +55,19 @@ export const coreDuelReducers: DuelReducers = {
   [DuelActionType.Shuffle]: ({ originatorState }) => {
     originatorState.deck = shuffle(originatorState.deck);
   },
-  [DuelActionType.DrawCard]: ({ originatorState }) => {
-    let zoneIdx: number;
-    try {
-      zoneIdx = getFirstEmptyZoneIdx(originatorState.hand, false);
-    } catch (e) {
-      // no space available in hand, don't draw a card
-      return;
-    }
-    const { card, deck } = draw(originatorState.deck);
-    originatorState.deck = deck;
-    originatorState.hand[zoneIdx] = {
-      isOccupied: true,
-      card,
-      orientation: Orientation.FaceDown,
-    };
-  },
+  [DuelActionType.DrawCard]: draw(),
   [DuelActionType.NormalSummon]: ({
     originatorState,
     activeTurn,
     payload: handIdx,
   }) => {
     // remove monster from hand at given index, summon it to the field
-    const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
+    const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones, true);
     const { card } = originatorState.hand[handIdx] as OccupiedMonsterZone;
-    originatorState.hand[handIdx] = { isOccupied: false };
+    clearZone(originatorState.hand, handIdx);
     originatorState.monsterZones[zoneIdx] = {
-      isOccupied: true,
-      card,
-      orientation: Orientation.FaceUp,
-      battlePosition: BattlePosition.Attack,
-      powerUpLevel: 0,
-      hasAttacked: false,
+      ...getOccupiedMonsterZone(card),
+      orientation: Orientation.FaceDown,
     };
     activeTurn.hasNormalSummoned = true;
   },
@@ -98,9 +76,9 @@ export const coreDuelReducers: DuelReducers = {
   },
   [DuelActionType.SetSpellTrap]: ({ originatorState, payload: handIdx }) => {
     // remove spell/trap from hand at given index, set it on the field
-    const zoneIdx = getFirstEmptyZoneIdx(originatorState.spellTrapZones);
+    const zoneIdx = getFirstEmptyZoneIdx(originatorState.spellTrapZones, true);
     const { card } = originatorState.hand[handIdx] as OccupiedSpellTrapZone;
-    originatorState.hand[handIdx] = { isOccupied: false };
+    clearZone(originatorState.hand, handIdx);
     originatorState.spellTrapZones[zoneIdx] = {
       isOccupied: true,
       card,
@@ -130,10 +108,10 @@ export const coreDuelReducers: DuelReducers = {
         targetLpLoss,
       } = attackMonster(attackerZone, targetZone);
       if (attackerDestroyed) {
-        originatorState.monsterZones[attackerIdx] = { isOccupied: false };
+        destroyAtCoords(originatorState, [FieldRow.PlayerMonster, attackerIdx]);
       }
       if (targetDestroyed) {
-        targetState.monsterZones[targetIdx] = { isOccupied: false };
+        destroyAtCoords(targetState, [FieldRow.OpponentMonster, targetIdx]);
       }
       if (attackerLpLoss) {
         originatorState.lp -= attackerLpLoss;
@@ -171,18 +149,16 @@ export const coreDuelReducers: DuelReducers = {
     activeTurn,
     payload: monsterIdx,
   }) => {
-    originatorState.monsterZones[monsterIdx] = { isOccupied: false };
+    destroyAtCoords(originatorState, [FieldRow.PlayerMonster, monsterIdx]);
     activeTurn.numTributedMonsters++;
   },
   [DuelActionType.Discard]: ({ originatorState, payload: coords }) => {
-    const [row, col] = coords as FieldCoords;
-    const zoneKey = getZoneKey(row);
-    originatorState[zoneKey][col] = { isOccupied: false };
+    destroyAtCoords(originatorState, coords);
   },
 };
 
 export const getCoreDuelDispatchActions = (
-  dispatch: (value: DuelAction) => void
+  dispatch: (value: CoreDuelAction) => void
 ): DuelDispatchActions => ({
   shuffle: (duellistKey: DuellistKey) =>
     dispatch({ duellistKey, type: DuelActionType.Shuffle }),
