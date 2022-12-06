@@ -62,10 +62,7 @@ duel loop:
   start of turn events (after drawing/checking for deck-out)
     one-time effects -- Mirage Knight, Cocoon of Evolution, Newdoria, Viser Des, DCJ, Satellite Cannon, etc.
   after every state-changing effect
-    Exodia in hand
-    FINAL on board
-    deck-out flag is set
-    LP has reached 0
+    check victor condition
     graveyard card auto-effects
     monsters on field (perpetual) auto-effects -- Slifer, Hoshiningen, Witch's Apprentice, Machine King, etc.
   actions that trigger a check

@@ -1,4 +1,5 @@
-import { clearZone, destroyAtCoords, draw } from "./cardEffectUtil";
+import { clearZone, destroyAtCoords } from "./cardEffectUtil";
+import { draw } from "./cardEffectWrapped";
 import { attackMonster } from "./combatUtil";
 import { BattlePosition, FieldRow, Orientation, Spell } from "./common";
 import { ReducerArg } from "./duelSlice";

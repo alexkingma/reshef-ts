@@ -1,8 +1,12 @@
 import { getCard } from "../common/card";
 import {
-  burn,
   clearGraveyard,
   clearZone,
+  setRowFaceDown,
+  setRowFaceUp,
+} from "./cardEffectUtil";
+import {
+  burn,
   destroy1500PlusAtk,
   destroyHighestAtk,
   destroyMonsterType,
@@ -11,9 +15,7 @@ import {
   heal,
   powerUp,
   setField,
-  setRowFaceDown,
-  setRowFaceUp,
-} from "./cardEffectUtil";
+} from "./cardEffectWrapped";
 import { BattlePosition, Field, FieldRow, Orientation, Spell } from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
