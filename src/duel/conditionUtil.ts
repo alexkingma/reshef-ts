@@ -1,3 +1,4 @@
+import { Monster, Trap } from "./common";
 import { ReducerArg } from "./duelSlice";
 
 export const containsCard = (row: Zone[], cardName: CardName) => {
@@ -6,7 +7,7 @@ export const containsCard = (row: Zone[], cardName: CardName) => {
 
 export const containsAllCards = (row: Zone[], cardNames: CardName[]) => {
   // all provided cards must be present in the given row
-  // alternatively: none of the provided cards must NOT be present
+  // alternatively: none of the provided cards may NOT be present
   return !cardNames.filter((c) => !containsCard(row, c)).length;
 };
 
@@ -20,23 +21,21 @@ export const isVictor = ({ originatorState, targetState }: ReducerArg) => {
 };
 
 export const hasFullExodia = (hand: HandZone[]) => {
-  const cards: CardName[] = [
-    "Exodia the Forbidden One",
-    "Left Arm of the Forbidden One",
-    "Left Leg of the Forbidden One",
-    "Right Arm of the Forbidden One",
-    "Right Leg of the Forbidden One",
-  ];
-  return containsAllCards(hand, cards);
+  return containsAllCards(hand, [
+    Monster.ExodiaTheForbiddenOne,
+    Monster.LeftArmOfTheForbiddenOne,
+    Monster.LeftLegOfTheForbiddenOne,
+    Monster.RightArmOfTheForbiddenOne,
+    Monster.RightLegOfTheForbiddenOne,
+  ]);
 };
 
 export const hasFullFINAL = (spellTrapRow: SpellTrapZone[]) => {
-  const cards: CardName[] = [
-    "Final Destiny",
-    'Spirit Message "I"',
-    'Spirit Message "N"',
-    'Spirit Message "A"',
-    'Spirit Message "L"',
-  ];
-  return containsAllCards(spellTrapRow, cards);
+  return containsAllCards(spellTrapRow, [
+    Trap.DestinyBoard,
+    Trap.SpiritMessageI,
+    Trap.SpiritMessageN,
+    Trap.SpiritMessageA,
+    Trap.SpiritMessageL,
+  ]);
 };

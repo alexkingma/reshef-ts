@@ -16,7 +16,14 @@ import {
   powerUp,
   setField,
 } from "./cardEffectWrapped";
-import { BattlePosition, Field, FieldRow, Orientation, Spell } from "./common";
+import {
+  BattlePosition,
+  Field,
+  FieldRow,
+  Monster,
+  Orientation,
+  Spell,
+} from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
   containsCard,
@@ -139,7 +146,9 @@ export const spellEffectReducers: SpellEffectReducers = {
     try {
       const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
       originatorState.monsterZones[zoneIdx] = {
-        ...generateOccupiedMonsterZone(getCard("Change Slime") as MonsterCard),
+        ...generateOccupiedMonsterZone(
+          getCard(Monster.ChangeSlime) as MonsterCard
+        ),
         hasAttacked: true,
       };
       activeTurn.hasNormalSummoned = true;
@@ -205,12 +214,12 @@ export const spellEffectReducers: SpellEffectReducers = {
     }
   },
   [Spell.Multiply]: ({ originatorState }) => {
-    if (!containsCard(originatorState.monsterZones, "Kuriboh")) return;
+    if (!containsCard(originatorState.monsterZones, Monster.Kuriboh)) return;
 
     originatorState.monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;
       row[idx] = {
-        ...generateOccupiedMonsterZone(getCard("Kuriboh") as MonsterCard),
+        ...generateOccupiedMonsterZone(getCard(Monster.Kuriboh) as MonsterCard),
         hasAttacked: true,
       };
     });
