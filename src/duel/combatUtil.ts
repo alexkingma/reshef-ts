@@ -1,17 +1,14 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import { BattlePosition } from "./common";
 
-const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
-  const { strong, weak } = alignmentMap[attacker];
-  return { isStrong: strong === target, isWeak: weak === target };
-};
-export const attackMonster = (
+export const calculateAttack = (
   attacker: OccupiedMonsterZone,
   target: OccupiedMonsterZone
 ) => {
   const isDefending = target.battlePosition === BattlePosition.Defence;
-  const diff =
-    attacker.card.atk - (isDefending ? target.card.def : target.card.atk);
+  const { effAtk: attackerEffAtk } = getCombatStats(attacker);
+  const { effAtk: targetEffAtk, effDef: targetEffDef } = getCombatStats(target);
+  const diff = attackerEffAtk - (isDefending ? targetEffDef : targetEffAtk);
   const { isWeak, isStrong } = getAlignmentResult(
     attacker.card.alignment,
     target.card.alignment
@@ -30,4 +27,19 @@ export const attackMonster = (
     attackerLpLoss,
     targetLpLoss,
   };
+};
+
+export const getCombatStats = (zone: OccupiedMonsterZone) => {
+  const { permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
+  const { atk: baseAtk, def: baseDef } = zone.card;
+  const calc = (base: number) => Math.max(0, base + (perm + temp) * 500);
+  return {
+    effAtk: calc(baseAtk),
+    effDef: calc(baseDef),
+  };
+};
+
+const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
+  const { strong, weak } = alignmentMap[attacker];
+  return { isStrong: strong === target, isWeak: weak === target };
 };

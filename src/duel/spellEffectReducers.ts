@@ -1,7 +1,8 @@
-import { getCard } from "../common/card";
 import {
+  burn as burnDirect,
   clearGraveyard,
-  clearZone,
+  convertMonster,
+  resurrectEnemy,
   setRowFaceDown,
   setRowFaceUp,
 } from "./cardEffectUtil";
@@ -13,23 +14,15 @@ import {
   destroyRows,
   draw,
   heal,
-  powerUp,
+  permPowerUp,
   setField,
 } from "./cardEffectWrapped";
-import {
-  BattlePosition,
-  Field,
-  FieldRow,
-  Monster,
-  Orientation,
-  Spell,
-} from "./common";
+import { BattlePosition, Field, FieldRow, Monster, Spell } from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
   containsCard,
   generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
-  getHighestAtkZoneIdx,
   getNumCardsInRow,
 } from "./duelUtil";
 
@@ -44,8 +37,8 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.FinalFlame]: burn(200),
   [Spell.Ookazi]: burn(500),
   [Spell.TremendousFire]: burn(1000),
-  [Spell.RestructerRevolution]: (arg) =>
-    burn(getNumCardsInRow(arg.targetState.hand) * 200)(arg),
+  [Spell.RestructerRevolution]: ({ targetState }) =>
+    burnDirect(targetState, getNumCardsInRow(targetState.hand) * 200),
 
   // heal
   [Spell.MooyanCurry]: heal(200),
@@ -55,49 +48,49 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.DianKetoTheCureMaster]: heal(5000),
 
   // power-up
-  [Spell.LegendarySword]: powerUp(),
-  [Spell.SwordOfDarkDestruction]: powerUp(),
-  [Spell.DarkEnergy]: powerUp(),
-  [Spell.AxeOfDespair]: powerUp(),
-  [Spell.LaserCannonArmor]: powerUp(),
-  [Spell.InsectArmorWithLaserCannon]: powerUp(),
-  [Spell.ElfsLight]: powerUp(),
-  [Spell.BeastFangs]: powerUp(),
-  [Spell.SteelShell]: powerUp(),
-  [Spell.VileGerms]: powerUp(),
-  [Spell.BlackPendant]: powerUp(),
-  [Spell.SilverBowAndArrow]: powerUp(),
-  [Spell.HornOfLight]: powerUp(),
-  [Spell.HornOfTheUnicorn]: powerUp(),
-  [Spell.DragonTreasure]: powerUp(),
-  [Spell.ElectroWhip]: powerUp(),
-  [Spell.CyberShield]: powerUp(),
-  [Spell.MysticalMoon]: powerUp(),
-  [Spell.MalevolentNuzzler]: powerUp(),
-  [Spell.VioletCrystal]: powerUp(),
-  [Spell.BookOfSecretArts]: powerUp(),
-  [Spell.Invigoration]: powerUp(),
-  [Spell.MachineConversionFactory]: powerUp(),
-  [Spell.RaiseBodyHeat]: powerUp(),
-  [Spell.FollowWind]: powerUp(),
-  [Spell.PowerOfKaishin]: powerUp(),
-  [Spell.KunaiWithChain]: powerUp(),
-  [Spell.Salamandra]: powerUp(),
-  [Spell.Megamorph]: powerUp(2),
-  [Spell.WingedTrumpeter]: powerUp(),
-  [Spell.BrightCastle]: powerUp(),
+  [Spell.LegendarySword]: permPowerUp(),
+  [Spell.SwordOfDarkDestruction]: permPowerUp(),
+  [Spell.DarkEnergy]: permPowerUp(),
+  [Spell.AxeOfDespair]: permPowerUp(),
+  [Spell.LaserCannonArmor]: permPowerUp(),
+  [Spell.InsectArmorWithLaserCannon]: permPowerUp(),
+  [Spell.ElfsLight]: permPowerUp(),
+  [Spell.BeastFangs]: permPowerUp(),
+  [Spell.SteelShell]: permPowerUp(),
+  [Spell.VileGerms]: permPowerUp(),
+  [Spell.BlackPendant]: permPowerUp(),
+  [Spell.SilverBowAndArrow]: permPowerUp(),
+  [Spell.HornOfLight]: permPowerUp(),
+  [Spell.HornOfTheUnicorn]: permPowerUp(),
+  [Spell.DragonTreasure]: permPowerUp(),
+  [Spell.ElectroWhip]: permPowerUp(),
+  [Spell.CyberShield]: permPowerUp(),
+  [Spell.MysticalMoon]: permPowerUp(),
+  [Spell.MalevolentNuzzler]: permPowerUp(),
+  [Spell.VioletCrystal]: permPowerUp(),
+  [Spell.BookOfSecretArts]: permPowerUp(),
+  [Spell.Invigoration]: permPowerUp(),
+  [Spell.MachineConversionFactory]: permPowerUp(),
+  [Spell.RaiseBodyHeat]: permPowerUp(),
+  [Spell.FollowWind]: permPowerUp(),
+  [Spell.PowerOfKaishin]: permPowerUp(),
+  [Spell.KunaiWithChain]: permPowerUp(),
+  [Spell.Salamandra]: permPowerUp(),
+  [Spell.Megamorph]: permPowerUp(2),
+  [Spell.WingedTrumpeter]: permPowerUp(),
+  [Spell.BrightCastle]: permPowerUp(),
 
   // monster-specific power-up
-  [Spell.CyclonLaser]: powerUp(),
-  [Spell.ElegantEgotist]: powerUp(),
-  [Spell.MagicalLabyrinth]: powerUp(),
-  [Spell.Cursebreaker]: powerUp(),
-  [Spell.Metalmorph]: powerUp(),
-  [Spell._7Completed]: powerUp(),
+  [Spell.CyclonLaser]: permPowerUp(),
+  [Spell.ElegantEgotist]: permPowerUp(),
+  [Spell.MagicalLabyrinth]: permPowerUp(),
+  [Spell.Cursebreaker]: permPowerUp(),
+  [Spell.Metalmorph]: permPowerUp(),
+  [Spell._7Completed]: permPowerUp(),
 
   // power-down
-  [Spell.SpellbindingCircle]: powerUp(-1),
-  [Spell.ShadowSpell]: powerUp(-2),
+  [Spell.SpellbindingCircle]: permPowerUp(-1),
+  [Spell.ShadowSpell]: permPowerUp(-2),
 
   // field
   [Spell.Forest]: setField(Field.Forest),
@@ -146,10 +139,8 @@ export const spellEffectReducers: SpellEffectReducers = {
     try {
       const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
       originatorState.monsterZones[zoneIdx] = {
-        ...generateOccupiedMonsterZone(
-          getCard(Monster.ChangeSlime) as MonsterCard
-        ),
-        hasAttacked: true,
+        ...generateOccupiedMonsterZone(Monster.ChangeSlime),
+        isLocked: true,
       };
       activeTurn.hasNormalSummoned = true;
     } catch (e) {
@@ -169,18 +160,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     setRowFaceUp(targetState.monsterZones);
   },
   [Spell.MonsterReborn]: ({ originatorState, targetState }) => {
-    if (!targetState.graveyard) return; // no monster to revive
-    try {
-      const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
-      originatorState.monsterZones[zoneIdx] = {
-        ...generateOccupiedMonsterZone(
-          getCard(targetState.graveyard) as MonsterCard
-        ),
-      };
-      clearGraveyard(targetState);
-    } catch (e) {
-      // no free zone to summon monster
-    }
+    resurrectEnemy(originatorState, targetState);
   },
   [Spell.GravediggerGhoul]: ({ originatorState, targetState }) => {
     clearGraveyard(originatorState);
@@ -188,30 +168,18 @@ export const spellEffectReducers: SpellEffectReducers = {
   },
   [Spell.MessengerOfPeace]: ({ originatorState, targetState }) => {
     // TODO
+    // perpetual activation as long as 1500+ monster is out, remains face up permanently
+    // basically like DCJ
   },
   [Spell.DarknessApproaches]: ({ originatorState }) => {
     setRowFaceDown(originatorState.monsterZones);
   },
   [Spell.BrainControl]: ({ originatorState, targetState }) => {
-    // TODO
+    convertMonster(originatorState, targetState);
+    // TODO: make the converted monster revert back after turn end
   },
   [Spell.ChangeOfHeart]: ({ originatorState, targetState }) => {
-    const targetZoneIdx = getHighestAtkZoneIdx(targetState.monsterZones);
-    if (targetZoneIdx === -1) return; // no monster to target
-    const targetZone = targetState.monsterZones[
-      targetZoneIdx
-    ] as OccupiedMonsterZone;
-    try {
-      const originZoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
-      originatorState.monsterZones[originZoneIdx] = {
-        ...targetZone,
-        battlePosition: BattlePosition.Attack,
-        orientation: Orientation.FaceUp,
-      };
-      clearZone(targetState.monsterZones, targetZoneIdx);
-    } catch (e) {
-      // no space to put new monster
-    }
+    convertMonster(originatorState, targetState);
   },
   [Spell.Multiply]: ({ originatorState }) => {
     if (!containsCard(originatorState.monsterZones, Monster.Kuriboh)) return;
@@ -219,8 +187,8 @@ export const spellEffectReducers: SpellEffectReducers = {
     originatorState.monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;
       row[idx] = {
-        ...generateOccupiedMonsterZone(getCard(Monster.Kuriboh) as MonsterCard),
-        hasAttacked: true,
+        ...generateOccupiedMonsterZone(Monster.Kuriboh),
+        isLocked: true,
       };
     });
   },

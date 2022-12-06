@@ -1,34 +1,38 @@
 import {
+  burn as burnDirect,
   destroyAtCoords,
   destroyRow,
-  powerUp as powerUpDirect,
+  draw as drawDirect,
+  heal as healDirect,
+  permPowerUp as permPowerUpDirect,
+  setField as setFieldDirect,
 } from "./cardEffectUtil";
-import { Field, FieldRow, Orientation } from "./common";
+import { Field, FieldCoords, FieldRow } from "./common";
 import { ReducerArg } from "./duelSlice";
-import { getFirstEmptyZoneIdx, getHighestAtkZoneIdx } from "./duelUtil";
+import { getHighestAtkZoneIdx } from "./duelUtil";
 
 export const burn =
   (amt: number) =>
   ({ targetState }: ReducerArg) => {
-    targetState.lp -= amt;
+    burnDirect(targetState, amt);
   };
 
 export const heal =
   (amt: number) =>
   ({ originatorState }: ReducerArg) => {
-    originatorState.lp += amt;
+    healDirect(originatorState, amt);
   };
 
-export const powerUp =
+export const permPowerUp =
   (levels: number = 1) =>
   ({ originatorState }: ReducerArg, monsterIdx: FieldCol) => {
-    powerUpDirect(originatorState.monsterZones, monsterIdx, levels);
+    permPowerUpDirect(originatorState, monsterIdx, levels);
   };
 
 export const setField =
   (newField: Field) =>
   ({ state }: ReducerArg) => {
-    state.activeField = newField;
+    setFieldDirect(state, newField);
   };
 
 export const destroyRows =
@@ -103,28 +107,11 @@ export const destroy1500PlusAtk = () =>
 export const destroyMonsterType = (type: CardType) =>
   destroyMonsterConditional((card) => card.type === type);
 
+export const destroyMonsterAlignment = (alignment: Alignment) =>
+  destroyMonsterConditional((card) => card.alignment === alignment);
+
 export const draw =
   (numCards: number = 1) =>
   ({ originatorState }: ReducerArg) => {
-    for (let i = 0; i < numCards; i++) {
-      let zoneIdx: number;
-      try {
-        zoneIdx = getFirstEmptyZoneIdx(originatorState.hand);
-      } catch (e) {
-        // no space available in hand, don't draw a card
-        return;
-      }
-
-      const card = originatorState.deck.shift();
-      if (!card) {
-        // TODO: player is out of cards, end game
-        return;
-      }
-
-      originatorState.hand[zoneIdx] = {
-        isOccupied: true,
-        card,
-        orientation: Orientation.FaceDown,
-      };
-    }
+    drawDirect(originatorState, numCards);
   };

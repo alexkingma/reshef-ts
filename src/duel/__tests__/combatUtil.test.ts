@@ -1,5 +1,4 @@
-import { getCard } from "../../common/card";
-import { attackMonster } from "../combatUtil";
+import { calculateAttack } from "../combatUtil";
 import { BattlePosition } from "../common";
 import { generateOccupiedMonsterZone } from "../duelUtil";
 
@@ -12,7 +11,7 @@ let light_700_600: OccupiedMonsterZone;
 let light_3000_2500: OccupiedMonsterZone;
 
 const createZone = (cardName: CardName): OccupiedMonsterZone => ({
-  ...generateOccupiedMonsterZone(getCard(cardName) as MonsterCard),
+  ...generateOccupiedMonsterZone(cardName),
 });
 
 beforeEach(() => {
@@ -33,7 +32,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_2500_2100, dark_700_600);
+      } = calculateAttack(dark_2500_2100, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -46,7 +45,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_700_600, dark_2500_2100);
+      } = calculateAttack(dark_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(1800);
@@ -60,7 +59,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_2500_2100, dark_700_600);
+      } = calculateAttack(dark_2500_2100, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -74,7 +73,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_700_600, dark_2500_2100);
+      } = calculateAttack(dark_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(1400);
@@ -87,7 +86,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_2500_2100, dark_2500_2100);
+      } = calculateAttack(dark_2500_2100, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -101,7 +100,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dark_700_600, dark_800_700);
+      } = calculateAttack(dark_700_600, dark_800_700);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
@@ -116,7 +115,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_2800_2000, dark_700_600);
+      } = calculateAttack(dreams_2800_2000, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -129,7 +128,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_700_700, dark_2500_2100);
+      } = calculateAttack(dreams_700_700, dark_2500_2100);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -143,7 +142,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_2800_2000, dark_700_600);
+      } = calculateAttack(dreams_2800_2000, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -157,7 +156,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_700_700, dark_2500_2100);
+      } = calculateAttack(dreams_700_700, dark_2500_2100);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -170,7 +169,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_700_700, dark_700_600);
+      } = calculateAttack(dreams_700_700, dark_700_600);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -184,7 +183,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(dreams_700_700, dark_800_700);
+      } = calculateAttack(dreams_700_700, dark_800_700);
       expect(attackerDestroyed).toEqual(false);
       expect(targetDestroyed).toEqual(true);
       expect(attackerLpLoss).toEqual(0);
@@ -199,7 +198,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_3000_2500, dark_700_600);
+      } = calculateAttack(light_3000_2500, dark_700_600);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
@@ -212,7 +211,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_700_600, dark_2500_2100);
+      } = calculateAttack(light_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(1800);
@@ -226,7 +225,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_3000_2500, dark_700_600);
+      } = calculateAttack(light_3000_2500, dark_700_600);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
@@ -240,7 +239,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_700_600, dark_2500_2100);
+      } = calculateAttack(light_700_600, dark_2500_2100);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(1400);
@@ -253,7 +252,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_700_600, dark_700_600);
+      } = calculateAttack(light_700_600, dark_700_600);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);
@@ -267,7 +266,7 @@ describe("neutral alignment", () => {
         targetDestroyed,
         attackerLpLoss,
         targetLpLoss,
-      } = attackMonster(light_700_600, dark_800_700);
+      } = calculateAttack(light_700_600, dark_800_700);
       expect(attackerDestroyed).toEqual(true);
       expect(targetDestroyed).toEqual(false);
       expect(attackerLpLoss).toEqual(0);

@@ -26,12 +26,12 @@ export const DuellistMonsterZones = ({ duellistKey }: Props) => {
               </li>
             );
           }
-          const { card, battlePosition: pos, hasAttacked } = zone;
+          const { card, battlePosition: pos, isLocked } = zone;
           return (
             <li key={idx}>
               {pos === BattlePosition.Attack ? "[]" : "=="} {card.name} (
               {card.atk}/{card.def})
-              {!hasAttacked && isMyTurn ? (
+              {!isLocked && isMyTurn ? (
                 <button onClick={() => attackMonster(idx as FieldCol)}>
                   Attack
                 </button>

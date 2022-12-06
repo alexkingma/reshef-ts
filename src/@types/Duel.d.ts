@@ -15,8 +15,9 @@ type MonsterZone = EmptyZone | OccupiedMonsterZone;
 type OccupiedMonsterZone = OccupiedZone & {
   card: MonsterCard;
   battlePosition: BattlePosition;
-  powerUpLevel: number;
-  hasAttacked: boolean;
+  permPowerUpLevel: number; // lingers indefinitely
+  tempPowerUpLevel: number; // reset and re-applied after every action
+  isLocked: boolean;
 };
 
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;

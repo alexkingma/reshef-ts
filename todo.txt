@@ -36,6 +36,7 @@ eventual improvements over original game:
   lp is restored after each duel
   move default zone selection to the middle of the board, or as close as possible while still empty
   use the actual art for cards, especially in close-up combat shots
+  show burn card LP drop animation, as though doing a direct attack
 eventual/complex ideas:
   expand graveyard to be more than one card
   allow more than 5 cards in hand
@@ -74,13 +75,6 @@ duel loop:
     spell/trap set
     spell/trap activate
     discard
-
-
-power-up prop for monsters is split into two:
-  permanent power-ups -- from spells (Bright Castle) or manual effect monsters (Hourglass of Life, Viser Des)
-  temporary power-ups -- dependent on a card (Hoshiningen) remaining on the field; re-calculated after every action
-this way we can safely retain knowledge of permanent power-ups while constantly reconfiguring the temporary de/buffs
-
 
 
 message log?

@@ -1,6 +1,14 @@
 import cards from "../assets/cards";
 import { getCard } from "../common/card";
-import { BattlePosition, Field, FieldRow, Orientation } from "./common";
+import {
+  BattlePosition,
+  Field,
+  FieldRow,
+  Monster,
+  Orientation,
+  Trap,
+} from "./common";
+import { ReducerArg } from "./duelSlice";
 
 export const getInitialDuel = (
   cardQuantMap1: CardQuantityMap,
@@ -74,21 +82,21 @@ export const initialiseDeck = (cardQuantMap: CardQuantityMap): Deck => {
   return shuffle(deck);
 };
 
-export const shuffle = (deck: Deck): Deck => {
-  let currentIdx = deck.length;
+export const shuffle = <T extends any[]>(arr: T): T => {
+  let currentIdx = arr.length;
   let randomIdx;
   while (currentIdx != 0) {
     randomIdx = Math.floor(Math.random() * currentIdx--);
-    [deck[currentIdx], deck[randomIdx]] = [deck[randomIdx], deck[currentIdx]];
+    [arr[currentIdx], arr[randomIdx]] = [arr[randomIdx], arr[currentIdx]];
   }
-  return deck;
+  return arr;
 };
 
 export const getFirstEmptyZoneIdx = (
   zones: Zone[],
   defaultToFirst: boolean = false
 ) => {
-  let nextFreeZoneIdx = zones.findIndex((zone) => !zone.isOccupied);
+  const nextFreeZoneIdx = zones.findIndex((zone) => !zone.isOccupied);
   if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx as FieldCol;
   if (defaultToFirst) {
     // no free zones, return the default index
@@ -101,16 +109,28 @@ export const getFirstEmptyZoneIdx = (
   }
 };
 
-export const getHighestAtkZoneIdx = (monsterZones: MonsterZone[]) => {
+export const getFirstOccupiedZoneIdx = (zones: Zone[]) => {
+  return zones.findIndex((z) => z.isOccupied) as FieldCol | -1;
+};
+
+export const getHighestAtkZoneIdx = (
+  zones: Zone[],
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
   let idx = -1;
   let highestAtk = -1;
-  monsterZones.forEach((zone, i) => {
-    if (zone.isOccupied && zone.card.atk > highestAtk) {
-      highestAtk = zone.card.atk;
+  zones.forEach((z, i) => {
+    if (!z.isOccupied || z.card.category !== "Monster" || !condition(z)) return;
+    if (z.card.atk > highestAtk) {
+      highestAtk = z.card.atk;
       idx = i;
     }
   });
   return idx as FieldCol | -1;
+};
+
+export const getFirstMatchInRowIdx = (zones: Zone[], cardName: CardName) => {
+  return zones.findIndex((z) => z.isOccupied && z.card.name === cardName);
 };
 
 export const getOtherDuellistKey = (key: DuellistKey) => {
@@ -143,17 +163,82 @@ export const getNumCardsInRow = (row: Zone[]) => {
 };
 
 export const containsCard = (row: Zone[], cardName: CardName) => {
-  return !!row.find((r) => r.isOccupied && r.card.name === cardName);
+  return hasMatchInRow(row, (z) => z.card.name === cardName);
+};
+
+export const containsAllCards = (row: Zone[], ...cardNames: CardName[]) => {
+  // all provided cards must be present in the given row
+  // alternatively: none of the provided cards may NOT be present
+  return !cardNames.filter((c) => !containsCard(row, c)).length;
+};
+
+export const hasMatchInRow = (
+  row: Zone[],
+  condition: (z: OccupiedZone) => boolean
+) => {
+  return countMatchesInRow(row, condition) > 0;
+};
+
+export const countMatchesInRow = (
+  row: Zone[],
+  condition: (z: OccupiedZone) => boolean
+) => {
+  return row.filter((z) => z.isOccupied && condition(z)).length;
 };
 
 export const generateOccupiedMonsterZone = (
-  card: MonsterCard
+  cardName: CardName
 ): OccupiedMonsterZone => ({
   // use this to avoid boilerplate elsewhere
   isOccupied: true,
-  card,
+  card: getCard(cardName) as MonsterCard,
   battlePosition: BattlePosition.Attack,
   orientation: Orientation.FaceUp,
-  hasAttacked: false,
-  powerUpLevel: 0,
+  isLocked: false,
+  permPowerUpLevel: 0,
+  tempPowerUpLevel: 0,
 });
+
+export const isTrap = (z: Zone) => {
+  return z.isOccupied && z.card.category === "Trap";
+};
+
+export const isType = (z: Zone, type: CardType) =>
+  z.isOccupied && z.card.category === "Monster" && z.card.type === type;
+
+export const isSpecificMonster = (z: Zone, cardName: CardName) =>
+  z.isOccupied && z.card.category === "Monster" && z.card.name === cardName;
+
+export const getExodiaCards = () => {
+  return [
+    Monster.ExodiaTheForbiddenOne,
+    Monster.LeftArmOfTheForbiddenOne,
+    Monster.LeftLegOfTheForbiddenOne,
+    Monster.RightArmOfTheForbiddenOne,
+    Monster.RightLegOfTheForbiddenOne,
+  ] as CardName[];
+};
+
+export const isVictor = ({ originatorState, targetState }: ReducerArg) => {
+  // TODO: opponent deck-out flag
+  return (
+    targetState.lp === 0 ||
+    hasFullExodia(originatorState.hand) ||
+    hasFullFINAL(originatorState.spellTrapZones)
+  );
+};
+
+export const hasFullExodia = (hand: HandZone[]) => {
+  return containsAllCards(hand, ...getExodiaCards());
+};
+
+export const hasFullFINAL = (spellTrapRow: SpellTrapZone[]) => {
+  return containsAllCards(
+    spellTrapRow,
+    Trap.DestinyBoard,
+    Trap.SpiritMessageI,
+    Trap.SpiritMessageN,
+    Trap.SpiritMessageA,
+    Trap.SpiritMessageL
+  );
+};

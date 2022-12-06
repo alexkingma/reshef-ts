@@ -17,6 +17,12 @@ export enum FieldRow {
   OpponentHand = 5,
 }
 
+// can't put this in a `.d.ts` file or FieldRow (enum) is
+// ... not evaluated and lets through args or any type
+// putting the def here encourages importing, which
+// ... properly evaluates / enforces the type
+export type FieldCoords = [rowIdx: FieldRow, colIdx: FieldCol];
+
 export enum Field {
   Arena = "Arena",
   Yami = "Yami",
@@ -723,97 +729,73 @@ export enum Monster {
   TalonsOfShurilane = "Talons of Shurilane",
 }
 
-export enum EffectMonster {
+export enum GraveyardEffectMonster {
+  TheWingedDragonOfRaPhoenixMode = "The Winged Dragon of Ra (Phoenix Mode)",
+  Helpoemer = "Helpoemer",
+  Newdoria = "Newdoria",
+  VampireLord = "Vampire Lord",
+  DifferentDimensionDragon = "Different Dimension Dragon",
+  DarkFlareKnight = "Dark Flare Knight",
+}
+
+export enum ManualEffectMonster {
   MysticalElf = "Mystical Elf",
-  SwampBattleguard = "Swamp Battleguard",
   FlameSwordsman = "Flame Swordsman",
   TimeWizard = "Time Wizard",
   BattleOx = "Battle Ox",
   CurseOfDragon = "Curse of Dragon",
   IllusionistFacelessMage = "Illusionist Faceless Mage",
-  MammothGraveyard = "Mammoth Graveyard",
   HarpieLady = "Harpie Lady",
   HarpieLadySisters = "Harpie Lady Sisters",
   KairyuShin = "Kairyu-Shin",
   GiantSoldierOfStone = "Giant Soldier of Stone",
-  CastleOfDarkIllusions = "Castle of Dark Illusions",
   ReaperOfTheCards = "Reaper of the Cards",
   CatapultTurtle = "Catapult Turtle",
   GyakutennoMegami = "Gyakutenno Megami",
-  PumpkingTheKingOfGhosts = "Pumpking the King of Ghosts",
   SpiritOfTheBooks = "Spirit of the Books",
   XYZDragonCannon = "XYZ-Dragon Cannon",
   Nemuriko = "Nemuriko",
   RevivalJam = "Revival Jam",
   FiendsHand = "Fiend's Hand",
-  BusterBlader = "Buster Blader",
   DarkNecrofear = "Dark Necrofear",
   ToadMaster = "Toad Master",
   XHeadCannon = "X-Head Cannon",
   FireReaper = "Fire Reaper",
-  MWarrior1 = "M-Warrior #1",
-  MWarrior2 = "M-Warrior #2",
   Doron = "Doron",
-  NightmarePenguin = "Nightmare Penguin",
   TrapMaster = "Trap Master",
   HourglassOfLife = "Hourglass of Life",
   ObeliskTheTormentor = "Obelisk the Tormentor",
-  WodanTheResidentOfTheForest = "Wodan the Resident of the Forest",
-  PerfectMachineKing = "Perfect Machine King",
-  SliferTheSkyDragon = "Slifer the Sky Dragon",
   TheWingedDragonOfRaBattleMode = "The Winged Dragon of Ra (Battle Mode)",
   RocketWarrior = "Rocket Warrior",
   BeastkingOfTheSwamps = "Beastking of the Swamps",
-  SatelliteCannon = "Satellite Cannon",
-  TheWingedDragonOfRaSphereMode = "The Winged Dragon of Ra (Sphere Mode)",
   FairysGift = "Fairy's Gift",
-  BlackLusterSoldier = "Black Luster Soldier",
-  LabyrinthTank = "Labyrinth Tank",
   MonsterTamer = "Monster Tamer",
   MysticLamp = "Mystic Lamp",
   Leghul = "Leghul",
   GammaTheMagnetWarrior = "Gamma The Magnet Warrior",
   MonsterEye = "Monster Eye",
-  MachineKing = "Machine King",
   TheWingedDragonOfRaPhoenixMode = "The Winged Dragon of Ra (Phoenix Mode)",
   GoddessOfWhim = "Goddess of Whim",
-  Hoshiningen = "Hoshiningen",
   DragonSeeker = "Dragon Seeker",
   PenguinTorpedo = "Penguin Torpedo",
   ZombyraTheDark = "Zombyra the Dark",
   SpiritOfTheMountain = "Spirit of the Mountain",
   AncientLamp = "Ancient Lamp",
   Skelengel = "Skelengel",
-  ThunderNyanNyan = "Thunder Nyan Nyan",
-  LavaBattleguard = "Lava Battleguard",
   KingsKnight = "King's Knight",
-  BladeKnight = "Blade Knight",
   YDragonHead = "Y-Dragon Head",
   ZMetalTank = "Z-Metal Tank",
   XYDragonCannon = "XY-Dragon Cannon",
   XZTankCannon = "XZ-Tank Cannon",
   YZTankDragon = "YZ-Tank Dragon",
-  ExodiaNecross = "Exodia Necross",
-  Helpoemer = "Helpoemer",
-  LavaGolem = "Lava Golem",
-  Newdoria = "Newdoria",
-  DarkJeroid = "Dark Jeroid",
   ElectricLizard = "Electric Lizard",
   LadyOfFaith = "Lady of Faith",
   ByserShock = "Byser Shock",
-  ViserDes = "Viser Des",
-  WitchsApprentice = "Witch's Apprentice",
   PuppetMaster = "Puppet Master",
-  VampireLord = "Vampire Lord",
   DarkPaladin = "Dark Paladin",
   Trent = "Trent",
-  DifferentDimensionDragon = "Different Dimension Dragon",
-  DarkFlareKnight = "Dark Flare Knight",
-  MirageKnight = "Mirage Knight",
   BerserkDragon = "Berserk Dragon",
-  CommandAngel = "Command Angel",
   DesVolstgalph = "Des Volstgalph",
-  ToonDarkMagicianGirl = "Toon Dark Magician Girl",
   GilfordTheLightning = "Gilford the Lightning",
   MysticalBeastSerket = "Mystical Beast Serket",
   CyberHarpie = "Cyber Harpie",
@@ -821,24 +803,52 @@ export enum EffectMonster {
   LegendaryFiend = "Legendary Fiend",
   ValkyrionTheMagnaWarrior = "Valkyrion the Magna Warrior",
   FGD = "F.G.D.",
-  MasterOfDragonSoldier = "Master of Dragon Soldier",
-  MagicianOfBlackChaos = "Magician of Black Chaos",
   RedArcheryGirl = "Red Archery Girl",
   Relinquished = "Relinquished",
   ThousandEyesRestrict = "Thousand-Eyes Restrict",
   AlphaTheMagnetWarrior = "Alpha The Magnet Warrior",
   InvitationToADarkSleep = "Invitation to a Dark Sleep",
   BarrelDragon = "Barrel Dragon",
-  Jinzo = "Jinzo",
   ReflectBounder = "Reflect Bounder",
   BetaTheMagnetWarrior = "Beta The Magnet Warrior",
-  DarkMagicianGirl = "Dark Magician Girl",
-  InsectQueen = "Insect Queen",
   ParasiteParacide = "Parasite Paracide",
   SkullMarkLadyBug = "Skull-Mark Lady Bug",
   PinchHopper = "Pinch Hopper",
   ChironTheMage = "Chiron the Mage",
   BeastOfGilfer = "Beast of Gilfer",
+}
+export enum AutoEffectMonster {
+  SwampBattleguard = "Swamp Battleguard",
+  MammothGraveyard = "Mammoth Graveyard",
+  CastleOfDarkIllusions = "Castle of Dark Illusions",
+  PumpkingTheKingOfGhosts = "Pumpking the King of Ghosts",
+  BusterBlader = "Buster Blader",
+  MWarrior1 = "M-Warrior #1",
+  MWarrior2 = "M-Warrior #2",
+  NightmarePenguin = "Nightmare Penguin",
+  WodanTheResidentOfTheForest = "Wodan the Resident of the Forest",
+  PerfectMachineKing = "Perfect Machine King",
+  SliferTheSkyDragon = "Slifer the Sky Dragon",
+  SatelliteCannon = "Satellite Cannon",
+  LabyrinthTank = "Labyrinth Tank",
+  MachineKing = "Machine King",
+  Hoshiningen = "Hoshiningen",
+  ThunderNyanNyan = "Thunder Nyan Nyan",
+  LavaBattleguard = "Lava Battleguard",
+  BladeKnight = "Blade Knight",
+  ExodiaNecross = "Exodia Necross",
+  LavaGolem = "Lava Golem",
+  DarkJeroid = "Dark Jeroid",
+  ViserDes = "Viser Des",
+  WitchsApprentice = "Witch's Apprentice",
+  MirageKnight = "Mirage Knight",
+  BerserkDragon = "Berserk Dragon",
+  CommandAngel = "Command Angel",
+  ToonDarkMagicianGirl = "Toon Dark Magician Girl",
+  MasterOfDragonSoldier = "Master of Dragon Soldier",
+  Jinzo = "Jinzo",
+  DarkMagicianGirl = "Dark Magician Girl",
+  InsectQueen = "Insect Queen",
 }
 
 export enum Spell {
@@ -969,7 +979,12 @@ export enum Trap {
 }
 
 // this will error if an enum value doesn't match a card name
-Monster as { [key: string]: CardName };
-EffectMonster as { [key: string]: CardName };
-Spell as { [key: string]: CardName };
-Trap as { [key: string]: CardName };
+interface CheckCardName {
+  [key: string]: CardName;
+}
+Monster as CheckCardName;
+ManualEffectMonster as CheckCardName;
+AutoEffectMonster as CheckCardName;
+GraveyardEffectMonster as CheckCardName;
+Spell as CheckCardName;
+Trap as CheckCardName;

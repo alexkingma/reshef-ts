@@ -1,7 +1,18 @@
-import { clearZone, destroyAtCoords } from "./cardEffectUtil";
+import {
+  attackMonster,
+  clearZone,
+  destroyAtCoords,
+  directAttack,
+} from "./cardEffectUtil";
 import { draw } from "./cardEffectWrapped";
-import { attackMonster } from "./combatUtil";
-import { BattlePosition, FieldRow, Orientation, Spell } from "./common";
+import {
+  BattlePosition,
+  FieldCoords,
+  FieldRow,
+  ManualEffectMonster,
+  Orientation,
+  Spell,
+} from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
   generateOccupiedMonsterZone,
@@ -10,6 +21,7 @@ import {
   getOtherDuellistKey,
   shuffle,
 } from "./duelUtil";
+import { monsterEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
 export const coreDuelReducers = {
@@ -26,7 +38,7 @@ export const coreDuelReducers = {
     const { card } = originatorState.hand[handIdx] as OccupiedMonsterZone;
     clearZone(originatorState.hand, handIdx);
     originatorState.monsterZones[zoneIdx] = {
-      ...generateOccupiedMonsterZone(card),
+      ...generateOccupiedMonsterZone(card.name),
       orientation: Orientation.FaceDown,
     };
     activeTurn.hasNormalSummoned = true;
@@ -46,37 +58,16 @@ export const coreDuelReducers = {
     { originatorState, targetState }: ReducerArg,
     attackerIdx: FieldCol
   ) => {
-    const attackerZone = originatorState.monsterZones[
-      attackerIdx
-    ] as OccupiedMonsterZone;
     const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
     if (targetIdx === -1) {
       // no monsters, attack directly
-      targetState.lp -= attackerZone.card.atk;
+      directAttack(originatorState, targetState, attackerIdx);
     } else {
-      const targetZone = targetState.monsterZones[
-        targetIdx
-      ] as OccupiedMonsterZone;
-      const {
-        attackerDestroyed,
-        targetDestroyed,
-        attackerLpLoss,
-        targetLpLoss,
-      } = attackMonster(attackerZone, targetZone);
-      if (attackerDestroyed) {
-        destroyAtCoords(originatorState, [FieldRow.PlayerMonster, attackerIdx]);
-      }
-      if (targetDestroyed) {
-        destroyAtCoords(targetState, [FieldRow.OpponentMonster, targetIdx]);
-      }
-      if (attackerLpLoss) {
-        originatorState.lp -= attackerLpLoss;
-      }
-      if (targetLpLoss) {
-        targetState.lp -= targetLpLoss;
-      }
+      attackMonster(originatorState, targetState, attackerIdx, targetIdx);
     }
-    attackerZone.hasAttacked = true;
+    (
+      originatorState.monsterZones[attackerIdx] as OccupiedMonsterZone
+    ).isLocked = true;
   },
   changeBattlePosition: (
     { originatorState }: ReducerArg,
@@ -94,7 +85,7 @@ export const coreDuelReducers = {
     // reset all turn-based params, then hand over to other player
     originatorState.monsterZones.forEach((zone) => {
       if (!zone.isOccupied) return;
-      zone.hasAttacked = false;
+      zone.isLocked = false;
     });
     activeTurn.duellistKey = getOtherDuellistKey(activeTurn.duellistKey);
     activeTurn.hasNormalSummoned = false;
@@ -125,5 +116,29 @@ export const coreDuelReducers = {
 
     // discard after activation
     clearZone(originatorState.spellTrapZones, spellIdx);
+  },
+  activateManualMonsterEffect: (arg: ReducerArg, monsterIdx: FieldCol) => {
+    const { originatorState } = arg;
+
+    const { card } = originatorState.monsterZones[
+      monsterIdx
+    ] as OccupiedMonsterZone;
+    const monsterEffectDispatch =
+      monsterEffectReducers[card.name as ManualEffectMonster];
+    if (!monsterEffectDispatch) {
+      console.log(`Monster effect not implemented for card: ${card.name}`);
+      return;
+    }
+    monsterEffectDispatch(arg, monsterIdx);
+
+    // lock card once effect is complete
+    const zonePostEffect = originatorState.monsterZones[monsterIdx];
+    if (zonePostEffect.isOccupied && zonePostEffect.card.name === card.name) {
+      // only lock card if the monster is the same one as before the effect
+      // cards that destroy themselves or summon other monsters
+      // ... in their idx usually do not need to be locked, and should
+      // ... be addressed case-by -case in individual reducers
+      zonePostEffect.isLocked = true;
+    }
   },
 };
