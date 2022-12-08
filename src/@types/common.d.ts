@@ -17,3 +17,6 @@ type PrependArgs<F, A> = F extends (...args: infer P) => infer R
 type PrependArgInFunctionMap<T, A> = {
   [K in keyof T]: PrependArgs<T[K], A>;
 };
+
+type OmitFirst<T extends any[]> = T extends [any, ...infer R] ? R : never;
+type OmitLast<T extends any[]> = T extends [...infer R, any] ? R : never;

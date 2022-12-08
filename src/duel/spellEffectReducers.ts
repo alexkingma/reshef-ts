@@ -17,7 +17,14 @@ import {
   permPowerUp,
   setField,
 } from "./cardEffectWrapped";
-import { BattlePosition, Field, FieldRow, Monster, Spell } from "./common";
+import {
+  BattlePosition,
+  DuellistKey,
+  Field,
+  Monster,
+  RowKey,
+  Spell,
+} from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
   containsCard,
@@ -102,26 +109,28 @@ export const spellEffectReducers: SpellEffectReducers = {
 
   // card destruction
   [Spell.FinalDestiny]: destroyRows([
-    FieldRow.PlayerHand,
-    FieldRow.PlayerSpellTrap,
-    FieldRow.PlayerMonster,
-    FieldRow.OpponentMonster,
-    FieldRow.OpponentSpellTrap,
-    FieldRow.OpponentHand,
+    [DuellistKey.Player, RowKey.Hand],
+    [DuellistKey.Player, RowKey.SpellTrap],
+    [DuellistKey.Player, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.SpellTrap],
+    [DuellistKey.Opponent, RowKey.Hand],
   ]),
   [Spell.HeavyStorm]: destroyRows([
-    FieldRow.PlayerSpellTrap,
-    FieldRow.PlayerMonster,
-    FieldRow.OpponentMonster,
-    FieldRow.OpponentSpellTrap,
+    [DuellistKey.Player, RowKey.SpellTrap],
+    [DuellistKey.Player, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.SpellTrap],
   ]),
   [Spell.DarkHole]: destroyRows([
-    FieldRow.PlayerMonster,
-    FieldRow.OpponentMonster,
+    [DuellistKey.Player, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.Monster],
   ]),
-  [Spell.Raigeki]: destroyRows([FieldRow.OpponentMonster]),
+  [Spell.Raigeki]: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
   [Spell.CrushCard]: destroy1500PlusAtk(),
-  [Spell.HarpiesFeatherDuster]: destroyRows([FieldRow.OpponentSpellTrap]),
+  [Spell.HarpiesFeatherDuster]: destroyRows([
+    [DuellistKey.Opponent, RowKey.SpellTrap],
+  ]),
   [Spell.BeckonToDarkness]: destroyHighestAtk(),
 
   // type-specific destruction

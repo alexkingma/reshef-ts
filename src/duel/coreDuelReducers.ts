@@ -9,10 +9,9 @@ import { getCombatStats } from "./combatUtil";
 import {
   AutoEffectMonster,
   BattlePosition,
-  FieldCoords,
-  FieldRow,
   ManualEffectMonster,
   Orientation,
+  RowKey,
   Spell,
 } from "./common";
 import { ReducerArg } from "./duelSlice";
@@ -98,10 +97,10 @@ export const coreDuelReducers = {
     { originatorState, activeTurn }: ReducerArg,
     monsterIdx: FieldCol
   ) => {
-    destroyAtCoords(originatorState, [FieldRow.PlayerMonster, monsterIdx]);
+    destroyAtCoords(originatorState, [RowKey.Monster, monsterIdx]);
     activeTurn.numTributedMonsters++;
   },
-  discard: ({ originatorState }: ReducerArg, coords: FieldCoords) => {
+  discard: ({ originatorState }: ReducerArg, coords: ZoneCoordsForDuellist) => {
     destroyAtCoords(originatorState, coords);
   },
   activateSpellEffect: (arg: ReducerArg, spellIdx: FieldCol) => {

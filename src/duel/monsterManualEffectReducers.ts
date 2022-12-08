@@ -34,11 +34,12 @@ import {
   setField as setField_Wrapped,
 } from "./cardEffectWrapped";
 import {
+  DuellistKey,
   Field,
-  FieldRow,
   ManualEffectMonster,
   Monster,
   Orientation,
+  RowKey,
   Trap,
 } from "./common";
 import { ReducerArg } from "./duelSlice";
@@ -114,7 +115,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
       combinedAtk += zone.card.atk;
     });
     idxsToClear.forEach((idx) =>
-      destroyAtCoords(originatorState, [FieldRow.PlayerMonster, idx])
+      destroyAtCoords(originatorState, [RowKey.Monster, idx])
     );
     burn(targetState, combinedAtk);
   },
@@ -185,7 +186,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     );
   },
   [ManualEffectMonster.ObeliskTheTormentor]: ({ targetState }) => {
-    destroyRow(targetState, FieldRow.OpponentMonster);
+    destroyRow(targetState, RowKey.Monster);
     burn(targetState, 4000);
   },
   [ManualEffectMonster.TheWingedDragonOfRaBattleMode]: ({
@@ -200,8 +201,8 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     powerDownHighestAtk(targetState);
   },
   [ManualEffectMonster.BeastkingOfTheSwamps]: destroyRows([
-    FieldRow.PlayerMonster,
-    FieldRow.OpponentMonster,
+    [DuellistKey.Player, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.Monster],
   ]),
   [ManualEffectMonster.FairysGift]: heal_Wrapped(1000),
   [ManualEffectMonster.MonsterTamer]: ({ originatorState }) => {
@@ -232,7 +233,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     targetState,
   }) => {
     burn(originatorState, 1000);
-    destroyRow(targetState, FieldRow.OpponentMonster);
+    destroyRow(targetState, RowKey.Monster);
   },
   [ManualEffectMonster.GoddessOfWhim]: ({ originatorState }, monsterIdx) => {
     draw(originatorState);
@@ -296,22 +297,22 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     // return all face-down cards on both fields to
     // the hands of both players if there is space in the hands
     const returnRowToHand =
-      (duellist: Duellist, row: FieldRow) => (z: Zone, idx: number) => {
+      (duellist: Duellist, row: RowKey) => (z: Zone, idx: number) => {
         if (!z.isOccupied) return;
         returnCardToHand(duellist, [row, idx as FieldCol]);
       };
 
     originatorState.monsterZones.forEach(
-      returnRowToHand(originatorState, FieldRow.PlayerMonster)
+      returnRowToHand(originatorState, RowKey.Monster)
     );
     originatorState.monsterZones.forEach(
-      returnRowToHand(originatorState, FieldRow.PlayerSpellTrap)
+      returnRowToHand(originatorState, RowKey.SpellTrap)
     );
     targetState.monsterZones.forEach(
-      returnRowToHand(targetState, FieldRow.OpponentMonster)
+      returnRowToHand(targetState, RowKey.Monster)
     );
     targetState.monsterZones.forEach(
-      returnRowToHand(targetState, FieldRow.OpponentSpellTrap)
+      returnRowToHand(targetState, RowKey.SpellTrap)
     );
   },
   [ManualEffectMonster.PuppetMaster]: ({ originatorState }) => {
@@ -349,7 +350,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     burn(targetState, 500);
   },
   [ManualEffectMonster.GilfordTheLightning]: destroyRows([
-    FieldRow.OpponentMonster,
+    [DuellistKey.Opponent, RowKey.Monster],
   ]),
   [ManualEffectMonster.MysticalBeastSerket]: (
     { originatorState, targetState },
@@ -357,7 +358,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
   ) => {
     const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
     if (targetIdx === -1) return;
-    destroyAtCoords(targetState, [FieldRow.OpponentMonster, targetIdx]);
+    destroyAtCoords(targetState, [RowKey.Monster, targetIdx]);
     permPowerUp(originatorState, monsterIdx);
   },
   [ManualEffectMonster.CyberHarpie]: ({ originatorState }) => {
@@ -398,8 +399,8 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     });
   },
   [ManualEffectMonster.FGD]: destroyRows([
-    FieldRow.OpponentMonster,
-    FieldRow.OpponentSpellTrap,
+    [DuellistKey.Opponent, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.SpellTrap],
   ]),
   [ManualEffectMonster.RedArcheryGirl]: ({ targetState }) => {
     const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
@@ -442,7 +443,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     // each targeted monster has a 50% chance to be destroyed
     idxsToTarget.forEach((i) => {
       if (Math.random() > 0.5) return;
-      destroyAtCoords(targetState, [FieldRow.OpponentMonster, i]);
+      destroyAtCoords(targetState, [RowKey.Monster, i]);
     });
   },
   [ManualEffectMonster.ReflectBounder]: (

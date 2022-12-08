@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { Field, FieldCoords } from "./common";
+import { Field } from "./common";
 import { coreDuelReducers } from "./coreDuelReducers";
 import {
   getInitialDuel,
@@ -65,7 +65,7 @@ export const duelSlice = createSlice({
 export const { actions } = duelSlice;
 
 export const selectDuel = (state: RootState) => state.duel;
-export const selectZone = (coords: FieldCoords) => (state: RootState) =>
+export const selectZone = (coords: ZoneCoords) => (state: RootState) =>
   getZone(state.duel, coords);
 export const selectIsMyTurn = (key: DuellistKey) => (state: RootState) =>
   state.duel.activeTurn.duellistKey === key;

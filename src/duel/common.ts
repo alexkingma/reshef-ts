@@ -8,20 +8,16 @@ export enum Orientation {
   FaceUp = "FACE_UP",
 }
 
-export enum FieldRow {
-  PlayerHand = 0,
-  PlayerSpellTrap = 1,
-  PlayerMonster = 2,
-  OpponentMonster = 3,
-  OpponentSpellTrap = 4,
-  OpponentHand = 5,
+export enum RowKey {
+  Hand = "hand",
+  SpellTrap = "spellTrapZones",
+  Monster = "monsterZones",
 }
 
-// can't put this in a `.d.ts` file or FieldRow (enum) is
-// ... not evaluated and lets through args or any type
-// putting the def here encourages importing, which
-// ... properly evaluates / enforces the type
-export type FieldCoords = [rowIdx: FieldRow, colIdx: FieldCol];
+export enum DuellistKey {
+  Player = "p1",
+  Opponent = "p2",
+}
 
 export enum Field {
   Arena = "Arena",

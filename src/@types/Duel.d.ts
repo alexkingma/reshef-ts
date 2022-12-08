@@ -44,7 +44,7 @@ interface Duel {
   p2: Duellist;
   activeTurn: Turn;
   activeField: Field;
-  cursorPos: FieldCoords;
+  cursorPos: ZoneCoords;
   // focusedCard: FieldCoords; // for multi-selection (X mon attacks Y mon, Spell A powers up Monster B, etc.)
 }
 
@@ -54,8 +54,10 @@ interface Turn {
   numTributedMonsters: number;
 }
 
-type FieldCol = 0 | 1 | 2 | 3 | 4;
-
-type FieldCoords = [rowIdx: FieldRow, colIdx: FieldCol];
-
 type DuellistKey = "p1" | "p2";
+type FieldCol = 0 | 1 | 2 | 3 | 4;
+type RowKey = "hand" | "monsterZones" | "spellTrapZones";
+
+type ZoneCoords = [dKey: DuellistKey, rowKey: RowKey, colIdx: FieldCol];
+type ZoneCoordsForDuellist = OmitFirst<ZoneCoords>;
+type RowCoords = OmitLast<ZoneCoords>;

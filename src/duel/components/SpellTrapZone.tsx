@@ -1,33 +1,28 @@
 import React from "react";
 import { useAppSelector } from "../../hooks";
-import { FieldRow } from "../common";
-import { selectIsMyTurn } from "../duelSlice";
+import { selectZone } from "../duelSlice";
 import { isTrap } from "../duelUtil";
-import useDuelActions from "../useDuelActions";
+import { DuelButtonKey, useDuelButtons } from "../useZoneButtons";
 
 interface Props {
-  duellistKey: DuellistKey;
-  zone: OccupiedSpellTrapZone;
-  zoneIdx: FieldCol;
+  zoneCoords: ZoneCoords;
 }
 
-export const SpellTrapZone = ({ duellistKey, zone, zoneIdx }: Props) => {
+export const SpellTrapZone = ({ zoneCoords }: Props) => {
+  const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedSpellTrapZone;
   const { card } = zone;
-  const coords: FieldCoords = [FieldRow.PlayerSpellTrap, zoneIdx];
-  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
-  const { activateSpellEffect, discard } = useDuelActions(duellistKey);
+
+  const buttons = useDuelButtons(zoneCoords, [
+    DuelButtonKey.SpellEffect,
+    DuelButtonKey.Discard,
+  ]);
 
   return (
     <>
       <span style={{ color: isTrap(zone) ? "purple" : "blue" }}>
         {card.name}{" "}
       </span>
-      {isMyTurn ? (
-        <>
-          <button onClick={() => activateSpellEffect(zoneIdx)}>Activate</button>
-          <button onClick={() => discard(coords)}>Discard</button>
-        </>
-      ) : null}
+      {buttons}
     </>
   );
 };

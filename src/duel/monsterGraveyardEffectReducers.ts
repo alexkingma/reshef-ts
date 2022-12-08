@@ -5,7 +5,7 @@ import {
   specialSummon,
 } from "./cardEffectUtil";
 import { destroyHighestAtk } from "./cardEffectWrapped";
-import { FieldRow, GraveyardEffectMonster, Monster } from "./common";
+import { GraveyardEffectMonster, Monster, RowKey } from "./common";
 import { ReducerArg } from "./duelSlice";
 import { getFirstOccupiedZoneIdx, getNumCardsInRow } from "./duelUtil";
 
@@ -26,7 +26,7 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
     const count = getNumCardsInRow(targetState.hand);
     if (count < 3) return;
     const handIdx = getFirstOccupiedZoneIdx(targetState.hand) as FieldCol;
-    destroyAtCoords(targetState, [FieldRow.OpponentHand, handIdx]);
+    destroyAtCoords(targetState, [RowKey.Hand, handIdx]);
   },
   [GraveyardEffectMonster.Newdoria]: (arg) => {
     const { originatorState } = arg;

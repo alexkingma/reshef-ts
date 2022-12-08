@@ -2,9 +2,9 @@ import cards from "../assets/cards";
 import {
   BattlePosition,
   Field,
-  FieldRow,
   Monster,
   Orientation,
+  RowKey,
   Trap,
 } from "./common";
 import { ReducerArg } from "./duelSlice";
@@ -39,7 +39,7 @@ export const getInitialDuel = (
       numTributedMonsters: 0,
     },
     activeField: Field.Arena,
-    cursorPos: [FieldRow.PlayerHand, 0],
+    cursorPos: ["p1", RowKey.Hand, 0],
   };
 };
 
@@ -153,36 +153,6 @@ export const getNumTributesRequired = ({
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
 
-export const getZoneKey = (
-  row: FieldRow
-): keyof Pick<Duellist, "monsterZones" | "spellTrapZones" | "hand"> => {
-  switch (row) {
-    case FieldRow.PlayerMonster:
-    case FieldRow.OpponentMonster:
-      return "monsterZones";
-    case FieldRow.PlayerSpellTrap:
-    case FieldRow.OpponentSpellTrap:
-      return "spellTrapZones";
-    default:
-      return "hand";
-  }
-};
-
-export const getDuellistKey = (row: FieldRow): DuellistKey => {
-  switch (row) {
-    case FieldRow.PlayerMonster:
-    case FieldRow.PlayerSpellTrap:
-    case FieldRow.PlayerHand:
-      return "p1";
-    case FieldRow.OpponentMonster:
-    case FieldRow.OpponentSpellTrap:
-    case FieldRow.OpponentHand:
-      return "p2";
-    default:
-      throw new Error(`Unknown field row: ${row}`);
-  }
-};
-
 export const getNumCardsInRow = (row: Zone[]) => {
   return row.filter((z) => z.isOccupied).length;
 };
@@ -278,10 +248,8 @@ export const hasFullFINAL = (spellTrapRow: SpellTrapZone[]) => {
   );
 };
 
-export const getZone = (state: Duel, [row, col]: FieldCoords) => {
-  const duellistKey = getDuellistKey(row);
-  const zoneKey = getZoneKey(row);
-  return state[duellistKey][zoneKey][col];
+export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
+  return state[dKey][rKey][col];
 };
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>

@@ -1,14 +1,15 @@
 import React from "react";
-import { BattlePosition, FieldRow } from "../common";
+import { useAppSelector } from "../../hooks";
+import { BattlePosition } from "../common";
+import { selectZone } from "../duelSlice";
 import { DuelButtonKey, useDuelButtons } from "../useZoneButtons";
 
 interface Props {
-  duellistKey: DuellistKey;
-  zone: OccupiedMonsterZone;
-  zoneIdx: FieldCol;
+  zoneCoords: ZoneCoords;
 }
 
-export const MonsterZone = ({ duellistKey, zone, zoneIdx }: Props) => {
+export const MonsterZone = ({ zoneCoords }: Props) => {
+  const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedMonsterZone;
   const {
     card,
     battlePosition: pos,
@@ -17,12 +18,12 @@ export const MonsterZone = ({ duellistKey, zone, zoneIdx }: Props) => {
     tempPowerUpLevel,
   } = zone;
   const { effAtk, effDef } = card;
-  const zoneCoords: FieldCoords = [FieldRow.PlayerMonster, zoneIdx];
 
-  const buttons = useDuelButtons(duellistKey, zoneCoords, [
+  const buttons = useDuelButtons(zoneCoords, [
+    DuelButtonKey.Summon,
     DuelButtonKey.Attack,
     DuelButtonKey.Defend,
-    DuelButtonKey.Effect,
+    DuelButtonKey.MonsterEffect,
     DuelButtonKey.Tribute,
     DuelButtonKey.Discard,
   ]);

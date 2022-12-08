@@ -7,7 +7,7 @@ import {
   permPowerUp as permPowerUpDirect,
   setField as setFieldDirect,
 } from "./cardEffectUtil";
-import { Field, FieldCoords, FieldRow } from "./common";
+import { DuellistKey, Field, RowKey } from "./common";
 import { ReducerArg } from "./duelSlice";
 import { getHighestAtkZoneIdx } from "./duelUtil";
 
@@ -36,29 +36,15 @@ export const setField =
   };
 
 export const destroyRows =
-  (rowsToDestroy: FieldRow[]) =>
+  (rowsToDestroy: RowCoords[]) =>
   ({ originatorState, targetState }: ReducerArg) => {
     // player rows
-    rowsToDestroy
-      .filter((r) =>
-        [
-          FieldRow.PlayerHand,
-          FieldRow.PlayerMonster,
-          FieldRow.PlayerSpellTrap,
-        ].includes(r)
+    rowsToDestroy.forEach(([dKey, rKey]) =>
+      destroyRow(
+        dKey === DuellistKey.Player ? originatorState : targetState,
+        rKey as RowKey
       )
-      .forEach((r) => destroyRow(originatorState, r));
-
-    // opponent rows
-    rowsToDestroy
-      .filter((r) =>
-        [
-          FieldRow.OpponentHand,
-          FieldRow.OpponentMonster,
-          FieldRow.OpponentSpellTrap,
-        ].includes(r)
-      )
-      .forEach((r) => destroyRow(targetState, r));
+    );
   };
 
 export const destroyHighestAtk =
@@ -69,9 +55,9 @@ export const destroyHighestAtk =
       return;
     }
     const coords = [
-      FieldRow.OpponentMonster,
+      RowKey.Monster,
       getHighestAtkZoneIdx(targetState.monsterZones),
-    ] as FieldCoords;
+    ] as ZoneCoordsForDuellist;
     destroyAtCoords(targetState, coords);
   };
 
@@ -94,9 +80,9 @@ const destroyMonsterConditional =
     }
 
     const coords = validColIdxs.map((col) => [
-      FieldRow.OpponentMonster,
+      RowKey.Monster,
       col,
-    ]) as FieldCoords[];
+    ]) as ZoneCoordsForDuellist[];
 
     coords.forEach((coord) => destroyAtCoords(targetState, coord));
   };

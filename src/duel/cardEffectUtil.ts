@@ -1,12 +1,5 @@
 import { calculateAttack } from "./combatUtil";
-import {
-  BattlePosition,
-  Field,
-  FieldCoords,
-  FieldRow,
-  Monster,
-  Orientation,
-} from "./common";
+import { BattlePosition, Field, Monster, Orientation, RowKey } from "./common";
 import { ReducerArg } from "./duelSlice";
 import {
   countMatchesInRow,
@@ -17,7 +10,7 @@ import {
   getFirstOccupiedZoneIdx,
   getHighestAtkZoneIdx,
   getNumCardsInRow,
-  getZoneKey,
+  isMonster,
   isTrap,
 } from "./duelUtil";
 
@@ -55,22 +48,25 @@ export const tempPowerDown = (
   tempPowerUp(duellist, monsterIdx, -levels);
 };
 
-export const destroyRow = (state: Duellist, row: FieldRow) => {
-  state[getZoneKey(row)].forEach((zone, idx) => {
+export const destroyRow = (state: Duellist, row: RowKey) => {
+  state[row].forEach((zone, idx) => {
     if (zone.isOccupied) {
       destroyAtCoords(state, [row, idx as FieldCol]);
     }
   });
 };
 
-export const destroyAtCoords = (state: Duellist, coords: FieldCoords) => {
+export const destroyAtCoords = (
+  duellist: Duellist,
+  coords: ZoneCoordsForDuellist
+) => {
   const [row, col] = coords;
-  const zone = state[getZoneKey(row)][col];
+  const zone = duellist[row][col];
   if (!zone.isOccupied) return;
-  if (zone.card.category === "Monster") {
-    state.graveyard = zone.card.name;
+  if (isMonster(zone)) {
+    duellist.graveyard = zone.card.name;
   }
-  clearZone(state[getZoneKey(row)], col);
+  clearZone(duellist[row], col);
 };
 
 export const clearGraveyard = (duellist: Duellist) => {
@@ -134,10 +130,10 @@ export const attackMonster = (
   const { attackerDestroyed, targetDestroyed, attackerLpLoss, targetLpLoss } =
     calculateAttack(attackerZone, targetZone);
   if (attackerDestroyed) {
-    destroyAtCoords(originatorState, [FieldRow.PlayerMonster, attackerIdx]);
+    destroyAtCoords(originatorState, [RowKey.Monster, attackerIdx]);
   }
   if (targetDestroyed) {
-    destroyAtCoords(targetState, [FieldRow.OpponentMonster, targetIdx]);
+    destroyAtCoords(targetState, [RowKey.Monster, targetIdx]);
   }
   if (attackerLpLoss) {
     originatorState.lp -= attackerLpLoss;
@@ -147,21 +143,18 @@ export const attackMonster = (
   }
 };
 
-export const destroySelf = (
-  originatorState: Duellist,
-  monsterIdx: FieldCol
-) => {
-  destroyAtCoords(originatorState, [FieldRow.PlayerMonster, monsterIdx]);
+export const destroySelf = (duellist: Duellist, monsterIdx: FieldCol) => {
+  destroyAtCoords(duellist, [RowKey.Monster, monsterIdx]);
 };
 
 export const specialSummon = (
-  originatorState: Duellist,
+  duellist: Duellist,
   cardName: CardName,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
   try {
-    const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
-    originatorState.monsterZones[zoneIdx] = {
+    const zoneIdx = getFirstEmptyZoneIdx(duellist.monsterZones);
+    duellist.monsterZones[zoneIdx] = {
       ...generateOccupiedMonsterZone(cardName),
       ...customProps,
     };
@@ -259,9 +252,9 @@ export const destroyHighestAtk = (duellist: Duellist) => {
   }
 
   const coords = [
-    FieldRow.OpponentMonster,
+    RowKey.Monster,
     getHighestAtkZoneIdx(duellist.monsterZones),
-  ] as FieldCoords;
+  ] as ZoneCoordsForDuellist;
   destroyAtCoords(duellist, coords);
 };
 
@@ -362,11 +355,11 @@ export const powerDownHighestAtk = (duellist: Duellist) => {
 
 export const returnCardToHand = (
   duellist: Duellist,
-  [rowIdx, colIdx]: FieldCoords
+  [rKey, colIdx]: ZoneCoordsForDuellist
 ) => {
   try {
     const handIdx = getFirstEmptyZoneIdx(duellist.hand);
-    const row = duellist[getZoneKey(rowIdx)];
+    const row = duellist[rKey];
     const targetZone = row[colIdx] as OccupiedZone;
     duellist.hand[handIdx] = {
       isOccupied: true,
@@ -379,9 +372,9 @@ export const returnCardToHand = (
   }
 };
 
-export const destroyLeftMostCard = (duellist: Duellist, row: FieldRow) => {
+export const destroyLeftMostCard = (duellist: Duellist, row: RowKey) => {
   // target the first card found starting from left, NOT specifically the card at idx 0
-  const targetIdx = getFirstOccupiedZoneIdx(duellist[getZoneKey(row)]);
+  const targetIdx = getFirstOccupiedZoneIdx(duellist[row]);
   if (targetIdx !== -1) {
     destroyAtCoords(duellist, [row, targetIdx]);
   }

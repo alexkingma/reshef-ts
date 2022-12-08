@@ -1,5 +1,4 @@
 import React from "react";
-
 import { DuellistDeck } from "./Deck";
 import { DuellistStatus } from "./DuellistStatus";
 import { useAppSelector } from "../../hooks";
@@ -8,6 +7,7 @@ import { MonsterZone } from "./MonsterZone";
 import { EmptyZone } from "./EmptyZone";
 import { SpellTrapZone } from "./SpellTrapZone";
 import { HandZone } from "./HandZone";
+import { RowKey } from "../common";
 
 interface Props {
   name: string;
@@ -29,9 +29,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
             <li key={i}>
               {z.isOccupied ? (
                 <MonsterZone
-                  zone={z}
-                  zoneIdx={i as FieldCol}
-                  duellistKey={duellistKey}
+                  zoneCoords={[duellistKey, RowKey.Monster, i as FieldCol]}
                 />
               ) : (
                 <EmptyZone key={i} />
@@ -40,6 +38,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
           ))}
         </ol>
       </div>
+
       <div>
         Spell/Trap Zones:
         <ol>
@@ -47,9 +46,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
             <li key={i}>
               {z.isOccupied ? (
                 <SpellTrapZone
-                  zone={z}
-                  zoneIdx={i as FieldCol}
-                  duellistKey={duellistKey}
+                  zoneCoords={[duellistKey, RowKey.SpellTrap, i as FieldCol]}
                 />
               ) : (
                 <EmptyZone key={i} />
@@ -58,6 +55,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
           ))}
         </ol>
       </div>
+
       <div>
         Hand:
         <ol>
@@ -65,9 +63,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
             <li key={i}>
               {z.isOccupied ? (
                 <HandZone
-                  zone={z}
-                  zoneIdx={i as FieldCol}
-                  duellistKey={duellistKey}
+                  zoneCoords={[duellistKey, RowKey.Hand, i as FieldCol]}
                 />
               ) : (
                 <EmptyZone key={i} />
