@@ -1,4 +1,3 @@
-import { getCard } from "../common/card";
 import { calculateAttack } from "./combatUtil";
 import {
   BattlePosition,
@@ -12,6 +11,7 @@ import { ReducerArg } from "./duelSlice";
 import {
   countMatchesInRow,
   generateOccupiedMonsterZone,
+  getCard,
   getFirstEmptyZoneIdx,
   getFirstMatchInRowIdx,
   getFirstOccupiedZoneIdx,
@@ -117,10 +117,8 @@ export const directAttack = (
   targetState: Duellist,
   attackerIdx: FieldCol
 ) => {
-  const { card } = originatorState.monsterZones[
-    attackerIdx
-  ] as OccupiedMonsterZone;
-  targetState.lp -= card.atk;
+  const zone = originatorState.monsterZones[attackerIdx] as OccupiedMonsterZone;
+  targetState.lp -= zone.card.effAtk;
 };
 
 export const attackMonster = (

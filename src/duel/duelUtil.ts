@@ -1,5 +1,4 @@
 import cards from "../assets/cards";
-import { getCard } from "../common/card";
 import {
   BattlePosition,
   Field,
@@ -9,6 +8,23 @@ import {
   Trap,
 } from "./common";
 import { ReducerArg } from "./duelSlice";
+
+export const getCard = (cardName: CardName): Card => {
+  const dbCard = cards.find((c) => c.name === cardName)!;
+  if (dbCard.category !== "Monster") {
+    return dbCard;
+  }
+  return {
+    ...dbCard,
+    effAtk: dbCard.atk,
+    effDef: dbCard.def,
+  };
+};
+
+const getRandomCard = (): Card => {
+  const dbCard = cards[Math.floor(Math.random() * cards.length)];
+  return getCard(dbCard.name);
+};
 
 export const getInitialDuel = (
   cardQuantMap1: CardQuantityMap,
@@ -27,25 +43,19 @@ export const getInitialDuel = (
   };
 };
 
-const getRandomCard = () => {
-  return cards[Math.floor(Math.random() * cards.length)];
-};
-
 export const getTempCardQuantMap = (): CardQuantityMap => {
   const map: CardQuantityMap = {};
   let numCardsRemaining = 40;
   while (numCardsRemaining > 0) {
-    const quant = Math.min(
-      numCardsRemaining,
-      Math.floor(Math.random() * 3) + 1
-    );
+    const quant = 1;
     numCardsRemaining -= quant;
 
     // don't overwrite existing cards in the map
+    const isEffect = (c: Card) => c.category === "Monster" && c.effect;
     let cardName;
     do {
       cardName = getRandomCard().name;
-    } while (cardName in map);
+    } while (cardName in map || !isEffect(getCard(cardName)));
 
     map[cardName] = quant;
   }
@@ -73,9 +83,9 @@ export const generateNewDuellist = (cardMap: CardQuantityMap): Duellist => {
 
 export const initialiseDeck = (cardQuantMap: CardQuantityMap): Deck => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [cardName, qty]) => {
-    const cardData = getCard(cardName as CardName);
+    const card = getCard(cardName as CardName);
     const cards: Card[] = Array.from({ length: qty });
-    cards.fill(cardData);
+    cards.fill(card);
     deck.push(...cards);
     return deck;
   }, [] as Deck);
@@ -121,8 +131,8 @@ export const getHighestAtkZoneIdx = (
   let highestAtk = -1;
   zones.forEach((z, i) => {
     if (!z.isOccupied || z.card.category !== "Monster" || !condition(z)) return;
-    if (z.card.atk > highestAtk) {
-      highestAtk = z.card.atk;
+    if (z.card.effAtk > highestAtk) {
+      highestAtk = z.card.effAtk;
       idx = i;
     }
   });
@@ -155,6 +165,21 @@ export const getZoneKey = (
       return "spellTrapZones";
     default:
       return "hand";
+  }
+};
+
+export const getDuellistKey = (row: FieldRow): DuellistKey => {
+  switch (row) {
+    case FieldRow.PlayerMonster:
+    case FieldRow.PlayerSpellTrap:
+    case FieldRow.PlayerHand:
+      return "p1";
+    case FieldRow.OpponentMonster:
+    case FieldRow.OpponentSpellTrap:
+    case FieldRow.OpponentHand:
+      return "p2";
+    default:
+      throw new Error(`Unknown field row: ${row}`);
   }
 };
 
@@ -199,15 +224,25 @@ export const generateOccupiedMonsterZone = (
   tempPowerUpLevel: 0,
 });
 
-export const isTrap = (z: Zone) => {
+export const isTrap = (z: Zone): z is OccupiedSpellTrapZone => {
   return z.isOccupied && z.card.category === "Trap";
 };
 
-export const isType = (z: Zone, type: CardType) =>
-  z.isOccupied && z.card.category === "Monster" && z.card.type === type;
+export const isSpell = (z: Zone): z is OccupiedSpellTrapZone => {
+  return z.isOccupied && z.card.category === "Magic";
+};
 
-export const isSpecificMonster = (z: Zone, cardName: CardName) =>
-  z.isOccupied && z.card.category === "Monster" && z.card.name === cardName;
+export const isMonster = (z: Zone): z is OccupiedMonsterZone => {
+  return z.isOccupied && z.card.category === "Monster";
+};
+
+export const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
+  isMonster(z) && z.card.type === type;
+
+export const isSpecificMonster = (
+  z: Zone,
+  cardName: CardName
+): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
 
 export const getExodiaCards = () => {
   return [
@@ -242,3 +277,12 @@ export const hasFullFINAL = (spellTrapRow: SpellTrapZone[]) => {
     Trap.SpiritMessageL
   );
 };
+
+export const getZone = (state: Duel, [row, col]: FieldCoords) => {
+  const duellistKey = getDuellistKey(row);
+  const zoneKey = getZoneKey(row);
+  return state[duellistKey][zoneKey][col];
+};
+
+export const canActivateEffect = (z: OccupiedMonsterZone) =>
+  !z.isLocked && z.card.effect && z.orientation === Orientation.FaceDown;

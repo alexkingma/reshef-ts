@@ -1,14 +1,15 @@
 import { default as alignmentMap } from "../assets/alignment.json";
-import { BattlePosition } from "./common";
+import { default as fieldMultiplierMap } from "../assets/fields.json";
+import { BattlePosition, Field } from "./common";
 
 export const calculateAttack = (
   attacker: OccupiedMonsterZone,
   target: OccupiedMonsterZone
 ) => {
   const isDefending = target.battlePosition === BattlePosition.Defence;
-  const { effAtk: attackerEffAtk } = getCombatStats(attacker);
-  const { effAtk: targetEffAtk, effDef: targetEffDef } = getCombatStats(target);
-  const diff = attackerEffAtk - (isDefending ? targetEffDef : targetEffAtk);
+  const diff =
+    attacker.card.effAtk -
+    (isDefending ? target.card.effDef : target.card.effAtk);
   const { isWeak, isStrong } = getAlignmentResult(
     attacker.card.alignment,
     target.card.alignment
@@ -29,10 +30,12 @@ export const calculateAttack = (
   };
 };
 
-export const getCombatStats = (zone: OccupiedMonsterZone) => {
-  const { permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
+export const getCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
+  const { card, permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
+  const fieldMultiplier = getFieldMultiplier(field, card.type);
   const { atk: baseAtk, def: baseDef } = zone.card;
-  const calc = (base: number) => Math.max(0, base + (perm + temp) * 500);
+  const calc = (base: number) =>
+    Math.max(0, base * fieldMultiplier + (perm + temp) * 500);
   return {
     effAtk: calc(baseAtk),
     effDef: calc(baseDef),
@@ -42,4 +45,9 @@ export const getCombatStats = (zone: OccupiedMonsterZone) => {
 const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
   const { strong, weak } = alignmentMap[attacker];
   return { isStrong: strong === target, isWeak: weak === target };
+};
+
+const getFieldMultiplier = (field: Field, type: CardType) => {
+  const map = fieldMultiplierMap[field] as { [key in CardType]: number };
+  return map[type] || 1;
 };

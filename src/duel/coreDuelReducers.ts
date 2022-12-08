@@ -5,7 +5,9 @@ import {
   directAttack,
 } from "./cardEffectUtil";
 import { draw } from "./cardEffectWrapped";
+import { getCombatStats } from "./combatUtil";
 import {
+  AutoEffectMonster,
   BattlePosition,
   FieldCoords,
   FieldRow,
@@ -21,7 +23,8 @@ import {
   getOtherDuellistKey,
   shuffle,
 } from "./duelUtil";
-import { monsterEffectReducers } from "./monsterManualEffectReducers";
+import { monsterAutoEffectReducers } from "./monsterAutoEffectReducers";
+import { monsterEffectReducers as monsterManualEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
 export const coreDuelReducers = {
@@ -123,13 +126,24 @@ export const coreDuelReducers = {
     const { card } = originatorState.monsterZones[
       monsterIdx
     ] as OccupiedMonsterZone;
-    const monsterEffectDispatch =
-      monsterEffectReducers[card.name as ManualEffectMonster];
-    if (!monsterEffectDispatch) {
+    const monsterManualEffectDispatch =
+      monsterManualEffectReducers[card.name as ManualEffectMonster];
+    const monsterAutoEffectDispatch =
+      monsterAutoEffectReducers[card.name as AutoEffectMonster];
+
+    if (!monsterManualEffectDispatch && !monsterAutoEffectDispatch) {
       console.log(`Monster effect not implemented for card: ${card.name}`);
       return;
     }
-    monsterEffectDispatch(arg, monsterIdx);
+
+    if (monsterManualEffectDispatch) {
+      monsterManualEffectDispatch(arg, monsterIdx);
+    }
+
+    // DEBUG ONLY
+    if (monsterAutoEffectDispatch) {
+      monsterAutoEffectDispatch(arg, monsterIdx);
+    }
 
     // lock card once effect is complete
     const zonePostEffect = originatorState.monsterZones[monsterIdx];
@@ -140,5 +154,17 @@ export const coreDuelReducers = {
       // ... be addressed case-by -case in individual reducers
       zonePostEffect.isLocked = true;
     }
+  },
+  updateField: (arg: ReducerArg) => {
+    const { originatorState, activeField } = arg;
+
+    originatorState.monsterZones.forEach((z, i, zones) => {
+      if (!z.isOccupied) return;
+      // TODO: reset each zone's temp power-up level and (in a separate method?) re-calculate
+      (zones[i] as OccupiedMonsterZone).card = {
+        ...z.card,
+        ...getCombatStats(z, activeField),
+      };
+    });
   },
 };

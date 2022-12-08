@@ -12,7 +12,7 @@ interface OccupiedZone {
 
 type MonsterZone = EmptyZone | OccupiedMonsterZone;
 
-type OccupiedMonsterZone = OccupiedZone & {
+type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
   card: MonsterCard;
   battlePosition: BattlePosition;
   permPowerUpLevel: number; // lingers indefinitely
@@ -22,7 +22,9 @@ type OccupiedMonsterZone = OccupiedZone & {
 
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;
 
-type OccupiedSpellTrapZone = OccupiedZone & { card: SpellOrTrapOrRitualCard };
+type OccupiedSpellTrapZone = Omit<OccupiedZone, "card"> & {
+  card: SpellOrTrapOrRitualCard;
+};
 
 type HandZone = EmptyZone | OccupiedZone;
 

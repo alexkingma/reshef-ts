@@ -35,6 +35,7 @@ type Alignment =
   | "Divine"
   | "Thunder";
 
+type DBCard = DBMonsterCard | SpellOrTrapOrRitualCard;
 type Card = MonsterCard | SpellOrTrapOrRitualCard;
 
 interface BaseCard {
@@ -45,7 +46,7 @@ interface BaseCard {
   category: CardCategory;
 }
 
-type MonsterCard = BaseCard & {
+type DBMonsterCard = BaseCard & {
   category: "Monster";
   effect: boolean;
   type: CardType;
@@ -54,6 +55,11 @@ type MonsterCard = BaseCard & {
   atk: number;
   def: number;
   code: number;
+};
+
+type MonsterCard = DBMonsterCard & {
+  effAtk: number;
+  effDef: number;
 };
 
 type SpellOrTrapOrRitualCard = BaseCard & {

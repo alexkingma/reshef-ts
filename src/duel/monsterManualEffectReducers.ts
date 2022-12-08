@@ -1,4 +1,3 @@
-import { getCard } from "../common/card";
 import {
   attackMonster,
   burn,
@@ -45,6 +44,7 @@ import {
 import { ReducerArg } from "./duelSlice";
 import {
   containsCard,
+  getCard,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   isType,
@@ -148,7 +148,11 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     destroyHighestAtk(targetState);
     destroySelf(originatorState, monsterIdx);
   },
-  [ManualEffectMonster.DarkNecrofear]: ({ originatorState, targetState }) => {
+  [ManualEffectMonster.DarkNecrofear]: ({
+    originatorState,
+    targetState,
+    activeField,
+  }) => {
     convertMonster(originatorState, targetState);
   },
   [ManualEffectMonster.ToadMaster]: ({ originatorState }) => {
@@ -159,7 +163,7 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
   },
   [ManualEffectMonster.FireReaper]: burn_Wrapped(50),
   [ManualEffectMonster.Doron]: ({ originatorState }) => {
-    specialSummon(originatorState, Monster.Doron);
+    specialSummon(originatorState, Monster.Doron, { isLocked: true });
   },
   [ManualEffectMonster.TrapMaster]: ({ originatorState }) => {
     try {

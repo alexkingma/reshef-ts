@@ -1,11 +1,13 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
+import { Field, FieldCoords } from "./common";
 import { coreDuelReducers } from "./coreDuelReducers";
 import {
   getInitialDuel,
   getOtherDuellistKey,
   getTempCardQuantMap,
+  getZone,
 } from "./duelUtil";
 
 export interface ReducerArg {
@@ -13,6 +15,7 @@ export interface ReducerArg {
   originatorState: Duellist;
   targetState: Duellist;
   activeTurn: Turn;
+  activeField: Field;
 }
 
 export type DuelActionKey = keyof typeof coreDuelReducers;
@@ -45,6 +48,7 @@ const transform = (map: CustomDuelReducers) => {
         originatorState,
         targetState,
         activeTurn: state.activeTurn,
+        activeField: state.activeField,
       };
       map[key as DuelActionKey](customArg, action.payload.payload);
     };
@@ -61,6 +65,8 @@ export const duelSlice = createSlice({
 export const { actions } = duelSlice;
 
 export const selectDuel = (state: RootState) => state.duel;
+export const selectZone = (coords: FieldCoords) => (state: RootState) =>
+  getZone(state.duel, coords);
 export const selectIsMyTurn = (key: DuellistKey) => (state: RootState) =>
   state.duel.activeTurn.duellistKey === key;
 export const selectDuellist = (key: DuellistKey) => (state: RootState) =>
