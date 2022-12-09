@@ -725,127 +725,133 @@ export enum Monster {
   TalonsOfShurilane = "Talons of Shurilane",
 }
 
-export enum GraveyardEffectMonster {
-  TheWingedDragonOfRaPhoenixMode = "The Winged Dragon of Ra (Phoenix Mode)",
-  Helpoemer = "Helpoemer",
-  Newdoria = "Newdoria",
-  VampireLord = "Vampire Lord",
-  DifferentDimensionDragon = "Different Dimension Dragon",
-  DarkFlareKnight = "Dark Flare Knight",
-}
+export type GraveyardEffectMonster = Extract<
+  Monster,
+  | Monster.TheWingedDragonOfRaPhoenixMode
+  | Monster.Helpoemer
+  | Monster.Newdoria
+  | Monster.VampireLord
+  | Monster.DifferentDimensionDragon
+  | Monster.DarkFlareKnight
+>;
 
-export enum ManualEffectMonster {
-  MysticalElf = "Mystical Elf",
-  FlameSwordsman = "Flame Swordsman",
-  TimeWizard = "Time Wizard",
-  BattleOx = "Battle Ox",
-  CurseOfDragon = "Curse of Dragon",
-  IllusionistFacelessMage = "Illusionist Faceless Mage",
-  HarpieLady = "Harpie Lady",
-  HarpieLadySisters = "Harpie Lady Sisters",
-  KairyuShin = "Kairyu-Shin",
-  GiantSoldierOfStone = "Giant Soldier of Stone",
-  ReaperOfTheCards = "Reaper of the Cards",
-  CatapultTurtle = "Catapult Turtle",
-  GyakutennoMegami = "Gyakutenno Megami",
-  SpiritOfTheBooks = "Spirit of the Books",
-  XYZDragonCannon = "XYZ-Dragon Cannon",
-  Nemuriko = "Nemuriko",
-  RevivalJam = "Revival Jam",
-  FiendsHand = "Fiend's Hand",
-  DarkNecrofear = "Dark Necrofear",
-  ToadMaster = "Toad Master",
-  XHeadCannon = "X-Head Cannon",
-  FireReaper = "Fire Reaper",
-  Doron = "Doron",
-  TrapMaster = "Trap Master",
-  HourglassOfLife = "Hourglass of Life",
-  ObeliskTheTormentor = "Obelisk the Tormentor",
-  TheWingedDragonOfRaBattleMode = "The Winged Dragon of Ra (Battle Mode)",
-  RocketWarrior = "Rocket Warrior",
-  BeastkingOfTheSwamps = "Beastking of the Swamps",
-  FairysGift = "Fairy's Gift",
-  MonsterTamer = "Monster Tamer",
-  MysticLamp = "Mystic Lamp",
-  Leghul = "Leghul",
-  GammaTheMagnetWarrior = "Gamma The Magnet Warrior",
-  MonsterEye = "Monster Eye",
-  TheWingedDragonOfRaPhoenixMode = "The Winged Dragon of Ra (Phoenix Mode)",
-  GoddessOfWhim = "Goddess of Whim",
-  DragonSeeker = "Dragon Seeker",
-  PenguinTorpedo = "Penguin Torpedo",
-  ZombyraTheDark = "Zombyra the Dark",
-  SpiritOfTheMountain = "Spirit of the Mountain",
-  AncientLamp = "Ancient Lamp",
-  Skelengel = "Skelengel",
-  KingsKnight = "King's Knight",
-  YDragonHead = "Y-Dragon Head",
-  ZMetalTank = "Z-Metal Tank",
-  XYDragonCannon = "XY-Dragon Cannon",
-  XZTankCannon = "XZ-Tank Cannon",
-  YZTankDragon = "YZ-Tank Dragon",
-  ElectricLizard = "Electric Lizard",
-  LadyOfFaith = "Lady of Faith",
-  ByserShock = "Byser Shock",
-  PuppetMaster = "Puppet Master",
-  DarkPaladin = "Dark Paladin",
-  Trent = "Trent",
-  BerserkDragon = "Berserk Dragon",
-  DesVolstgalph = "Des Volstgalph",
-  GilfordTheLightning = "Gilford the Lightning",
-  MysticalBeastSerket = "Mystical Beast Serket",
-  CyberHarpie = "Cyber Harpie",
-  ExarionUniverse = "Exarion Universe",
-  LegendaryFiend = "Legendary Fiend",
-  ValkyrionTheMagnaWarrior = "Valkyrion the Magna Warrior",
-  FGD = "F.G.D.",
-  RedArcheryGirl = "Red Archery Girl",
-  Relinquished = "Relinquished",
-  ThousandEyesRestrict = "Thousand-Eyes Restrict",
-  AlphaTheMagnetWarrior = "Alpha The Magnet Warrior",
-  InvitationToADarkSleep = "Invitation to a Dark Sleep",
-  BarrelDragon = "Barrel Dragon",
-  ReflectBounder = "Reflect Bounder",
-  BetaTheMagnetWarrior = "Beta The Magnet Warrior",
-  ParasiteParacide = "Parasite Paracide",
-  SkullMarkLadyBug = "Skull-Mark Lady Bug",
-  PinchHopper = "Pinch Hopper",
-  ChironTheMage = "Chiron the Mage",
-  BeastOfGilfer = "Beast of Gilfer",
-}
-export enum AutoEffectMonster {
-  SwampBattleguard = "Swamp Battleguard",
-  MammothGraveyard = "Mammoth Graveyard",
-  CastleOfDarkIllusions = "Castle of Dark Illusions",
-  PumpkingTheKingOfGhosts = "Pumpking the King of Ghosts",
-  BusterBlader = "Buster Blader",
-  MWarrior1 = "M-Warrior #1",
-  MWarrior2 = "M-Warrior #2",
-  NightmarePenguin = "Nightmare Penguin",
-  WodanTheResidentOfTheForest = "Wodan the Resident of the Forest",
-  PerfectMachineKing = "Perfect Machine King",
-  SliferTheSkyDragon = "Slifer the Sky Dragon",
-  SatelliteCannon = "Satellite Cannon",
-  LabyrinthTank = "Labyrinth Tank",
-  MachineKing = "Machine King",
-  Hoshiningen = "Hoshiningen",
-  ThunderNyanNyan = "Thunder Nyan Nyan",
-  LavaBattleguard = "Lava Battleguard",
-  BladeKnight = "Blade Knight",
-  ExodiaNecross = "Exodia Necross",
-  LavaGolem = "Lava Golem",
-  DarkJeroid = "Dark Jeroid",
-  ViserDes = "Viser Des",
-  WitchsApprentice = "Witch's Apprentice",
-  MirageKnight = "Mirage Knight",
-  BerserkDragon = "Berserk Dragon",
-  CommandAngel = "Command Angel",
-  ToonDarkMagicianGirl = "Toon Dark Magician Girl",
-  MasterOfDragonSoldier = "Master of Dragon Soldier",
-  Jinzo = "Jinzo",
-  DarkMagicianGirl = "Dark Magician Girl",
-  InsectQueen = "Insect Queen",
-}
+export type HandEffectMonster = Extract<Monster, Monster.LavaGolem>;
+
+export type ManualEffectMonster = Extract<
+  Monster,
+  | Monster.MysticalElf
+  | Monster.FlameSwordsman
+  | Monster.TimeWizard
+  | Monster.BattleOx
+  | Monster.CurseOfDragon
+  | Monster.IllusionistFacelessMage
+  | Monster.HarpieLady
+  | Monster.HarpieLadySisters
+  | Monster.KairyuShin
+  | Monster.GiantSoldierOfStone
+  | Monster.ReaperOfTheCards
+  | Monster.CatapultTurtle
+  | Monster.GyakutennoMegami
+  | Monster.SpiritOfTheBooks
+  | Monster.XYZDragonCannon
+  | Monster.Nemuriko
+  | Monster.RevivalJam
+  | Monster.FiendsHand
+  | Monster.DarkNecrofear
+  | Monster.ToadMaster
+  | Monster.XHeadCannon
+  | Monster.FireReaper
+  | Monster.Doron
+  | Monster.TrapMaster
+  | Monster.HourglassOfLife
+  | Monster.ObeliskTheTormentor
+  | Monster.TheWingedDragonOfRaBattleMode
+  | Monster.RocketWarrior
+  | Monster.BeastkingOfTheSwamps
+  | Monster.FairysGift
+  | Monster.MonsterTamer
+  | Monster.MysticLamp
+  | Monster.Leghul
+  | Monster.GammaTheMagnetWarrior
+  | Monster.MonsterEye
+  | Monster.TheWingedDragonOfRaPhoenixMode
+  | Monster.GoddessOfWhim
+  | Monster.DragonSeeker
+  | Monster.PenguinTorpedo
+  | Monster.ZombyraTheDark
+  | Monster.SpiritOfTheMountain
+  | Monster.AncientLamp
+  | Monster.Skelengel
+  | Monster.KingsKnight
+  | Monster.YDragonHead
+  | Monster.ZMetalTank
+  | Monster.XYDragonCannon
+  | Monster.XZTankCannon
+  | Monster.YZTankDragon
+  | Monster.ElectricLizard
+  | Monster.LadyOfFaith
+  | Monster.ByserShock
+  | Monster.PuppetMaster
+  | Monster.DarkPaladin
+  | Monster.Trent
+  | Monster.BerserkDragon
+  | Monster.DesVolstgalph
+  | Monster.GilfordTheLightning
+  | Monster.MysticalBeastSerket
+  | Monster.CyberHarpie
+  | Monster.ExarionUniverse
+  | Monster.LegendaryFiend
+  | Monster.ValkyrionTheMagnaWarrior
+  | Monster.FGD
+  | Monster.RedArcheryGirl
+  | Monster.Relinquished
+  | Monster.ThousandEyesRestrict
+  | Monster.AlphaTheMagnetWarrior
+  | Monster.InvitationToADarkSleep
+  | Monster.BarrelDragon
+  | Monster.ReflectBounder
+  | Monster.BetaTheMagnetWarrior
+  | Monster.ParasiteParacide
+  | Monster.SkullMarkLadyBug
+  | Monster.PinchHopper
+  | Monster.ChironTheMage
+  | Monster.BeastOfGilfer
+>;
+
+export type AutoEffectMonster = Extract<
+  Monster,
+  | Monster.SwampBattleguard
+  | Monster.MammothGraveyard
+  | Monster.CastleOfDarkIllusions
+  | Monster.PumpkingTheKingOfGhosts
+  | Monster.BusterBlader
+  | Monster.MWarrior1
+  | Monster.MWarrior2
+  | Monster.NightmarePenguin
+  | Monster.WodanTheResidentOfTheForest
+  | Monster.PerfectMachineKing
+  | Monster.SliferTheSkyDragon
+  | Monster.SatelliteCannon
+  | Monster.LabyrinthTank
+  | Monster.MachineKing
+  | Monster.Hoshiningen
+  | Monster.ThunderNyanNyan
+  | Monster.LavaBattleguard
+  | Monster.BladeKnight
+  | Monster.ExodiaNecross
+  | Monster.LavaGolem
+  | Monster.DarkJeroid
+  | Monster.ViserDes
+  | Monster.WitchsApprentice
+  | Monster.MirageKnight
+  | Monster.BerserkDragon
+  | Monster.CommandAngel
+  | Monster.ToonDarkMagicianGirl
+  | Monster.MasterOfDragonSoldier
+  | Monster.Jinzo
+  | Monster.DarkMagicianGirl
+  | Monster.InsectQueen
+>;
 
 export enum Spell {
   // burn
@@ -979,8 +985,5 @@ interface CheckCardName {
   [key: string]: CardName;
 }
 Monster as CheckCardName;
-ManualEffectMonster as CheckCardName;
-AutoEffectMonster as CheckCardName;
-GraveyardEffectMonster as CheckCardName;
 Spell as CheckCardName;
 Trap as CheckCardName;
