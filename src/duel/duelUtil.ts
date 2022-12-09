@@ -118,6 +118,15 @@ export const getFirstEmptyZoneIdx = (
     );
   }
 };
+export const hasEmptyZone = (row: Zone[]) => {
+  try {
+    getFirstEmptyZoneIdx(row);
+    return true;
+  } catch (e) {
+    // no free space to summon
+    return false;
+  }
+};
 
 export const getFirstOccupiedZoneIdx = (zones: Zone[]) => {
   return zones.findIndex((z) => z.isOccupied) as FieldCol | -1;
@@ -153,10 +162,6 @@ export const getNumTributesRequired = ({
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
 
-export const getNumCardsInRow = (row: Zone[]) => {
-  return row.filter((z) => z.isOccupied).length;
-};
-
 export const containsCard = (row: Zone[], cardName: CardName) => {
   return hasMatchInRow(row, (z) => z.card.name === cardName);
 };
@@ -169,14 +174,14 @@ export const containsAllCards = (row: Zone[], ...cardNames: CardName[]) => {
 
 export const hasMatchInRow = (
   row: Zone[],
-  condition: (z: OccupiedZone) => boolean
+  condition: (z: OccupiedZone) => boolean = () => true
 ) => {
   return countMatchesInRow(row, condition) > 0;
 };
 
 export const countMatchesInRow = (
   row: Zone[],
-  condition: (z: OccupiedZone) => boolean
+  condition: (z: OccupiedZone) => boolean = () => true
 ) => {
   return row.filter((z) => z.isOccupied && condition(z)).length;
 };

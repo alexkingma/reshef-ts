@@ -42,7 +42,7 @@ import {
   RowKey,
   Trap,
 } from "./common";
-import { ReducerArg } from "./duelSlice";
+import { MonsterEffectReducer } from "./coreDuelReducers";
 import {
   containsCard,
   getCard,
@@ -53,7 +53,7 @@ import {
 } from "./duelUtil";
 
 type MonsterManualEffectReducers = {
-  [key in ManualEffectMonster]: (arg: ReducerArg, monsterIdx: FieldCol) => void;
+  [key in ManualEffectMonster]: MonsterEffectReducer;
 };
 
 export const monsterEffectReducers: MonsterManualEffectReducers = {

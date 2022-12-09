@@ -26,6 +26,19 @@ import { monsterAutoEffectReducers } from "./monsterAutoEffectReducers";
 import { monsterEffectReducers as monsterManualEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
+export type MonsterEffectReducer = (
+  arg: ReducerArg,
+  monsterIdx: FieldCol
+) => void;
+
+export type MonsterAutoEffectReducer = (
+  arg: ReducerArg,
+  monsterIdx: FieldCol
+) => {
+  condition: () => boolean;
+  effect: MonsterEffectReducer;
+}[];
+
 export const coreDuelReducers = {
   shuffle: ({ originatorState }: ReducerArg) => {
     originatorState.deck = shuffle(originatorState.deck);
@@ -56,10 +69,14 @@ export const coreDuelReducers = {
       orientation: Orientation.FaceDown,
     };
   },
-  attackMonster: (
+  attack: (
     { originatorState, targetState }: ReducerArg,
     attackerIdx: FieldCol
   ) => {
+    const attackerZone = originatorState.monsterZones[
+      attackerIdx
+    ] as OccupiedMonsterZone;
+    attackerZone.battlePosition = BattlePosition.Attack;
     const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
     if (targetIdx === -1) {
       // no monsters, attack directly
@@ -67,21 +84,13 @@ export const coreDuelReducers = {
     } else {
       attackMonster(originatorState, targetState, attackerIdx, targetIdx);
     }
-    (
-      originatorState.monsterZones[attackerIdx] as OccupiedMonsterZone
-    ).isLocked = true;
+    attackerZone.isLocked = true;
   },
-  changeBattlePosition: (
-    { originatorState }: ReducerArg,
-    monsterIdx: FieldCol
-  ) => {
+  defend: ({ originatorState }: ReducerArg, monsterIdx: FieldCol) => {
     const zone = originatorState.monsterZones[
       monsterIdx
     ] as OccupiedMonsterZone;
-    zone.battlePosition =
-      zone.battlePosition === BattlePosition.Attack
-        ? BattlePosition.Defence
-        : BattlePosition.Attack;
+    zone.battlePosition = BattlePosition.Defence;
   },
   endTurn: ({ originatorState, activeTurn }: ReducerArg) => {
     // reset all turn-based params, then hand over to other player
@@ -127,21 +136,14 @@ export const coreDuelReducers = {
     ] as OccupiedMonsterZone;
     const monsterManualEffectDispatch =
       monsterManualEffectReducers[card.name as ManualEffectMonster];
-    const monsterAutoEffectDispatch =
-      monsterAutoEffectReducers[card.name as AutoEffectMonster];
 
-    if (!monsterManualEffectDispatch && !monsterAutoEffectDispatch) {
+    if (!monsterManualEffectDispatch) {
       console.log(`Monster effect not implemented for card: ${card.name}`);
       return;
     }
 
     if (monsterManualEffectDispatch) {
       monsterManualEffectDispatch(arg, monsterIdx);
-    }
-
-    // DEBUG ONLY
-    if (monsterAutoEffectDispatch) {
-      monsterAutoEffectDispatch(arg, monsterIdx);
     }
 
     // lock card once effect is complete
@@ -152,6 +154,30 @@ export const coreDuelReducers = {
       // ... in their idx usually do not need to be locked, and should
       // ... be addressed case-by -case in individual reducers
       zonePostEffect.isLocked = true;
+    }
+  },
+  activateAutoMonsterEffect: (arg: ReducerArg, monsterIdx: FieldCol) => {
+    // TODO: check graveyard effects too
+    const { originatorState } = arg;
+
+    const { card } = originatorState.monsterZones[
+      monsterIdx
+    ] as OccupiedMonsterZone;
+    const monsterAutoEffectDispatch =
+      monsterAutoEffectReducers[card.name as AutoEffectMonster];
+
+    if (!monsterAutoEffectDispatch) {
+      console.log(`Monster effect not implemented for card: ${card.name}`);
+      return;
+    }
+
+    if (monsterAutoEffectDispatch) {
+      const conEffectPairs = monsterAutoEffectDispatch(arg, monsterIdx);
+      conEffectPairs.forEach(({ condition, effect }) => {
+        if (condition()) {
+          effect(arg, monsterIdx);
+        }
+      });
     }
   },
   updateField: (arg: ReducerArg) => {

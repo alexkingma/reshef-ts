@@ -1,15 +1,18 @@
 import {
   burn as burnDirect,
+  countConditional,
   destroyAtCoords,
   destroyRow,
   draw as drawDirect,
   heal as healDirect,
   permPowerUp as permPowerUpDirect,
   setField as setFieldDirect,
+  tempPowerUp as tempPowerUpDirect,
+  updateMatchesInRow,
 } from "./cardEffectUtil";
 import { DuellistKey, Field, RowKey } from "./common";
 import { ReducerArg } from "./duelSlice";
-import { getHighestAtkZoneIdx } from "./duelUtil";
+import { countMatchesInRow, getHighestAtkZoneIdx } from "./duelUtil";
 
 export const burn =
   (amt: number) =>
@@ -101,3 +104,44 @@ export const draw =
   ({ originatorState }: ReducerArg) => {
     drawDirect(originatorState, numCards);
   };
+
+export const getEffCon_powerUpSelfConditional = (
+  rowConditionPairs: (
+    | [Zone[], (z: Zone) => boolean]
+    | [Zone[], (z: Zone) => boolean, number]
+  )[],
+  graveyardConditionPairs: (
+    | [CardName | null, (c: MonsterCard) => boolean]
+    | [CardName | null, (c: MonsterCard) => boolean, number]
+  )[] = []
+) => {
+  return {
+    condition: () => {
+      return countConditional(rowConditionPairs, graveyardConditionPairs) > 0;
+    },
+    effect: ({ originatorState }: ReducerArg, monsterIdx: FieldCol) => {
+      const count = countConditional(
+        rowConditionPairs,
+        graveyardConditionPairs
+      );
+      tempPowerUpDirect(originatorState, monsterIdx, count);
+    },
+  };
+};
+
+export const getEffCon_updateMatchesInRow = (
+  row: MonsterZone[],
+  condition: (z: OccupiedMonsterZone) => boolean,
+  effect: (z: OccupiedMonsterZone) => void
+) => {
+  return {
+    condition: () => {
+      return (
+        countMatchesInRow(row, (z) => condition(z as OccupiedMonsterZone)) > 0
+      );
+    },
+    effect: () => {
+      updateMatchesInRow(row, condition, effect);
+    },
+  };
+};

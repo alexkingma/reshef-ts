@@ -1,50 +1,51 @@
 import {
+  burn,
   clearAllTraps,
   destroySelf,
   permPowerUp,
   powerDownHighestAtk,
-  powerUpSelfConditional,
   setField,
   setRowFaceDown,
   specialSummon,
   tempPowerDown,
   tempPowerUp,
-  updateMatchesInRow,
 } from "./cardEffectUtil";
-import { permPowerUp as permPowerUp_Wrapped } from "./cardEffectWrapped";
-import { AutoEffectMonster, Field, Monster } from "./common";
-import { ReducerArg } from "./duelSlice";
 import {
+  getEffCon_powerUpSelfConditional,
+  getEffCon_updateMatchesInRow,
+} from "./cardEffectWrapped";
+import { AutoEffectMonster, Field, Monster } from "./common";
+import { MonsterAutoEffectReducer } from "./coreDuelReducers";
+import {
+  countMatchesInRow,
   getExodiaCards,
   getHighestAtkZoneIdx,
-  getNumCardsInRow,
   hasMatchInRow,
   isSpecificMonster,
+  isTrap,
   isType,
 } from "./duelUtil";
 
 type MonsterAutoEffectReducers = {
-  [key in AutoEffectMonster]: (arg: ReducerArg, monsterIdx: FieldCol) => void;
+  [key in AutoEffectMonster]: MonsterAutoEffectReducer;
 };
 
 export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
-  [Monster.SwampBattleguard]: ({ originatorState }, monsterIdx) => {
+  [Monster.SwampBattleguard]: ({ originatorState }) => {
     const isLavaBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.LavaBattleguard);
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isLavaBattleguard],
     ]);
+    return [effCon];
   },
   [Monster.MammothGraveyard]: ({ targetState }) => {
-    updateMatchesInRow(
+    const effCon = getEffCon_updateMatchesInRow(
       targetState.monsterZones,
       () => true,
       (z) => z.tempPowerUpLevel--
     );
-  },
-  [Monster.CastleOfDarkIllusions]: ({ state, originatorState }) => {
-    setField(state, Field.Yami);
-    setRowFaceDown(originatorState.monsterZones);
+    return [effCon];
   },
   [Monster.PumpkingTheKingOfGhosts]: ({ originatorState }) => {
     const cards: CardName[] = [
@@ -52,79 +53,82 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
       Monster.DragonZombie,
       Monster.ClownZombie,
     ];
-    updateMatchesInRow(
+    const effCon = getEffCon_updateMatchesInRow(
       originatorState.monsterZones,
       (z) => cards.includes(z.card.name),
       (z) => z.tempPowerUpLevel++
     );
+    return [effCon];
   },
-  [Monster.BusterBlader]: ({ originatorState, targetState }, monsterIdx) => {
-    // powers up for every dragon monster on the opponent's field and graveyard
+  [Monster.BusterBlader]: ({ targetState }) => {
     const isDragonZone = (z: Zone) => isType(z, "Dragon");
     const isDragonCard = (c: MonsterCard) => c.type === "Dragon";
-    powerUpSelfConditional(
-      originatorState,
-      monsterIdx,
+    const effCon = getEffCon_powerUpSelfConditional(
       [[targetState.monsterZones, isDragonZone]],
       [[targetState.graveyard, isDragonCard]]
     );
+    return [effCon];
   },
   [Monster.MWarrior1]: ({ originatorState }) => {
-    updateMatchesInRow(
+    const effCon = getEffCon_updateMatchesInRow(
       originatorState.monsterZones,
       (z: OccupiedMonsterZone) => z.card.name !== Monster.MWarrior2,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
     );
+    return [effCon];
   },
   [Monster.MWarrior2]: ({ originatorState }) => {
-    updateMatchesInRow(
+    const effCon = getEffCon_updateMatchesInRow(
       originatorState.monsterZones,
       (z: OccupiedMonsterZone) => z.card.name !== Monster.MWarrior1,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
     );
+    return [effCon];
   },
   [Monster.NightmarePenguin]: ({ originatorState }) => {
-    updateMatchesInRow(
+    const effCon = getEffCon_updateMatchesInRow(
       originatorState.monsterZones,
       (z) => ["Aqua", "Fish", "Sea Serpent", "Reptile"].includes(z.card.type),
       (z) => z.tempPowerUpLevel++
     );
+    return [effCon];
   },
-  [Monster.WodanTheResidentOfTheForest]: ({ originatorState }, monsterIdx) => {
+  [Monster.WodanTheResidentOfTheForest]: ({ originatorState }) => {
     const isPlant = (z: Zone) => isType(z, "Plant");
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isPlant],
     ]);
+    return [effCon];
   },
-  [Monster.PerfectMachineKing]: (
-    { originatorState, targetState },
-    monsterIdx
-  ) => {
+  [Monster.PerfectMachineKing]: ({ originatorState, targetState }) => {
     const isMachine = (z: Zone) => isType(z, "Machine");
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isMachine, 2],
       [targetState.monsterZones, isMachine, 2],
     ]);
+    return [effCon];
   },
-  [Monster.SliferTheSkyDragon]: ({ originatorState }, monsterIdx) => {
-    powerUpSelfConditional(originatorState, monsterIdx, [
+  [Monster.SliferTheSkyDragon]: ({ originatorState }) => {
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.hand, () => true, 3],
     ]);
+    return [effCon];
   },
-  [Monster.SatelliteCannon]: permPowerUp_Wrapped(2),
-  [Monster.LabyrinthTank]: ({ originatorState }, monsterIdx) => {
+  [Monster.LabyrinthTank]: ({ originatorState }) => {
     const isLabyrinthWall = (z: Zone) =>
       isSpecificMonster(z, Monster.LabyrinthWall);
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isLabyrinthWall],
     ]);
+    return [effCon];
   },
-  [Monster.MachineKing]: ({ originatorState, targetState }, monsterIdx) => {
+  [Monster.MachineKing]: ({ originatorState, targetState }) => {
     const isMachine = (z: Zone) => isType(z, "Machine");
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isMachine],
       [targetState.monsterZones, isMachine],
     ]);
+    return [effCon];
   },
   [Monster.Hoshiningen]: ({ originatorState, targetState }) => {
     const matchLight = (z: OccupiedMonsterZone) => z.card.alignment === "Light";
@@ -132,61 +136,94 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
     const up = (z: OccupiedMonsterZone) => z.tempPowerUpLevel++;
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
-    updateMatchesInRow(originatorState.monsterZones, matchLight, up);
-    updateMatchesInRow(originatorState.monsterZones, matchDark, down);
-    updateMatchesInRow(targetState.monsterZones, matchLight, up);
-    updateMatchesInRow(targetState.monsterZones, matchDark, down);
+    return [
+      getEffCon_updateMatchesInRow(
+        originatorState.monsterZones,
+        matchLight,
+        up
+      ),
+      getEffCon_updateMatchesInRow(
+        originatorState.monsterZones,
+        matchDark,
+        down
+      ),
+      getEffCon_updateMatchesInRow(targetState.monsterZones, matchLight, up),
+      getEffCon_updateMatchesInRow(targetState.monsterZones, matchDark, down),
+    ];
   },
   [Monster.ThunderNyanNyan]: ({ originatorState }, monsterIdx) => {
-    const nonLightExists = hasMatchInRow(
-      originatorState.monsterZones,
-      (z) => (z.card as MonsterCard).alignment !== "Light"
-    );
-    if (nonLightExists) {
-      destroySelf(originatorState, monsterIdx);
-    }
+    return [
+      {
+        condition: () => {
+          return hasMatchInRow(
+            originatorState.monsterZones,
+            (z) => (z.card as MonsterCard).alignment !== "Light"
+          );
+        },
+        effect: () => {
+          destroySelf(originatorState, monsterIdx);
+        },
+      },
+    ];
   },
-  [Monster.LavaBattleguard]: ({ originatorState }, monsterIdx) => {
+  [Monster.LavaBattleguard]: ({ originatorState }) => {
     const isSwampBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.SwampBattleguard);
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isSwampBattleguard],
     ]);
+    return [effCon];
   },
   [Monster.BladeKnight]: ({ originatorState }, monsterIdx) => {
-    const count = getNumCardsInRow(originatorState.hand);
-    if (count <= 1) {
-      tempPowerUp(originatorState, monsterIdx);
-    }
+    return [
+      {
+        condition: () => {
+          return countMatchesInRow(originatorState.hand) <= 1;
+        },
+        effect: () => {
+          tempPowerUp(originatorState, monsterIdx);
+        },
+      },
+    ];
   },
   [Monster.ExodiaNecross]: ({ originatorState }, monsterIdx) => {
-    // powers up at the start of the own turn
-    // If there are no Exodia parts in the graveyard, it disappears
-
-    // TODO -- split this into separate start-of-turn and perpetual fns
-
-    // start-of-turn only
-    permPowerUp(originatorState, monsterIdx);
-
-    // perpetual check
-    if (
-      originatorState.graveyard &&
-      getExodiaCards().includes(originatorState.graveyard)
-    ) {
-      destroySelf(originatorState, monsterIdx);
-    }
-  },
-  [Monster.LavaGolem]: ({ originatorState, targetState }, monsterIdx) => {
-    // TODO -- auto, start of turn
-    // burn for 700 at start of own turn
+    return [
+      {
+        condition: () => {
+          return (
+            !!originatorState.graveyard &&
+            getExodiaCards().includes(originatorState.graveyard)
+          );
+        },
+        effect: () => {
+          // If there are no Exodia parts in the graveyard, it disappears
+          destroySelf(originatorState, monsterIdx);
+        },
+      },
+      {
+        condition: () => {
+          // TODO: start of own turn
+          return true;
+        },
+        effect: ({ originatorState }, monsterIdx) => {
+          permPowerUp(originatorState, monsterIdx);
+        },
+      },
+    ];
   },
   [Monster.DarkJeroid]: ({ targetState }) => {
-    const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
-    if (targetIdx === -1) return;
-    tempPowerDown(targetState, targetIdx);
-  },
-  [Monster.ViserDes]: ({ targetState }) => {
-    powerDownHighestAtk(targetState);
+    return [
+      {
+        condition: () => {
+          return hasMatchInRow(targetState.monsterZones);
+        },
+        effect: () => {
+          const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
+          if (targetIdx === -1) return;
+          tempPowerDown(targetState, targetIdx);
+        },
+      },
+    ];
   },
   [Monster.WitchsApprentice]: ({ originatorState, targetState }) => {
     const matchLight = (z: OccupiedMonsterZone) => z.card.alignment === "Light";
@@ -194,58 +231,147 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
     const up = (z: OccupiedMonsterZone) => z.tempPowerUpLevel++;
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
-    updateMatchesInRow(originatorState.monsterZones, matchLight, down);
-    updateMatchesInRow(originatorState.monsterZones, matchDark, up);
-    updateMatchesInRow(targetState.monsterZones, matchLight, down);
-    updateMatchesInRow(targetState.monsterZones, matchDark, up);
+    return [
+      getEffCon_updateMatchesInRow(
+        originatorState.monsterZones,
+        matchLight,
+        down
+      ),
+      getEffCon_updateMatchesInRow(originatorState.monsterZones, matchDark, up),
+      getEffCon_updateMatchesInRow(targetState.monsterZones, matchLight, down),
+      getEffCon_updateMatchesInRow(targetState.monsterZones, matchDark, up),
+    ];
   },
-  [Monster.MirageKnight]: ({ originatorState }, monsterIdx) => {
-    destroySelf(originatorState, monsterIdx);
-    specialSummon(originatorState, Monster.DarkMagician);
-    specialSummon(originatorState, Monster.FlameSwordsman);
-  },
-  [Monster.BerserkDragon]: ({ originatorState }, monsterIdx) => {
-    // powers down at the start of the foe's turn
-    tempPowerDown(originatorState, monsterIdx);
-  },
-  [Monster.CommandAngel]: ({ originatorState, targetState }) => {
-    updateMatchesInRow(
+  [Monster.CommandAngel]: ({ originatorState }) => {
+    const effCon = getEffCon_updateMatchesInRow(
       originatorState.monsterZones,
       (z) => z.card.type === "Fairy",
       (z) => z.tempPowerUpLevel++
     );
+    return [effCon];
   },
-  [Monster.ToonDarkMagicianGirl]: ({ originatorState }, monsterIdx) => {
+  [Monster.ToonDarkMagicianGirl]: ({ originatorState }) => {
     const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
-    powerUpSelfConditional(
-      originatorState,
-      monsterIdx,
+    const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[originatorState.graveyard, isDarkMagician]]
     );
+    return [effCon];
   },
-  [Monster.MasterOfDragonSoldier]: ({ originatorState }, monsterIdx) => {
+  [Monster.MasterOfDragonSoldier]: ({ originatorState }) => {
     const isDragon = (z: Zone) => isType(z, "Dragon");
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isDragon],
     ]);
+    return [effCon];
   },
   [Monster.Jinzo]: ({ targetState }) => {
-    clearAllTraps(targetState);
+    return [
+      {
+        condition: () => {
+          return hasMatchInRow(targetState.spellTrapZones, (z) => isTrap(z));
+        },
+        effect: ({ targetState }) => {
+          clearAllTraps(targetState);
+        },
+      },
+    ];
   },
-  [Monster.DarkMagicianGirl]: ({ originatorState }, monsterIdx) => {
+  [Monster.DarkMagicianGirl]: ({ originatorState }) => {
     const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
-    powerUpSelfConditional(
-      originatorState,
-      monsterIdx,
+    const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[originatorState.graveyard, isDarkMagician]]
     );
+    return [effCon];
   },
-  [Monster.InsectQueen]: ({ originatorState }, monsterIdx) => {
+  [Monster.InsectQueen]: ({ originatorState }) => {
     const isInsect = (z: Zone) => isType(z, "Insect");
-    powerUpSelfConditional(originatorState, monsterIdx, [
+    const effCon = getEffCon_powerUpSelfConditional([
       [originatorState.monsterZones, isInsect],
     ]);
+    return [effCon];
+  },
+  ////////////////////////////////
+  [Monster.CastleOfDarkIllusions]: () => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of BOTH turns
+          return true;
+        },
+        effect: ({ state, originatorState }) => {
+          setField(state, Field.Yami);
+          setRowFaceDown(originatorState.monsterZones);
+        },
+      },
+    ];
+  },
+  [Monster.SatelliteCannon]: () => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of own turn
+          return true;
+        },
+        effect: ({ originatorState }, monsterIdx) => {
+          permPowerUp(originatorState, monsterIdx, 2);
+        },
+      },
+    ];
+  },
+  [Monster.LavaGolem]: () => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of own turn
+          return true;
+        },
+        effect: ({ originatorState }) => {
+          burn(originatorState, 700);
+        },
+      },
+    ];
+  },
+  [Monster.ViserDes]: ({ targetState }) => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of own turn
+          return hasMatchInRow(targetState.monsterZones);
+        },
+        effect: ({ targetState }) => {
+          powerDownHighestAtk(targetState);
+        },
+      },
+    ];
+  },
+  [Monster.MirageKnight]: () => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of own turn
+          return true;
+        },
+        effect: ({ originatorState }, monsterIdx) => {
+          destroySelf(originatorState, monsterIdx);
+          specialSummon(originatorState, Monster.DarkMagician);
+          specialSummon(originatorState, Monster.FlameSwordsman);
+        },
+      },
+    ];
+  },
+  [Monster.BerserkDragon]: () => {
+    return [
+      {
+        condition: () => {
+          // TODO: start of FOE's turn
+          return true;
+        },
+        effect: ({ originatorState }, monsterIdx) => {
+          tempPowerDown(originatorState, monsterIdx);
+        },
+      },
+    ];
   },
 };

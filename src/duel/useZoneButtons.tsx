@@ -47,6 +47,8 @@ export const useDuelButtons = (
   buttonKeys: DuelButtonKey[]
 ) => {
   const [duellistKey, rowKey, colIdx] = zoneCoords;
+  const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
+
   const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
   const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
   const { hasNormalSummoned, numTributedMonsters } =
@@ -57,17 +59,15 @@ export const useDuelButtons = (
     return numTributedMonsters >= getNumTributesRequired(card);
   };
 
-  const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
-
   const {
-    changeBattlePosition,
+    attack,
+    defend,
     tribute,
-    discard,
-    attackMonster,
-    setSpellTrap,
     activateManualMonsterEffect,
-    activateSpellEffect,
     normalSummon,
+    setSpellTrap,
+    activateSpellEffect,
+    discard,
   } = useDuelActions(duellistKey);
 
   const duelButtons: DuelButtonBlueprintMap = {
@@ -75,7 +75,7 @@ export const useDuelButtons = (
       label: "Attack",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => attackMonster(i),
+      onClick: (i) => attack(i),
     },
     [DuelButtonKey.Summon]: {
       label: "Summon",
@@ -116,7 +116,7 @@ export const useDuelButtons = (
       label: "Defend",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => changeBattlePosition(i),
+      onClick: (i) => defend(i),
     },
     [DuelButtonKey.Discard]: {
       label: "Discard",

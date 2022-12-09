@@ -28,9 +28,9 @@ import {
 import { ReducerArg } from "./duelSlice";
 import {
   containsCard,
+  countMatchesInRow,
   generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
-  getNumCardsInRow,
 } from "./duelUtil";
 
 type SpellEffectReducers = {
@@ -45,7 +45,7 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.Ookazi]: burn(500),
   [Spell.TremendousFire]: burn(1000),
   [Spell.RestructerRevolution]: ({ targetState }) =>
-    burnDirect(targetState, getNumCardsInRow(targetState.hand) * 200),
+    burnDirect(targetState, countMatchesInRow(targetState.hand) * 200),
 
   // heal
   [Spell.MooyanCurry]: heal(200),

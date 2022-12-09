@@ -43,11 +43,6 @@ eventual/complex ideas:
   move field spells to their own zone
   notify player when cards they ordered have arrived at the shop (once a variable number of duels have transpired, scaling vaguely on cost/rarity of card)
 
-pending duel features:
-  check win/lose conditions -- basic useEffect dependency for game loop?
-  activate trap
-  activate monster effect
-
 major chunks of game state:
   duel -- see above
   player -- dl/dc, money, deck/trunk contents, coords/dirFacing
@@ -55,33 +50,68 @@ major chunks of game state:
   shop -- cards in stock, sortKey, cursorPos
   world -- story/plot flags, available locations, npcs (coords/dirFacing, who has been duelled, conversation flags)
 
+-------------------------------------------------------------------
 
-duel loop:
+todo summary:
+  updateField doesn't currently work/isn't called
+  start-of-turn isn't checked for effects    
+    add a isStartOfTurn flag to the activeTurn state
+    it gets set every time endTurn is called
+    each time update is called, this flag determines if we check startOfTurn or perpetual auto effects
+  are there places where i need to know whose turn it is?
+    if so, add a prop to state so i know if it's self/foe turn
+    prefer adding vars to state over fracturing condition logic outside of the reducer files
+  trap card effects/reducer map
+    FINAL cards auto destroy if F is not on the board
   scheduling system, to inform about timed future events
     SoRL -- active for 5 additional turns (counting both players' turns) after the current turn, then destroy
     brain control -- active for the current turn only
-  start of turn events (after drawing/checking for deck-out)
-    one-time effects -- Mirage Knight, Cocoon of Evolution, Newdoria, Viser Des, DCJ, Satellite Cannon, etc.
-  after every state-changing effect
-    check victor condition
-    graveyard card auto-effects
-    monsters on field (perpetual) auto-effects -- Slifer, Hoshiningen, Witch's Apprentice, Machine King, etc.
-  actions that trigger a check
-    draw
-    summon monster
-    monster attack
-    monster effect activate
-    tribute
-    spell/trap set
-    spell/trap activate
-    discard
+  message log
+    doubles as a history of the duel, and also as a text prompt in gba mode
+    just an array of { originZoneCoords, msgBlueprint, isCleared }
+    when gba mode needs to suspend the game to show text:
+      read the text into a var, replace any placeholders with card data
+        (don't think there will be much of this, all the messages are pretty generic)
+      render however much of it fits on the screen at once
+      when its all finished, dispatch a clearMessage
+      when there are no further uncleared messages in the log, the game flow resumes
+    in pc mode, the text is just dumped in messager form on the side somewhere
+
+--------------------------------------------------------------------
 
 
-message log?
-just a bunch of <p> elements that auto-populate along the side of the screen as actions play out
-saves on debugging stuff with console log since i can see what happened and where it went wrong more clearly
-  "X [Dark, 2500/2100] attacked Y [Forest, 700/700]"
-  "X was destroyed"
-  "Player lost Z LP"
-  "Player activated [card]"
-  "LP healed by 500"
+types of effects:
+  manual
+  auto
+    time of activation
+      perpetual
+      start of own turn
+      start of foe turn
+    location-specific
+      monsterZone (95% of monsters)
+      spellZone (all spells/traps)
+      graveyard (like 5 monsters?)
+      hand (just lava golem)
+
+
+
+order of effects (left to right):
+  [start of turn text]
+  [draw card]
+  check auto effects (active turn, then other player; start at idx 0):
+    graveyard
+    monsters
+    spells
+    hand
+
+example update ordering:
+  use FD
+  UI shows spell text (text is pushed to a message log that has to be rendered/processed)
+  dispatch of spell activation goes through, all cards are destroyed except slifer
+  update is called
+    for each card on the field/hand/gy:
+      if a card with a valid auto effect (order to check is important; see above) is found:
+        UI shows effect text/prompt
+        a monster/spell effect dispatch of the relevant spell is fired off
+        all temppowerups are reset and recalculated
+

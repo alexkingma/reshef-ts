@@ -9,7 +9,6 @@ import {
   getFirstMatchInRowIdx,
   getFirstOccupiedZoneIdx,
   getHighestAtkZoneIdx,
-  getNumCardsInRow,
   isMonster,
   isTrap,
 } from "./duelUtil";
@@ -246,7 +245,7 @@ export const setField = (state: Duel, field: Field) => {
 };
 
 export const destroyHighestAtk = (duellist: Duellist) => {
-  if (!getNumCardsInRow(duellist.monsterZones)) {
+  if (!countMatchesInRow(duellist.monsterZones)) {
     // no monsters exist, destroy nothing
     return;
   }
@@ -322,9 +321,7 @@ export const clearAllTraps = (duellist: Duellist) => {
   });
 };
 
-export const powerUpSelfConditional = (
-  originatorState: Duellist,
-  monsterIdx: FieldCol,
+export const countConditional = (
   rowConditionPairs: (
     | [Zone[], (z: Zone) => boolean]
     | [Zone[], (z: Zone) => boolean, number]
@@ -344,6 +341,22 @@ export const powerUpSelfConditional = (
       count += value;
     }
   });
+  return count;
+};
+
+export const powerUpSelfConditional = (
+  originatorState: Duellist,
+  monsterIdx: FieldCol,
+  rowConditionPairs: (
+    | [Zone[], (z: Zone) => boolean]
+    | [Zone[], (z: Zone) => boolean, number]
+  )[],
+  graveyardConditionPairs: (
+    | [CardName | null, (c: MonsterCard) => boolean]
+    | [CardName | null, (c: MonsterCard) => boolean, number]
+  )[] = []
+) => {
+  let count = countConditional(rowConditionPairs, graveyardConditionPairs);
   tempPowerUp(originatorState, monsterIdx, count);
 };
 
