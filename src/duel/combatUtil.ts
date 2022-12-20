@@ -1,6 +1,9 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../assets/fields.json";
-import { BattlePosition, Field } from "./common";
+import { BattlePosition, Field, TempAutoEffectMonster } from "./common";
+import { ReducerArg } from "./duelSlice";
+import { activateTempEffect } from "./duelUtil";
+import { monsterTempAutoEffectReducers } from "./monsterTempAutoEffectReducers";
 
 export const calculateAttack = (
   attacker: OccupiedMonsterZone,
@@ -50,4 +53,84 @@ const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
 const getFieldMultiplier = (field: Field, type: CardType) => {
   const map = fieldMultiplierMap[field] as { [key in CardType]: number };
   return map[type] || 1;
+};
+
+export const recalcCombatStats = (arg: ReducerArg) => {
+  resetCombatStats(arg);
+  activateTempAutoEffects(arg);
+  calcCombatStats(arg);
+};
+
+const resetCombatStats = ({
+  originatorState,
+  targetState,
+  state,
+}: ReducerArg) => {
+  originatorState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+  });
+  targetState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+  });
+};
+
+const calcCombatStats = ({
+  originatorState,
+  targetState,
+  state,
+}: ReducerArg) => {
+  originatorState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+  });
+  targetState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+  });
+};
+
+const resetZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
+  zone.tempPowerUpLevel = 0;
+  calcZoneCombatStats(zone, field);
+};
+
+const calcZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
+  zone.card = {
+    ...zone.card,
+    ...getCombatStats(zone, field),
+  };
+};
+
+const activateTempAutoEffects = (arg: ReducerArg) => {
+  const { originatorState, targetState } = arg;
+  originatorState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    activateZoneTempAutoEffects(
+      arg,
+      zones[i] as OccupiedMonsterZone,
+      i as FieldCol
+    );
+  });
+  targetState.monsterZones.forEach((z, i, zones) => {
+    if (!z.isOccupied) return;
+    activateZoneTempAutoEffects(
+      arg,
+      zones[i] as OccupiedMonsterZone,
+      i as FieldCol
+    );
+  });
+};
+
+const activateZoneTempAutoEffects = (
+  arg: ReducerArg,
+  zone: OccupiedMonsterZone,
+  monsterIdx: FieldCol
+) => {
+  const reducer =
+    monsterTempAutoEffectReducers[zone.card.name as TempAutoEffectMonster];
+  if (!reducer) return;
+
+  activateTempEffect(arg, reducer, monsterIdx);
 };

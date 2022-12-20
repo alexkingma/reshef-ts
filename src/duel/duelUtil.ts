@@ -1,13 +1,22 @@
 import cards from "../assets/cards";
+import { recalcCombatStats } from "./combatUtil";
 import {
   BattlePosition,
   Field,
+  GraveyardEffectMonster,
   Monster,
   Orientation,
+  PermAutoEffectMonster,
   RowKey,
   Trap,
 } from "./common";
+import {
+  MonsterAutoEffectReducer,
+  MonsterEffectReducer,
+} from "./coreDuelReducers";
 import { ReducerArg } from "./duelSlice";
+import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
+import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
 
 export const getCard = (cardName: CardName): Card => {
   const dbCard = cards.find((c) => c.name === cardName)!;
@@ -259,3 +268,85 @@ export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && z.card.effect && z.orientation === Orientation.FaceDown;
+
+export const activateTempEffect = (
+  arg: ReducerArg,
+  reducer: MonsterAutoEffectReducer<MonsterEffectReducer>,
+  monsterIdx: FieldCol
+) => {
+  const conEffectPairs = reducer(arg, monsterIdx);
+  conEffectPairs.forEach(({ condition, effect }) => {
+    if (condition()) {
+      effect(arg, monsterIdx);
+    }
+  });
+};
+
+export const checkGraveyardEffect = (arg: ReducerArg, graveyard: Graveyard) => {
+  if (!graveyard) return;
+  const reducer =
+    monsterGraveyardEffectReducers[graveyard as GraveyardEffectMonster];
+  if (!reducer) return;
+
+  const conEffectPairs = reducer(arg);
+  conEffectPairs.forEach(({ condition, effect }) => {
+    if (condition()) {
+      effect(arg);
+    }
+  });
+};
+
+export const checkMonsterAutoEffect = (
+  arg: ReducerArg,
+  zone: Zone,
+  monsterIdx: FieldCol,
+  reducerMap: {
+    [cardName in CardName]?: MonsterAutoEffectReducer<MonsterEffectReducer>;
+  }
+) => {
+  if (!zone.isOccupied) return;
+  const reducer = reducerMap[zone.card.name as PermAutoEffectMonster];
+  if (!reducer) return;
+
+  activateTempEffect(arg, reducer, monsterIdx);
+};
+
+export const checkPermAutoEffects = (arg: ReducerArg) => {
+  const { originatorState, targetState } = arg;
+
+  checkGraveyardEffect(arg, originatorState.graveyard);
+  checkGraveyardEffect(arg, targetState.graveyard);
+
+  originatorState.monsterZones.forEach((_, i, zones) => {
+    checkMonsterAutoEffect(
+      arg,
+      zones[i],
+      i as FieldCol,
+      monsterPermAutoEffectReducers
+    );
+  });
+
+  targetState.monsterZones.forEach((_, i, zones) => {
+    checkMonsterAutoEffect(
+      arg,
+      zones[i],
+      i as FieldCol,
+      monsterPermAutoEffectReducers
+    );
+  });
+
+  // TODO: spell/trap zones (DCJ, MoP, ... are there more?)
+  // TODO: hand zones (just Lava Golem?)
+};
+
+export const checkAutoEffects = (arg: ReducerArg) => {
+  // Temp power-up effect cards are separate from
+  // permanent (but still auto) effect cards.
+  // Temp power-ups must be calculated so that the permanent
+  // effects may accurately deduce the "strongest" card, etc.
+  // Then, once permanent effects (destruction, spec. summoning, etc.)
+  // are complete, temp power-ups should be recalculated one final time.
+  recalcCombatStats(arg);
+  checkPermAutoEffects(arg);
+  recalcCombatStats(arg);
+};

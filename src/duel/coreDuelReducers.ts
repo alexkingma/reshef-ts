@@ -5,9 +5,7 @@ import {
   directAttack,
 } from "./cardEffectUtil";
 import { draw } from "./cardEffectWrapped";
-import { getCombatStats } from "./combatUtil";
 import {
-  AutoEffectMonster,
   BattlePosition,
   ManualEffectMonster,
   Orientation,
@@ -22,7 +20,6 @@ import {
   getOtherDuellistKey,
   shuffle,
 } from "./duelUtil";
-import { monsterAutoEffectReducers } from "./monsterAutoEffectReducers";
 import { monsterEffectReducers as monsterManualEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
@@ -31,12 +28,13 @@ export type MonsterEffectReducer = (
   monsterIdx: FieldCol
 ) => void;
 
-export type MonsterAutoEffectReducer = (
-  arg: ReducerArg,
-  monsterIdx: FieldCol
-) => {
+export type GraveyardEffectReducer = (arg: ReducerArg) => void;
+
+export type MonsterAutoEffectReducer<
+  T extends MonsterEffectReducer | GraveyardEffectReducer
+> = (...P: Parameters<T>) => {
   condition: () => boolean;
-  effect: MonsterEffectReducer;
+  effect: T;
 }[];
 
 export const coreDuelReducers = {
@@ -155,41 +153,5 @@ export const coreDuelReducers = {
       // ... be addressed case-by -case in individual reducers
       zonePostEffect.isLocked = true;
     }
-  },
-  activateAutoMonsterEffect: (arg: ReducerArg, monsterIdx: FieldCol) => {
-    // TODO: check graveyard effects too
-    const { originatorState } = arg;
-
-    const { card } = originatorState.monsterZones[
-      monsterIdx
-    ] as OccupiedMonsterZone;
-    const monsterAutoEffectDispatch =
-      monsterAutoEffectReducers[card.name as AutoEffectMonster];
-
-    if (!monsterAutoEffectDispatch) {
-      console.log(`Monster effect not implemented for card: ${card.name}`);
-      return;
-    }
-
-    if (monsterAutoEffectDispatch) {
-      const conEffectPairs = monsterAutoEffectDispatch(arg, monsterIdx);
-      conEffectPairs.forEach(({ condition, effect }) => {
-        if (condition()) {
-          effect(arg, monsterIdx);
-        }
-      });
-    }
-  },
-  updateField: (arg: ReducerArg) => {
-    const { originatorState, activeField } = arg;
-
-    originatorState.monsterZones.forEach((z, i, zones) => {
-      if (!z.isOccupied) return;
-      // TODO: reset each zone's temp power-up level and (in a separate method?) re-calculate
-      (zones[i] as OccupiedMonsterZone).card = {
-        ...z.card,
-        ...getCombatStats(z, activeField),
-      };
-    });
   },
 };

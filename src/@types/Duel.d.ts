@@ -29,12 +29,13 @@ type OccupiedSpellTrapZone = Omit<OccupiedZone, "card"> & {
 type HandZone = EmptyZone | OccupiedZone;
 
 type Deck = Card[];
+type Graveyard = CardName | null;
 
 interface Duellist {
   lp: number;
   hand: HandZone[];
   deck: Deck;
-  graveyard: CardName | null;
+  graveyard: Graveyard;
   monsterZones: MonsterZone[];
   spellTrapZones: SpellTrapZone[];
 }

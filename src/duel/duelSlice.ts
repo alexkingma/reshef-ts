@@ -4,6 +4,7 @@ import type { RootState } from "../store";
 import { Field } from "./common";
 import { coreDuelReducers } from "./coreDuelReducers";
 import {
+  checkAutoEffects,
   getInitialDuel,
   getOtherDuellistKey,
   getTempCardQuantMap,
@@ -51,6 +52,15 @@ const transform = (map: CustomDuelReducers) => {
         activeField: state.activeField,
       };
       map[key as DuelActionKey](customArg, action.payload.payload);
+
+      // after every core dispatch to the field state as above,
+      // the entire field passive/auto effects need to be recalculated
+
+      // TODO: BUG
+      // endTurn flips the duellistKey in activeTurn, which effectively
+      // inverts what "originator" and "target" states refer to, meaning
+      // auto effects target the wrong side of the field
+      checkAutoEffects(customArg);
     };
   }
   return transformedMap;

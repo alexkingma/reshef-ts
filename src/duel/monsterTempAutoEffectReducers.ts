@@ -1,36 +1,26 @@
-import {
-  burn,
-  clearAllTraps,
-  destroySelf,
-  permPowerUp,
-  powerDownHighestAtk,
-  setField,
-  setRowFaceDown,
-  specialSummon,
-  tempPowerDown,
-  tempPowerUp,
-} from "./cardEffectUtil";
+import { tempPowerDown, tempPowerUp } from "./cardEffectUtil";
 import {
   getEffCon_powerUpSelfConditional,
   getEffCon_updateMatchesInRow,
 } from "./cardEffectWrapped";
-import { AutoEffectMonster, Field, Monster } from "./common";
-import { MonsterAutoEffectReducer } from "./coreDuelReducers";
+import { Monster, TempAutoEffectMonster } from "./common";
+import {
+  MonsterAutoEffectReducer,
+  MonsterEffectReducer,
+} from "./coreDuelReducers";
 import {
   countMatchesInRow,
-  getExodiaCards,
   getHighestAtkZoneIdx,
   hasMatchInRow,
   isSpecificMonster,
-  isTrap,
   isType,
 } from "./duelUtil";
 
-type MonsterAutoEffectReducers = {
-  [key in AutoEffectMonster]: MonsterAutoEffectReducer;
+type MonsterTempAutoEffectReducers = {
+  [key in TempAutoEffectMonster]: MonsterAutoEffectReducer<MonsterEffectReducer>;
 };
 
-export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
+export const monsterTempAutoEffectReducers: MonsterTempAutoEffectReducers = {
   [Monster.SwampBattleguard]: ({ originatorState }) => {
     const isLavaBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.LavaBattleguard);
@@ -151,21 +141,6 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
       getEffCon_updateMatchesInRow(targetState.monsterZones, matchDark, down),
     ];
   },
-  [Monster.ThunderNyanNyan]: ({ originatorState }, monsterIdx) => {
-    return [
-      {
-        condition: () => {
-          return hasMatchInRow(
-            originatorState.monsterZones,
-            (z) => (z.card as MonsterCard).alignment !== "Light"
-          );
-        },
-        effect: () => {
-          destroySelf(originatorState, monsterIdx);
-        },
-      },
-    ];
-  },
   [Monster.LavaBattleguard]: ({ originatorState }) => {
     const isSwampBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.SwampBattleguard);
@@ -182,31 +157,6 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
         },
         effect: () => {
           tempPowerUp(originatorState, monsterIdx);
-        },
-      },
-    ];
-  },
-  [Monster.ExodiaNecross]: ({ originatorState }, monsterIdx) => {
-    return [
-      {
-        condition: () => {
-          return (
-            !!originatorState.graveyard &&
-            getExodiaCards().includes(originatorState.graveyard)
-          );
-        },
-        effect: () => {
-          // If there are no Exodia parts in the graveyard, it disappears
-          destroySelf(originatorState, monsterIdx);
-        },
-      },
-      {
-        condition: () => {
-          // TODO: start of own turn
-          return true;
-        },
-        effect: ({ originatorState }, monsterIdx) => {
-          permPowerUp(originatorState, monsterIdx);
         },
       },
     ];
@@ -265,18 +215,6 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
     ]);
     return [effCon];
   },
-  [Monster.Jinzo]: ({ targetState }) => {
-    return [
-      {
-        condition: () => {
-          return hasMatchInRow(targetState.spellTrapZones, (z) => isTrap(z));
-        },
-        effect: ({ targetState }) => {
-          clearAllTraps(targetState);
-        },
-      },
-    ];
-  },
   [Monster.DarkMagicianGirl]: ({ originatorState }) => {
     const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
     const effCon = getEffCon_powerUpSelfConditional(
@@ -291,87 +229,5 @@ export const monsterAutoEffectReducers: MonsterAutoEffectReducers = {
       [originatorState.monsterZones, isInsect],
     ]);
     return [effCon];
-  },
-  ////////////////////////////////
-  [Monster.CastleOfDarkIllusions]: () => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of BOTH turns
-          return true;
-        },
-        effect: ({ state, originatorState }) => {
-          setField(state, Field.Yami);
-          setRowFaceDown(originatorState.monsterZones);
-        },
-      },
-    ];
-  },
-  [Monster.SatelliteCannon]: () => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of own turn
-          return true;
-        },
-        effect: ({ originatorState }, monsterIdx) => {
-          permPowerUp(originatorState, monsterIdx, 2);
-        },
-      },
-    ];
-  },
-  [Monster.LavaGolem]: () => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of own turn
-          return true;
-        },
-        effect: ({ originatorState }) => {
-          burn(originatorState, 700);
-        },
-      },
-    ];
-  },
-  [Monster.ViserDes]: ({ targetState }) => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of own turn
-          return hasMatchInRow(targetState.monsterZones);
-        },
-        effect: ({ targetState }) => {
-          powerDownHighestAtk(targetState);
-        },
-      },
-    ];
-  },
-  [Monster.MirageKnight]: () => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of own turn
-          return true;
-        },
-        effect: ({ originatorState }, monsterIdx) => {
-          destroySelf(originatorState, monsterIdx);
-          specialSummon(originatorState, Monster.DarkMagician);
-          specialSummon(originatorState, Monster.FlameSwordsman);
-        },
-      },
-    ];
-  },
-  [Monster.BerserkDragon]: () => {
-    return [
-      {
-        condition: () => {
-          // TODO: start of FOE's turn
-          return true;
-        },
-        effect: ({ originatorState }, monsterIdx) => {
-          tempPowerDown(originatorState, monsterIdx);
-        },
-      },
-    ];
   },
 };

@@ -6,7 +6,10 @@ import {
   specialSummon,
 } from "./cardEffectUtil";
 import { GraveyardEffectMonster, Monster, RowKey } from "./common";
-import { MonsterAutoEffectReducer } from "./coreDuelReducers";
+import {
+  GraveyardEffectReducer,
+  MonsterAutoEffectReducer,
+} from "./coreDuelReducers";
 import {
   countMatchesInRow,
   getFirstOccupiedZoneIdx,
@@ -14,7 +17,7 @@ import {
 } from "./duelUtil";
 
 type MonsterGraveyardEffectReducers = {
-  [key in GraveyardEffectMonster]: MonsterAutoEffectReducer;
+  [key in GraveyardEffectMonster]: MonsterAutoEffectReducer<GraveyardEffectReducer>;
 };
 
 export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {

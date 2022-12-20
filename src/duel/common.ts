@@ -818,11 +818,23 @@ export type ManualEffectMonster = Extract<
   | Monster.BeastOfGilfer
 >;
 
-export type AutoEffectMonster = Extract<
+export type PermAutoEffectMonster = Extract<
+  Monster,
+  | Monster.CastleOfDarkIllusions
+  | Monster.SatelliteCannon
+  | Monster.ThunderNyanNyan
+  | Monster.ExodiaNecross
+  | Monster.LavaGolem
+  | Monster.ViserDes
+  | Monster.MirageKnight
+  | Monster.BerserkDragon
+  | Monster.Jinzo
+>;
+
+export type TempAutoEffectMonster = Extract<
   Monster,
   | Monster.SwampBattleguard
   | Monster.MammothGraveyard
-  | Monster.CastleOfDarkIllusions
   | Monster.PumpkingTheKingOfGhosts
   | Monster.BusterBlader
   | Monster.MWarrior1
@@ -831,24 +843,16 @@ export type AutoEffectMonster = Extract<
   | Monster.WodanTheResidentOfTheForest
   | Monster.PerfectMachineKing
   | Monster.SliferTheSkyDragon
-  | Monster.SatelliteCannon
   | Monster.LabyrinthTank
   | Monster.MachineKing
   | Monster.Hoshiningen
-  | Monster.ThunderNyanNyan
   | Monster.LavaBattleguard
   | Monster.BladeKnight
-  | Monster.ExodiaNecross
-  | Monster.LavaGolem
   | Monster.DarkJeroid
-  | Monster.ViserDes
   | Monster.WitchsApprentice
-  | Monster.MirageKnight
-  | Monster.BerserkDragon
   | Monster.CommandAngel
   | Monster.ToonDarkMagicianGirl
   | Monster.MasterOfDragonSoldier
-  | Monster.Jinzo
   | Monster.DarkMagicianGirl
   | Monster.InsectQueen
 >;

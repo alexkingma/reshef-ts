@@ -1,10 +1,13 @@
 import { clearZone, destroyAtCoords, specialSummon } from "./cardEffectUtil";
 import { HandEffectMonster, Monster, RowKey } from "./common";
-import { MonsterAutoEffectReducer } from "./coreDuelReducers";
+import {
+  MonsterAutoEffectReducer,
+  MonsterEffectReducer,
+} from "./coreDuelReducers";
 import { countMatchesInRow, getFirstOccupiedZoneIdx } from "./duelUtil";
 
 type MonsterAutoEffectReducers = {
-  [key in HandEffectMonster]: MonsterAutoEffectReducer;
+  [key in HandEffectMonster]: MonsterAutoEffectReducer<MonsterEffectReducer>;
 };
 
 export const monsterHandEffectReducers: MonsterAutoEffectReducers = {

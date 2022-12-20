@@ -53,7 +53,6 @@ major chunks of game state:
 -------------------------------------------------------------------
 
 todo summary:
-  updateField doesn't currently work/isn't called
   start-of-turn isn't checked for effects    
     add a isStartOfTurn flag to the activeTurn state
     it gets set every time endTurn is called
