@@ -1,7 +1,8 @@
 import {
   burn,
   clearAllTraps,
-  destroySelf,
+  clearZone,
+  destroyAtCoords,
   permPowerDown,
   permPowerUp,
   powerDownHighestAtk,
@@ -10,47 +11,59 @@ import {
   specialSummon,
 } from "./cardEffectUtil";
 import { Field, Monster, PermAutoEffectMonster } from "./common";
+import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
-  MonsterAutoEffectReducer,
-  MonsterEffectReducer,
-} from "./coreDuelReducers";
-import { getExodiaCards, hasMatchInRow, isTrap } from "./duelUtil";
+  getExodiaCards,
+  graveyardContainsCards,
+  hasMatchInRow,
+  isAlignment,
+  isTrap,
+} from "./duelUtil";
+
+type MonsterPermAutoEffectReducer = (
+  stateMap: StateMap,
+  coordsMap: ZoneCoordsMap
+) => {
+  condition: () => boolean;
+  effect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
+}[];
 
 type MonsterPermAutoEffectReducers = {
-  [key in PermAutoEffectMonster]: MonsterAutoEffectReducer<MonsterEffectReducer>;
+  [key in PermAutoEffectMonster]: MonsterPermAutoEffectReducer;
 };
 
 export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
-  [Monster.ThunderNyanNyan]: ({ originatorState }, monsterIdx) => {
-    return [
-      {
-        condition: () => {
-          return hasMatchInRow(
-            originatorState.monsterZones,
-            (z) => (z.card as MonsterCard).alignment !== "Light"
-          );
-        },
-        effect: () => {
-          // TODO: BUG
-          // destroys card on wrong side of field if is non-owner's turn
-          // needs to destroyAtCoords, but that needs zoneCoords as the second arg of the reducer...
-          destroySelf(originatorState, monsterIdx);
-        },
-      },
-    ];
-  },
-  [Monster.ExodiaNecross]: ({ originatorState }, monsterIdx) => {
+  [Monster.ThunderNyanNyan]: (
+    { state },
+    { zoneCoords, ownMonsters, otherMonsters }
+  ) => {
     return [
       {
         condition: () => {
           return (
-            !originatorState.graveyard ||
-            !getExodiaCards().includes(originatorState.graveyard)
+            hasMatchInRow(
+              state,
+              ownMonsters,
+              (z) => !isAlignment(z, "Light")
+            ) ||
+            hasMatchInRow(state, otherMonsters, (z) => !isAlignment(z, "Light"))
           );
         },
         effect: () => {
+          destroyAtCoords(state, zoneCoords);
+        },
+      },
+    ];
+  },
+  [Monster.ExodiaNecross]: ({ state }, { zoneCoords, dKey }) => {
+    return [
+      {
+        condition: () => {
+          return !graveyardContainsCards(state, dKey, ...getExodiaCards());
+        },
+        effect: () => {
           // If there are no Exodia parts in the graveyard, it disappears
-          destroySelf(originatorState, monsterIdx);
+          destroyAtCoords(state, zoneCoords);
         },
       },
       {
@@ -58,20 +71,20 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of own turn
           return true;
         },
-        effect: ({ originatorState }, monsterIdx) => {
-          permPowerUp(originatorState, monsterIdx);
+        effect: ({ state }, { zoneCoords }) => {
+          permPowerUp(state, zoneCoords);
         },
       },
     ];
   },
-  [Monster.Jinzo]: ({ targetState }) => {
+  [Monster.Jinzo]: ({ state }, { otherMonsters, otherDKey }) => {
     return [
       {
         condition: () => {
-          return hasMatchInRow(targetState.spellTrapZones, (z) => isTrap(z));
+          return hasMatchInRow(state, otherMonsters, (z) => isTrap(z));
         },
-        effect: ({ targetState }) => {
-          clearAllTraps(targetState);
+        effect: ({ state }) => {
+          clearAllTraps(state, otherDKey);
         },
       },
     ];
@@ -83,9 +96,9 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of BOTH turns
           return true;
         },
-        effect: ({ state, originatorState }) => {
+        effect: ({ state }, { ownMonsters }) => {
           setField(state, Field.Yami);
-          setRowFaceDown(originatorState.monsterZones);
+          setRowFaceDown(state, ownMonsters);
         },
       },
     ];
@@ -97,8 +110,8 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of own turn
           return true;
         },
-        effect: ({ originatorState }, monsterIdx) => {
-          permPowerUp(originatorState, monsterIdx, 2);
+        effect: ({ state }, { zoneCoords }) => {
+          permPowerUp(state, zoneCoords, 2);
         },
       },
     ];
@@ -110,21 +123,21 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of own turn
           return true;
         },
-        effect: ({ originatorState }) => {
-          burn(originatorState, 700);
+        effect: ({ state }, { dKey }) => {
+          burn(state, dKey, 700);
         },
       },
     ];
   },
-  [Monster.ViserDes]: ({ targetState }) => {
+  [Monster.ViserDes]: ({ state }, { otherMonsters }) => {
     return [
       {
         condition: () => {
           // TODO: start of own turn
-          return hasMatchInRow(targetState.monsterZones);
+          return hasMatchInRow(state, otherMonsters);
         },
-        effect: ({ targetState }) => {
-          powerDownHighestAtk(targetState);
+        effect: ({ state }, { otherDKey }) => {
+          powerDownHighestAtk(state, otherDKey);
         },
       },
     ];
@@ -136,10 +149,10 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of own turn
           return true;
         },
-        effect: ({ originatorState }, monsterIdx) => {
-          destroySelf(originatorState, monsterIdx);
-          specialSummon(originatorState, Monster.DarkMagician);
-          specialSummon(originatorState, Monster.FlameSwordsman);
+        effect: ({ state }, { zoneCoords, dKey }) => {
+          clearZone(state, zoneCoords);
+          specialSummon(state, dKey, Monster.DarkMagician);
+          specialSummon(state, dKey, Monster.FlameSwordsman);
         },
       },
     ];
@@ -151,8 +164,8 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           // TODO: start of FOE's turn
           return true;
         },
-        effect: ({ originatorState }, monsterIdx) => {
-          permPowerDown(originatorState, monsterIdx);
+        effect: ({ state }, { zoneCoords }) => {
+          permPowerDown(state, zoneCoords);
         },
       },
     ];

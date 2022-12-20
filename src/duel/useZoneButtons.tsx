@@ -8,7 +8,7 @@ import {
   isMonster,
   isSpell,
 } from "./duelUtil";
-import useDuelActions from "./useDuelActions";
+import { useCardActions } from "./useCardActions";
 
 export enum DuelButtonKey {
   Attack = "ATTACK",
@@ -68,14 +68,14 @@ export const useDuelButtons = (
     setSpellTrap,
     activateSpellEffect,
     discard,
-  } = useDuelActions(duellistKey);
+  } = useCardActions(zoneCoords);
 
   const duelButtons: DuelButtonBlueprintMap = {
     [DuelButtonKey.Attack]: {
       label: "Attack",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => attack(i),
+      onClick: (i) => attack(),
     },
     [DuelButtonKey.Summon]: {
       label: "Summon",
@@ -84,17 +84,17 @@ export const useDuelButtons = (
         isMonster(z) &&
         canNormalSummon(z.card) &&
         isRow(RowKey.Hand),
-      onClick: (i) => normalSummon(i),
+      onClick: (i) => normalSummon(),
     },
     [DuelButtonKey.Set]: {
       label: "Set",
       condition: (z) => isMyTurn && !isMonster(z) && isRow(RowKey.Hand),
-      onClick: (i) => setSpellTrap(i),
+      onClick: (i) => setSpellTrap(),
     },
     [DuelButtonKey.SpellEffect]: {
       label: "Activate",
       condition: (z) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
-      onClick: (i) => activateSpellEffect(i),
+      onClick: (i) => activateSpellEffect(),
     },
     [DuelButtonKey.MonsterEffect]: {
       label: "Effect",
@@ -104,24 +104,24 @@ export const useDuelButtons = (
         !z.isLocked &&
         canActivateEffect(z) &&
         isRow(RowKey.Monster),
-      onClick: (i) => activateManualMonsterEffect(i),
+      onClick: (i) => activateManualMonsterEffect(),
     },
     [DuelButtonKey.Tribute]: {
       label: "Tribute",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => tribute(i),
+      onClick: (i) => tribute(),
     },
     [DuelButtonKey.Defend]: {
       label: "Defend",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => defend(i),
+      onClick: (i) => defend(),
     },
     [DuelButtonKey.Discard]: {
       label: "Discard",
       condition: () => isMyTurn,
-      onClick: () => discard([rowKey, colIdx]),
+      onClick: () => discard(),
     },
   };
 

@@ -1,8 +1,13 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../assets/fields.json";
-import { BattlePosition, Field, TempAutoEffectMonster } from "./common";
-import { ReducerArg } from "./duelSlice";
-import { activateTempEffect } from "./duelUtil";
+import { BattlePosition, Field, RowKey, TempAutoEffectMonster } from "./common";
+import { StateMap, ZoneCoordsMap } from "./duelSlice";
+import {
+  activateTempEffect,
+  getOtherDuellistKey,
+  getZone,
+  getZoneCoordsMap,
+} from "./duelUtil";
 import { monsterTempAutoEffectReducers } from "./monsterTempAutoEffectReducers";
 
 export const calculateAttack = (
@@ -55,17 +60,17 @@ const getFieldMultiplier = (field: Field, type: CardType) => {
   return map[type] || 1;
 };
 
-export const recalcCombatStats = (arg: ReducerArg) => {
-  resetCombatStats(arg);
-  activateTempAutoEffects(arg);
-  calcCombatStats(arg);
+export const recalcCombatStats = (stateMap: StateMap) => {
+  resetCombatStats(stateMap);
+  activateTempAutoEffects(stateMap);
+  calcCombatStats(stateMap);
 };
 
 const resetCombatStats = ({
   originatorState,
   targetState,
   state,
-}: ReducerArg) => {
+}: StateMap) => {
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
     resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
@@ -76,11 +81,7 @@ const resetCombatStats = ({
   });
 };
 
-const calcCombatStats = ({
-  originatorState,
-  targetState,
-  state,
-}: ReducerArg) => {
+const calcCombatStats = ({ originatorState, targetState, state }: StateMap) => {
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
     calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
@@ -103,34 +104,36 @@ const calcZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
   };
 };
 
-const activateTempAutoEffects = (arg: ReducerArg) => {
-  const { originatorState, targetState } = arg;
-  originatorState.monsterZones.forEach((z, i, zones) => {
+const activateTempAutoEffects = (stateMap: StateMap) => {
+  const { originatorState, targetState, activeTurn } = stateMap;
+  const { duellistKey: activeKey } = activeTurn;
+  const inactiveKey = getOtherDuellistKey(activeKey);
+  originatorState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
     activateZoneTempAutoEffects(
-      arg,
-      zones[i] as OccupiedMonsterZone,
-      i as FieldCol
+      stateMap,
+      getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol])
     );
   });
-  targetState.monsterZones.forEach((z, i, zones) => {
+  targetState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
     activateZoneTempAutoEffects(
-      arg,
-      zones[i] as OccupiedMonsterZone,
-      i as FieldCol
+      stateMap,
+      getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol])
     );
   });
 };
 
 const activateZoneTempAutoEffects = (
-  arg: ReducerArg,
-  zone: OccupiedMonsterZone,
-  monsterIdx: FieldCol
+  stateMap: StateMap,
+  coordsMap: ZoneCoordsMap
 ) => {
+  const { state } = stateMap;
+  const { zoneCoords } = coordsMap;
+  const { card } = getZone(state, zoneCoords) as OccupiedMonsterZone;
   const reducer =
-    monsterTempAutoEffectReducers[zone.card.name as TempAutoEffectMonster];
+    monsterTempAutoEffectReducers[card.name as TempAutoEffectMonster];
   if (!reducer) return;
 
-  activateTempEffect(arg, reducer, monsterIdx);
+  activateTempEffect(stateMap, coordsMap, reducer);
 };

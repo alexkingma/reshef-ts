@@ -1,8 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../hooks";
 import { selectDuellist, selectIsMyTurn } from "../duelSlice";
-
-import useDuelActions from "../useDuelActions";
+import { useDuellistActions } from "../useDuellistActions";
 
 interface Props {
   duellistKey: DuellistKey;
@@ -12,7 +11,7 @@ interface Props {
 export const DuellistStatus = ({ duellistKey, name }: Props) => {
   const { lp, graveyard } = useAppSelector(selectDuellist(duellistKey));
   const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
-  const { endTurn } = useDuelActions(duellistKey);
+  const { endTurn } = useDuellistActions(duellistKey);
 
   return (
     <>

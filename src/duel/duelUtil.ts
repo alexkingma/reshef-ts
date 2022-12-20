@@ -10,13 +10,10 @@ import {
   RowKey,
   Trap,
 } from "./common";
-import {
-  MonsterAutoEffectReducer,
-  MonsterEffectReducer,
-} from "./coreDuelReducers";
-import { ReducerArg } from "./duelSlice";
+import { DuellistCoordsMap, StateMap, ZoneCoordsMap } from "./duelSlice";
 import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
 import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
+import { MonsterAutoEffectReducer } from "./monsterTempAutoEffectReducers";
 
 export const getCard = (cardName: CardName): Card => {
   const dbCard = cards.find((c) => c.name === cardName)!;
@@ -112,10 +109,12 @@ export const shuffle = <T extends any[]>(arr: T): T => {
 };
 
 export const getFirstEmptyZoneIdx = (
-  zones: Zone[],
+  state: Duel,
+  [dKey, rKey]: RowCoords,
   defaultToFirst: boolean = false
 ) => {
-  const nextFreeZoneIdx = zones.findIndex((zone) => !zone.isOccupied);
+  const row = state[dKey][rKey];
+  const nextFreeZoneIdx = row.findIndex((zone) => !zone.isOccupied);
   if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx as FieldCol;
   if (defaultToFirst) {
     // no free zones, return the default index
@@ -127,9 +126,9 @@ export const getFirstEmptyZoneIdx = (
     );
   }
 };
-export const hasEmptyZone = (row: Zone[]) => {
+export const hasEmptyZone = (state: Duel, rowCoords: RowCoords) => {
   try {
-    getFirstEmptyZoneIdx(row);
+    getFirstEmptyZoneIdx(state, rowCoords);
     return true;
   } catch (e) {
     // no free space to summon
@@ -137,17 +136,21 @@ export const hasEmptyZone = (row: Zone[]) => {
   }
 };
 
-export const getFirstOccupiedZoneIdx = (zones: Zone[]) => {
-  return zones.findIndex((z) => z.isOccupied) as FieldCol | -1;
+export const getFirstOccupiedZoneIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords
+) => {
+  return state[dKey][rKey].findIndex((z) => z.isOccupied) as FieldCol | -1;
 };
 
 export const getHighestAtkZoneIdx = (
-  zones: Zone[],
+  state: Duel,
+  [dKey, rKey]: RowCoords,
   condition: (z: OccupiedZone) => boolean = () => true
 ) => {
   let idx = -1;
   let highestAtk = -1;
-  zones.forEach((z, i) => {
+  state[dKey][rKey].forEach((z, i) => {
     if (!z.isOccupied || z.card.category !== "Monster" || !condition(z)) return;
     if (z.card.effAtk > highestAtk) {
       highestAtk = z.card.effAtk;
@@ -157,12 +160,59 @@ export const getHighestAtkZoneIdx = (
   return idx as FieldCol | -1;
 };
 
-export const getFirstMatchInRowIdx = (zones: Zone[], cardName: CardName) => {
-  return zones.findIndex((z) => z.isOccupied && z.card.name === cardName);
+export const getFirstMatchInRowIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  cardName: CardName
+) => {
+  const row = state[dKey][rKey];
+  return row.findIndex((z) => z.isOccupied && z.card.name === cardName);
 };
 
 export const getOtherDuellistKey = (key: DuellistKey) => {
   return key === "p1" ? "p2" : "p1";
+};
+
+export const getStateMap = (
+  state: Duel,
+  duellistKey: DuellistKey
+): StateMap => {
+  const originatorState = state[duellistKey];
+  const targetState = state[getOtherDuellistKey(duellistKey)];
+  return {
+    state, // only use when other props cannot be lastingly referenced in reducer
+    originatorState,
+    targetState,
+    activeTurn: state.activeTurn,
+    activeField: state.activeField,
+  };
+};
+
+export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
+  const [dKey, , colIdx] = zoneCoords;
+  return {
+    zoneCoords,
+    colIdx,
+    ...getDuellistCoordsMap(dKey),
+  };
+};
+
+export const getDuellistCoordsMap = (dKey: DuellistKey): DuellistCoordsMap => {
+  const otherDKey = getOtherDuellistKey(dKey) as DuellistKey;
+  return {
+    dKey,
+    otherDKey,
+
+    // own rows
+    ownMonsters: [dKey, RowKey.Monster],
+    ownSpellTrap: [dKey, RowKey.SpellTrap],
+    ownHand: [dKey, RowKey.Hand],
+
+    // opponent rows
+    otherMonsters: [otherDKey, RowKey.Monster],
+    otherSpellTrap: [otherDKey, RowKey.SpellTrap],
+    otherHand: [otherDKey, RowKey.Hand],
+  };
 };
 
 export const getNumTributesRequired = ({
@@ -171,27 +221,47 @@ export const getNumTributesRequired = ({
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
 
-export const containsCard = (row: Zone[], cardName: CardName) => {
-  return hasMatchInRow(row, (z) => z.card.name === cardName);
+export const containsCard = (
+  state: Duel,
+  rowCoords: RowCoords,
+  cardName: CardName
+) => {
+  return hasMatchInRow(state, rowCoords, (z) => z.card.name === cardName);
 };
 
-export const containsAllCards = (row: Zone[], ...cardNames: CardName[]) => {
+export const containsAllCards = (
+  state: Duel,
+  rowCoords: RowCoords,
+  ...cardNames: CardName[]
+) => {
   // all provided cards must be present in the given row
   // alternatively: none of the provided cards may NOT be present
-  return !cardNames.filter((c) => !containsCard(row, c)).length;
+  return !cardNames.filter((c) => !containsCard(state, rowCoords, c)).length;
+};
+
+export const graveyardContainsCards = (
+  state: Duel,
+  dKey: DuellistKey,
+  ...cardNames: CardName[]
+) => {
+  if (!state[dKey].graveyard) return false; // graveyard is empty
+  return cardNames.findIndex((c) => c === state[dKey].graveyard) !== -1;
 };
 
 export const hasMatchInRow = (
-  row: Zone[],
+  state: Duel,
+  rowCoords: RowCoords,
   condition: (z: OccupiedZone) => boolean = () => true
 ) => {
-  return countMatchesInRow(row, condition) > 0;
+  return countMatchesInRow(state, rowCoords, condition) > 0;
 };
 
 export const countMatchesInRow = (
-  row: Zone[],
+  state: Duel,
+  [dKey, rKey]: RowCoords,
   condition: (z: OccupiedZone) => boolean = () => true
 ) => {
+  const row = state[dKey][rKey];
   return row.filter((z) => z.isOccupied && condition(z)).length;
 };
 
@@ -223,6 +293,11 @@ export const isMonster = (z: Zone): z is OccupiedMonsterZone => {
 export const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
   isMonster(z) && z.card.type === type;
 
+export const isAlignment = (
+  z: Zone,
+  alignment: Alignment
+): z is OccupiedMonsterZone => isMonster(z) && z.card.alignment === alignment;
+
 export const isSpecificMonster = (
   z: Zone,
   cardName: CardName
@@ -238,22 +313,23 @@ export const getExodiaCards = () => {
   ] as CardName[];
 };
 
-export const isVictor = ({ originatorState, targetState }: ReducerArg) => {
+export const isVictor = (state: Duel) => {
   // TODO: opponent deck-out flag
-  return (
-    targetState.lp === 0 ||
-    hasFullExodia(originatorState.hand) ||
-    hasFullFINAL(originatorState.spellTrapZones)
-  );
+  // return (
+  //   targetState.lp === 0 ||
+  //   hasFullExodia(originatorState.hand) ||
+  //   hasFullFINAL(originatorState.spellTrapZones)
+  // );
 };
 
-export const hasFullExodia = (hand: HandZone[]) => {
-  return containsAllCards(hand, ...getExodiaCards());
+export const hasFullExodia = (state: Duel, rowCoords: RowCoords) => {
+  return containsAllCards(state, rowCoords, ...getExodiaCards());
 };
 
-export const hasFullFINAL = (spellTrapRow: SpellTrapZone[]) => {
+export const hasFullFINAL = (state: Duel, rowCoords: RowCoords) => {
   return containsAllCards(
-    spellTrapRow,
+    state,
+    rowCoords,
     Trap.DestinyBoard,
     Trap.SpiritMessageI,
     Trap.SpiritMessageN,
@@ -270,67 +346,70 @@ export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && z.card.effect && z.orientation === Orientation.FaceDown;
 
 export const activateTempEffect = (
-  arg: ReducerArg,
-  reducer: MonsterAutoEffectReducer<MonsterEffectReducer>,
-  monsterIdx: FieldCol
+  stateMap: StateMap,
+  coordsMap: ZoneCoordsMap,
+  reducer: MonsterAutoEffectReducer
 ) => {
-  const conEffectPairs = reducer(arg, monsterIdx);
+  const conEffectPairs = reducer(stateMap, coordsMap);
   conEffectPairs.forEach(({ condition, effect }) => {
     if (condition()) {
-      effect(arg, monsterIdx);
+      effect(stateMap, coordsMap);
     }
   });
 };
 
-export const checkGraveyardEffect = (arg: ReducerArg, graveyard: Graveyard) => {
+export const checkGraveyardEffect = (stateMap: StateMap, dKey: DuellistKey) => {
+  const { graveyard } = stateMap.state[dKey];
   if (!graveyard) return;
   const reducer =
     monsterGraveyardEffectReducers[graveyard as GraveyardEffectMonster];
   if (!reducer) return;
 
-  const conEffectPairs = reducer(arg);
+  const conEffectPairs = reducer(stateMap, getDuellistCoordsMap(dKey));
   conEffectPairs.forEach(({ condition, effect }) => {
     if (condition()) {
-      effect(arg);
+      effect(stateMap, getDuellistCoordsMap(dKey));
     }
   });
 };
 
 export const checkMonsterAutoEffect = (
-  arg: ReducerArg,
-  zone: Zone,
-  monsterIdx: FieldCol,
+  stateMap: StateMap,
+  coordsMap: ZoneCoordsMap,
   reducerMap: {
-    [cardName in CardName]?: MonsterAutoEffectReducer<MonsterEffectReducer>;
+    [cardName in CardName]?: any;
   }
 ) => {
+  const { state } = stateMap;
+  const { zoneCoords } = coordsMap;
+  const zone = getZone(state, zoneCoords);
   if (!zone.isOccupied) return;
   const reducer = reducerMap[zone.card.name as PermAutoEffectMonster];
   if (!reducer) return;
 
-  activateTempEffect(arg, reducer, monsterIdx);
+  activateTempEffect(stateMap, coordsMap, reducer);
 };
 
-export const checkPermAutoEffects = (arg: ReducerArg) => {
-  const { originatorState, targetState } = arg;
+export const checkPermAutoEffects = (stateMap: StateMap) => {
+  const { state, activeTurn } = stateMap;
 
-  checkGraveyardEffect(arg, originatorState.graveyard);
-  checkGraveyardEffect(arg, targetState.graveyard);
+  const activeKey = activeTurn.duellistKey;
+  const inactiveKey = getOtherDuellistKey(activeKey);
+  checkGraveyardEffect(stateMap, activeKey);
+  checkGraveyardEffect(stateMap, inactiveKey);
 
-  originatorState.monsterZones.forEach((_, i, zones) => {
+  state[activeKey].monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
-      arg,
-      zones[i],
-      i as FieldCol,
+      stateMap,
+      getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
   });
 
-  targetState.monsterZones.forEach((_, i, zones) => {
+  state[inactiveKey].monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
-      arg,
-      zones[i],
-      i as FieldCol,
+      stateMap,
+      getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
   });
@@ -339,14 +418,14 @@ export const checkPermAutoEffects = (arg: ReducerArg) => {
   // TODO: hand zones (just Lava Golem?)
 };
 
-export const checkAutoEffects = (arg: ReducerArg) => {
+export const checkAutoEffects = (stateMap: StateMap) => {
   // Temp power-up effect cards are separate from
   // permanent (but still auto) effect cards.
   // Temp power-ups must be calculated so that the permanent
   // effects may accurately deduce the "strongest" card, etc.
   // Then, once permanent effects (destruction, spec. summoning, etc.)
   // are complete, temp power-ups should be recalculated one final time.
-  recalcCombatStats(arg);
-  checkPermAutoEffects(arg);
-  recalcCombatStats(arg);
+  recalcCombatStats(stateMap);
+  checkPermAutoEffects(stateMap);
+  recalcCombatStats(stateMap);
 };

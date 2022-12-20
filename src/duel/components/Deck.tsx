@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../hooks";
 import { selectDuellist } from "../duelSlice";
-import useDuelActions from "../useDuelActions";
+import { useDuellistActions } from "../useDuellistActions";
 
 interface Props {
   duellistKey: DuellistKey;
@@ -9,13 +9,14 @@ interface Props {
 
 export const DuellistDeck = ({ duellistKey }: Props) => {
   const { deck } = useAppSelector(selectDuellist(duellistKey));
-  const { shuffle, draw } = useDuelActions(duellistKey);
+  const { shuffle, draw } = useDuellistActions(duellistKey);
 
   return (
     <>
       <div>
         Deck:&nbsp;
         <button onClick={() => shuffle()}>Shuffle</button>
+        {/* TODO: remove junk coordsMap arg */}
         <button onClick={() => draw()}>Draw</button>
         <ol>
           {deck.slice(0, 5).map((card, idx) => (

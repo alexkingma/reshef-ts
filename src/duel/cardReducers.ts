@@ -4,63 +4,44 @@ import {
   destroyAtCoords,
   directAttack,
 } from "./cardEffectUtil";
-import { draw } from "./cardEffectWrapped";
 import {
   BattlePosition,
   ManualEffectMonster,
   Orientation,
-  RowKey,
   Spell,
 } from "./common";
-import { ReducerArg } from "./duelSlice";
+import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
   generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
-  getOtherDuellistKey,
-  shuffle,
 } from "./duelUtil";
 import { monsterEffectReducers as monsterManualEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
-export type MonsterEffectReducer = (
-  arg: ReducerArg,
-  monsterIdx: FieldCol
-) => void;
-
-export type GraveyardEffectReducer = (arg: ReducerArg) => void;
-
-export type MonsterAutoEffectReducer<
-  T extends MonsterEffectReducer | GraveyardEffectReducer
-> = (...P: Parameters<T>) => {
-  condition: () => boolean;
-  effect: T;
-}[];
-
-export const coreDuelReducers = {
-  shuffle: ({ originatorState }: ReducerArg) => {
-    originatorState.deck = shuffle(originatorState.deck);
-  },
-  draw: draw(),
+export const cardReducers = {
   normalSummon: (
-    { originatorState, activeTurn }: ReducerArg,
-    handIdx: FieldCol
+    { state, originatorState, activeTurn }: StateMap,
+    { zoneCoords, ownMonsters, colIdx }: ZoneCoordsMap
   ) => {
     // remove monster from hand at given index, summon it to the field
-    const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones, true);
-    const { card } = originatorState.hand[handIdx] as OccupiedMonsterZone;
-    clearZone(originatorState.hand, handIdx);
+    const zoneIdx = getFirstEmptyZoneIdx(state, ownMonsters, true);
+    const { card } = originatorState.hand[colIdx] as OccupiedMonsterZone;
+    clearZone(state, zoneCoords);
     originatorState.monsterZones[zoneIdx] = {
       ...generateOccupiedMonsterZone(card.name),
       orientation: Orientation.FaceDown,
     };
     activeTurn.hasNormalSummoned = true;
   },
-  setSpellTrap: ({ originatorState }: ReducerArg, handIdx: FieldCol) => {
+  setSpellTrap: (
+    { state, originatorState }: StateMap,
+    { zoneCoords, ownSpellTrap, colIdx }: ZoneCoordsMap
+  ) => {
     // remove spell/trap from hand at given index, set it on the field
-    const zoneIdx = getFirstEmptyZoneIdx(originatorState.spellTrapZones, true);
-    const { card } = originatorState.hand[handIdx] as OccupiedSpellTrapZone;
-    clearZone(originatorState.hand, handIdx);
+    const zoneIdx = getFirstEmptyZoneIdx(state, ownSpellTrap, true);
+    const { card } = originatorState.hand[colIdx] as OccupiedSpellTrapZone;
+    clearZone(state, zoneCoords);
     originatorState.spellTrapZones[zoneIdx] = {
       isOccupied: true,
       card,
@@ -68,51 +49,41 @@ export const coreDuelReducers = {
     };
   },
   attack: (
-    { originatorState, targetState }: ReducerArg,
-    attackerIdx: FieldCol
+    { state, originatorState, targetState }: StateMap,
+    { colIdx: attackerIdx, otherMonsters, zoneCoords }: ZoneCoordsMap
   ) => {
     const attackerZone = originatorState.monsterZones[
       attackerIdx
     ] as OccupiedMonsterZone;
     attackerZone.battlePosition = BattlePosition.Attack;
-    const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) {
       // no monsters, attack directly
       directAttack(originatorState, targetState, attackerIdx);
     } else {
-      attackMonster(originatorState, targetState, attackerIdx, targetIdx);
+      attackMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
     }
     attackerZone.isLocked = true;
   },
-  defend: ({ originatorState }: ReducerArg, monsterIdx: FieldCol) => {
+  defend: (
+    { originatorState }: StateMap,
+    { colIdx: monsterIdx }: ZoneCoordsMap
+  ) => {
     const zone = originatorState.monsterZones[
       monsterIdx
     ] as OccupiedMonsterZone;
     zone.battlePosition = BattlePosition.Defence;
   },
-  endTurn: ({ originatorState, activeTurn }: ReducerArg) => {
-    // reset all turn-based params, then hand over to other player
-    originatorState.monsterZones.forEach((zone) => {
-      if (!zone.isOccupied) return;
-      zone.isLocked = false;
-    });
-    activeTurn.duellistKey = getOtherDuellistKey(activeTurn.duellistKey);
-    activeTurn.hasNormalSummoned = false;
-    activeTurn.numTributedMonsters = 0;
-  },
-  tribute: (
-    { originatorState, activeTurn }: ReducerArg,
-    monsterIdx: FieldCol
-  ) => {
-    destroyAtCoords(originatorState, [RowKey.Monster, monsterIdx]);
+  tribute: ({ state, activeTurn }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
+    destroyAtCoords(state, zoneCoords);
     activeTurn.numTributedMonsters++;
   },
-  discard: ({ originatorState }: ReducerArg, coords: ZoneCoordsForDuellist) => {
-    destroyAtCoords(originatorState, coords);
+  discard: ({ state }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
+    destroyAtCoords(state, zoneCoords);
   },
-  activateSpellEffect: (arg: ReducerArg, spellIdx: FieldCol) => {
-    const { originatorState } = arg;
-
+  activateSpellEffect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => {
+    const { state, originatorState } = stateMap;
+    const { zoneCoords, colIdx: spellIdx } = coordsMap;
     const { card } = originatorState.spellTrapZones[
       spellIdx
     ] as OccupiedSpellTrapZone;
@@ -121,14 +92,17 @@ export const coreDuelReducers = {
       console.log(`Spell effect not implemented for card: ${card.name}`);
       return;
     }
-    spellDispatch(arg);
+    spellDispatch(stateMap, coordsMap);
 
     // discard after activation
-    clearZone(originatorState.spellTrapZones, spellIdx);
+    clearZone(state, zoneCoords);
   },
-  activateManualMonsterEffect: (arg: ReducerArg, monsterIdx: FieldCol) => {
-    const { originatorState } = arg;
-
+  activateManualMonsterEffect: (
+    stateMap: StateMap,
+    coordsMap: ZoneCoordsMap
+  ) => {
+    const { originatorState } = stateMap;
+    const { colIdx: monsterIdx } = coordsMap;
     const { card } = originatorState.monsterZones[
       monsterIdx
     ] as OccupiedMonsterZone;
@@ -141,7 +115,7 @@ export const coreDuelReducers = {
     }
 
     if (monsterManualEffectDispatch) {
-      monsterManualEffectDispatch(arg, monsterIdx);
+      monsterManualEffectDispatch(stateMap, coordsMap);
     }
 
     // lock card once effect is complete

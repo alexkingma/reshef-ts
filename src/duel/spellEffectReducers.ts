@@ -7,7 +7,7 @@ import {
   setRowFaceUp,
 } from "./cardEffectUtil";
 import {
-  burn,
+  burnOther,
   destroy1500PlusAtk,
   destroyHighestAtk,
   destroyMonsterType,
@@ -25,7 +25,7 @@ import {
   RowKey,
   Spell,
 } from "./common";
-import { ReducerArg } from "./duelSlice";
+import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
   containsCard,
   countMatchesInRow,
@@ -34,18 +34,18 @@ import {
 } from "./duelUtil";
 
 type SpellEffectReducers = {
-  [key in Spell]: (arg: ReducerArg, payload?: any) => void;
+  [key in Spell]: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
 };
 
 export const spellEffectReducers: SpellEffectReducers = {
   // burn
-  [Spell.Sparks]: burn(50),
-  [Spell.Hinotama]: burn(100),
-  [Spell.FinalFlame]: burn(200),
-  [Spell.Ookazi]: burn(500),
-  [Spell.TremendousFire]: burn(1000),
-  [Spell.RestructerRevolution]: ({ targetState }) =>
-    burnDirect(targetState, countMatchesInRow(targetState.hand) * 200),
+  [Spell.Sparks]: burnOther(50),
+  [Spell.Hinotama]: burnOther(100),
+  [Spell.FinalFlame]: burnOther(200),
+  [Spell.Ookazi]: burnOther(500),
+  [Spell.TremendousFire]: burnOther(1000),
+  [Spell.RestructerRevolution]: ({ state }, { otherDKey, otherHand }) =>
+    burnDirect(state, otherDKey, countMatchesInRow(state, otherHand) * 200),
 
   // heal
   [Spell.MooyanCurry]: heal(200),
@@ -144,9 +144,12 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.LastDayOfWitch]: destroyMonsterType("Spellcaster"),
 
   // assorted
-  [Spell.JamBreedingMachine]: ({ originatorState, activeTurn }) => {
+  [Spell.JamBreedingMachine]: (
+    { state, originatorState, activeTurn },
+    { ownMonsters }
+  ) => {
     try {
-      const zoneIdx = getFirstEmptyZoneIdx(originatorState.monsterZones);
+      const zoneIdx = getFirstEmptyZoneIdx(state, ownMonsters);
       originatorState.monsterZones[zoneIdx] = {
         ...generateOccupiedMonsterZone(Monster.ChangeSlime),
         isLocked: true,
@@ -165,33 +168,33 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.SwordsOfRevealingLight]: ({ targetState }) => {
     // TODO
   },
-  [Spell.DarkPiercingLight]: ({ targetState }) => {
-    setRowFaceUp(targetState.monsterZones);
+  [Spell.DarkPiercingLight]: ({ state }, { otherMonsters }) => {
+    setRowFaceUp(state, otherMonsters);
   },
-  [Spell.MonsterReborn]: ({ originatorState, targetState }) => {
-    resurrectEnemy(originatorState, targetState);
+  [Spell.MonsterReborn]: ({ state }, { dKey }) => {
+    resurrectEnemy(state, dKey);
   },
-  [Spell.GravediggerGhoul]: ({ originatorState, targetState }) => {
-    clearGraveyard(originatorState);
-    clearGraveyard(targetState);
+  [Spell.GravediggerGhoul]: ({ state }, { dKey, otherDKey }) => {
+    clearGraveyard(state, dKey);
+    clearGraveyard(state, otherDKey);
   },
   [Spell.MessengerOfPeace]: ({ originatorState, targetState }) => {
     // TODO
     // perpetual activation as long as 1500+ monster is out, remains face up permanently
     // basically like DCJ
   },
-  [Spell.DarknessApproaches]: ({ originatorState }) => {
-    setRowFaceDown(originatorState.monsterZones);
+  [Spell.DarknessApproaches]: ({ state }, { ownMonsters }) => {
+    setRowFaceDown(state, ownMonsters);
   },
-  [Spell.BrainControl]: ({ originatorState, targetState }) => {
-    convertMonster(originatorState, targetState);
+  [Spell.BrainControl]: ({ state }, { dKey }) => {
+    convertMonster(state, dKey);
     // TODO: make the converted monster revert back after turn end
   },
-  [Spell.ChangeOfHeart]: ({ originatorState, targetState }) => {
-    convertMonster(originatorState, targetState);
+  [Spell.ChangeOfHeart]: ({ state }, { dKey }) => {
+    convertMonster(state, dKey);
   },
-  [Spell.Multiply]: ({ originatorState }) => {
-    if (!containsCard(originatorState.monsterZones, Monster.Kuriboh)) return;
+  [Spell.Multiply]: ({ state, originatorState }, { ownMonsters }) => {
+    if (!containsCard(state, ownMonsters, Monster.Kuriboh)) return;
 
     originatorState.monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;
@@ -202,7 +205,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     });
   },
   [Spell.PotOfGreed]: draw(2),
-  [Spell.TheInexperiencedSpy]: ({ targetState }) => {
-    setRowFaceUp(targetState.hand);
+  [Spell.TheInexperiencedSpy]: ({ state }, { otherHand }) => {
+    setRowFaceUp(state, otherHand);
   },
 };

@@ -1,17 +1,18 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
+import { cardReducers } from "./cardReducers";
 import { Field } from "./common";
-import { coreDuelReducers } from "./coreDuelReducers";
+import { duellistReducers } from "./duellistReducers";
 import {
   checkAutoEffects,
   getInitialDuel,
-  getOtherDuellistKey,
+  getStateMap,
   getTempCardQuantMap,
   getZone,
 } from "./duelUtil";
 
-export interface ReducerArg {
+export interface StateMap {
   state: Duel;
   originatorState: Duellist;
   targetState: Duellist;
@@ -19,17 +20,43 @@ export interface ReducerArg {
   activeField: Field;
 }
 
-export type DuelActionKey = keyof typeof coreDuelReducers;
+export interface DuellistCoordsMap {
+  dKey: DuellistKey;
+  otherDKey: DuellistKey;
+
+  // own rows
+  ownMonsters: RowCoords;
+  ownSpellTrap: RowCoords;
+  ownHand: RowCoords;
+
+  // opponent rows
+  otherMonsters: RowCoords;
+  otherSpellTrap: RowCoords;
+  otherHand: RowCoords;
+}
+
+export type ZoneCoordsMap = DuellistCoordsMap & {
+  zoneCoords: ZoneCoords;
+  colIdx: FieldCol;
+};
+
+export type CoordsMap = ZoneCoordsMap | DuellistCoordsMap;
+
+export type CardActionKey = keyof typeof cardReducers;
+export type DuellistActionKey = keyof typeof duellistReducers;
+type DuelActionKey = CardActionKey | DuellistActionKey;
 type CustomDuelReducers = {
-  [K in DuelActionKey]: (arg: ReducerArg, ...payload: any[]) => void;
+  [K in DuelActionKey]: (
+    stateMap: StateMap,
+    coordsMap: K extends CardActionKey ? ZoneCoordsMap : DuellistCoordsMap
+  ) => void;
 };
 type DuelReducers = {
   [K in DuelActionKey]: (
     state: Duel,
-    action: PayloadAction<{
-      duellistKey: DuellistKey;
-      payload: Parameters<typeof coreDuelReducers[K]>[1];
-    }>
+    action: PayloadAction<
+      K extends CardActionKey ? ZoneCoordsMap : DuellistCoordsMap
+    >
   ) => void;
 };
 
@@ -40,27 +67,25 @@ const initialState: Duel = getInitialDuel(playerCardMap, opponentCardMap);
 const transform = (map: CustomDuelReducers) => {
   const transformedMap = {} as DuelReducers;
   for (let key in map) {
-    transformedMap[key as DuelActionKey] = (state, action) => {
-      const duellistKey = action.payload.duellistKey;
-      const originatorState = state[duellistKey];
-      const targetState = state[getOtherDuellistKey(duellistKey)];
-      const customArg = {
-        state, // only use when other props cannot be lastingly referenced in reducer
-        originatorState,
-        targetState,
-        activeTurn: state.activeTurn,
-        activeField: state.activeField,
-      };
-      map[key as DuelActionKey](customArg, action.payload.payload);
+    transformedMap[key as CardActionKey] = (state, action) => {
+      const { dKey } = action.payload;
+      const stateMap = getStateMap(state, dKey);
+      map[key as DuelActionKey](stateMap, action.payload);
 
-      // after every core dispatch to the field state as above,
-      // the entire field passive/auto effects need to be recalculated
+      if (key !== "endTurn") {
+        // after every core dispatch to the field state as above,
+        // the entire field passive/auto effects need to be recalculated
 
-      // TODO: BUG
-      // endTurn flips the duellistKey in activeTurn, which effectively
-      // inverts what "originator" and "target" states refer to, meaning
-      // auto effects target the wrong side of the field
-      checkAutoEffects(customArg);
+        // endTurn() effectively inverts what the "originator" and
+        // "target" states refer to, causing auto effects to
+        // target the wrong side of the field.
+        // There are no effects that should run upon a turn ending in any case;
+        // start-of-turn events only happen after a card has been drawn,
+        // text has been displayed, etc.
+
+        // TODO: check isStartOfTurn flag instead of key matching
+        checkAutoEffects(stateMap);
+      }
     };
   }
   return transformedMap;
@@ -69,7 +94,7 @@ const transform = (map: CustomDuelReducers) => {
 export const duelSlice = createSlice({
   name: "duel",
   initialState,
-  reducers: transform(coreDuelReducers),
+  reducers: transform({ ...cardReducers, ...duellistReducers }),
 });
 
 export const { actions } = duelSlice;

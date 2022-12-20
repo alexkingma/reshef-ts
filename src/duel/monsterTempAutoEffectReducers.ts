@@ -4,229 +4,229 @@ import {
   getEffCon_updateMatchesInRow,
 } from "./cardEffectWrapped";
 import { Monster, TempAutoEffectMonster } from "./common";
-import {
-  MonsterAutoEffectReducer,
-  MonsterEffectReducer,
-} from "./coreDuelReducers";
+import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
   countMatchesInRow,
   getHighestAtkZoneIdx,
   hasMatchInRow,
+  isAlignment,
   isSpecificMonster,
   isType,
 } from "./duelUtil";
 
+export type MonsterAutoEffectReducer = (
+  stateMap: StateMap,
+  coordsMap: ZoneCoordsMap
+) => {
+  condition: () => boolean;
+  effect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
+}[];
+
 type MonsterTempAutoEffectReducers = {
-  [key in TempAutoEffectMonster]: MonsterAutoEffectReducer<MonsterEffectReducer>;
+  [key in TempAutoEffectMonster]: MonsterAutoEffectReducer;
 };
 
 export const monsterTempAutoEffectReducers: MonsterTempAutoEffectReducers = {
-  [Monster.SwampBattleguard]: ({ originatorState }) => {
+  [Monster.SwampBattleguard]: ({ state }, { ownMonsters }) => {
     const isLavaBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.LavaBattleguard);
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isLavaBattleguard],
+      [state, ownMonsters, isLavaBattleguard],
     ]);
     return [effCon];
   },
-  [Monster.MammothGraveyard]: ({ targetState }) => {
+  [Monster.MammothGraveyard]: ({ state }, { otherMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
-      targetState.monsterZones,
+      state,
+      otherMonsters,
       () => true,
       (z) => z.tempPowerUpLevel--
     );
     return [effCon];
   },
-  [Monster.PumpkingTheKingOfGhosts]: ({ originatorState }) => {
+  [Monster.PumpkingTheKingOfGhosts]: ({ state }, { ownMonsters }) => {
     const cards: CardName[] = [
       Monster.ArmoredZombie,
       Monster.DragonZombie,
       Monster.ClownZombie,
     ];
     const effCon = getEffCon_updateMatchesInRow(
-      originatorState.monsterZones,
+      state,
+      ownMonsters,
       (z) => cards.includes(z.card.name),
       (z) => z.tempPowerUpLevel++
     );
     return [effCon];
   },
-  [Monster.BusterBlader]: ({ targetState }) => {
+  [Monster.BusterBlader]: ({ state }, { dKey, ownMonsters }) => {
     const isDragonZone = (z: Zone) => isType(z, "Dragon");
     const isDragonCard = (c: MonsterCard) => c.type === "Dragon";
     const effCon = getEffCon_powerUpSelfConditional(
-      [[targetState.monsterZones, isDragonZone]],
-      [[targetState.graveyard, isDragonCard]]
+      [[state, ownMonsters, isDragonZone]],
+      [[state, dKey, isDragonCard]]
     );
     return [effCon];
   },
-  [Monster.MWarrior1]: ({ originatorState }) => {
+  [Monster.MWarrior1]: ({ state }, { ownMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
-      originatorState.monsterZones,
-      (z: OccupiedMonsterZone) => z.card.name !== Monster.MWarrior2,
+      state,
+      ownMonsters,
+      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior2,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
     );
     return [effCon];
   },
-  [Monster.MWarrior2]: ({ originatorState }) => {
+  [Monster.MWarrior2]: ({ state }, { ownMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
-      originatorState.monsterZones,
-      (z: OccupiedMonsterZone) => z.card.name !== Monster.MWarrior1,
+      state,
+      ownMonsters,
+      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior1,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
     );
     return [effCon];
   },
-  [Monster.NightmarePenguin]: ({ originatorState }) => {
+  [Monster.NightmarePenguin]: ({ state }, { ownMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
-      originatorState.monsterZones,
+      state,
+      ownMonsters,
       (z) => ["Aqua", "Fish", "Sea Serpent", "Reptile"].includes(z.card.type),
       (z) => z.tempPowerUpLevel++
     );
     return [effCon];
   },
-  [Monster.WodanTheResidentOfTheForest]: ({ originatorState }) => {
+  [Monster.WodanTheResidentOfTheForest]: ({ state }, { ownMonsters }) => {
     const isPlant = (z: Zone) => isType(z, "Plant");
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isPlant],
+      [state, ownMonsters, isPlant],
     ]);
     return [effCon];
   },
-  [Monster.PerfectMachineKing]: ({ originatorState, targetState }) => {
+  [Monster.PerfectMachineKing]: ({ state }, { ownMonsters, otherMonsters }) => {
     const isMachine = (z: Zone) => isType(z, "Machine");
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isMachine, 2],
-      [targetState.monsterZones, isMachine, 2],
+      [state, ownMonsters, isMachine, 2],
+      [state, otherMonsters, isMachine, 2],
     ]);
     return [effCon];
   },
-  [Monster.SliferTheSkyDragon]: ({ originatorState }) => {
+  [Monster.SliferTheSkyDragon]: ({ state }, { ownHand }) => {
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.hand, () => true, 3],
+      [state, ownHand, () => true, 3],
     ]);
     return [effCon];
   },
-  [Monster.LabyrinthTank]: ({ originatorState }) => {
+  [Monster.LabyrinthTank]: ({ state }, { ownMonsters }) => {
     const isLabyrinthWall = (z: Zone) =>
       isSpecificMonster(z, Monster.LabyrinthWall);
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isLabyrinthWall],
+      [state, ownMonsters, isLabyrinthWall],
     ]);
     return [effCon];
   },
-  [Monster.MachineKing]: ({ originatorState, targetState }) => {
+  [Monster.MachineKing]: ({ state }, { ownMonsters, otherMonsters }) => {
     const isMachine = (z: Zone) => isType(z, "Machine");
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isMachine],
-      [targetState.monsterZones, isMachine],
+      [state, ownMonsters, isMachine],
+      [state, otherMonsters, isMachine],
     ]);
     return [effCon];
   },
-  [Monster.Hoshiningen]: ({ originatorState, targetState }) => {
-    const matchLight = (z: OccupiedMonsterZone) => z.card.alignment === "Light";
-    const matchDark = (z: OccupiedMonsterZone) => z.card.alignment === "Dark";
+  [Monster.Hoshiningen]: ({ state }, { ownMonsters, otherMonsters }) => {
+    const matchLight = (z: OccupiedMonsterZone) => isAlignment(z, "Light");
+    const matchDark = (z: OccupiedMonsterZone) => isAlignment(z, "Dark");
     const up = (z: OccupiedMonsterZone) => z.tempPowerUpLevel++;
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
     return [
-      getEffCon_updateMatchesInRow(
-        originatorState.monsterZones,
-        matchLight,
-        up
-      ),
-      getEffCon_updateMatchesInRow(
-        originatorState.monsterZones,
-        matchDark,
-        down
-      ),
-      getEffCon_updateMatchesInRow(targetState.monsterZones, matchLight, up),
-      getEffCon_updateMatchesInRow(targetState.monsterZones, matchDark, down),
+      getEffCon_updateMatchesInRow(state, ownMonsters, matchLight, up),
+      getEffCon_updateMatchesInRow(state, ownMonsters, matchDark, down),
+      getEffCon_updateMatchesInRow(state, otherMonsters, matchLight, up),
+      getEffCon_updateMatchesInRow(state, otherMonsters, matchDark, down),
     ];
   },
-  [Monster.LavaBattleguard]: ({ originatorState }) => {
+  [Monster.LavaBattleguard]: ({ state }, { ownMonsters }) => {
     const isSwampBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.SwampBattleguard);
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isSwampBattleguard],
+      [state, ownMonsters, isSwampBattleguard],
     ]);
     return [effCon];
   },
-  [Monster.BladeKnight]: ({ originatorState }, monsterIdx) => {
+  [Monster.BladeKnight]: ({ state }, { ownHand }) => {
     return [
       {
         condition: () => {
-          return countMatchesInRow(originatorState.hand) <= 1;
+          return countMatchesInRow(state, ownHand) <= 1;
         },
-        effect: () => {
-          tempPowerUp(originatorState, monsterIdx);
+        effect: ({ state }, { zoneCoords }) => {
+          tempPowerUp(state, zoneCoords);
         },
       },
     ];
   },
-  [Monster.DarkJeroid]: ({ targetState }) => {
+  [Monster.DarkJeroid]: ({ state }, { otherMonsters }) => {
     return [
       {
         condition: () => {
-          return hasMatchInRow(targetState.monsterZones);
+          return hasMatchInRow(state, otherMonsters);
         },
         effect: () => {
-          const targetIdx = getHighestAtkZoneIdx(targetState.monsterZones);
+          const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
           if (targetIdx === -1) return;
-          tempPowerDown(targetState, targetIdx);
+          tempPowerDown(state, [...otherMonsters, targetIdx]);
         },
       },
     ];
   },
-  [Monster.WitchsApprentice]: ({ originatorState, targetState }) => {
+  [Monster.WitchsApprentice]: ({ state }, { ownMonsters, otherMonsters }) => {
     const matchLight = (z: OccupiedMonsterZone) => z.card.alignment === "Light";
     const matchDark = (z: OccupiedMonsterZone) => z.card.alignment === "Dark";
     const up = (z: OccupiedMonsterZone) => z.tempPowerUpLevel++;
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
     return [
-      getEffCon_updateMatchesInRow(
-        originatorState.monsterZones,
-        matchLight,
-        down
-      ),
-      getEffCon_updateMatchesInRow(originatorState.monsterZones, matchDark, up),
-      getEffCon_updateMatchesInRow(targetState.monsterZones, matchLight, down),
-      getEffCon_updateMatchesInRow(targetState.monsterZones, matchDark, up),
+      getEffCon_updateMatchesInRow(state, ownMonsters, matchLight, down),
+      getEffCon_updateMatchesInRow(state, ownMonsters, matchDark, up),
+      getEffCon_updateMatchesInRow(state, otherMonsters, matchLight, down),
+      getEffCon_updateMatchesInRow(state, otherMonsters, matchDark, up),
     ];
   },
-  [Monster.CommandAngel]: ({ originatorState }) => {
+  [Monster.CommandAngel]: ({ state }, { ownMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
-      originatorState.monsterZones,
-      (z) => z.card.type === "Fairy",
+      state,
+      ownMonsters,
+      (z) => isType(z, "Fairy"),
       (z) => z.tempPowerUpLevel++
     );
     return [effCon];
   },
-  [Monster.ToonDarkMagicianGirl]: ({ originatorState }) => {
+  [Monster.ToonDarkMagicianGirl]: ({ state }, { dKey }) => {
     const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
     const effCon = getEffCon_powerUpSelfConditional(
       [],
-      [[originatorState.graveyard, isDarkMagician]]
+      [[state, dKey, isDarkMagician]]
     );
     return [effCon];
   },
-  [Monster.MasterOfDragonSoldier]: ({ originatorState }) => {
+  [Monster.MasterOfDragonSoldier]: ({ state }, { ownMonsters }) => {
     const isDragon = (z: Zone) => isType(z, "Dragon");
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isDragon],
+      [state, ownMonsters, isDragon],
     ]);
     return [effCon];
   },
-  [Monster.DarkMagicianGirl]: ({ originatorState }) => {
+  [Monster.DarkMagicianGirl]: ({ state }, { dKey }) => {
     const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
     const effCon = getEffCon_powerUpSelfConditional(
       [],
-      [[originatorState.graveyard, isDarkMagician]]
+      [[state, dKey, isDarkMagician]]
     );
     return [effCon];
   },
-  [Monster.InsectQueen]: ({ originatorState }) => {
+  [Monster.InsectQueen]: ({ state }, { ownMonsters }) => {
     const isInsect = (z: Zone) => isType(z, "Insect");
     const effCon = getEffCon_powerUpSelfConditional([
-      [originatorState.monsterZones, isInsect],
+      [state, ownMonsters, isInsect],
     ]);
     return [effCon];
   },
