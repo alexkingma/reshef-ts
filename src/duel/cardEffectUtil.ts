@@ -1,6 +1,7 @@
 import { calculateAttack } from "./combatUtil";
 import { BattlePosition, Field, Monster, Orientation, RowKey } from "./common";
 import {
+  containsAllCards,
   countMatchesInRow,
   generateOccupiedMonsterZone,
   getCard,
@@ -203,6 +204,27 @@ export const magnetWarriorMergeAttempt = (
   specialSummon(state, dKey, Monster.ValkyrionTheMagnaWarrior);
 };
 
+export const xyzMergeAttempt = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  mergeCombos: [inputs: Monster[], output: Monster][]
+) => {
+  const [dKey, rKey, colIdx] = zoneCoords;
+  const rowCoords: RowCoords = [dKey, rKey];
+
+  for (const [inputMons, outputMon] of mergeCombos) {
+    if (containsAllCards(state, rowCoords, ...inputMons)) {
+      const idxsToClear = [
+        colIdx,
+        ...inputMons.map((m) => getFirstMatchInRowIdx(state, rowCoords, m)),
+      ];
+      clearZones(state, rowCoords, idxsToClear);
+      specialSummon(state, dKey, outputMon, { isLocked: true });
+      break; // stop looking for merge combos after a match succeeds
+    }
+  }
+};
+
 export const resurrectOwn = (state: Duel, dKey: DuellistKey) => {
   if (!state[dKey].graveyard) return;
 
@@ -254,29 +276,37 @@ export const setField = (state: Duel, field: Field) => {
   state.activeField = field;
 };
 
-export const destroyHighestAtk = (state: Duel, dKey: DuellistKey) => {
+export const destroyHighestAtk = (
+  state: Duel,
+  dKey: DuellistKey,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
-  if (!countMatchesInRow(state, rowCoords)) {
+  if (!countMatchesInRow(state, rowCoords, condition)) {
     // no monsters exist, destroy nothing
     return;
   }
 
   const coords = [
     ...rowCoords,
-    getHighestAtkZoneIdx(state, rowCoords),
+    getHighestAtkZoneIdx(state, rowCoords, condition),
   ] as ZoneCoords;
   destroyAtCoords(state, coords);
 };
 
-export const destroyFirstFound = (state: Duel, rowCoords: RowCoords) => {
-  if (!countMatchesInRow(state, rowCoords)) {
+export const destroyFirstFound = (
+  state: Duel,
+  rowCoords: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  if (!countMatchesInRow(state, rowCoords, condition)) {
     // no monsters exist, destroy nothing
     return;
   }
 
   const coords = [
     ...rowCoords,
-    getFirstOccupiedZoneIdx(state, rowCoords),
+    getFirstOccupiedZoneIdx(state, rowCoords, condition),
   ] as ZoneCoords;
   destroyAtCoords(state, coords);
 };

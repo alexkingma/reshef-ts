@@ -5,6 +5,7 @@ import {
   clearZone,
   convertMonster,
   destroyAtCoords,
+  destroyFirstFound,
   destroyHighestAtk,
   destroyRow,
   directAttack,
@@ -21,6 +22,7 @@ import {
   specialSummon,
   subsumeMonster,
   updateMatchesInRow,
+  xyzMergeAttempt,
 } from "./cardEffectUtil";
 import {
   burnOther,
@@ -43,11 +45,16 @@ import {
 } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
-  containsCard,
+  containsAnyCards,
+  countMatchesInRow,
   getCard,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
+  hasMatchInRow,
+  isFaceDown,
+  isFaceUp,
   isSpecificMonster,
+  isSpell,
   isType,
   shuffle,
 } from "./duelUtil";
@@ -138,11 +145,6 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
   [Monster.SpiritOfTheBooks]: ({ state }, { dKey }) => {
     specialSummon(state, dKey, Monster.BooKoo);
   },
-  [Monster.XYZDragonCannon]: ({ originatorState, targetState }) => {
-    // TODO
-    // destroy a monster on the opponent's field by discarding the far left card in the own hand
-    // left-most card in hand is discarded, if no cards, no penalty
-  },
   [Monster.Nemuriko]: ({ state, targetState }, { otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) return; // no monster to target
@@ -160,9 +162,6 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
   },
   [Monster.ToadMaster]: ({ state }, { dKey }) => {
     specialSummon(state, dKey, Monster.FrogTheJam);
-  },
-  [Monster.XHeadCannon]: ({ originatorState }, { zoneCoords }) => {
-    // TODO
   },
   [Monster.FireReaper]: burnOther(50),
   [Monster.Doron]: ({ state }, { dKey }) => {
@@ -262,31 +261,63 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
   },
   [Monster.Skelengel]: draw_Wrapped(),
   [Monster.KingsKnight]: ({ state }, { dKey, ownMonsters }) => {
-    if (!containsCard(state, ownMonsters, Monster.QueensKnight)) {
+    if (!containsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
       return;
     }
     specialSummon(state, dKey, Monster.JacksKnight);
   },
-  [Monster.YDragonHead]: ({ originatorState, targetState }, monsterIdx) => {
-    // TODO
+  [Monster.XHeadCannon]: ({ state }, { zoneCoords }) => {
+    // note that x/y/z CANNOT merge with their "stage 2" counterparts
+    // e.g. X cannot merge with YZ, only with individual Y and/or Z pieces
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.YDragonHead, Monster.ZMetalTank], Monster.XYZDragonCannon],
+      [[Monster.YDragonHead], Monster.XYDragonCannon],
+      [[Monster.ZMetalTank], Monster.XZTankCannon],
+    ]);
   },
-  [Monster.ZMetalTank]: ({ originatorState }) => {
-    // TODO
+  [Monster.YDragonHead]: ({ state }, { zoneCoords }) => {
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.XHeadCannon, Monster.ZMetalTank], Monster.XYZDragonCannon],
+      [[Monster.XHeadCannon], Monster.XYDragonCannon],
+      [[Monster.ZMetalTank], Monster.YZTankDragon],
+    ]);
   },
-  [Monster.XYDragonCannon]: ({ originatorState }, { zoneCoords }) => {
-    // TODO
-    // destroy a face-up spell or trap on the foe's field by discarding the far left card in the own hand.
-    // see xyz
+  [Monster.ZMetalTank]: ({ state }, { zoneCoords }) => {
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.XHeadCannon, Monster.YDragonHead], Monster.XYZDragonCannon],
+      [[Monster.XHeadCannon], Monster.XZTankCannon],
+      [[Monster.YDragonHead], Monster.YZTankDragon],
+    ]);
   },
-  [Monster.XZTankCannon]: ({ originatorState, targetState }) => {
-    // TODO
-    // destroy a face-down spell or trap on the foe's field by discarding the far left card in the own hand.
-    // see xyz
+  [Monster.XYDragonCannon]: ({ state }, { otherSpellTrap, ownHand }) => {
+    // destroy a [face-up spell/trap] by discarding from hand
+    if (!hasMatchInRow(state, otherSpellTrap, isFaceUp)) return;
+    destroyFirstFound(state, ownHand);
+    destroyFirstFound(state, otherSpellTrap, isFaceUp);
   },
-  [Monster.YZTankDragon]: ({ originatorState, targetState }) => {
-    // TODO
-    // destroy a face-down monster on the foe's field by discarding the far left card in the own hand.
-    // see xyz
+  [Monster.XZTankCannon]: ({ state }, { otherSpellTrap, ownHand }) => {
+    // destroy a [face-down spell/trap] by discarding from hand
+    if (!hasMatchInRow(state, otherSpellTrap, isFaceDown)) return;
+    destroyFirstFound(state, ownHand);
+    destroyFirstFound(state, otherSpellTrap, isFaceDown);
+  },
+  [Monster.YZTankDragon]: (
+    { state },
+    { otherDKey, otherMonsters, ownHand }
+  ) => {
+    // destroy a [face-down monster] by discarding from hand
+    if (!hasMatchInRow(state, otherMonsters, isFaceDown)) return;
+    destroyFirstFound(state, ownHand);
+    destroyHighestAtk(state, otherDKey, isFaceDown);
+  },
+  [Monster.XYZDragonCannon]: (
+    { state },
+    { otherDKey, otherMonsters, ownHand }
+  ) => {
+    // destroy [any monster] by discarding from hand
+    if (!hasMatchInRow(state, otherMonsters)) return;
+    destroyFirstFound(state, ownHand);
+    destroyHighestAtk(state, otherDKey);
   },
   [Monster.ElectricLizard]: ({ state, targetState }, { otherMonsters }) => {
     const monsterIdx = getHighestAtkZoneIdx(state, otherMonsters);
@@ -317,11 +348,11 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     specialSummon(state, dKey, Monster.Gernia);
     burn(state, otherDKey, 1000);
   },
-  [Monster.DarkPaladin]: ({ state }, { ownHand }) => {
-    // TODO
-    // destroy a spell on the opponent's field by discarding the far left card in the own hand
-    // doesn't discard if no spells are found/destroyed
-    // destroyFirstFound(state, ownHand);
+  [Monster.DarkPaladin]: ({ state }, { ownHand, otherSpellTrap }) => {
+    // destroy a [spell] by discarding from hand
+    if (!hasMatchInRow(state, otherSpellTrap, isSpell)) return;
+    destroyFirstFound(state, ownHand);
+    destroyFirstFound(state, otherSpellTrap, isSpell);
   },
   [Monster.Trent]: setField_Wrapped(Field.Forest),
   [Monster.BerserkDragon]: (
@@ -372,24 +403,17 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     permPowerUp(state, zoneCoords);
   },
   [Monster.ValkyrionTheMagnaWarrior]: (
-    { state, originatorState },
-    { dKey, zoneCoords }
+    { state },
+    { dKey, zoneCoords, ownMonsters }
   ) => {
     // separate into Alpha, Beta, and Gamma if there are two or more open spaces
-    const numFreeZones = originatorState.monsterZones.filter(
-      (z) => !z.isOccupied
-    ).length;
+    const numFreeZones = 5 - countMatchesInRow(state, ownMonsters);
     if (numFreeZones < 2) return; // separation fails
+    const isLocked = { isLocked: true };
     clearZone(state, zoneCoords);
-    specialSummon(state, dKey, Monster.AlphaTheMagnetWarrior, {
-      isLocked: true,
-    });
-    specialSummon(state, dKey, Monster.BetaTheMagnetWarrior, {
-      isLocked: true,
-    });
-    specialSummon(state, dKey, Monster.GammaTheMagnetWarrior, {
-      isLocked: true,
-    });
+    specialSummon(state, dKey, Monster.AlphaTheMagnetWarrior, isLocked);
+    specialSummon(state, dKey, Monster.BetaTheMagnetWarrior, isLocked);
+    specialSummon(state, dKey, Monster.GammaTheMagnetWarrior, isLocked);
   },
   [Monster.FGD]: destroyRows([
     [DuellistKey.Opponent, RowKey.Monster],

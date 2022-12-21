@@ -27,7 +27,7 @@ import {
 } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
-  containsCard,
+  containsAnyCards,
   countMatchesInRow,
   generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
@@ -194,7 +194,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     convertMonster(state, dKey);
   },
   [Spell.Multiply]: ({ state, originatorState }, { ownMonsters }) => {
-    if (!containsCard(state, ownMonsters, Monster.Kuriboh)) return;
+    if (!containsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
     originatorState.monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;

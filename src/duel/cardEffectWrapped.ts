@@ -54,7 +54,7 @@ export const destroyRows =
 export const destroyHighestAtk =
   () =>
   ({ state, targetState }: StateMap, { otherMonsters }: CoordsMap) => {
-    if (!targetState.monsterZones.filter((z) => z.isOccupied).length) {
+    if (!targetState.monsterZones.some((z) => z.isOccupied)) {
       // no monsters exist, destroy nothing
       return;
     }

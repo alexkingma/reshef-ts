@@ -140,9 +140,11 @@ export const hasEmptyZone = (state: Duel, rowCoords: RowCoords) => {
 
 export const getFirstOccupiedZoneIdx = (
   state: Duel,
-  [dKey, rKey]: RowCoords
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
 ) => {
-  return state[dKey][rKey].findIndex((z) => z.isOccupied) as FieldCol | -1;
+  const zone = state[dKey][rKey];
+  return zone.findIndex((z) => z.isOccupied && condition(z)) as FieldCol | -1;
 };
 
 export const getHighestAtkZoneIdx = (
@@ -235,12 +237,14 @@ export const getNumTributesRequired = ({
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
 
-export const containsCard = (
+export const containsAnyCards = (
   state: Duel,
   rowCoords: RowCoords,
-  cardName: CardName
+  ...cardNames: CardName[]
 ) => {
-  return hasMatchInRow(state, rowCoords, (z) => z.card.name === cardName);
+  return cardNames.some((c) =>
+    hasMatchInRow(state, rowCoords, (z) => z.card.name === c)
+  );
 };
 
 export const containsAllCards = (
@@ -250,7 +254,7 @@ export const containsAllCards = (
 ) => {
   // all provided cards must be present in the given row
   // alternatively: none of the provided cards may NOT be present
-  return !cardNames.filter((c) => !containsCard(state, rowCoords, c)).length;
+  return cardNames.every((c) => containsAnyCards(state, rowCoords, c));
 };
 
 export const graveyardContainsCards = (
@@ -259,7 +263,7 @@ export const graveyardContainsCards = (
   ...cardNames: CardName[]
 ) => {
   if (!state[dKey].graveyard) return false; // graveyard is empty
-  return cardNames.findIndex((c) => c === state[dKey].graveyard) !== -1;
+  return cardNames.some((c) => c === state[dKey].graveyard);
 };
 
 export const hasMatchInRow = (
@@ -316,6 +320,15 @@ export const isSpecificMonster = (
   z: Zone,
   cardName: CardName
 ): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
+
+const isOrientation = (z: Zone, o: Orientation): z is OccupiedMonsterZone =>
+  z.isOccupied && z.orientation === o;
+
+export const isFaceDown = (z: OccupiedZone) =>
+  isOrientation(z, Orientation.FaceDown);
+
+export const isFaceUp = (z: OccupiedZone) =>
+  isOrientation(z, Orientation.FaceUp);
 
 export const getExodiaCards = () => {
   return [

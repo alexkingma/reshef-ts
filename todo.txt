@@ -53,7 +53,9 @@ major chunks of game state:
 -------------------------------------------------------------------
 
 todo summary:
-  finish the last dozen or so manual monster effects (XYZ/DarkPaladin, etc.)
+  flip cards to face-up
+    atk-pos monsters flip on own turn end
+    also flip monsters after attacking, being attacked, or activating an effect
   trap card effects/reducer map
     FINAL cards auto destroy if F is not on the board
   scheduling system, to inform about timed future events
