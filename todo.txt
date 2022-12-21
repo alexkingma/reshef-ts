@@ -53,13 +53,7 @@ major chunks of game state:
 -------------------------------------------------------------------
 
 todo summary:
-  start-of-turn isn't checked for effects    
-    add a isStartOfTurn flag to the activeTurn state
-    it gets set every time endTurn is called
-    each time update is called, this flag determines if we check startOfTurn or perpetual auto effects
-  are there places where i need to know whose turn it is?
-    if so, add a prop to state so i know if it's self/foe turn
-    prefer adding vars to state over fracturing condition logic outside of the reducer files
+  finish the last dozen or so manual monster effects (XYZ/DarkPaladin, etc.)
   trap card effects/reducer map
     FINAL cards auto destroy if F is not on the board
   scheduling system, to inform about timed future events

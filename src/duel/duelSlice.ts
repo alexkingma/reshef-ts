@@ -76,14 +76,13 @@ const transform = (map: CustomDuelReducers) => {
         // after every core dispatch to the field state as above,
         // the entire field passive/auto effects need to be recalculated
 
-        // endTurn() effectively inverts what the "originator" and
-        // "target" states refer to, causing auto effects to
-        // target the wrong side of the field.
-        // There are no effects that should run upon a turn ending in any case;
-        // start-of-turn events only happen after a card has been drawn,
-        // text has been displayed, etc.
-
-        // TODO: check isStartOfTurn flag instead of key matching
+        // However, once endTurn has been dispatched and isStartOfTurn is set,
+        // the target/originator states essentially get swapped, causing buggy
+        // behaviour until the cycle has been started fresh from a new dispatch.
+        // Since no events need to be reacted to immediately post-endTurn events,
+        // we can safely ignore this round of checks in favour of waiting for the
+        // start-of-turn dispatch, which prompts "It's my turn" dialogue, card-
+        // drawing, start-of-turn-only effects, etc.
         checkAutoEffects(stateMap);
       }
     };

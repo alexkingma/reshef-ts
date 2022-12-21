@@ -51,6 +51,7 @@ interface Duel {
 
 interface Turn {
   duellistKey: DuellistKey;
+  isStartOfTurn: boolean;
   hasNormalSummoned: boolean;
   numTributedMonsters: number;
 }

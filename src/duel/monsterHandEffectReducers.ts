@@ -1,7 +1,7 @@
-import { clearZone, destroyAtCoords, specialSummon } from "./cardEffectUtil";
+import { clearZone, destroyFirstFound, specialSummon } from "./cardEffectUtil";
 import { HandEffectMonster, Monster } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
-import { countMatchesInRow } from "./duelUtil";
+import { countMatchesInRow, isStartOfEitherTurn } from "./duelUtil";
 
 type MonsterAutoEffectReducer = (
   state: StateMap,
@@ -16,21 +16,21 @@ type MonsterAutoEffectReducers = {
 };
 
 export const monsterHandEffectReducers: MonsterAutoEffectReducers = {
-  [Monster.LavaGolem]: ({ state }, { otherMonsters, zoneCoords, dKey }) => {
+  [Monster.LavaGolem]: ({ state }, { otherMonsters }) => {
     return [
       {
         condition: () => {
-          // TODO -- start of turn
-          return countMatchesInRow(state, otherMonsters) >= 2;
+          return (
+            isStartOfEitherTurn(state) &&
+            countMatchesInRow(state, otherMonsters) >= 2
+          );
         },
-        effect: () => {
+        effect: ({ state }, { zoneCoords, otherDKey, otherMonsters }) => {
           // If this is in the own hand, it can be made to appear on
           // the enemy's field for two enemy monsters as tributes.
-
-          // TODO: make sure the firstZoneIdx is different each time when called twice
-          destroyAtCoords(state, zoneCoords);
-          destroyAtCoords(state, zoneCoords);
-          specialSummon(state, dKey, Monster.LavaGolem);
+          destroyFirstFound(state, otherMonsters);
+          destroyFirstFound(state, otherMonsters);
+          specialSummon(state, otherDKey, Monster.LavaGolem);
           clearZone(state, zoneCoords);
         },
       },

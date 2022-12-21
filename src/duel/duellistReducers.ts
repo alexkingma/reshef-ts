@@ -1,12 +1,11 @@
-import { draw } from "./cardEffectWrapped";
+import { draw } from "./cardEffectUtil";
 import { DuellistCoordsMap, StateMap } from "./duelSlice";
-import { shuffle } from "./duelUtil";
+import { checkAutoEffects, shuffle } from "./duelUtil";
 
 export const duellistReducers = {
   shuffle: ({ originatorState }: StateMap) => {
     shuffle(originatorState.deck);
   },
-  draw: draw(),
   endTurn: (
     { originatorState, activeTurn }: StateMap,
     { otherDKey }: DuellistCoordsMap
@@ -17,7 +16,19 @@ export const duellistReducers = {
       zone.isLocked = false;
     });
     activeTurn.duellistKey = otherDKey;
+    activeTurn.isStartOfTurn = true;
     activeTurn.hasNormalSummoned = false;
     activeTurn.numTributedMonsters = 0;
+  },
+  startTurn: (stateMap: StateMap, { dKey }: DuellistCoordsMap) => {
+    // start-of-turn effects execute here
+    checkAutoEffects(stateMap);
+
+    const { state, activeTurn } = stateMap;
+    activeTurn.isStartOfTurn = false;
+
+    // displaying dialogue prompts and Draw Phase (in spirit)
+    // takes place AFTER start-of-turn field checks
+    draw(state, dKey);
   },
 };

@@ -12,6 +12,7 @@ import {
 } from "./common";
 import { DuellistCoordsMap, StateMap, ZoneCoordsMap } from "./duelSlice";
 import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
+import { monsterHandEffectReducers } from "./monsterHandEffectReducers";
 import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
 import { MonsterAutoEffectReducer } from "./monsterTempAutoEffectReducers";
 
@@ -41,6 +42,7 @@ export const getInitialDuel = (
     p2: generateNewDuellist(cardQuantMap2),
     activeTurn: {
       duellistKey: "p1",
+      isStartOfTurn: true,
       hasNormalSummoned: false,
       numTributedMonsters: 0,
     },
@@ -213,6 +215,18 @@ export const getDuellistCoordsMap = (dKey: DuellistKey): DuellistCoordsMap => {
     otherSpellTrap: [otherDKey, RowKey.SpellTrap],
     otherHand: [otherDKey, RowKey.Hand],
   };
+};
+
+export const isOwnTurn = (state: Duel, dKey: DuellistKey) => {
+  return state.activeTurn.duellistKey === dKey;
+};
+
+export const isStartOfTurn = (state: Duel, dKey: DuellistKey) => {
+  return state.activeTurn.isStartOfTurn && isOwnTurn(state, dKey);
+};
+
+export const isStartOfEitherTurn = (state: Duel) => {
+  return state.activeTurn.isStartOfTurn;
 };
 
 export const getNumTributesRequired = ({
@@ -393,29 +407,47 @@ export const checkMonsterAutoEffect = (
 export const checkPermAutoEffects = (stateMap: StateMap) => {
   const { state, activeTurn } = stateMap;
 
-  const activeKey = activeTurn.duellistKey;
-  const inactiveKey = getOtherDuellistKey(activeKey);
-  checkGraveyardEffect(stateMap, activeKey);
-  checkGraveyardEffect(stateMap, inactiveKey);
+  const dKey = activeTurn.duellistKey;
+  const otherDKey = getOtherDuellistKey(dKey);
+  const originatorState = state[dKey];
+  const targetState = state[otherDKey];
 
-  state[activeKey].monsterZones.forEach((_, i) => {
+  checkGraveyardEffect(stateMap, dKey);
+  checkGraveyardEffect(stateMap, otherDKey);
+
+  originatorState.monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
       stateMap,
-      getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol]),
+      getZoneCoordsMap([dKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
   });
 
-  state[inactiveKey].monsterZones.forEach((_, i) => {
+  targetState.monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
       stateMap,
-      getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol]),
+      getZoneCoordsMap([otherDKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
   });
 
   // TODO: spell/trap zones (DCJ, MoP, ... are there more?)
-  // TODO: hand zones (just Lava Golem?)
+
+  originatorState.hand.forEach((_, i) => {
+    checkMonsterAutoEffect(
+      stateMap,
+      getZoneCoordsMap([dKey, RowKey.Hand, i as FieldCol]),
+      monsterHandEffectReducers
+    );
+  });
+
+  targetState.hand.forEach((_, i) => {
+    checkMonsterAutoEffect(
+      stateMap,
+      getZoneCoordsMap([otherDKey, RowKey.Hand, i as FieldCol]),
+      monsterHandEffectReducers
+    );
+  });
 };
 
 export const checkAutoEffects = (stateMap: StateMap) => {

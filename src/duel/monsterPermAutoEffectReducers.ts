@@ -17,6 +17,8 @@ import {
   graveyardContainsCards,
   hasMatchInRow,
   isAlignment,
+  isStartOfEitherTurn,
+  isStartOfTurn,
   isTrap,
 } from "./duelUtil";
 
@@ -62,14 +64,12 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
           return !graveyardContainsCards(state, dKey, ...getExodiaCards());
         },
         effect: () => {
-          // If there are no Exodia parts in the graveyard, it disappears
           destroyAtCoords(state, zoneCoords);
         },
       },
       {
         condition: () => {
-          // TODO: start of own turn
-          return true;
+          return isStartOfTurn(state, dKey);
         },
         effect: ({ state }, { zoneCoords }) => {
           permPowerUp(state, zoneCoords);
@@ -89,12 +89,11 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.CastleOfDarkIllusions]: () => {
+  [Monster.CastleOfDarkIllusions]: ({ state }) => {
     return [
       {
         condition: () => {
-          // TODO: start of BOTH turns
-          return true;
+          return isStartOfEitherTurn(state);
         },
         effect: ({ state }, { ownMonsters }) => {
           setField(state, Field.Yami);
@@ -103,12 +102,11 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.SatelliteCannon]: () => {
+  [Monster.SatelliteCannon]: ({ state }, { dKey }) => {
     return [
       {
         condition: () => {
-          // TODO: start of own turn
-          return true;
+          return isStartOfTurn(state, dKey);
         },
         effect: ({ state }, { zoneCoords }) => {
           permPowerUp(state, zoneCoords, 2);
@@ -116,12 +114,11 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.LavaGolem]: () => {
+  [Monster.LavaGolem]: ({ state }, { dKey }) => {
     return [
       {
         condition: () => {
-          // TODO: start of own turn
-          return true;
+          return isStartOfTurn(state, dKey);
         },
         effect: ({ state }, { dKey }) => {
           burn(state, dKey, 700);
@@ -129,12 +126,13 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.ViserDes]: ({ state }, { otherMonsters }) => {
+  [Monster.ViserDes]: ({ state }, { dKey, otherMonsters }) => {
     return [
       {
         condition: () => {
-          // TODO: start of own turn
-          return hasMatchInRow(state, otherMonsters);
+          return (
+            isStartOfTurn(state, dKey) && hasMatchInRow(state, otherMonsters)
+          );
         },
         effect: ({ state }, { otherDKey }) => {
           powerDownHighestAtk(state, otherDKey);
@@ -142,12 +140,11 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.MirageKnight]: () => {
+  [Monster.MirageKnight]: ({ state }, { dKey }) => {
     return [
       {
         condition: () => {
-          // TODO: start of own turn
-          return true;
+          return isStartOfTurn(state, dKey);
         },
         effect: ({ state }, { zoneCoords, dKey }) => {
           clearZone(state, zoneCoords);
@@ -157,12 +154,11 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.BerserkDragon]: () => {
+  [Monster.BerserkDragon]: ({ state }, { otherDKey }) => {
     return [
       {
         condition: () => {
-          // TODO: start of FOE's turn
-          return true;
+          return isStartOfTurn(state, otherDKey);
         },
         effect: ({ state }, { zoneCoords }) => {
           permPowerDown(state, zoneCoords);

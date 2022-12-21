@@ -268,6 +268,19 @@ export const destroyHighestAtk = (state: Duel, dKey: DuellistKey) => {
   destroyAtCoords(state, coords);
 };
 
+export const destroyFirstFound = (state: Duel, rowCoords: RowCoords) => {
+  if (!countMatchesInRow(state, rowCoords)) {
+    // no monsters exist, destroy nothing
+    return;
+  }
+
+  const coords = [
+    ...rowCoords,
+    getFirstOccupiedZoneIdx(state, rowCoords),
+  ] as ZoneCoords;
+  destroyAtCoords(state, coords);
+};
+
 export const updateMatchesInRow = (
   state: Duel,
   [dKey, rKey]: RowCoords,
@@ -397,13 +410,4 @@ export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
   } catch (e) {
     // no space in hand, do nothing
   }
-};
-
-export const destroyLeftMostCard = (state: Duel, rowCoords: RowCoords) => {
-  // target the first card found starting from left, NOT specifically the card at idx 0
-  const targetIdx = getFirstOccupiedZoneIdx(state, rowCoords);
-  if (targetIdx !== -1) {
-    destroyAtCoords(state, [...rowCoords, targetIdx]);
-  }
-  return targetIdx;
 };

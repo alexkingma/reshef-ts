@@ -317,11 +317,11 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
     specialSummon(state, dKey, Monster.Gernia);
     burn(state, otherDKey, 1000);
   },
-  [Monster.DarkPaladin]: ({ originatorState, targetState }) => {
+  [Monster.DarkPaladin]: ({ state }, { ownHand }) => {
     // TODO
     // destroy a spell on the opponent's field by discarding the far left card in the own hand
     // doesn't discard if no spells are found/destroyed
-    // destroyLeftMostCard(originatorState, FieldRow.PlayerHand);
+    // destroyFirstFound(state, ownHand);
   },
   [Monster.Trent]: setField_Wrapped(Field.Forest),
   [Monster.BerserkDragon]: (

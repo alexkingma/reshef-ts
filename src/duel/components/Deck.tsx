@@ -9,15 +9,13 @@ interface Props {
 
 export const DuellistDeck = ({ duellistKey }: Props) => {
   const { deck } = useAppSelector(selectDuellist(duellistKey));
-  const { shuffle, draw } = useDuellistActions(duellistKey);
+  const { shuffle } = useDuellistActions(duellistKey);
 
   return (
     <>
       <div>
         Deck:&nbsp;
         <button onClick={() => shuffle()}>Shuffle</button>
-        {/* TODO: remove junk coordsMap arg */}
-        <button onClick={() => draw()}>Draw</button>
         <ol>
           {deck.slice(0, 5).map((card, idx) => (
             <li key={idx}>{card.name}</li>

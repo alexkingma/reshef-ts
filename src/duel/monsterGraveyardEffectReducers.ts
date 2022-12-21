@@ -1,18 +1,13 @@
 import {
   clearGraveyard,
-  destroyAtCoords,
+  destroyFirstFound,
   destroyHighestAtk,
   resurrectOwn,
   specialSummon,
 } from "./cardEffectUtil";
-import { GraveyardEffectMonster, Monster, RowKey } from "./common";
+import { GraveyardEffectMonster, Monster } from "./common";
 import { DuellistCoordsMap, StateMap } from "./duelSlice";
-import {
-  countMatchesInRow,
-  getFirstOccupiedZoneIdx,
-  getOtherDuellistKey,
-  hasEmptyZone,
-} from "./duelUtil";
+import { countMatchesInRow, hasEmptyZone, isStartOfTurn } from "./duelUtil";
 
 type GraveyardEffectReducer = (
   stateMap: StateMap,
@@ -43,25 +38,19 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
       },
     ];
   },
-  [Monster.Helpoemer]: ({ state }, { dKey }) => {
+  [Monster.Helpoemer]: ({ state }, { otherDKey, otherHand }) => {
     return [
       {
         condition: () => {
-          // TODO: start of foe's turn (verify)
           return (
-            countMatchesInRow(state, [
-              getOtherDuellistKey(dKey),
-              RowKey.Hand,
-            ]) >= 3
+            isStartOfTurn(state, otherDKey) &&
+            countMatchesInRow(state, otherHand) >= 3
           );
         },
         effect: ({ state }, { otherHand }) => {
           // If this is in the own graveyard on the enemy's turn, and if
           // the foe has 3 or more cards in hand, the foe must discard one.
-          const handIdx = getFirstOccupiedZoneIdx(state, [
-            ...otherHand,
-          ]) as FieldCol;
-          destroyAtCoords(state, [...otherHand, handIdx]);
+          destroyFirstFound(state, otherHand);
         },
       },
     ];
@@ -79,27 +68,25 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
       },
     ];
   },
-  [Monster.VampireLord]: ({ state }, { ownMonsters }) => {
+  [Monster.VampireLord]: ({ state }, { dKey, ownMonsters }) => {
     return [
       {
         condition: () => {
-          return hasEmptyZone(state, ownMonsters);
+          return isStartOfTurn(state, dKey) && hasEmptyZone(state, ownMonsters);
         },
         effect: ({ state }, { dKey }) => {
-          // in the own graveyard at the start of your turn == resurrected
           resurrectOwn(state, dKey);
         },
       },
     ];
   },
-  [Monster.DifferentDimensionDragon]: ({ state }, { ownMonsters }) => {
+  [Monster.DifferentDimensionDragon]: ({ state }, { dKey, ownMonsters }) => {
     return [
       {
         condition: () => {
-          return hasEmptyZone(state, ownMonsters);
+          return isStartOfTurn(state, dKey) && hasEmptyZone(state, ownMonsters);
         },
         effect: ({ state }, { dKey }) => {
-          // in the own graveyard at the start of your turn == resurrected
           resurrectOwn(state, dKey);
         },
       },
