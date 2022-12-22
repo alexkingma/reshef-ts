@@ -53,11 +53,19 @@ major chunks of game state:
 -------------------------------------------------------------------
 
 todo summary:
-  flip cards to face-up
-    atk-pos monsters flip on own turn end
-    also flip monsters after attacking, being attacked, or activating an effect
   trap card effects/reducer map
     FINAL cards auto destroy if F is not on the board
+    trap cards probably split into categories:
+      attack counters -- eatgaboon, TT, etc.
+        manually check field for traps during attack reducer
+        if a trap that exists in the attackCounter reducer map exists, compare atk val against it
+        if it triggers, fire that trap's reducer and cancel the rest of the attack reducer
+      spell counters -- anti-raigeki, goblin fan, etc.
+        manually check these during the spell activation reducer -- if exists, has a reverse effect
+        probably don't need a specific reducer map for these, just build into the 3-4 spell effects reducers?
+      auto effects with condition/effect clauses -- FINAL, DCJ (MoP is here too, but as a spell)
+        these are basically just auto-effect (perm) monsters that live in the spell/trap row
+      fake trap
   scheduling system, to inform about timed future events
     SoRL -- active for 5 additional turns (counting both players' turns) after the current turn, then destroy
     brain control -- active for the current turn only

@@ -68,7 +68,7 @@ type MonsterManualEffectReducers = {
   [key in ManualEffectMonster]: MonsterManualEffectReducer;
 };
 
-export const monsterEffectReducers: MonsterManualEffectReducers = {
+export const monsterManualEffectReducers: MonsterManualEffectReducers = {
   [Monster.MysticalElf]: ({ state }, { ownMonsters }) => {
     updateMatchesInRow(
       state,
@@ -179,7 +179,8 @@ export const monsterEffectReducers: MonsterManualEffectReducers = {
       // no free spell zone
     }
   },
-  [Monster.HourglassOfLife]: ({ state }, { ownMonsters }) => {
+  [Monster.HourglassOfLife]: ({ state }, { dKey, ownMonsters }) => {
+    burn(state, dKey, 1000);
     updateMatchesInRow(
       state,
       ownMonsters,

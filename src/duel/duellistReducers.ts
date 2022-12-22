@@ -1,4 +1,5 @@
 import { draw } from "./cardEffectUtil";
+import { BattlePosition, Orientation } from "./common";
 import { DuellistCoordsMap, StateMap } from "./duelSlice";
 import { checkAutoEffects, shuffle } from "./duelUtil";
 
@@ -11,9 +12,12 @@ export const duellistReducers = {
     { otherDKey }: DuellistCoordsMap
   ) => {
     // reset all turn-based params, then hand over to other player
-    originatorState.monsterZones.forEach((zone) => {
-      if (!zone.isOccupied) return;
-      zone.isLocked = false;
+    originatorState.monsterZones.forEach((z) => {
+      if (!z.isOccupied) return;
+      if (z.battlePosition === BattlePosition.Attack) {
+        z.orientation = Orientation.FaceUp;
+      }
+      z.isLocked = false;
     });
     activeTurn.duellistKey = otherDKey;
     activeTurn.isStartOfTurn = true;

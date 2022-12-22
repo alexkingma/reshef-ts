@@ -123,6 +123,7 @@ export const directAttack = (
   attackerIdx: FieldCol
 ) => {
   const zone = originatorState.monsterZones[attackerIdx] as OccupiedMonsterZone;
+  zone.orientation = Orientation.FaceUp;
   targetState.lp -= zone.card.effAtk;
 };
 
@@ -139,20 +140,24 @@ export const attackMonster = (
     attackerIdx
   ] as OccupiedMonsterZone;
   const targetZone = targetState.monsterZones[targetIdx] as OccupiedMonsterZone;
+
   const { attackerDestroyed, targetDestroyed, attackerLpLoss, targetLpLoss } =
     calculateAttack(attackerZone, targetZone);
+
   if (attackerDestroyed) {
     destroyAtCoords(state, attackerCoords);
+  } else {
+    attackerZone.orientation = Orientation.FaceUp;
   }
+
   if (targetDestroyed) {
     destroyAtCoords(state, targetCoords);
+  } else {
+    targetZone.orientation = Orientation.FaceUp;
   }
-  if (attackerLpLoss) {
-    originatorState.lp -= attackerLpLoss;
-  }
-  if (targetLpLoss) {
-    targetState.lp -= targetLpLoss;
-  }
+
+  if (attackerLpLoss) originatorState.lp -= attackerLpLoss;
+  if (targetLpLoss) targetState.lp -= targetLpLoss;
 };
 
 export const specialSummon = (

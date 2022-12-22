@@ -377,10 +377,22 @@ export const activateTempEffect = (
   coordsMap: ZoneCoordsMap,
   reducer: MonsterAutoEffectReducer
 ) => {
+  const { state } = stateMap;
+  const { zoneCoords } = coordsMap;
+  const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
+  const originalCardName = originalZone.card.name;
+
   const conEffectPairs = reducer(stateMap, coordsMap);
   conEffectPairs.forEach(({ condition, effect }) => {
     if (condition()) {
       effect(stateMap, coordsMap);
+
+      // See postMonsterManualAction() for context on this check.
+      // Auto effects are slightly different since they don't lock
+      // or change battle position, but the reasoning is the same.
+      if (isSpecificMonster(originalZone, originalCardName)) {
+        originalZone.orientation = Orientation.FaceUp;
+      }
     }
   });
 };
@@ -473,4 +485,22 @@ export const checkAutoEffects = (stateMap: StateMap) => {
   recalcCombatStats(stateMap);
   checkPermAutoEffects(stateMap);
   recalcCombatStats(stateMap);
+};
+
+export const postMonsterManualAction = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  originalCardName: CardName
+) => {
+  // After attacking or manually activating an effect,
+  // that monster should be flipped/locked, etc.
+
+  // The exception is if the monster has destroyed/replaced itself
+  // (e.g. special summoning another monster in its place).
+  const zonePostAction = getZone(state, zoneCoords);
+  if (!isSpecificMonster(zonePostAction, originalCardName)) return;
+
+  zonePostAction.battlePosition = BattlePosition.Attack;
+  zonePostAction.orientation = Orientation.FaceUp;
+  zonePostAction.isLocked = true;
 };

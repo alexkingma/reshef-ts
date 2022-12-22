@@ -3,6 +3,7 @@ import {
   clearZone,
   destroyAtCoords,
   directAttack,
+  specialSummon,
 } from "./cardEffectUtil";
 import {
   BattlePosition,
@@ -12,33 +13,31 @@ import {
 } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
-  generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
+  getZone,
+  postMonsterManualAction,
 } from "./duelUtil";
-import { monsterEffectReducers as monsterManualEffectReducers } from "./monsterManualEffectReducers";
+import { monsterManualEffectReducers } from "./monsterManualEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
 export const cardReducers = {
   normalSummon: (
-    { state, originatorState, activeTurn }: StateMap,
-    { zoneCoords, ownMonsters, colIdx }: ZoneCoordsMap
+    { state, activeTurn }: StateMap,
+    { zoneCoords, dKey }: ZoneCoordsMap
   ) => {
-    // remove monster from hand at given index, summon it to the field
-    const zoneIdx = getFirstEmptyZoneIdx(state, ownMonsters, true);
-    const { card } = originatorState.hand[colIdx] as OccupiedMonsterZone;
+    const { card, orientation } = getZone(
+      state,
+      zoneCoords
+    ) as OccupiedMonsterZone;
+    specialSummon(state, dKey, card.name, { orientation });
     clearZone(state, zoneCoords);
-    originatorState.monsterZones[zoneIdx] = {
-      ...generateOccupiedMonsterZone(card.name),
-      orientation: Orientation.FaceDown,
-    };
     activeTurn.hasNormalSummoned = true;
   },
   setSpellTrap: (
     { state, originatorState }: StateMap,
     { zoneCoords, ownSpellTrap, colIdx }: ZoneCoordsMap
   ) => {
-    // remove spell/trap from hand at given index, set it on the field
     const zoneIdx = getFirstEmptyZoneIdx(state, ownSpellTrap, true);
     const { card } = originatorState.hand[colIdx] as OccupiedSpellTrapZone;
     clearZone(state, zoneCoords);
@@ -101,31 +100,25 @@ export const cardReducers = {
     stateMap: StateMap,
     coordsMap: ZoneCoordsMap
   ) => {
-    const { originatorState } = stateMap;
-    const { colIdx: monsterIdx } = coordsMap;
-    const { card } = originatorState.monsterZones[
-      monsterIdx
-    ] as OccupiedMonsterZone;
+    const { state } = stateMap;
+    const { zoneCoords } = coordsMap;
+    const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    const originalCardName = originalZone.card.name;
     const monsterManualEffectDispatch =
-      monsterManualEffectReducers[card.name as ManualEffectMonster];
+      monsterManualEffectReducers[originalCardName as ManualEffectMonster];
 
     if (!monsterManualEffectDispatch) {
-      console.log(`Monster effect not implemented for card: ${card.name}`);
+      console.log(
+        `Monster effect not implemented for card: ${originalCardName}`
+      );
       return;
     }
 
     if (monsterManualEffectDispatch) {
       monsterManualEffectDispatch(stateMap, coordsMap);
-    }
 
-    // lock card once effect is complete
-    const zonePostEffect = originatorState.monsterZones[monsterIdx];
-    if (zonePostEffect.isOccupied && zonePostEffect.card.name === card.name) {
-      // only lock card if the monster is the same one as before the effect
-      // cards that destroy themselves or summon other monsters
-      // ... in their idx usually do not need to be locked, and should
-      // ... be addressed case-by -case in individual reducers
-      zonePostEffect.isLocked = true;
+      // lock/flip/etc.
+      postMonsterManualAction(state, zoneCoords, originalCardName);
     }
   },
 };
