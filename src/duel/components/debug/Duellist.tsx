@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DuellistDeck } from "./Deck";
 import { DuellistStatus } from "./DuellistStatus";
-import { useAppSelector } from "../../hooks";
-import { selectDuellist } from "../duelSlice";
+import { useAppSelector } from "../../../hooks";
+import { selectDuellist } from "../../duelSlice";
 import { MonsterZone } from "./MonsterZone";
 import { EmptyZone } from "./EmptyZone";
 import { SpellTrapZone } from "./SpellTrapZone";
 import { HandZone } from "./HandZone";
-import { RowKey } from "../common";
-import { useDuellistActions } from "../useDuellistActions";
-import { isStartOfTurn } from "../duelUtil";
+import { RowKey } from "../../common";
 
 interface Props {
   name: string;
@@ -20,14 +18,6 @@ export const Duellist = ({ name, duellistKey }: Props) => {
   const { monsterZones, spellTrapZones, hand } = useAppSelector(
     selectDuellist(duellistKey)
   );
-  const state = useAppSelector(({ duel }) => duel);
-  const { startTurn } = useDuellistActions(duellistKey);
-
-  useEffect(() => {
-    if (isStartOfTurn(state, duellistKey)) {
-      startTurn();
-    }
-  }, [state.activeTurn.isStartOfTurn]);
 
   return (
     <div style={{ minWidth: "400px" }}>

@@ -1,7 +1,7 @@
 import React from "react";
-import { useAppSelector } from "../../hooks";
-import { selectDuellist } from "../duelSlice";
-import { useDuellistActions } from "../useDuellistActions";
+import { useAppSelector } from "../../../hooks";
+import { selectDuellist } from "../../duelSlice";
+import { useDuellistActions } from "../../useDuellistActions";
 
 interface Props {
   duellistKey: DuellistKey;

@@ -7,6 +7,7 @@ import { duellistReducers } from "./duellistReducers";
 import {
   checkAutoEffects,
   getInitialDuel,
+  getRow,
   getStateMap,
   getTempCardQuantMap,
   getZone,
@@ -98,13 +99,23 @@ export const duelSlice = createSlice({
 
 export const { actions } = duelSlice;
 
-export const selectDuel = (state: RootState) => state.duel;
-export const selectZone = (coords: ZoneCoords) => (state: RootState) =>
-  getZone(state.duel, coords);
-export const selectIsMyTurn = (key: DuellistKey) => (state: RootState) =>
-  state.duel.activeTurn.duellistKey === key;
-export const selectDuellist = (key: DuellistKey) => (state: RootState) =>
-  state.duel[key] as Duellist;
-export const selectActiveTurn = (state: RootState) => state.duel.activeTurn;
+export const selectDuel = ({ duel }: RootState) => duel;
+export const selectRow =
+  (rowCoords: RowCoords) =>
+  ({ duel }: RootState) =>
+    getRow(duel, rowCoords);
+export const selectZone =
+  (coords: ZoneCoords) =>
+  ({ duel }: RootState) =>
+    getZone(duel, coords);
+export const selectIsMyTurn =
+  (key: DuellistKey) =>
+  ({ duel }: RootState) =>
+    duel.activeTurn.duellistKey === key;
+export const selectDuellist =
+  (key: DuellistKey) =>
+  ({ duel }: RootState) =>
+    duel[key] as Duellist;
+export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 
 export default duelSlice.reducer;

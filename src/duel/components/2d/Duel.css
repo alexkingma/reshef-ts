@@ -1,0 +1,4 @@
+.duel {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,6 @@
+.cardCount {
+  position: absolute;
+  font-size: 36px;
+  align-self: center;
+  z-index: 1;
+}

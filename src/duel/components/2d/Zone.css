@@ -1,0 +1,12 @@
+.zone {
+  display: flex;
+  justify-content: center;
+  margin: 5px 20px;
+  width: 108px;
+  height: 145px;
+}
+
+.zoneBorder {
+  border: 1px solid black;
+  border-radius: 3px;
+}

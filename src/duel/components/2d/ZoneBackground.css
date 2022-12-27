@@ -1,0 +1,27 @@
+.zoneBackground {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 108px 143px;
+  width: 108px;
+  height: 143px;
+}
+
+.graveyardBackground {
+  filter: grayscale(1);
+}
+
+.deckBackground {
+  filter: grayscale(1);
+}
+
+.monsterBackground {
+  filter: hue-rotate(345deg);
+}
+
+.spellTrapBackground {
+  filter: hue-rotate(180deg);
+}
+
+.fieldBackground {
+  filter: hue-rotate(90deg);
+}

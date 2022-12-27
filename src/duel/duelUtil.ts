@@ -308,6 +308,10 @@ export const isMonster = (z: Zone): z is OccupiedMonsterZone => {
   return z.isOccupied && z.card.category === "Monster";
 };
 
+export const isDefMode = (z: Zone): z is OccupiedMonsterZone => {
+  return isMonster(z) && z.battlePosition === BattlePosition.Defence;
+};
+
 export const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
   isMonster(z) && z.card.type === type;
 
@@ -367,6 +371,10 @@ export const hasFullFINAL = (state: Duel, rowCoords: RowCoords) => {
 
 export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
   return state[dKey][rKey][col];
+};
+
+export const getRow = (state: Duel, [dKey, rKey]: RowCoords) => {
+  return state[dKey][rKey];
 };
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>

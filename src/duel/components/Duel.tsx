@@ -1,31 +1,47 @@
-import React from "react";
-import { Duellist } from "./Duellist";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
-import { selectActiveTurn, selectDuel } from "../duelSlice";
-import { DuellistKey } from "../common";
+import { selectActiveTurn } from "../duelSlice";
+import { isStartOfEitherTurn } from "../duelUtil";
+import { useDuellistActions } from "../useDuellistActions";
+import { Duel as Duel2D } from "./2d/Duel";
+import { Duel as DuelDebug } from "./debug/Duel";
 
 export const Duel = () => {
-  const { numTributedMonsters, hasNormalSummoned, isStartOfTurn } =
-    useAppSelector(selectActiveTurn);
-  const { activeField } = useAppSelector(selectDuel);
+  const state = useAppSelector(({ duel }) => duel);
+  const { duellistKey, isStartOfTurn } = useAppSelector(selectActiveTurn);
+  const { startTurn } = useDuellistActions(duellistKey);
+
+  useEffect(() => {
+    if (isStartOfEitherTurn(state)) {
+      startTurn();
+    }
+  }, [isStartOfTurn]);
+
+  const [renderMode, setRenderMode] = useState("visual");
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        margin: "0 100px",
-      }}
-    >
-      <div>
-        <h5>General Duel Info</h5>
-        <p>Field: {activeField}</p>
-        <p>Num Tributes: {numTributedMonsters}</p>
-        <p>Turn start: {isStartOfTurn ? "YES" : "NO"}</p>
-        <p>Has Normal Summoned: {hasNormalSummoned ? "YES" : "NO"}</p>
+    <>
+      <div style={{ position: "absolute", zIndex: 1 }}>
+        {renderMode === "visual" ? (
+          <button onClick={() => setRenderMode("text")}>
+            Go To Debug Mode
+          </button>
+        ) : null}
+        {renderMode === "text" ? (
+          <button onClick={() => setRenderMode("visual")}>
+            Go To Game Mode
+          </button>
+        ) : null}
       </div>
-      <Duellist name="Player" duellistKey={DuellistKey.Player} />
-      <Duellist name="Opponent" duellistKey={DuellistKey.Opponent} />
-    </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+        }}
+      >
+        {renderMode === "text" ? <DuelDebug /> : <Duel2D />}
+      </div>
+    </>
   );
 };

@@ -1,8 +1,8 @@
 import React from "react";
-import { useAppSelector } from "../../hooks";
-import { BattlePosition } from "../common";
-import { selectZone } from "../duelSlice";
-import { DuelButtonKey, useDuelButtons } from "../useZoneButtons";
+import { useAppSelector } from "../../../hooks";
+import { BattlePosition } from "../../common";
+import { selectZone } from "../../duelSlice";
+import { DuelButtonKey, useDuelButtons } from "../../useZoneButtons";
 
 interface Props {
   zoneCoords: ZoneCoords;
