@@ -3,7 +3,7 @@ import {
   getEffCon_powerUpSelfConditional,
   getEffCon_updateMatchesInRow,
 } from "./cardEffectWrapped";
-import { Monster, TempAutoEffectMonster } from "./common";
+import { Monster, TempPowerUpMonster } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
   countMatchesInRow,
@@ -22,11 +22,11 @@ export type MonsterAutoEffectReducer = (
   effect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
 }[];
 
-type MonsterTempAutoEffectReducers = {
-  [key in TempAutoEffectMonster]: MonsterAutoEffectReducer;
+type MonsterTempPowerUpReducers = {
+  [key in TempPowerUpMonster]: MonsterAutoEffectReducer;
 };
 
-export const monsterTempAutoEffectReducers: MonsterTempAutoEffectReducers = {
+export const monsterTempPowerUpReducers: MonsterTempPowerUpReducers = {
   [Monster.SwampBattleguard]: ({ state }, { ownMonsters }) => {
     const isLavaBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.LavaBattleguard);

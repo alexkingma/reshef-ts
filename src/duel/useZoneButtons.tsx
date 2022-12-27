@@ -63,7 +63,7 @@ export const useDuelButtons = (
     attack,
     defend,
     tribute,
-    activateManualMonsterEffect,
+    activateMonsterFlipEffect,
     normalSummon,
     setSpellTrap,
     activateSpellEffect,
@@ -75,7 +75,7 @@ export const useDuelButtons = (
       label: "Attack",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => attack(),
+      onClick: () => attack(),
     },
     [DuelButtonKey.Summon]: {
       label: "Summon",
@@ -84,39 +84,39 @@ export const useDuelButtons = (
         isMonster(z) &&
         canNormalSummon(z.card) &&
         isRow(RowKey.Hand),
-      onClick: (i) => normalSummon(),
+      onClick: () => normalSummon(),
     },
     [DuelButtonKey.Set]: {
       label: "Set",
       condition: (z) => isMyTurn && !isMonster(z) && isRow(RowKey.Hand),
-      onClick: (i) => setSpellTrap(),
+      onClick: () => setSpellTrap(),
     },
     [DuelButtonKey.SpellEffect]: {
       label: "Activate",
       condition: (z) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
-      onClick: (i) => activateSpellEffect(),
+      onClick: () => activateSpellEffect(),
     },
     [DuelButtonKey.MonsterEffect]: {
-      label: "Effect",
+      label: "Flip",
       condition: (z) =>
         isMyTurn &&
         isMonster(z) &&
         !z.isLocked &&
         canActivateEffect(z) &&
         isRow(RowKey.Monster),
-      onClick: (i) => activateManualMonsterEffect(),
+      onClick: () => activateMonsterFlipEffect(),
     },
     [DuelButtonKey.Tribute]: {
       label: "Tribute",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => tribute(),
+      onClick: () => tribute(),
     },
     [DuelButtonKey.Defend]: {
       label: "Defend",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: (i) => defend(),
+      onClick: () => defend(),
     },
     [DuelButtonKey.Discard]: {
       label: "Discard",

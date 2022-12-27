@@ -37,7 +37,7 @@ import {
 import {
   DuellistKey,
   Field,
-  ManualEffectMonster,
+  FlipEffectMonster,
   Monster,
   Orientation,
   RowKey,
@@ -59,16 +59,16 @@ import {
   shuffle,
 } from "./duelUtil";
 
-type MonsterManualEffectReducer = (
+type MonsterFlipEffectReducer = (
   state: StateMap,
   coordsMap: ZoneCoordsMap
 ) => void;
 
-type MonsterManualEffectReducers = {
-  [key in ManualEffectMonster]: MonsterManualEffectReducer;
+type MonsterFlipEffectReducers = {
+  [key in FlipEffectMonster]: MonsterFlipEffectReducer;
 };
 
-export const monsterManualEffectReducers: MonsterManualEffectReducers = {
+export const monsterFlipEffectReducers: MonsterFlipEffectReducers = {
   [Monster.MysticalElf]: ({ state }, { ownMonsters }) => {
     updateMatchesInRow(
       state,

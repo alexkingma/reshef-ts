@@ -737,7 +737,7 @@ export type GraveyardEffectMonster = Extract<
 
 export type HandEffectMonster = Extract<Monster, Monster.LavaGolem>;
 
-export type ManualEffectMonster = Extract<
+export type FlipEffectMonster = Extract<
   Monster,
   | Monster.MysticalElf
   | Monster.FlameSwordsman
@@ -831,7 +831,7 @@ export type PermAutoEffectMonster = Extract<
   | Monster.Jinzo
 >;
 
-export type TempAutoEffectMonster = Extract<
+export type TempPowerUpMonster = Extract<
   Monster,
   | Monster.SwampBattleguard
   | Monster.MammothGraveyard

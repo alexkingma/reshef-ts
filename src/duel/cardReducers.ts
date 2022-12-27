@@ -7,7 +7,7 @@ import {
 } from "./cardEffectUtil";
 import {
   BattlePosition,
-  ManualEffectMonster,
+  FlipEffectMonster,
   Orientation,
   Spell,
 } from "./common";
@@ -16,9 +16,9 @@ import {
   getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   getZone,
-  postMonsterManualAction,
+  postDirectMonsterAction,
 } from "./duelUtil";
-import { monsterManualEffectReducers } from "./monsterManualEffectReducers";
+import { monsterFlipEffectReducers } from "./monsterFlipEffectReducers";
 import { spellEffectReducers } from "./spellEffectReducers";
 
 export const cardReducers = {
@@ -96,29 +96,26 @@ export const cardReducers = {
     // discard after activation
     clearZone(state, zoneCoords);
   },
-  activateManualMonsterEffect: (
-    stateMap: StateMap,
-    coordsMap: ZoneCoordsMap
-  ) => {
+  activateMonsterFlipEffect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => {
     const { state } = stateMap;
     const { zoneCoords } = coordsMap;
     const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
     const originalCardName = originalZone.card.name;
-    const monsterManualEffectDispatch =
-      monsterManualEffectReducers[originalCardName as ManualEffectMonster];
+    const monsterFlipEffectDispatch =
+      monsterFlipEffectReducers[originalCardName as FlipEffectMonster];
 
-    if (!monsterManualEffectDispatch) {
+    if (!monsterFlipEffectDispatch) {
       console.log(
         `Monster effect not implemented for card: ${originalCardName}`
       );
       return;
     }
 
-    if (monsterManualEffectDispatch) {
-      monsterManualEffectDispatch(stateMap, coordsMap);
+    if (monsterFlipEffectDispatch) {
+      monsterFlipEffectDispatch(stateMap, coordsMap);
 
       // lock/flip/etc.
-      postMonsterManualAction(state, zoneCoords, originalCardName);
+      postDirectMonsterAction(state, zoneCoords, originalCardName);
     }
   },
 };

@@ -1,6 +1,6 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../assets/fields.json";
-import { BattlePosition, Field, RowKey, TempAutoEffectMonster } from "./common";
+import { BattlePosition, Field, RowKey, TempPowerUpMonster } from "./common";
 import { StateMap, ZoneCoordsMap } from "./duelSlice";
 import {
   activateTempEffect,
@@ -8,7 +8,7 @@ import {
   getZone,
   getZoneCoordsMap,
 } from "./duelUtil";
-import { monsterTempAutoEffectReducers } from "./monsterTempAutoEffectReducers";
+import { monsterTempPowerUpReducers } from "./monsterTempPowerUpReducers";
 
 export const calculateAttack = (
   attacker: OccupiedMonsterZone,
@@ -62,7 +62,7 @@ const getFieldMultiplier = (field: Field, type: CardType) => {
 
 export const recalcCombatStats = (stateMap: StateMap) => {
   resetCombatStats(stateMap);
-  activateTempAutoEffects(stateMap);
+  activateTempPowerUps(stateMap);
   calcCombatStats(stateMap);
 };
 
@@ -104,35 +104,34 @@ const calcZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
   };
 };
 
-const activateTempAutoEffects = (stateMap: StateMap) => {
+const activateTempPowerUps = (stateMap: StateMap) => {
   const { originatorState, targetState, activeTurn } = stateMap;
   const { duellistKey: activeKey } = activeTurn;
   const inactiveKey = getOtherDuellistKey(activeKey);
   originatorState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
-    activateZoneTempAutoEffects(
+    activateZoneTempPowerUps(
       stateMap,
       getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol])
     );
   });
   targetState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
-    activateZoneTempAutoEffects(
+    activateZoneTempPowerUps(
       stateMap,
       getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol])
     );
   });
 };
 
-const activateZoneTempAutoEffects = (
+const activateZoneTempPowerUps = (
   stateMap: StateMap,
   coordsMap: ZoneCoordsMap
 ) => {
   const { state } = stateMap;
   const { zoneCoords } = coordsMap;
   const { card } = getZone(state, zoneCoords) as OccupiedMonsterZone;
-  const reducer =
-    monsterTempAutoEffectReducers[card.name as TempAutoEffectMonster];
+  const reducer = monsterTempPowerUpReducers[card.name as TempPowerUpMonster];
   if (!reducer) return;
 
   activateTempEffect(stateMap, coordsMap, reducer);

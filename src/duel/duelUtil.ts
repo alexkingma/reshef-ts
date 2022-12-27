@@ -14,7 +14,7 @@ import { DuellistCoordsMap, StateMap, ZoneCoordsMap } from "./duelSlice";
 import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
 import { monsterHandEffectReducers } from "./monsterHandEffectReducers";
 import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
-import { MonsterAutoEffectReducer } from "./monsterTempAutoEffectReducers";
+import { MonsterAutoEffectReducer } from "./monsterTempPowerUpReducers";
 
 export const getCard = (cardName: CardName): Card => {
   const dbCard = cards.find((c) => c.name === cardName)!;
@@ -387,7 +387,7 @@ export const activateTempEffect = (
     if (condition()) {
       effect(stateMap, coordsMap);
 
-      // See postMonsterManualAction() for context on this check.
+      // See postDirectMonsterAction() for context on this check.
       // Auto effects are slightly different since they don't lock
       // or change battle position, but the reasoning is the same.
       if (isSpecificMonster(originalZone, originalCardName)) {
@@ -487,7 +487,7 @@ export const checkAutoEffects = (stateMap: StateMap) => {
   recalcCombatStats(stateMap);
 };
 
-export const postMonsterManualAction = (
+export const postDirectMonsterAction = (
   state: Duel,
   zoneCoords: ZoneCoords,
   originalCardName: CardName
