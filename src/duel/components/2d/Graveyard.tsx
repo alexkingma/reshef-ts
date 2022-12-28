@@ -1,8 +1,8 @@
+import { DuellistKey } from "@/duel/common";
+import { selectDuellist } from "@/duel/duelSlice";
+import { getCard } from "@/duel/duelUtil";
+import { useAppSelector } from "@/hooks";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { DuellistKey } from "../../common";
-import { selectDuellist } from "../../duelSlice";
-import { getCard } from "../../duelUtil";
 import { VisibleCard } from "./VisibleCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";

@@ -1,6 +1,6 @@
+import { default as cardBack } from "@/assets/images/card-back.png";
 import classNames from "classnames";
 import React from "react";
-import { default as cardBack } from "../../../assets/images/card-back.png";
 
 interface Props {
   customClasses?: string;

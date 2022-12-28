@@ -1,7 +1,7 @@
+import { selectDuel } from "@/duel/duelSlice";
+import { getCard } from "@/duel/duelUtil";
+import { useAppSelector } from "@/hooks";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { selectDuel } from "../../duelSlice";
-import { getCard } from "../../duelUtil";
 import { VisibleCard } from "./VisibleCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";

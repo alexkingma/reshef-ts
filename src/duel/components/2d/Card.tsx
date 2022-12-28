@@ -1,9 +1,9 @@
+import { DuellistKey, Orientation } from "@/duel/common";
+import { selectZone } from "@/duel/duelSlice";
+import { isDefMode } from "@/duel/duelUtil";
+import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { DuellistKey, Orientation } from "../../common";
-import { selectZone } from "../../duelSlice";
-import { isDefMode } from "../../duelUtil";
 import "./Card.css";
 import { HiddenCard } from "./HiddenCard";
 import { VisibleCard } from "./VisibleCard";

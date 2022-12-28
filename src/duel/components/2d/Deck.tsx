@@ -1,6 +1,6 @@
+import { selectDuellist } from "@/duel/duelSlice";
+import { useAppSelector } from "@/hooks";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { selectDuellist } from "../../duelSlice";
 import "./Deck.css";
 import { HiddenCard } from "./HiddenCard";
 import { Zone } from "./Zone";

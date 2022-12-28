@@ -1,5 +1,5 @@
+import { getImage } from "@/common/image";
 import React from "react";
-import { getImage } from "../../../common/image";
 
 interface Props {
   card: Card;

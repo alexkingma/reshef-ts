@@ -1,13 +1,13 @@
+import { RowKey } from "@/duel/common";
+import { selectDuellist } from "@/duel/duelSlice";
+import { useAppSelector } from "@/hooks";
 import React from "react";
 import { DuellistDeck } from "./Deck";
 import { DuellistStatus } from "./DuellistStatus";
-import { useAppSelector } from "../../../hooks";
-import { selectDuellist } from "../../duelSlice";
-import { MonsterZone } from "./MonsterZone";
 import { EmptyZone } from "./EmptyZone";
-import { SpellTrapZone } from "./SpellTrapZone";
 import { HandZone } from "./HandZone";
-import { RowKey } from "../../common";
+import { MonsterZone } from "./MonsterZone";
+import { SpellTrapZone } from "./SpellTrapZone";
 
 interface Props {
   name: string;

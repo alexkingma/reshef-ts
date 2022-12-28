@@ -1,5 +1,5 @@
+import { DuellistKey } from "@/duel/common";
 import React from "react";
-import { DuellistKey } from "../../common";
 import { Duellist } from "./Duellist";
 
 import "./Duel.css";

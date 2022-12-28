@@ -1,7 +1,7 @@
+import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
+import { useDuellistActions } from "@/duel/useDuellistActions";
+import { useAppSelector } from "@/hooks";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { selectDuellist, selectIsMyTurn } from "../../duelSlice";
-import { useDuellistActions } from "../../useDuellistActions";
 
 interface Props {
   duellistKey: DuellistKey;

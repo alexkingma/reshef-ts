@@ -1,5 +1,5 @@
+import { useAppSelector } from "@/hooks";
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks";
 import { selectActiveTurn } from "../duelSlice";
 import { isStartOfEitherTurn } from "../duelUtil";
 import { useDuellistActions } from "../useDuellistActions";

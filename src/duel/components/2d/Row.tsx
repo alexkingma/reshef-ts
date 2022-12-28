@@ -1,8 +1,8 @@
+import { RowKey } from "@/duel/common";
+import { selectRow } from "@/duel/duelSlice";
+import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { RowKey } from "../../common";
-import { selectRow } from "../../duelSlice";
 import { Card } from "./Card";
 import "./Row.css";
 import { Zone } from "./Zone";

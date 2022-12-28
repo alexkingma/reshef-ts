@@ -1,8 +1,8 @@
+import { DuellistKey } from "@/duel/common";
+import { selectActiveTurn, selectDuel } from "@/duel/duelSlice";
+import { useAppSelector } from "@/hooks";
 import React from "react";
 import { Duellist } from "./Duellist";
-import { useAppSelector } from "../../../hooks";
-import { selectActiveTurn, selectDuel } from "../../duelSlice";
-import { DuellistKey } from "../../common";
 
 export const Duel = () => {
   const { numTributedMonsters, hasNormalSummoned, isStartOfTurn } =

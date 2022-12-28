@@ -14,6 +14,9 @@ module.exports = {
     static: path.join(__dirname, "dist"),
   },
   resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
     extensions: [".tsx", ".ts", ".js"],
   },
   module: {

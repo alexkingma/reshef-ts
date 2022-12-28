@@ -1,8 +1,8 @@
+import { BattlePosition } from "@/duel/common";
+import { selectZone } from "@/duel/duelSlice";
+import { DuelButtonKey, useDuelButtons } from "@/duel/useZoneButtons";
+import { useAppSelector } from "@/hooks";
 import React from "react";
-import { useAppSelector } from "../../../hooks";
-import { BattlePosition } from "../../common";
-import { selectZone } from "../../duelSlice";
-import { DuelButtonKey, useDuelButtons } from "../../useZoneButtons";
 
 interface Props {
   zoneCoords: ZoneCoords;

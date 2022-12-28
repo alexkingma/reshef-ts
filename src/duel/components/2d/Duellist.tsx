@@ -1,5 +1,5 @@
+import { DuellistKey, RowKey } from "@/duel/common";
 import React from "react";
-import { DuellistKey, RowKey } from "../../common";
 import { Counterweight } from "./Counterweight";
 import { Deck } from "./Deck";
 import { Field } from "./Field";
