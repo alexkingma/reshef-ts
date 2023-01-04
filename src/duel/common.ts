@@ -829,6 +829,9 @@ export type PermAutoEffectMonster = Extract<
   | Monster.MirageKnight
   | Monster.BerserkDragon
   | Monster.Jinzo
+  | Monster.PetitMoth
+  | Monster.CocoonOfEvolution
+  | Monster.GreatMoth
 >;
 
 export type TempPowerUpMonster = Extract<

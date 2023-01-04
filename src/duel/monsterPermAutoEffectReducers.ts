@@ -166,4 +166,43 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
+  [Monster.PetitMoth]: ({ state }, { dKey }) => {
+    return [
+      {
+        condition: () => {
+          return isStartOfTurn(state, dKey);
+        },
+        effect: ({ state }, { zoneCoords, dKey }) => {
+          clearZone(state, zoneCoords);
+          specialSummon(state, dKey, Monster.CocoonOfEvolution);
+        },
+      },
+    ];
+  },
+  [Monster.CocoonOfEvolution]: ({ state }, { dKey }) => {
+    return [
+      {
+        condition: () => {
+          return isStartOfTurn(state, dKey);
+        },
+        effect: ({ state }, { zoneCoords, dKey }) => {
+          clearZone(state, zoneCoords);
+          specialSummon(state, dKey, Monster.GreatMoth);
+        },
+      },
+    ];
+  },
+  [Monster.GreatMoth]: ({ state }, { dKey }) => {
+    return [
+      {
+        condition: () => {
+          return isStartOfTurn(state, dKey);
+        },
+        effect: ({ state }, { zoneCoords, dKey }) => {
+          clearZone(state, zoneCoords);
+          specialSummon(state, dKey, Monster.PerfectlyUltimateGreatMoth);
+        },
+      },
+    ];
+  },
 };
