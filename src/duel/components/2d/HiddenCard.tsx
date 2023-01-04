@@ -8,9 +8,6 @@ interface Props {
 
 export const HiddenCard = ({ customClasses }: Props) => {
   return (
-    <div
-      className={classNames(customClasses, "hiddenCard")}
-      style={{ backgroundImage: `url(${cardBack})` }}
-    />
+    <img src={cardBack} className={classNames(customClasses, "hiddenCard")} />
   );
 };

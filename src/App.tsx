@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
 
-import { store } from "./store";
 import { Duel } from "./duel/components/Duel";
+import { store } from "./store";
 
 import "./App.css";
 

@@ -1,9 +1,10 @@
 .zoneBackground {
   position: absolute;
   background-repeat: no-repeat;
-  background-size: 108px 143px;
+  background-size: 108px 147px;
   width: 108px;
-  height: 143px;
+  height: 147px;
+  border-radius: 3px;
 }
 
 .graveyardBackground {

@@ -10,11 +10,7 @@ export const VisibleCard = ({ card }: Props) => {
 
   return (
     <>
-      <div className="card" style={{ backgroundImage: `url(${cardFront})` }} />
-      <div
-        className="cardBottomBorder"
-        style={{ backgroundImage: `url(${cardFront})` }}
-      />
+      <img src={cardFront} className="card" />
     </>
   );
 };

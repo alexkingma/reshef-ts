@@ -22,7 +22,7 @@ export const Row = ({ rowCoords }: Props) => {
   return (
     <div className="row">
       {zones.map((_, i) => (
-        <Zone key={i} customClasses={classNames(!isHand && "zoneBorder")}>
+        <Zone key={i}>
           {!isHand && (
             <ZoneBackground
               customClasses={classNames(

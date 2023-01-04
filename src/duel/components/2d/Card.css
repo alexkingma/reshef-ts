@@ -1,16 +1,5 @@
 .card {
-  background-repeat: no-repeat;
-  background-position: -2px -17px;
-  width: 108px;
-  height: 143px;
-}
-
-.cardBottomBorder {
-  background-repeat: no-repeat;
-  background-position: -2px -17px;
-  width: 108px;
-  height: 4px;
-  transform: rotate(180deg);
+  border-radius: 3px;
 }
 
 .rotatedCard {
@@ -19,8 +8,7 @@
 }
 
 .hiddenCard {
-  background-repeat: no-repeat;
-  background-size: 108px 143px;
   width: 108px;
-  height: 143px;
+  height: 147px;
+  border-radius: 3px;
 }
