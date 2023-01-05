@@ -42,10 +42,7 @@ const ZoneButton = ({ zone, zoneIdx, label, condition, onClick }: Props) => {
   return <button onClick={() => onClick(zoneIdx)}>{label}</button>;
 };
 
-export const useDuelButtons = (
-  zoneCoords: ZoneCoords,
-  buttonKeys: DuelButtonKey[]
-) => {
+export const useZoneButtons = (zoneCoords: ZoneCoords) => {
   const [duellistKey, rowKey, colIdx] = zoneCoords;
   const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
 
@@ -77,6 +74,12 @@ export const useDuelButtons = (
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
       onClick: () => attack(),
     },
+    [DuelButtonKey.Defend]: {
+      label: "Defend",
+      condition: (z) =>
+        isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
+      onClick: () => defend(),
+    },
     [DuelButtonKey.Summon]: {
       label: "Summon",
       condition: (z) =>
@@ -97,7 +100,7 @@ export const useDuelButtons = (
       onClick: () => activateSpellEffect(),
     },
     [DuelButtonKey.MonsterEffect]: {
-      label: "Flip",
+      label: "Flip Effect",
       condition: (z) =>
         isMyTurn &&
         isMonster(z) &&
@@ -112,12 +115,6 @@ export const useDuelButtons = (
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
       onClick: () => tribute(),
     },
-    [DuelButtonKey.Defend]: {
-      label: "Defend",
-      condition: (z) =>
-        isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: () => defend(),
-    },
     [DuelButtonKey.Discard]: {
       label: "Discard",
       condition: () => isMyTurn,
@@ -127,8 +124,7 @@ export const useDuelButtons = (
 
   return (
     <>
-      {buttonKeys.map((buttonKey) => {
-        const buttonProps = duelButtons[buttonKey];
+      {Object.entries(duelButtons).map(([buttonKey, buttonProps]) => {
         return (
           <ZoneButton
             {...buttonProps}

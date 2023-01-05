@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { ReactNode } from "react";
-import "./Zone.css";
+import "./Zone.scss";
 
 interface Props {
   children?: ReactNode;

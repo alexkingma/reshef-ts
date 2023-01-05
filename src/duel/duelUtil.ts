@@ -3,6 +3,7 @@ import { recalcCombatStats } from "./combatUtil";
 import {
   BattlePosition,
   Field,
+  FlipEffectMonster,
   GraveyardEffectMonster,
   Monster,
   Orientation,
@@ -11,6 +12,7 @@ import {
   Trap,
 } from "./common";
 import { DuellistCoordsMap, StateMap, ZoneCoordsMap } from "./duelSlice";
+import { monsterFlipEffectReducers } from "./monsterFlipEffectReducers";
 import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
 import { monsterHandEffectReducers } from "./monsterHandEffectReducers";
 import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
@@ -426,8 +428,12 @@ export const getRow = (state: Duel, [dKey, rKey]: RowCoords) => {
   return state[dKey][rKey];
 };
 
+export const hasManualEffect = (z: OccupiedMonsterZone) =>
+  z.card.effect &&
+  !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];
+
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
-  !z.isLocked && z.card.effect && z.orientation === Orientation.FaceDown;
+  !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
 
 export const activateTempEffect = (
   stateMap: StateMap,

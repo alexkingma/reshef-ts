@@ -1,6 +1,6 @@
 import { BattlePosition } from "@/duel/common";
 import { selectZone } from "@/duel/duelSlice";
-import { DuelButtonKey, useDuelButtons } from "@/duel/useZoneButtons";
+import { useZoneButtons } from "@/duel/useZoneButtons";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 
@@ -19,14 +19,7 @@ export const MonsterZone = ({ zoneCoords }: Props) => {
   } = zone;
   const { effAtk, effDef } = card;
 
-  const buttons = useDuelButtons(zoneCoords, [
-    DuelButtonKey.Summon,
-    DuelButtonKey.Attack,
-    DuelButtonKey.Defend,
-    DuelButtonKey.MonsterEffect,
-    DuelButtonKey.Tribute,
-    DuelButtonKey.Discard,
-  ]);
+  const buttons = useZoneButtons(zoneCoords);
 
   return (
     <>

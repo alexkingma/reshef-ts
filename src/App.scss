@@ -1,0 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.root {
+  // define global scss vars here
+  --card-height: 147px;
+  --card-width: 108px;
+}

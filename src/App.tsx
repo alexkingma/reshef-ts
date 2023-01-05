@@ -4,12 +4,14 @@ import { Provider } from "react-redux";
 import { Duel } from "./duel/components/Duel";
 import { store } from "./store";
 
-import "./App.css";
+import "./App.scss";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Duel />
+      <div className="root">
+        <Duel />
+      </div>
     </Provider>
   );
 };

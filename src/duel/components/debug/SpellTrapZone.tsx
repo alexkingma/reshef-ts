@@ -1,6 +1,6 @@
 import { selectZone } from "@/duel/duelSlice";
 import { isTrap } from "@/duel/duelUtil";
-import { DuelButtonKey, useDuelButtons } from "@/duel/useZoneButtons";
+import { useZoneButtons } from "@/duel/useZoneButtons";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 
@@ -12,10 +12,7 @@ export const SpellTrapZone = ({ zoneCoords }: Props) => {
   const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedSpellTrapZone;
   const { card } = zone;
 
-  const buttons = useDuelButtons(zoneCoords, [
-    DuelButtonKey.SpellEffect,
-    DuelButtonKey.Discard,
-  ]);
+  const buttons = useZoneButtons(zoneCoords);
 
   return (
     <>

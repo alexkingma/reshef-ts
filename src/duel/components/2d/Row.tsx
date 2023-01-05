@@ -4,7 +4,7 @@ import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
 import { Card } from "./Card";
-import "./Row.css";
+import "./Row.scss";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";
 

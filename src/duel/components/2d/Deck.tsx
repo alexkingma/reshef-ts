@@ -1,7 +1,7 @@
 import { selectDuellist } from "@/duel/duelSlice";
 import { useAppSelector } from "@/hooks";
 import React from "react";
-import "./Deck.css";
+import "./Deck.scss";
 import { HiddenCard } from "./HiddenCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";

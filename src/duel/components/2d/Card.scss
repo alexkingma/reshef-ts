@@ -1,0 +1,39 @@
+.cardContainer {
+  position: relative;
+
+  &:hover .zoneButtonsContainer {
+    display: flex;
+  }
+
+  .card {
+    border-radius: 3px;
+  }
+
+  .rotatedCard {
+    transform-origin: calc(var(--card-width) / 2) calc(var(--card-height) / 2);
+    transform: rotate(270deg);
+  }
+
+  .zoneButtonsContainer {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: none;
+
+    > button {
+      min-width: 80%;
+    }
+  }
+}
+
+.hiddenCard {
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 3px;
+}

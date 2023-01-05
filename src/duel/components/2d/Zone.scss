@@ -2,6 +2,6 @@
   position: relative;
   justify-content: center;
   margin: 5px 20px;
-  width: 108px;
-  height: 147px;
+  width: var(--card-width);
+  height: var(--card-height);
 }
