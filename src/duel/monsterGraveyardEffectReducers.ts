@@ -55,11 +55,14 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
       },
     ];
   },
-  [Monster.Newdoria]: ({ state }, { otherMonsters }) => {
+  [Monster.Newdoria]: ({ state }, { otherMonsters, dKey }) => {
     return [
       {
         condition: () => {
-          return countMatchesInRow(state, otherMonsters) > 0;
+          return (
+            isStartOfTurn(state, dKey) &&
+            countMatchesInRow(state, otherMonsters) > 0
+          );
         },
         effect: ({ state }, { dKey, otherDKey }) => {
           destroyHighestAtk(state, otherDKey);
