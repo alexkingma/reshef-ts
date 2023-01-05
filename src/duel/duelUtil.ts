@@ -28,9 +28,18 @@ export const getCard = (cardName: CardName): Card => {
   };
 };
 
-const getRandomCard = (): Card => {
-  const dbCard = cards[Math.floor(Math.random() * cards.length)];
-  return getCard(dbCard.name);
+const getRandomCardName = (cardRules: Partial<Card> = {}): CardName => {
+  const isMatch = (card: Card) => {
+    return Object.entries(cardRules).every(
+      ([key, val]) => card[key as keyof Card] === val
+    );
+  };
+
+  let dbCard;
+  do {
+    dbCard = cards[Math.floor(Math.random() * cards.length)];
+  } while (!isMatch(getCard(dbCard.name)));
+  return dbCard.name;
 };
 
 export const getInitialDuel = (
@@ -38,8 +47,8 @@ export const getInitialDuel = (
   cardQuantMap2: CardQuantityMap
 ): Duel => {
   return {
-    p1: generateNewDuellist(cardQuantMap1),
-    p2: generateNewDuellist(cardQuantMap2),
+    p1: randomiseDuellistState(cardQuantMap1),
+    p2: randomiseDuellistState(cardQuantMap2),
     activeTurn: {
       duellistKey: "p1",
       isStartOfTurn: true,
@@ -59,16 +68,56 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
     numCardsRemaining -= quant;
 
     // don't overwrite existing cards in the map
-    const isEffect = (c: Card) => c.category === "Monster" && c.effect;
     let cardName;
     do {
-      cardName = getRandomCard().name;
-    } while (cardName in map || !isEffect(getCard(cardName)));
+      cardName = getRandomCardName({ effect: true });
+    } while (cardName in map);
 
     map[cardName] = quant;
   }
 
   return map;
+};
+
+export const randomiseDuellistState = (cardMap: CardQuantityMap): Duellist => {
+  const rand = () => Math.random() > 0.5;
+  const deck = initialiseDeck(cardMap);
+  return {
+    lp: Math.ceil(Math.random() * 8) * 1000,
+    hand: deck.splice(0, 5).map((card) =>
+      rand()
+        ? { isOccupied: false }
+        : {
+            isOccupied: true,
+            card,
+            orientation: Orientation.FaceDown,
+          }
+    ),
+    deck: deck.slice(0, Math.floor(Math.random() * 35)),
+    graveyard: getRandomCardName({ category: "Monster" }),
+    monsterZones: Array.from({ length: 5 }).map(() =>
+      rand()
+        ? { isOccupied: false }
+        : {
+            ...generateOccupiedMonsterZone(getRandomCardName({ effect: true })),
+            battlePosition: rand()
+              ? BattlePosition.Attack
+              : BattlePosition.Defence,
+            orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
+          }
+    ),
+    spellTrapZones: Array.from({ length: 5 }).map(() =>
+      rand()
+        ? { isOccupied: false }
+        : {
+            isOccupied: true,
+            orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
+            card: getCard(
+              getRandomCardName({ category: rand() ? "Trap" : "Magic" })
+            ) as SpellOrTrapOrRitualCard,
+          }
+    ),
+  };
 };
 
 export const generateNewDuellist = (cardMap: CardQuantityMap): Duellist => {
