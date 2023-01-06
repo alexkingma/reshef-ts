@@ -3,7 +3,7 @@ import { selectDuellist } from "@/duel/duelSlice";
 import { getCard } from "@/duel/duelUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
-import { FaceUpCard } from "./FaceUpCard";
+import { FaceUpCard } from "../card/FaceUpCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";
 

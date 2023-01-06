@@ -1,6 +1,6 @@
 import { DuellistKey } from "@/duel/common";
 import React from "react";
-import { Duellist } from "./Duellist";
+import { Duellist } from "./duellist/Duellist";
 
 import "./Duel.scss";
 

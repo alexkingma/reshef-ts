@@ -3,10 +3,10 @@ import { selectRow } from "@/duel/duelSlice";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
-import { Card } from "./Card";
+import { Card } from "../card/Card";
+import { Zone } from "../zone/Zone";
+import { ZoneBackground } from "../zone/ZoneBackground";
 import "./Row.scss";
-import { Zone } from "./Zone";
-import { ZoneBackground } from "./ZoneBackground";
 
 interface Props {
   rowCoords: RowCoords;
