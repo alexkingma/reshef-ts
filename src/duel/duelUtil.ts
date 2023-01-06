@@ -49,8 +49,8 @@ export const getInitialDuel = (
   cardQuantMap2: CardQuantityMap
 ): Duel => {
   return {
-    p1: randomiseDuellistState(cardQuantMap1),
-    p2: randomiseDuellistState(cardQuantMap2),
+    p1: randomiseDuellistState("Player", cardQuantMap1),
+    p2: randomiseDuellistState("Opponent", cardQuantMap2),
     activeTurn: {
       duellistKey: "p1",
       isStartOfTurn: true,
@@ -81,10 +81,14 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
   return map;
 };
 
-export const randomiseDuellistState = (cardMap: CardQuantityMap): Duellist => {
+export const randomiseDuellistState = (
+  name: string,
+  cardMap: CardQuantityMap
+): Duellist => {
   const rand = () => Math.random() > 0.5;
   const deck = initialiseDeck(cardMap);
   return {
+    name,
     lp: Math.ceil(Math.random() * 8) * 1000,
     hand: deck.splice(0, 5).map((card) =>
       rand()
@@ -122,9 +126,13 @@ export const randomiseDuellistState = (cardMap: CardQuantityMap): Duellist => {
   };
 };
 
-export const generateNewDuellist = (cardMap: CardQuantityMap): Duellist => {
+export const generateNewDuellist = (
+  name: string,
+  cardMap: CardQuantityMap
+): Duellist => {
   const deck = initialiseDeck(cardMap);
   return {
+    name,
     lp: 8000,
     hand: deck.splice(0, 5).map((card) => ({
       isOccupied: true,

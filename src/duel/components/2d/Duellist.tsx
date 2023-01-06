@@ -2,12 +2,12 @@ import { DuellistKey, RowKey } from "@/duel/common";
 import React from "react";
 import { Counterweight } from "./Counterweight";
 import { Deck } from "./Deck";
+import { DuellistStatus } from "./DuellistStatus";
 import { Field } from "./Field";
 import { Graveyard } from "./Graveyard";
 import { Row } from "./Row";
 
 interface Props {
-  name: string;
   duellistKey: DuellistKey;
 }
 
@@ -30,7 +30,11 @@ export const Duellist = ({ duellistKey }: Props) => {
         <Row rowCoords={[duellistKey, RowKey.SpellTrap]} />
         <Deck duellistKey={duellistKey} />
       </div>
-      <Row rowCoords={[duellistKey, RowKey.Hand]} />
+      <div style={{ display: "flex" }}>
+        <DuellistStatus duellistKey={duellistKey} />
+        <Row rowCoords={[duellistKey, RowKey.Hand]} />
+        <Counterweight />
+      </div>
     </div>
   );
 };

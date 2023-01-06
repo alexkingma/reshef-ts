@@ -32,6 +32,7 @@ type Deck = Card[];
 type Graveyard = CardName | null;
 
 interface Duellist {
+  name: string;
   lp: number;
   hand: HandZone[];
   deck: Deck;

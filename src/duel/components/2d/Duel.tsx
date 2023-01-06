@@ -7,9 +7,9 @@ import "./Duel.scss";
 export const Duel = () => {
   return (
     <div className="duel">
-      <Duellist name="Opponent" duellistKey={DuellistKey.Opponent} />
+      <Duellist duellistKey={DuellistKey.Opponent} />
       <hr style={{ width: "100px" }} />
-      <Duellist name="Player" duellistKey={DuellistKey.Player} />
+      <Duellist duellistKey={DuellistKey.Player} />
     </div>
   );
 };

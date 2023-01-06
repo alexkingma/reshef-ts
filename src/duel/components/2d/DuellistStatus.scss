@@ -1,0 +1,37 @@
+.statusContainer {
+  bottom: 0;
+  left: 0;
+  margin: 20px;
+  border: 3px black solid;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(177, 182, 252);
+  max-width: var(--card-width);
+
+  .spacer {
+    height: 4px;
+  }
+
+  .lp,
+  .name {
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    font-size: 18px;
+  }
+
+  .endTurnButton {
+    font-size: 18px;
+    padding: 4px;
+
+    &:disabled {
+      opacity: 0.7;
+    }
+  }
+}
+
+.opponentStatus {
+  transform: rotate(180deg);
+  background-color: rgb(218, 193, 158);
+}
