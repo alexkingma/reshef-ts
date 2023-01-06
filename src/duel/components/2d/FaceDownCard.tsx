@@ -6,8 +6,8 @@ interface Props {
   customClasses?: string;
 }
 
-export const HiddenCard = ({ customClasses }: Props) => {
+export const FaceDownCard = ({ customClasses }: Props) => {
   return (
-    <img src={cardBack} className={classNames(customClasses, "hiddenCard")} />
+    <img src={cardBack} className={classNames("faceDownCard", customClasses)} />
   );
 };

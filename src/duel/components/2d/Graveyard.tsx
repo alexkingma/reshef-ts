@@ -3,7 +3,7 @@ import { selectDuellist } from "@/duel/duelSlice";
 import { getCard } from "@/duel/duelUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
-import { VisibleCard } from "./VisibleCard";
+import { FaceUpCard } from "./FaceUpCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";
 
@@ -17,7 +17,7 @@ export const Graveyard = ({ duellistKey }: Props) => {
   return (
     <Zone>
       {graveyard ? (
-        <VisibleCard card={getCard(graveyard)} />
+        <FaceUpCard card={getCard(graveyard)} />
       ) : (
         <ZoneBackground customClasses="graveyardBackground" />
       )}

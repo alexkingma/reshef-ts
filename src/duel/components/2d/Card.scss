@@ -1,15 +1,30 @@
 .cardContainer {
   position: relative;
+  height: var(--card-height);
 
-  &:hover .zoneButtonsContainer {
-    display: flex;
+  &:hover {
+    .zoneButtonsContainer {
+      display: flex;
+    }
+
+    .faceUpCard:not(.alwaysVisible).showOnHover {
+      display: block;
+    }
+
+    .faceDownCard.showOnHover {
+      display: none;
+    }
   }
 
-  .card {
+  .faceUpCard {
     border-radius: 3px;
+
+    &:not(.alwaysVisible) {
+      display: none;
+    }
   }
 
-  .rotatedCard {
+  .defenceModeCard {
     transform-origin: calc(var(--card-width) / 2) calc(var(--card-height) / 2);
     transform: rotate(270deg);
   }
@@ -18,8 +33,7 @@
     position: absolute;
     z-index: 1;
     left: 0;
-    top: 0;
-    bottom: 0;
+    top: 100%;
     right: 0;
     align-items: center;
     justify-content: center;
@@ -32,8 +46,12 @@
   }
 }
 
-.hiddenCard {
+.faceDownCard {
   width: var(--card-width);
   height: var(--card-height);
   border-radius: 3px;
+
+  &.alwaysVisible {
+    display: none;
+  }
 }

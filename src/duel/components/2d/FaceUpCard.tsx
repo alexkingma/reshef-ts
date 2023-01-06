@@ -7,12 +7,10 @@ interface Props {
   customClasses?: string;
 }
 
-export const VisibleCard = ({ card, customClasses }: Props) => {
+export const FaceUpCard = ({ card, customClasses }: Props) => {
   const cardFront = getImage(card.name);
 
   return (
-    <>
-      <img src={cardFront} className={classNames("card", customClasses)} />
-    </>
+    <img src={cardFront} className={classNames("faceUpCard", customClasses)} />
   );
 };

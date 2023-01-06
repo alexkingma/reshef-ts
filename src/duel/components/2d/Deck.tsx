@@ -2,7 +2,7 @@ import { selectDuellist } from "@/duel/duelSlice";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 import "./Deck.scss";
-import { HiddenCard } from "./HiddenCard";
+import { FaceDownCard } from "./FaceDownCard";
 import { Zone } from "./Zone";
 import { ZoneBackground } from "./ZoneBackground";
 
@@ -19,7 +19,7 @@ export const Deck = ({ duellistKey }: Props) => {
       {!deck.length ? (
         <ZoneBackground customClasses={"deckBackground"} />
       ) : (
-        <HiddenCard />
+        <FaceDownCard />
       )}
     </Zone>
   );
