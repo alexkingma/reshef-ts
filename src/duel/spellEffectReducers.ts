@@ -25,16 +25,17 @@ import {
   RowKey,
   Spell,
 } from "./common";
-import { StateMap, ZoneCoordsMap } from "./duelSlice";
+import { ZoneCoordsMap } from "./duelSlice";
 import {
   containsAnyCards,
   countMatchesInRow,
   generateOccupiedMonsterZone,
   getFirstEmptyZoneIdx,
+  getRow,
 } from "./duelUtil";
 
 type SpellEffectReducers = {
-  [key in Spell]: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
+  [key in Spell]: (state: Duel, coordsMap: ZoneCoordsMap) => void;
 };
 
 export const spellEffectReducers: SpellEffectReducers = {
@@ -44,7 +45,7 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.FinalFlame]: burnOther(200),
   [Spell.Ookazi]: burnOther(500),
   [Spell.TremendousFire]: burnOther(1000),
-  [Spell.RestructerRevolution]: ({ state }, { otherDKey, otherHand }) =>
+  [Spell.RestructerRevolution]: (state, { otherDKey, otherHand }) =>
     burnDirect(state, otherDKey, countMatchesInRow(state, otherHand) * 200),
 
   // heal
@@ -144,59 +145,60 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.LastDayOfWitch]: destroyMonsterType("Spellcaster"),
 
   // assorted
-  [Spell.JamBreedingMachine]: (
-    { state, originatorState, activeTurn },
-    { ownMonsters }
-  ) => {
+  [Spell.JamBreedingMachine]: (state, { ownMonsters }) => {
     try {
       const zoneIdx = getFirstEmptyZoneIdx(state, ownMonsters);
-      originatorState.monsterZones[zoneIdx] = {
+
+      const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
+      monsterZones[zoneIdx] = {
         ...generateOccupiedMonsterZone(Monster.ChangeSlime),
         isLocked: true,
       };
-      activeTurn.hasNormalSummoned = true;
+      state.activeTurn.hasNormalSummoned = true;
     } catch (e) {
       // no free zone to summon monster
     }
   },
-  [Spell.StopDefense]: ({ targetState }) => {
-    targetState.monsterZones.forEach((zone, idx, row) => {
+  [Spell.StopDefense]: (state, { otherMonsters }) => {
+    const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
+    monsterZones.forEach((zone, idx, row) => {
       if (!zone.isOccupied) return;
       (row[idx] as OccupiedMonsterZone).battlePosition = BattlePosition.Attack;
     });
   },
-  [Spell.SwordsOfRevealingLight]: ({ targetState }) => {
+  [Spell.SwordsOfRevealingLight]: (state, { otherMonsters }) => {
     // TODO
   },
-  [Spell.DarkPiercingLight]: ({ state }, { otherMonsters }) => {
+  [Spell.DarkPiercingLight]: (state, { otherMonsters }) => {
     setRowFaceUp(state, otherMonsters);
   },
-  [Spell.MonsterReborn]: ({ state }, { dKey }) => {
+  [Spell.MonsterReborn]: (state, { dKey }) => {
     resurrectEnemy(state, dKey);
   },
-  [Spell.GravediggerGhoul]: ({ state }, { dKey, otherDKey }) => {
+  [Spell.GravediggerGhoul]: (state, { dKey, otherDKey }) => {
     clearGraveyard(state, dKey);
     clearGraveyard(state, otherDKey);
   },
-  [Spell.MessengerOfPeace]: ({ originatorState, targetState }) => {
+  [Spell.MessengerOfPeace]: () => {
     // TODO
     // perpetual activation as long as 1500+ monster is out, remains face up permanently
     // basically like DCJ
   },
-  [Spell.DarknessApproaches]: ({ state }, { ownMonsters }) => {
+  [Spell.DarknessApproaches]: (state, { ownMonsters }) => {
     setRowFaceDown(state, ownMonsters);
   },
-  [Spell.BrainControl]: ({ state }, { dKey }) => {
+  [Spell.BrainControl]: (state, { dKey }) => {
     convertMonster(state, dKey);
     // TODO: make the converted monster revert back after turn end
   },
-  [Spell.ChangeOfHeart]: ({ state }, { dKey }) => {
+  [Spell.ChangeOfHeart]: (state, { dKey }) => {
     convertMonster(state, dKey);
   },
-  [Spell.Multiply]: ({ state, originatorState }, { ownMonsters }) => {
+  [Spell.Multiply]: (state, { ownMonsters }) => {
     if (!containsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
-    originatorState.monsterZones.forEach((zone, idx, row) => {
+    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
+    monsterZones.forEach((zone, idx, row) => {
       if (zone.isOccupied) return;
       row[idx] = {
         ...generateOccupiedMonsterZone(Monster.Kuriboh),
@@ -205,7 +207,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     });
   },
   [Spell.PotOfGreed]: draw(2),
-  [Spell.TheInexperiencedSpy]: ({ state }, { otherHand }) => {
+  [Spell.TheInexperiencedSpy]: (state, { otherHand }) => {
     setRowFaceUp(state, otherHand);
   },
 };

@@ -2,24 +2,18 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import { cardReducers } from "./cardReducers";
-import { Field } from "./common";
+import { RowKey } from "./common";
 import { duellistReducers } from "./duellistReducers";
 import {
   checkAutoEffects,
   getInitialDuel,
+  getOtherDuellistKey,
   getRow,
-  getStateMap,
   getTempCardQuantMap,
   getZone,
+  hasMatchInRow,
 } from "./duelUtil";
-
-export interface StateMap {
-  state: Duel;
-  originatorState: Duellist;
-  targetState: Duellist;
-  activeTurn: Turn;
-  activeField: Field;
-}
+import { interactionReducers } from "./interactionReducers";
 
 export interface DuellistCoordsMap {
   dKey: DuellistKey;
@@ -45,18 +39,29 @@ export type CoordsMap = ZoneCoordsMap | DuellistCoordsMap;
 
 export type CardActionKey = keyof typeof cardReducers;
 export type DuellistActionKey = keyof typeof duellistReducers;
-type DuelActionKey = CardActionKey | DuellistActionKey;
+export type InteractionActionKey = keyof typeof interactionReducers;
+
+type DuelActionKey = CardActionKey | DuellistActionKey | InteractionActionKey;
 type CustomDuelReducers = {
   [K in DuelActionKey]: (
-    stateMap: StateMap,
-    coordsMap: K extends CardActionKey ? ZoneCoordsMap : DuellistCoordsMap
+    state: Duel,
+    coordsMap: K extends CardActionKey
+      ? ZoneCoordsMap
+      : K extends InteractionActionKey
+      ? ExtractSecondArg<typeof interactionReducers[K]>
+      : DuellistCoordsMap
   ) => void;
 };
+
 type DuelReducers = {
   [K in DuelActionKey]: (
     state: Duel,
     action: PayloadAction<
-      K extends CardActionKey ? ZoneCoordsMap : DuellistCoordsMap
+      K extends CardActionKey
+        ? ZoneCoordsMap
+        : K extends InteractionActionKey
+        ? ExtractSecondArg<typeof interactionReducers[K]>
+        : DuellistCoordsMap
     >
   ) => void;
 };
@@ -68,12 +73,10 @@ const initialState: Duel = getInitialDuel(playerCardMap, opponentCardMap);
 const transform = (map: CustomDuelReducers) => {
   const transformedMap = {} as DuelReducers;
   for (let key in map) {
-    transformedMap[key as CardActionKey] = (state, action) => {
-      const { dKey } = action.payload;
-      const stateMap = getStateMap(state, dKey);
-      map[key as DuelActionKey](stateMap, action.payload);
+    transformedMap[key as DuelActionKey] = (state, action) => {
+      map[key as DuelActionKey](state, action.payload as any);
 
-      if (key !== "endTurn") {
+      if (key !== "endTurn" && !(key in interactionReducers)) {
         // after every core dispatch to the field state as above,
         // the entire field passive/auto effects need to be recalculated
 
@@ -84,7 +87,7 @@ const transform = (map: CustomDuelReducers) => {
         // we can safely ignore this round of checks in favour of waiting for the
         // start-of-turn dispatch, which prompts "It's my turn" dialogue, card-
         // drawing, start-of-turn-only effects, etc.
-        checkAutoEffects(stateMap);
+        checkAutoEffects(state);
       }
     };
   }
@@ -94,7 +97,11 @@ const transform = (map: CustomDuelReducers) => {
 export const duelSlice = createSlice({
   name: "duel",
   initialState,
-  reducers: transform({ ...cardReducers, ...duellistReducers }),
+  reducers: transform({
+    ...cardReducers,
+    ...duellistReducers,
+    ...interactionReducers,
+  }),
 });
 
 export const { actions } = duelSlice;
@@ -108,6 +115,10 @@ export const selectZone =
   (coords: ZoneCoords) =>
   ({ duel }: RootState) =>
     getZone(duel, coords);
+export const selectOpponentHasMonster =
+  (dKey: DuellistKey) =>
+  ({ duel }: RootState) =>
+    hasMatchInRow(duel, [getOtherDuellistKey(dKey), RowKey.Monster]);
 export const selectIsMyTurn =
   (key: DuellistKey) =>
   ({ duel }: RootState) =>
@@ -116,6 +127,7 @@ export const selectDuellist =
   (key: DuellistKey) =>
   ({ duel }: RootState) =>
     duel[key] as Duellist;
+export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 
 export default duelSlice.reducer;

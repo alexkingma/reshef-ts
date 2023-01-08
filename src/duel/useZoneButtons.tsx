@@ -1,19 +1,26 @@
 import React from "react";
 import { useAppSelector } from "../hooks";
-import { RowKey } from "./common";
-import { selectActiveTurn, selectIsMyTurn, selectZone } from "./duelSlice";
+import { InteractionMode, RowKey } from "./common";
+import {
+  selectActiveTurn,
+  selectIsMyTurn,
+  selectOpponentHasMonster,
+  selectZone,
+} from "./duelSlice";
 import {
   canActivateEffect,
   getNumTributesRequired,
+  hasTarget,
   isMonster,
   isSpell,
 } from "./duelUtil";
 import { useCardActions } from "./useCardActions";
+import { useInteractionActions } from "./useInteractionActions";
 
 export enum DuelButtonKey {
   Attack = "ATTACK",
   Summon = "SUMMON",
-  Set = "SET",
+  SetSpellTrap = "SET_SPELL_TRAP",
   MonsterEffect = "MONSTER_EFFECT",
   SpellEffect = "SPELL_EFFECT",
   Tribute = "TRIBUTE",
@@ -47,6 +54,9 @@ export const useZoneButtons = (zoneCoords: ZoneCoords) => {
   const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
 
   const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
+  const opponentHasMonster = useAppSelector(
+    selectOpponentHasMonster(duellistKey)
+  );
   const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
   const { hasNormalSummoned, numTributedMonsters } =
     useAppSelector(selectActiveTurn);
@@ -66,13 +76,31 @@ export const useZoneButtons = (zoneCoords: ZoneCoords) => {
     activateSpellEffect,
     discard,
   } = useCardActions(zoneCoords);
+  const {
+    setOriginZone,
+    setInteractionMode,
+    setPendingAction,
+    resetInteractions,
+  } = useInteractionActions();
 
   const duelButtons: DuelButtonBlueprintMap = {
     [DuelButtonKey.Attack]: {
       label: "Attack",
       condition: (z) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      onClick: () => attack(),
+      onClick: () => {
+        setOriginZone(zoneCoords);
+        if (opponentHasMonster) {
+          // direct attack not possible, next step is to pick a monster to target
+          setPendingAction(attack);
+          setInteractionMode(InteractionMode.ChoosingOpponentMonster);
+          // TODO: set cursor to be on opponent's first monster
+        } else {
+          // no monsters to target, direct attack
+          attack();
+          resetInteractions();
+        }
+      },
     },
     [DuelButtonKey.Defend]: {
       label: "Defend",
@@ -87,17 +115,36 @@ export const useZoneButtons = (zoneCoords: ZoneCoords) => {
         isMonster(z) &&
         canNormalSummon(z.card) &&
         isRow(RowKey.Hand),
-      onClick: () => normalSummon(),
+      onClick: () => {
+        setOriginZone(zoneCoords);
+        setPendingAction(normalSummon);
+        setInteractionMode(InteractionMode.ChoosingOwnMonsterZone);
+        // TODO: set cursor to be on first free zone (or 0 idx)
+      },
     },
-    [DuelButtonKey.Set]: {
+    [DuelButtonKey.SetSpellTrap]: {
       label: "Set",
       condition: (z) => isMyTurn && !isMonster(z) && isRow(RowKey.Hand),
-      onClick: () => setSpellTrap(),
+      onClick: () => {
+        setOriginZone(zoneCoords);
+        setPendingAction(setSpellTrap);
+        setInteractionMode(InteractionMode.ChoosingOwnSpellTrapZone);
+        // TODO: set cursor to be on first free zone (or 0 idx)
+      },
     },
     [DuelButtonKey.SpellEffect]: {
       label: "Activate",
       condition: (z) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
-      onClick: () => activateSpellEffect(),
+      onClick: () => {
+        if (hasTarget(zone.card.name)) {
+          setOriginZone(zoneCoords);
+          setPendingAction(activateSpellEffect);
+          setInteractionMode(InteractionMode.ChoosingOwnMonster);
+          // TODO: set cursor to be on first monster
+        } else {
+          activateSpellEffect();
+        }
+      },
     },
     [DuelButtonKey.MonsterEffect]: {
       label: "Flip Effect",

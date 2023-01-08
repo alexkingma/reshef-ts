@@ -1,7 +1,7 @@
 import { default as alignmentMap } from "../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../assets/fields.json";
 import { BattlePosition, Field, RowKey, TempPowerUpMonster } from "./common";
-import { StateMap, ZoneCoordsMap } from "./duelSlice";
+import { ZoneCoordsMap } from "./duelSlice";
 import {
   activateTempEffect,
   getOtherDuellistKey,
@@ -60,17 +60,16 @@ const getFieldMultiplier = (field: Field, type: CardType) => {
   return map[type] || 1;
 };
 
-export const recalcCombatStats = (stateMap: StateMap) => {
-  resetCombatStats(stateMap);
-  activateTempPowerUps(stateMap);
-  calcCombatStats(stateMap);
+export const recalcCombatStats = (state: Duel) => {
+  resetCombatStats(state);
+  activateTempPowerUps(state);
+  calcCombatStats(state);
 };
 
-const resetCombatStats = ({
-  originatorState,
-  targetState,
-  state,
-}: StateMap) => {
+const resetCombatStats = (state: Duel) => {
+  const dKey = state.activeTurn.duellistKey;
+  const originatorState = state[dKey];
+  const targetState = state[getOtherDuellistKey(dKey)];
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
     resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
@@ -81,7 +80,10 @@ const resetCombatStats = ({
   });
 };
 
-const calcCombatStats = ({ originatorState, targetState, state }: StateMap) => {
+const calcCombatStats = (state: Duel) => {
+  const dKey = state.activeTurn.duellistKey;
+  const originatorState = state[dKey];
+  const targetState = state[getOtherDuellistKey(dKey)];
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
     calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
@@ -104,35 +106,33 @@ const calcZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
   };
 };
 
-const activateTempPowerUps = (stateMap: StateMap) => {
-  const { originatorState, targetState, activeTurn } = stateMap;
-  const { duellistKey: activeKey } = activeTurn;
+const activateTempPowerUps = (state: Duel) => {
+  const dKey = state.activeTurn.duellistKey;
+  const originatorState = state[dKey];
+  const targetState = state[getOtherDuellistKey(dKey)];
+  const { duellistKey: activeKey } = state.activeTurn;
   const inactiveKey = getOtherDuellistKey(activeKey);
   originatorState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
     activateZoneTempPowerUps(
-      stateMap,
+      state,
       getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol])
     );
   });
   targetState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
     activateZoneTempPowerUps(
-      stateMap,
+      state,
       getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol])
     );
   });
 };
 
-const activateZoneTempPowerUps = (
-  stateMap: StateMap,
-  coordsMap: ZoneCoordsMap
-) => {
-  const { state } = stateMap;
+const activateZoneTempPowerUps = (state: Duel, coordsMap: ZoneCoordsMap) => {
   const { zoneCoords } = coordsMap;
   const { card } = getZone(state, zoneCoords) as OccupiedMonsterZone;
   const reducer = monsterTempPowerUpReducers[card.name as TempPowerUpMonster];
   if (!reducer) return;
 
-  activateTempEffect(stateMap, coordsMap, reducer);
+  activateTempEffect(state, coordsMap, reducer);
 };

@@ -4,7 +4,7 @@ import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
 import { Card } from "../card/Card";
-import { Zone } from "../zone/Zone";
+import { InteractiveZone } from "../zone/InteractiveZone";
 import { ZoneBackground } from "../zone/ZoneBackground";
 import "./Row.scss";
 
@@ -21,19 +21,22 @@ export const Row = ({ rowCoords }: Props) => {
 
   return (
     <div className="row">
-      {zones.map((_, i) => (
-        <Zone key={i}>
-          {!isHand && (
-            <ZoneBackground
-              customClasses={classNames(
-                isMonster && "monsterBackground",
-                isSpellTrap && "spellTrapBackground"
-              )}
-            />
-          )}
-          <Card zoneCoords={[...rowCoords, i as FieldCol]} />
-        </Zone>
-      ))}
+      {zones.map((_, i) => {
+        const zoneCoords: ZoneCoords = [...rowCoords, i as FieldCol];
+        return (
+          <InteractiveZone key={i} zoneCoords={zoneCoords}>
+            {!isHand && (
+              <ZoneBackground
+                customClasses={classNames(
+                  isMonster && "monsterBackground",
+                  isSpellTrap && "spellTrapBackground"
+                )}
+              />
+            )}
+            <Card zoneCoords={zoneCoords} />
+          </InteractiveZone>
+        );
+      })}
     </div>
   );
 };

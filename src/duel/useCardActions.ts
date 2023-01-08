@@ -19,7 +19,3 @@ export const useCardActions = (zoneCoords: ZoneCoords) => {
 
   return map;
 };
-
-type DuellistActions = {
-  [K in keyof typeof cardReducers]: () => void;
-};

@@ -3,4 +3,39 @@
   margin: 5px 20px;
   width: var(--card-width);
   height: var(--card-height);
+  --pulse-size: 20px;
+}
+
+.cursorZone .faceUpCard,
+.cursorZone .faceDownCard {
+  box-shadow: 0 0 var(--pulse-size) yellow;
+}
+
+.originZone .faceUpCard,
+.originZone .faceDownCard {
+  --pulse-colour: green;
+  box-shadow: 0 0 var(--pulse-size) var(--pulse-colour);
+  animation: pulse 1s ease-out infinite;
+}
+
+.viableTargetZone,
+.viableTargetZone,
+.viableTargetCard .faceUpCard,
+.viableTargetCard .faceDownCard {
+  --pulse-colour: red;
+  --pulse-size: 20px;
+  box-shadow: 0 0 var(--pulse-size) var(--pulse-colour);
+  animation: pulse 1s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 var(--pulse-colour);
+  }
+  50% {
+    box-shadow: 0 0 var(--pulse-size) var(--pulse-colour);
+  }
+  100% {
+    box-shadow: 0 0 0 var(--pulse-colour);
+  }
 }

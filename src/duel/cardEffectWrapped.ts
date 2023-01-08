@@ -10,51 +10,42 @@ import {
   tempPowerUp as tempPowerUpDirect,
   updateMatchesInRow,
 } from "./cardEffectUtil";
-import { Field, RowKey } from "./common";
-import {
-  CoordsMap,
-  DuellistCoordsMap,
-  StateMap,
-  ZoneCoordsMap,
-} from "./duelSlice";
-import { countMatchesInRow, getHighestAtkZoneIdx } from "./duelUtil";
+import { Field } from "./common";
+import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "./duelSlice";
+import { countMatchesInRow, getHighestAtkZoneIdx, getRow } from "./duelUtil";
 
 export const burnOther =
   (amt: number) =>
-  ({ state }: StateMap, { otherDKey }: CoordsMap) => {
+  (state: Duel, { otherDKey }: CoordsMap) => {
     burnDirect(state, otherDKey, amt);
   };
 
 export const heal =
   (amt: number) =>
-  ({ state }: StateMap, { dKey }: CoordsMap) => {
+  (state: Duel, { dKey }: CoordsMap) => {
     healDirect(state, dKey, amt);
   };
 
 export const permPowerUp =
   (levels: number = 1) =>
-  ({ state }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
-    permPowerUpDirect(state, zoneCoords, levels);
+  (state: Duel) => {
+    const { targetCoords } = state.interaction;
+    permPowerUpDirect(state, targetCoords!, levels);
   };
 
-export const setField =
-  (newField: Field) =>
-  ({ state }: StateMap) => {
-    setFieldDirect(state, newField);
-  };
+export const setField = (newField: Field) => (state: Duel) => {
+  setFieldDirect(state, newField);
+};
 
-export const destroyRows =
-  (rowsToDestroy: RowCoords[]) =>
-  ({ state }: StateMap) => {
-    rowsToDestroy.forEach(([dKey, rKey]) =>
-      destroyRow(state, [dKey, rKey as RowKey])
-    );
-  };
+export const destroyRows = (rowsToDestroy: RowCoords[]) => (state: Duel) => {
+  rowsToDestroy.forEach((row) => destroyRow(state, row));
+};
 
 export const destroyHighestAtk =
   () =>
-  ({ state, targetState }: StateMap, { otherMonsters }: CoordsMap) => {
-    if (!targetState.monsterZones.some((z) => z.isOccupied)) {
+  (state: Duel, { otherMonsters }: CoordsMap) => {
+    const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
+    if (!monsterZones.some((z) => z.isOccupied)) {
       // no monsters exist, destroy nothing
       return;
     }
@@ -68,16 +59,14 @@ export const destroyHighestAtk =
 
 const destroyMonsterConditional =
   (condition: (c: MonsterCard) => boolean) =>
-  ({ state, targetState }: StateMap, { otherMonsters }: CoordsMap) => {
-    const validColIdxs = targetState.monsterZones.reduce(
-      (validCols, z, idx) => {
-        if (z.isOccupied && condition(z.card)) {
-          return [...validCols, idx];
-        }
-        return validCols;
-      },
-      [] as number[]
-    );
+  (state: Duel, { otherMonsters }: CoordsMap) => {
+    const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
+    const validColIdxs = monsterZones.reduce((validCols, z, idx) => {
+      if (z.isOccupied && condition(z.card)) {
+        return [...validCols, idx];
+      }
+      return validCols;
+    }, [] as number[]);
 
     if (!validColIdxs.length) {
       // no applicable monsters exist, destroy nothing
@@ -103,7 +92,7 @@ export const destroyMonsterAlignment = (alignment: Alignment) =>
 
 export const draw =
   (numCards: number = 1) =>
-  ({ state }: StateMap, { dKey }: DuellistCoordsMap) => {
+  (state: Duel, { dKey }: DuellistCoordsMap) => {
     drawDirect(state, dKey, numCards);
   };
 
@@ -121,7 +110,7 @@ export const getEffCon_powerUpSelfConditional = (
     condition: () => {
       return countConditional(rowConditionPairs, graveyardConditionPairs) > 0;
     },
-    effect: ({ state }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
+    effect: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
       const count = countConditional(
         rowConditionPairs,
         graveyardConditionPairs

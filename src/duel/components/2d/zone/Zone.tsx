@@ -4,8 +4,9 @@ import "./Zone.scss";
 
 interface Props {
   children?: ReactNode;
+  customClasses?: string;
 }
 
-export const Zone = ({ children }: Props) => {
-  return <div className={classNames("zone")}>{children}</div>;
+export const Zone = ({ customClasses, children }: Props) => {
+  return <div className={classNames("zone", customClasses)}>{children}</div>;
 };

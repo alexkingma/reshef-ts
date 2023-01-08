@@ -29,6 +29,16 @@ export enum Field {
   Forest = "Forest",
 }
 
+export enum InteractionMode {
+  Locked = "LOCKED", // cursor movement not allowed (animation playing, dialogue cued, opponent's turn)
+  FreeMovement = "FREE_MOVEMENT", // default state during own turn
+  ViewingOptions = "VIEWING_OPTIONS", // zone buttons/actions appear (attack, summon, discard)
+  ChoosingOwnMonster = "CHOOSING_OWN_MONSTER", // select a monster to target/power-up with a spell
+  ChoosingOwnMonsterZone = "CHOOSING_OWN_MONSTER_ZONE", // zone to summon at (empty or otherwise)
+  ChoosingOwnSpellTrapZone = "CHOOSING_OWN_SPELL_TRAP_ZONE", // zone to set at (empty or otherwise)
+  ChoosingOpponentMonster = "CHOOSING_OPPONENT_MONSTER", // monster to attack (non-direct attacks)
+}
+
 export enum Monster {
   BlueEyesWhiteDragon = "Blue-Eyes White Dragon",
   MysticalElf = "Mystical Elf",

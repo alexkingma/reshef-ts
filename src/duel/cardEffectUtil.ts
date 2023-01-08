@@ -106,23 +106,21 @@ export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
   setRowOrientation(state, rowCoords, Orientation.FaceDown);
 };
 
-export const immobiliseCard = (zone: OccupiedMonsterZone) => {
+export const immobiliseCard = (state: Duel, zoneCoords: ZoneCoords) => {
+  const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
   zone.isLocked = true;
 };
 
-export const immobiliseRow = (row: MonsterZone[]) => {
-  row.forEach((zone, idx, zones) => {
+export const immobiliseRow = (state: Duel, [dKey, rKey]: RowCoords) => {
+  state[dKey][rKey].forEach((zone, idx) => {
     if (!zone.isOccupied) return;
-    immobiliseCard(zones[idx] as OccupiedMonsterZone);
+    immobiliseCard(state, [dKey, rKey, idx as FieldCol]);
   });
 };
 
-export const directAttack = (
-  originatorState: Duellist,
-  targetState: Duellist,
-  attackerIdx: FieldCol
-) => {
-  const zone = originatorState.monsterZones[attackerIdx] as OccupiedMonsterZone;
+export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {
+  const targetState = state[getOtherDuellistKey(attackerCoords[0])];
+  const zone = getZone(state, attackerCoords) as OccupiedMonsterZone;
   zone.orientation = Orientation.FaceUp;
   targetState.lp -= zone.card.effAtk;
 };
@@ -132,14 +130,10 @@ export const attackMonster = (
   attackerCoords: ZoneCoords,
   targetCoords: ZoneCoords
 ) => {
-  const [attackerDKey, , attackerIdx] = attackerCoords;
-  const [targetDKey, , targetIdx] = targetCoords;
-  const originatorState = state[attackerDKey];
-  const targetState = state[targetDKey];
-  const attackerZone = originatorState.monsterZones[
-    attackerIdx
-  ] as OccupiedMonsterZone;
-  const targetZone = targetState.monsterZones[targetIdx] as OccupiedMonsterZone;
+  const [attackerDKey] = attackerCoords;
+  const [targetDKey] = targetCoords;
+  const attackerZone = getZone(state, attackerCoords) as OccupiedMonsterZone;
+  const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
 
   const { attackerDestroyed, targetDestroyed, attackerLpLoss, targetLpLoss } =
     calculateAttack(attackerZone, targetZone);
@@ -156,8 +150,8 @@ export const attackMonster = (
     targetZone.orientation = Orientation.FaceUp;
   }
 
-  if (attackerLpLoss) originatorState.lp -= attackerLpLoss;
-  if (targetLpLoss) targetState.lp -= targetLpLoss;
+  if (attackerLpLoss) burn(state, attackerDKey, attackerLpLoss);
+  if (targetLpLoss) burn(state, targetDKey, targetLpLoss);
 };
 
 export const specialSummon = (

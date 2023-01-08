@@ -3,116 +3,95 @@ import {
   clearZone,
   destroyAtCoords,
   directAttack,
-  specialSummon,
 } from "./cardEffectUtil";
+import { BattlePosition, FlipEffectMonster, Spell } from "./common";
+import { ZoneCoordsMap } from "./duelSlice";
 import {
-  BattlePosition,
-  FlipEffectMonster,
-  Orientation,
-  Spell,
-} from "./common";
-import { StateMap, ZoneCoordsMap } from "./duelSlice";
-import {
-  getFirstEmptyZoneIdx,
-  getHighestAtkZoneIdx,
+  generateOccupiedMonsterZone,
   getZone,
   postDirectMonsterAction,
 } from "./duelUtil";
-import { monsterFlipEffectReducers } from "./monsterFlipEffectReducers";
-import { spellEffectReducers } from "./spellEffectReducers";
+import { monsterFlipEffectReducers as flipReducers } from "./monsterFlipEffectReducers";
+import { spellEffectReducers as spellReducers } from "./spellEffectReducers";
 
 export const cardReducers = {
-  normalSummon: (
-    { state, activeTurn }: StateMap,
-    { zoneCoords, dKey }: ZoneCoordsMap
-  ) => {
+  normalSummon: (state: Duel) => {
+    const { originCoords, targetCoords } = state.interaction;
     const { card, orientation } = getZone(
       state,
-      zoneCoords
+      originCoords!
     ) as OccupiedMonsterZone;
-    specialSummon(state, dKey, card.name, { orientation });
-    clearZone(state, zoneCoords);
-    activeTurn.hasNormalSummoned = true;
+    clearZone(state, originCoords!);
+    Object.assign(getZone(state, targetCoords!), {
+      ...generateOccupiedMonsterZone(card.name),
+      orientation,
+    });
+    state.activeTurn.hasNormalSummoned = true;
   },
-  setSpellTrap: (
-    { state, originatorState }: StateMap,
-    { zoneCoords, ownSpellTrap, colIdx }: ZoneCoordsMap
-  ) => {
-    const zoneIdx = getFirstEmptyZoneIdx(state, ownSpellTrap, true);
-    const { card } = originatorState.hand[colIdx] as OccupiedSpellTrapZone;
-    clearZone(state, zoneCoords);
-    originatorState.spellTrapZones[zoneIdx] = {
+  setSpellTrap: (state: Duel) => {
+    const { originCoords, targetCoords } = state.interaction;
+    const { card, orientation } = getZone(
+      state,
+      originCoords!
+    ) as OccupiedSpellTrapZone;
+    clearZone(state, originCoords!);
+    Object.assign(getZone(state, targetCoords!), {
       isOccupied: true,
       card,
-      orientation: Orientation.FaceDown,
-    };
+      orientation,
+    });
   },
-  attack: (
-    { state, originatorState, targetState }: StateMap,
-    { colIdx: attackerIdx, otherMonsters, zoneCoords }: ZoneCoordsMap
-  ) => {
-    const attackerZone = originatorState.monsterZones[
-      attackerIdx
-    ] as OccupiedMonsterZone;
+  attack: (state: Duel) => {
+    const { originCoords, targetCoords } = state.interaction;
+    const attackerZone = getZone(state, originCoords!) as OccupiedMonsterZone;
     attackerZone.battlePosition = BattlePosition.Attack;
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) {
+
+    if (!targetCoords) {
       // no monsters, attack directly
-      directAttack(originatorState, targetState, attackerIdx);
+      directAttack(state, originCoords!);
     } else {
-      attackMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
+      attackMonster(state, originCoords!, targetCoords);
     }
+
     attackerZone.isLocked = true;
   },
-  defend: (
-    { originatorState }: StateMap,
-    { colIdx: monsterIdx }: ZoneCoordsMap
-  ) => {
-    const zone = originatorState.monsterZones[
-      monsterIdx
-    ] as OccupiedMonsterZone;
+  defend: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
+    const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
     zone.battlePosition = BattlePosition.Defence;
   },
-  tribute: ({ state, activeTurn }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
+  tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords);
-    activeTurn.numTributedMonsters++;
+    state.activeTurn.numTributedMonsters++;
   },
-  discard: ({ state }: StateMap, { zoneCoords }: ZoneCoordsMap) => {
+  discard: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords);
   },
-  activateSpellEffect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => {
-    const { state, originatorState } = stateMap;
-    const { zoneCoords, colIdx: spellIdx } = coordsMap;
-    const { card } = originatorState.spellTrapZones[
-      spellIdx
-    ] as OccupiedSpellTrapZone;
-    const spellDispatch = spellEffectReducers[card.name as Spell];
-    if (!spellDispatch) {
+  activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
+    const { zoneCoords } = coordsMap;
+    const { card } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+    const spellReducer = spellReducers[card.name as Spell];
+    if (!spellReducer) {
       console.log(`Spell effect not implemented for card: ${card.name}`);
       return;
     }
-    spellDispatch(stateMap, coordsMap);
+    spellReducer(state, coordsMap);
 
     // discard after activation
     clearZone(state, zoneCoords);
   },
-  activateMonsterFlipEffect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => {
-    const { state } = stateMap;
+  activateMonsterFlipEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
     const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    const originalCardName = originalZone.card.name;
-    const monsterFlipEffectDispatch =
-      monsterFlipEffectReducers[originalCardName as FlipEffectMonster];
+    const originalCardName = originalZone.card.name as FlipEffectMonster;
+    const flipReducer = flipReducers[originalCardName];
 
-    if (!monsterFlipEffectDispatch) {
-      console.log(
-        `Monster effect not implemented for card: ${originalCardName}`
-      );
+    if (!flipReducer) {
+      console.log(`Flip effect not implemented for card: ${originalCardName}`);
       return;
     }
 
-    if (monsterFlipEffectDispatch) {
-      monsterFlipEffectDispatch(stateMap, coordsMap);
+    if (flipReducer) {
+      flipReducer(state, coordsMap);
 
       // lock/flip/etc.
       postDirectMonsterAction(state, zoneCoords, originalCardName);

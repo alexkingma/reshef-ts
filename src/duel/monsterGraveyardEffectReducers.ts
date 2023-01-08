@@ -6,17 +6,17 @@ import {
   specialSummon,
 } from "./cardEffectUtil";
 import { GraveyardEffectMonster, Monster } from "./common";
-import { DuellistCoordsMap, StateMap } from "./duelSlice";
+import { DuellistCoordsMap } from "./duelSlice";
 import { countMatchesInRow, hasEmptyZone, isStartOfTurn } from "./duelUtil";
 
 type GraveyardEffectReducer = (
-  stateMap: StateMap,
+  state: Duel,
   coordsMap: DuellistCoordsMap
 ) => void;
 
 type MonsterGraveyardEffectReducers = {
   [key in GraveyardEffectMonster]: (
-    stateMap: StateMap,
+    state: Duel,
     coordsMap: DuellistCoordsMap
   ) => {
     condition: () => boolean;
@@ -25,20 +25,20 @@ type MonsterGraveyardEffectReducers = {
 };
 
 export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
-  [Monster.TheWingedDragonOfRaPhoenixMode]: ({ state }, { ownMonsters }) => {
+  [Monster.TheWingedDragonOfRaPhoenixMode]: (state, { ownMonsters }) => {
     return [
       {
         condition: () => {
           return hasEmptyZone(state, ownMonsters);
         },
-        effect: ({ state }, { dKey }) => {
+        effect: (state, { dKey }) => {
           specialSummon(state, dKey, Monster.TheWingedDragonOfRaBattleMode);
           clearGraveyard(state, dKey);
         },
       },
     ];
   },
-  [Monster.Helpoemer]: ({ state }, { otherDKey, otherHand }) => {
+  [Monster.Helpoemer]: (state, { otherDKey, otherHand }) => {
     return [
       {
         condition: () => {
@@ -47,7 +47,7 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
             countMatchesInRow(state, otherHand) >= 3
           );
         },
-        effect: ({ state }, { otherHand }) => {
+        effect: (state, { otherHand }) => {
           // If this is in the own graveyard on the enemy's turn, and if
           // the foe has 3 or more cards in hand, the foe must discard one.
           destroyFirstFound(state, otherHand);
@@ -55,7 +55,7 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
       },
     ];
   },
-  [Monster.Newdoria]: ({ state }, { otherMonsters, dKey }) => {
+  [Monster.Newdoria]: (state, { otherMonsters, dKey }) => {
     return [
       {
         condition: () => {
@@ -64,44 +64,44 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
             countMatchesInRow(state, otherMonsters) > 0
           );
         },
-        effect: ({ state }, { dKey, otherDKey }) => {
+        effect: (state, { dKey, otherDKey }) => {
           destroyHighestAtk(state, otherDKey);
           clearGraveyard(state, dKey);
         },
       },
     ];
   },
-  [Monster.VampireLord]: ({ state }, { dKey, ownMonsters }) => {
+  [Monster.VampireLord]: (state, { dKey, ownMonsters }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey) && hasEmptyZone(state, ownMonsters);
         },
-        effect: ({ state }, { dKey }) => {
+        effect: (state, { dKey }) => {
           resurrectOwn(state, dKey);
         },
       },
     ];
   },
-  [Monster.DifferentDimensionDragon]: ({ state }, { dKey, ownMonsters }) => {
+  [Monster.DifferentDimensionDragon]: (state, { dKey, ownMonsters }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey) && hasEmptyZone(state, ownMonsters);
         },
-        effect: ({ state }, { dKey }) => {
+        effect: (state, { dKey }) => {
           resurrectOwn(state, dKey);
         },
       },
     ];
   },
-  [Monster.DarkFlareKnight]: ({ state }, { ownMonsters }) => {
+  [Monster.DarkFlareKnight]: (state, { ownMonsters }) => {
     return [
       {
         condition: () => {
           return hasEmptyZone(state, ownMonsters);
         },
-        effect: ({ state }, { dKey }) => {
+        effect: (state, { dKey }) => {
           specialSummon(state, dKey, Monster.MirageKnight);
           clearGraveyard(state, dKey);
         },

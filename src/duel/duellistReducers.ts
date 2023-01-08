@@ -1,34 +1,35 @@
 import { draw } from "./cardEffectUtil";
 import { BattlePosition, Orientation } from "./common";
-import { DuellistCoordsMap, StateMap } from "./duelSlice";
-import { checkAutoEffects, shuffle } from "./duelUtil";
+import { DuellistCoordsMap } from "./duelSlice";
+import { checkAutoEffects, getRow, shuffle } from "./duelUtil";
 
 export const duellistReducers = {
-  shuffle: ({ originatorState }: StateMap) => {
-    shuffle(originatorState.deck);
+  shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
+    shuffle(state[dKey].deck);
   },
-  endTurn: (
-    { originatorState, activeTurn }: StateMap,
-    { otherDKey }: DuellistCoordsMap
-  ) => {
+  endTurn: (state: Duel, { ownMonsters, otherDKey }: DuellistCoordsMap) => {
     // reset all turn-based params, then hand over to other player
-    originatorState.monsterZones.forEach((z) => {
+    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
+    monsterZones.forEach((z) => {
       if (!z.isOccupied) return;
       if (z.battlePosition === BattlePosition.Attack) {
         z.orientation = Orientation.FaceUp;
       }
       z.isLocked = false;
     });
-    activeTurn.duellistKey = otherDKey;
-    activeTurn.isStartOfTurn = true;
-    activeTurn.hasNormalSummoned = false;
-    activeTurn.numTributedMonsters = 0;
+    state.activeTurn = {
+      ...state.activeTurn,
+      duellistKey: otherDKey,
+      isStartOfTurn: true,
+      hasNormalSummoned: false,
+      numTributedMonsters: 0,
+    };
   },
-  startTurn: (stateMap: StateMap, { dKey }: DuellistCoordsMap) => {
+  startTurn: (state: Duel, { dKey }: DuellistCoordsMap) => {
     // start-of-turn effects execute here
-    checkAutoEffects(stateMap);
+    checkAutoEffects(state);
 
-    const { state, activeTurn } = stateMap;
+    const { activeTurn } = state;
     activeTurn.isStartOfTurn = false;
 
     // displaying dialogue prompts and Draw Phase (in spirit)

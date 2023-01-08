@@ -11,7 +11,7 @@ import {
   specialSummon,
 } from "./cardEffectUtil";
 import { Field, Monster, PermAutoEffectMonster } from "./common";
-import { StateMap, ZoneCoordsMap } from "./duelSlice";
+import { ZoneCoordsMap } from "./duelSlice";
 import {
   getExodiaCards,
   graveyardContainsCards,
@@ -23,11 +23,11 @@ import {
 } from "./duelUtil";
 
 type MonsterPermAutoEffectReducer = (
-  stateMap: StateMap,
+  state: Duel,
   coordsMap: ZoneCoordsMap
 ) => {
   condition: () => boolean;
-  effect: (stateMap: StateMap, coordsMap: ZoneCoordsMap) => void;
+  effect: (state: Duel, coordsMap: ZoneCoordsMap) => void;
 }[];
 
 type MonsterPermAutoEffectReducers = {
@@ -36,7 +36,7 @@ type MonsterPermAutoEffectReducers = {
 
 export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
   [Monster.ThunderNyanNyan]: (
-    { state },
+    state,
     { zoneCoords, ownMonsters, otherMonsters }
   ) => {
     return [
@@ -57,7 +57,7 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.ExodiaNecross]: ({ state }, { zoneCoords, dKey }) => {
+  [Monster.ExodiaNecross]: (state, { zoneCoords, dKey }) => {
     return [
       {
         condition: () => {
@@ -71,62 +71,62 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords }) => {
+        effect: (state, { zoneCoords }) => {
           permPowerUp(state, zoneCoords);
         },
       },
     ];
   },
-  [Monster.Jinzo]: ({ state }, { otherMonsters, otherDKey }) => {
+  [Monster.Jinzo]: (state, { otherMonsters, otherDKey }) => {
     return [
       {
         condition: () => {
           return hasMatchInRow(state, otherMonsters, (z) => isTrap(z));
         },
-        effect: ({ state }) => {
+        effect: (state) => {
           clearAllTraps(state, otherDKey);
         },
       },
     ];
   },
-  [Monster.CastleOfDarkIllusions]: ({ state }) => {
+  [Monster.CastleOfDarkIllusions]: (state) => {
     return [
       {
         condition: () => {
           return isStartOfEitherTurn(state);
         },
-        effect: ({ state }, { ownMonsters }) => {
+        effect: (state, { ownMonsters }) => {
           setField(state, Field.Yami);
           setRowFaceDown(state, ownMonsters);
         },
       },
     ];
   },
-  [Monster.SatelliteCannon]: ({ state }, { dKey }) => {
+  [Monster.SatelliteCannon]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords }) => {
+        effect: (state, { zoneCoords }) => {
           permPowerUp(state, zoneCoords, 2);
         },
       },
     ];
   },
-  [Monster.LavaGolem]: ({ state }, { dKey }) => {
+  [Monster.LavaGolem]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { dKey }) => {
+        effect: (state, { dKey }) => {
           burn(state, dKey, 700);
         },
       },
     ];
   },
-  [Monster.ViserDes]: ({ state }, { dKey, otherMonsters }) => {
+  [Monster.ViserDes]: (state, { dKey, otherMonsters }) => {
     return [
       {
         condition: () => {
@@ -134,19 +134,19 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
             isStartOfTurn(state, dKey) && hasMatchInRow(state, otherMonsters)
           );
         },
-        effect: ({ state }, { otherDKey }) => {
+        effect: (state, { otherDKey }) => {
           powerDownHighestAtk(state, otherDKey);
         },
       },
     ];
   },
-  [Monster.MirageKnight]: ({ state }, { dKey }) => {
+  [Monster.MirageKnight]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords, dKey }) => {
+        effect: (state, { zoneCoords, dKey }) => {
           clearZone(state, zoneCoords);
           specialSummon(state, dKey, Monster.DarkMagician);
           specialSummon(state, dKey, Monster.FlameSwordsman);
@@ -154,51 +154,51 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
       },
     ];
   },
-  [Monster.BerserkDragon]: ({ state }, { otherDKey }) => {
+  [Monster.BerserkDragon]: (state, { otherDKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, otherDKey);
         },
-        effect: ({ state }, { zoneCoords }) => {
+        effect: (state, { zoneCoords }) => {
           permPowerDown(state, zoneCoords);
         },
       },
     ];
   },
-  [Monster.PetitMoth]: ({ state }, { dKey }) => {
+  [Monster.PetitMoth]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords, dKey }) => {
+        effect: (state, { zoneCoords, dKey }) => {
           clearZone(state, zoneCoords);
           specialSummon(state, dKey, Monster.CocoonOfEvolution);
         },
       },
     ];
   },
-  [Monster.CocoonOfEvolution]: ({ state }, { dKey }) => {
+  [Monster.CocoonOfEvolution]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords, dKey }) => {
+        effect: (state, { zoneCoords, dKey }) => {
           clearZone(state, zoneCoords);
           specialSummon(state, dKey, Monster.GreatMoth);
         },
       },
     ];
   },
-  [Monster.GreatMoth]: ({ state }, { dKey }) => {
+  [Monster.GreatMoth]: (state, { dKey }) => {
     return [
       {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: ({ state }, { zoneCoords, dKey }) => {
+        effect: (state, { zoneCoords, dKey }) => {
           clearZone(state, zoneCoords);
           specialSummon(state, dKey, Monster.PerfectlyUltimateGreatMoth);
         },

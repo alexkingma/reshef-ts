@@ -1,14 +1,14 @@
 import { clearZone, destroyFirstFound, specialSummon } from "./cardEffectUtil";
 import { HandEffectMonster, Monster } from "./common";
-import { StateMap, ZoneCoordsMap } from "./duelSlice";
+import { ZoneCoordsMap } from "./duelSlice";
 import { countMatchesInRow, isStartOfEitherTurn } from "./duelUtil";
 
 type MonsterAutoEffectReducer = (
-  state: StateMap,
+  state: Duel,
   coords: ZoneCoordsMap
 ) => {
   condition: () => boolean;
-  effect: (state: StateMap, coords: ZoneCoordsMap) => void;
+  effect: (state: Duel, coords: ZoneCoordsMap) => void;
 }[];
 
 type MonsterAutoEffectReducers = {
@@ -16,7 +16,7 @@ type MonsterAutoEffectReducers = {
 };
 
 export const monsterHandEffectReducers: MonsterAutoEffectReducers = {
-  [Monster.LavaGolem]: ({ state }, { otherMonsters }) => {
+  [Monster.LavaGolem]: (state, { otherMonsters }) => {
     return [
       {
         condition: () => {
@@ -25,7 +25,7 @@ export const monsterHandEffectReducers: MonsterAutoEffectReducers = {
             countMatchesInRow(state, otherMonsters) >= 2
           );
         },
-        effect: ({ state }, { zoneCoords, otherDKey, otherMonsters }) => {
+        effect: (state, { zoneCoords, otherDKey, otherMonsters }) => {
           // If this is in the own hand, it can be made to appear on
           // the enemy's field for two enemy monsters as tributes.
           destroyFirstFound(state, otherMonsters);

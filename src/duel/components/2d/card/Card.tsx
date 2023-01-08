@@ -1,5 +1,10 @@
-import { DuellistKey, Orientation, RowKey } from "@/duel/common";
-import { selectZone } from "@/duel/duelSlice";
+import {
+  DuellistKey,
+  InteractionMode,
+  Orientation,
+  RowKey,
+} from "@/duel/common";
+import { selectInteraction, selectZone } from "@/duel/duelSlice";
 import { isDefMode } from "@/duel/duelUtil";
 import { useZoneButtons } from "@/duel/useZoneButtons";
 import { useAppSelector } from "@/hooks";
@@ -16,6 +21,7 @@ interface Props {
 export const Card = ({ zoneCoords }: Props) => {
   const [dKey, rKey] = zoneCoords;
   const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
+  const { mode } = useAppSelector(selectInteraction);
   const buttons = useZoneButtons(zoneCoords);
 
   if (!z.isOccupied) return null;
@@ -33,7 +39,9 @@ export const Card = ({ zoneCoords }: Props) => {
     <div className="cardContainer">
       <FaceUpCard card={z.card} customClasses={customClasses} />
       <FaceDownCard customClasses={customClasses} />
-      <div className="zoneButtonsContainer">{buttons}</div>
+      {mode === InteractionMode.ViewingOptions && (
+        <div className="zoneButtonsContainer">{buttons}</div>
+      )}
     </div>
   );
 };

@@ -5,13 +5,15 @@ import {
   Field,
   FlipEffectMonster,
   GraveyardEffectMonster,
+  InteractionMode,
   Monster,
   Orientation,
   PermAutoEffectMonster,
   RowKey,
+  Spell,
   Trap,
 } from "./common";
-import { DuellistCoordsMap, StateMap, ZoneCoordsMap } from "./duelSlice";
+import { DuellistCoordsMap, ZoneCoordsMap } from "./duelSlice";
 import { monsterFlipEffectReducers } from "./monsterFlipEffectReducers";
 import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
 import { monsterHandEffectReducers } from "./monsterHandEffectReducers";
@@ -58,7 +60,13 @@ export const getInitialDuel = (
       numTributedMonsters: 0,
     },
     activeField: Field.Arena,
-    cursorPos: ["p1", RowKey.Hand, 0],
+    interaction: {
+      cursorCoords: ["p1", RowKey.Hand, 0],
+      originCoords: null,
+      targetCoords: null,
+      mode: InteractionMode.FreeMovement,
+      pendingAction: null,
+    },
   };
 };
 
@@ -234,21 +242,6 @@ export const getFirstMatchInRowIdx = (
 
 export const getOtherDuellistKey = (key: DuellistKey) => {
   return key === "p1" ? "p2" : "p1";
-};
-
-export const getStateMap = (
-  state: Duel,
-  duellistKey: DuellistKey
-): StateMap => {
-  const originatorState = state[duellistKey];
-  const targetState = state[getOtherDuellistKey(duellistKey)];
-  return {
-    state, // only use when other props cannot be lastingly referenced in reducer
-    originatorState,
-    targetState,
-    activeTurn: state.activeTurn,
-    activeField: state.activeField,
-  };
 };
 
 export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
@@ -444,19 +437,18 @@ export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
 
 export const activateTempEffect = (
-  stateMap: StateMap,
+  state: Duel,
   coordsMap: ZoneCoordsMap,
   reducer: MonsterAutoEffectReducer
 ) => {
-  const { state } = stateMap;
   const { zoneCoords } = coordsMap;
   const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
   const originalCardName = originalZone.card.name;
 
-  const conEffectPairs = reducer(stateMap, coordsMap);
+  const conEffectPairs = reducer(state, coordsMap);
   conEffectPairs.forEach(({ condition, effect }) => {
     if (condition()) {
-      effect(stateMap, coordsMap);
+      effect(state, coordsMap);
 
       // See postDirectMonsterAction() for context on this check.
       // Auto effects are slightly different since they don't lock
@@ -468,52 +460,51 @@ export const activateTempEffect = (
   });
 };
 
-export const checkGraveyardEffect = (stateMap: StateMap, dKey: DuellistKey) => {
-  const { graveyard } = stateMap.state[dKey];
+export const checkGraveyardEffect = (state: Duel, dKey: DuellistKey) => {
+  const { graveyard } = state[dKey];
   if (!graveyard) return;
   const reducer =
     monsterGraveyardEffectReducers[graveyard as GraveyardEffectMonster];
   if (!reducer) return;
 
-  const conEffectPairs = reducer(stateMap, getDuellistCoordsMap(dKey));
+  const conEffectPairs = reducer(state, getDuellistCoordsMap(dKey));
   conEffectPairs.forEach(({ condition, effect }) => {
     if (condition()) {
-      effect(stateMap, getDuellistCoordsMap(dKey));
+      effect(state, getDuellistCoordsMap(dKey));
     }
   });
 };
 
 export const checkMonsterAutoEffect = (
-  stateMap: StateMap,
+  state: Duel,
   coordsMap: ZoneCoordsMap,
   reducerMap: {
     [cardName in CardName]?: any;
   }
 ) => {
-  const { state } = stateMap;
   const { zoneCoords } = coordsMap;
   const zone = getZone(state, zoneCoords);
   if (!zone.isOccupied) return;
   const reducer = reducerMap[zone.card.name as PermAutoEffectMonster];
   if (!reducer) return;
 
-  activateTempEffect(stateMap, coordsMap, reducer);
+  activateTempEffect(state, coordsMap, reducer);
 };
 
-export const checkPermAutoEffects = (stateMap: StateMap) => {
-  const { state, activeTurn } = stateMap;
+export const checkPermAutoEffects = (state: Duel) => {
+  const { activeTurn } = state;
 
   const dKey = activeTurn.duellistKey;
   const otherDKey = getOtherDuellistKey(dKey);
   const originatorState = state[dKey];
   const targetState = state[otherDKey];
 
-  checkGraveyardEffect(stateMap, dKey);
-  checkGraveyardEffect(stateMap, otherDKey);
+  checkGraveyardEffect(state, dKey);
+  checkGraveyardEffect(state, otherDKey);
 
   originatorState.monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
-      stateMap,
+      state,
       getZoneCoordsMap([dKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
@@ -521,7 +512,7 @@ export const checkPermAutoEffects = (stateMap: StateMap) => {
 
   targetState.monsterZones.forEach((_, i) => {
     checkMonsterAutoEffect(
-      stateMap,
+      state,
       getZoneCoordsMap([otherDKey, RowKey.Monster, i as FieldCol]),
       monsterPermAutoEffectReducers
     );
@@ -531,7 +522,7 @@ export const checkPermAutoEffects = (stateMap: StateMap) => {
 
   originatorState.hand.forEach((_, i) => {
     checkMonsterAutoEffect(
-      stateMap,
+      state,
       getZoneCoordsMap([dKey, RowKey.Hand, i as FieldCol]),
       monsterHandEffectReducers
     );
@@ -539,23 +530,23 @@ export const checkPermAutoEffects = (stateMap: StateMap) => {
 
   targetState.hand.forEach((_, i) => {
     checkMonsterAutoEffect(
-      stateMap,
+      state,
       getZoneCoordsMap([otherDKey, RowKey.Hand, i as FieldCol]),
       monsterHandEffectReducers
     );
   });
 };
 
-export const checkAutoEffects = (stateMap: StateMap) => {
+export const checkAutoEffects = (state: Duel) => {
   // Temp power-up effect cards are separate from
   // permanent (but still auto) effect cards.
   // Temp power-ups must be calculated so that the permanent
   // effects may accurately deduce the "strongest" card, etc.
   // Then, once permanent effects (destruction, spec. summoning, etc.)
   // are complete, temp power-ups should be recalculated one final time.
-  recalcCombatStats(stateMap);
-  checkPermAutoEffects(stateMap);
-  recalcCombatStats(stateMap);
+  recalcCombatStats(state);
+  checkPermAutoEffects(state);
+  recalcCombatStats(state);
 };
 
 export const postDirectMonsterAction = (
@@ -574,4 +565,53 @@ export const postDirectMonsterAction = (
   zonePostAction.battlePosition = BattlePosition.Attack;
   zonePostAction.orientation = Orientation.FaceUp;
   zonePostAction.isLocked = true;
+};
+
+export const isCoordMatch = (c1: ZoneCoords, c2: ZoneCoords) => {
+  return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2];
+};
+
+export const hasTarget = (card: CardName) => {
+  return [
+    // alignment/type-specific power-ups
+    Spell.LegendarySword,
+    Spell.SwordOfDarkDestruction,
+    Spell.DarkEnergy,
+    Spell.AxeOfDespair,
+    Spell.LaserCannonArmor,
+    Spell.InsectArmorWithLaserCannon,
+    Spell.ElfsLight,
+    Spell.BeastFangs,
+    Spell.SteelShell,
+    Spell.VileGerms,
+    Spell.BlackPendant,
+    Spell.SilverBowAndArrow,
+    Spell.HornOfLight,
+    Spell.HornOfTheUnicorn,
+    Spell.DragonTreasure,
+    Spell.ElectroWhip,
+    Spell.CyberShield,
+    Spell.MysticalMoon,
+    Spell.MalevolentNuzzler,
+    Spell.VioletCrystal,
+    Spell.BookOfSecretArts,
+    Spell.Invigoration,
+    Spell.MachineConversionFactory,
+    Spell.RaiseBodyHeat,
+    Spell.FollowWind,
+    Spell.PowerOfKaishin,
+    Spell.KunaiWithChain,
+    Spell.Salamandra,
+    Spell.Megamorph,
+    Spell.WingedTrumpeter,
+    Spell.BrightCastle,
+
+    // monster-specific power-up
+    Spell.CyclonLaser,
+    Spell.ElegantEgotist,
+    Spell.MagicalLabyrinth,
+    Spell.Cursebreaker,
+    Spell.Metalmorph,
+    Spell._7Completed,
+  ].includes(card as Spell);
 };
