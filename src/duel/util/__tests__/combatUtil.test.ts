@@ -1,6 +1,5 @@
 import { BattlePosition } from "../../common";
-import { calculateAttack } from "../combatUtil";
-import { generateOccupiedMonsterZone } from "../duelUtil";
+import { calculateAttack, generateOccupiedMonsterZone } from "../zoneUtil";
 
 let dark_700_600: OccupiedMonsterZone;
 let dark_800_700: OccupiedMonsterZone;

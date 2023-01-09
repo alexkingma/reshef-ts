@@ -6,7 +6,7 @@ import {
 } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
 import { useZoneButtons } from "@/duel/useZoneButtons";
-import { isDefMode } from "@/duel/util/duelUtil";
+import { isDefMode } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";

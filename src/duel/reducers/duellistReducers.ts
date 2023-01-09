@@ -1,7 +1,9 @@
 import { BattlePosition, Orientation } from "../common";
 import { DuellistCoordsMap } from "../duelSlice";
-import { draw } from "../util/cardEffectUtil";
-import { checkAutoEffects, getRow, shuffle } from "../util/duelUtil";
+import { checkAutoEffects } from "../util/autoEffectUtil";
+import { shuffle } from "../util/common";
+import { draw } from "../util/deckUtil";
+import { getRow } from "../util/rowUtil";
 
 export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {

@@ -1,11 +1,8 @@
 import { HandEffectMonster, Monster } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
-import {
-  clearZone,
-  destroyFirstFound,
-  specialSummon,
-} from "../util/cardEffectUtil";
-import { countMatchesInRow, isStartOfEitherTurn } from "../util/duelUtil";
+import { isStartOfEitherTurn } from "../util/duelUtil";
+import { countMatchesInRow, destroyFirstFound } from "../util/rowUtil";
+import { clearZone, specialSummon } from "../util/zoneUtil";
 
 type MonsterAutoEffectReducer = (
   state: Duel,

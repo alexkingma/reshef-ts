@@ -7,16 +7,15 @@ import {
   Spell,
 } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
+import { burn } from "../util/duellistUtil";
+import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {
-  burn as burnDirect,
-  clearGraveyard,
-  convertMonster,
-  resurrectEnemy,
+  countMatchesInRow,
+  getRow,
+  rowContainsAnyCards,
   setRowFaceDown,
   setRowFaceUp,
-  specialSummon,
-  specialSummonAtCoords,
-} from "../util/cardEffectUtil";
+} from "../util/rowUtil";
 import {
   burnOther,
   destroy1500PlusAtk,
@@ -24,16 +23,16 @@ import {
   destroyMonsterType,
   destroyRows,
   draw,
-  heal,
+  healSelf,
   permPowerUp,
   setField,
-} from "../util/cardEffectWrapped";
+} from "../util/wrappedUtil";
 import {
-  containsAnyCards,
-  countMatchesInRow,
-  getRow,
+  convertMonster,
   getZone,
-} from "../util/duelUtil";
+  specialSummon,
+  specialSummonAtCoords,
+} from "../util/zoneUtil";
 
 type SpellEffectReducers = {
   [key in Spell]: (state: Duel, coordsMap: ZoneCoordsMap) => void;
@@ -47,14 +46,14 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.Ookazi]: burnOther(500),
   [Spell.TremendousFire]: burnOther(1000),
   [Spell.RestructerRevolution]: (state, { otherDKey, otherHand }) =>
-    burnDirect(state, otherDKey, countMatchesInRow(state, otherHand) * 200),
+    burn(state, otherDKey, countMatchesInRow(state, otherHand) * 200),
 
   // heal
-  [Spell.MooyanCurry]: heal(200),
-  [Spell.RedMedicine]: heal(500),
-  [Spell.GoblinsSecretRemedy]: heal(1000),
-  [Spell.SoulOfThePure]: heal(2000),
-  [Spell.DianKetoTheCureMaster]: heal(5000),
+  [Spell.MooyanCurry]: healSelf(200),
+  [Spell.RedMedicine]: healSelf(500),
+  [Spell.GoblinsSecretRemedy]: healSelf(1000),
+  [Spell.SoulOfThePure]: healSelf(2000),
+  [Spell.DianKetoTheCureMaster]: healSelf(5000),
 
   // power-up
   [Spell.LegendarySword]: permPowerUp(),
@@ -219,7 +218,7 @@ export const spellEffectReducers: SpellEffectReducers = {
     convertMonster(state, dKey);
   },
   [Spell.Multiply]: (state, { ownMonsters, dKey }) => {
-    if (!containsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
+    if (!rowContainsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
     const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
     monsterZones.forEach((zone) => {

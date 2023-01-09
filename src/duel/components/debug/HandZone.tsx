@@ -1,5 +1,5 @@
 import { selectZone } from "@/duel/duelSlice";
-import { isMonster, isSpell, isTrap } from "@/duel/util/duelUtil";
+import { isMonster, isSpell, isTrap } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 import { MonsterZone } from "./MonsterZone";

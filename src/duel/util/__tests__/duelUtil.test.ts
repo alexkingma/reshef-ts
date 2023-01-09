@@ -1,5 +1,5 @@
 import { Monster } from "../../common";
-import { generateOccupiedMonsterZone } from "../duelUtil";
+import { generateOccupiedMonsterZone } from "../zoneUtil";
 
 describe("getHighestAtkZoneIdx", () => {
   const empty: EmptyZone = {

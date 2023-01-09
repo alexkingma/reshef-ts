@@ -1,0 +1,273 @@
+import { Orientation, RowKey, Trap } from "../common";
+import { getCard, getExodiaCards } from "./cardUtil";
+import {
+  clearZone,
+  destroyAtCoords,
+  immobiliseCard,
+  isMonster,
+  isTrap,
+  permPowerUp,
+  tempPowerUp,
+} from "./zoneUtil";
+
+export const getRow = (state: Duel, [dKey, rKey]: RowCoords) => {
+  return state[dKey][rKey];
+};
+
+export const hasFullExodia = (state: Duel, rowCoords: RowCoords) => {
+  return rowContainsAllCards(state, rowCoords, ...getExodiaCards());
+};
+
+export const hasFullFINAL = (state: Duel, rowCoords: RowCoords) => {
+  return rowContainsAllCards(
+    state,
+    rowCoords,
+    Trap.DestinyBoard,
+    Trap.SpiritMessageI,
+    Trap.SpiritMessageN,
+    Trap.SpiritMessageA,
+    Trap.SpiritMessageL
+  );
+};
+
+export const getFirstEmptyZoneIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  defaultToFirst: boolean = false
+) => {
+  const row = state[dKey][rKey];
+  const nextFreeZoneIdx = row.findIndex((zone) => !zone.isOccupied);
+  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx as FieldCol;
+  if (defaultToFirst) {
+    // no free zones, return the default index
+    return 0;
+  } else {
+    // sometimes we want to know that no zones are available, but not return a default
+    throw new Error(
+      "No free zones found, catch this error to implement custom logic."
+    );
+  }
+};
+
+export const hasEmptyZone = (state: Duel, rowCoords: RowCoords) => {
+  try {
+    getFirstEmptyZoneIdx(state, rowCoords);
+    return true;
+  } catch (e) {
+    // no free space to summon
+    return false;
+  }
+};
+
+export const getFirstOccupiedZoneIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  const zone = state[dKey][rKey];
+  return zone.findIndex((z) => z.isOccupied && condition(z)) as FieldCol | -1;
+};
+
+export const getHighestAtkZoneIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  let idx = -1;
+  let highestAtk = -1;
+  state[dKey][rKey].forEach((z, i) => {
+    if (!z.isOccupied || z.card.category !== "Monster" || !condition(z)) return;
+    if (z.card.effAtk > highestAtk) {
+      highestAtk = z.card.effAtk;
+      idx = i;
+    }
+  });
+  return idx as FieldCol | -1;
+};
+
+export const getFirstMatchInRowIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  cardName: CardName
+) => {
+  const row = state[dKey][rKey];
+  return row.findIndex((z) => z.isOccupied && z.card.name === cardName);
+};
+
+export const rowContainsAnyCards = (
+  state: Duel,
+  rowCoords: RowCoords,
+  ...cardNames: CardName[]
+) => {
+  return cardNames.some((c) =>
+    hasMatchInRow(state, rowCoords, (z) => z.card.name === c)
+  );
+};
+
+export const rowContainsAllCards = (
+  state: Duel,
+  rowCoords: RowCoords,
+  ...cardNames: CardName[]
+) => {
+  // all provided cards must be present in the given row
+  // alternatively: none of the provided cards may NOT be present
+  return cardNames.every((c) => rowContainsAnyCards(state, rowCoords, c));
+};
+
+export const hasMatchInRow = (
+  state: Duel,
+  rowCoords: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  return countMatchesInRow(state, rowCoords, condition) > 0;
+};
+
+export const countMatchesInRow = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  const row = state[dKey][rKey];
+  return row.filter((z) => z.isOccupied && condition(z)).length;
+};
+
+export const destroyRow = (state: Duel, rowCoords: RowCoords) => {
+  const [dKey, rKey] = rowCoords;
+  state[dKey][rKey].forEach((zone, idx) => {
+    if (zone.isOccupied) {
+      destroyAtCoords(state, [...rowCoords, idx as FieldCol]);
+    }
+  });
+};
+
+const setRowOrientation = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  orientation: Orientation
+) => {
+  state[dKey][rKey].forEach((zone, idx, row) => {
+    if (!zone.isOccupied) return;
+    (row[idx] as OccupiedZone).orientation = orientation;
+  });
+};
+
+export const setRowFaceUp = (state: Duel, rowCoords: RowCoords) => {
+  setRowOrientation(state, rowCoords, Orientation.FaceUp);
+};
+
+export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
+  setRowOrientation(state, rowCoords, Orientation.FaceDown);
+};
+
+export const immobiliseRow = (state: Duel, [dKey, rKey]: RowCoords) => {
+  state[dKey][rKey].forEach((zone, idx) => {
+    if (!zone.isOccupied) return;
+    immobiliseCard(state, [dKey, rKey, idx as FieldCol]);
+  });
+};
+
+export const destroyHighestAtk = (
+  state: Duel,
+  dKey: DuellistKey,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  const rowCoords: RowCoords = [dKey, RowKey.Monster];
+  if (!countMatchesInRow(state, rowCoords, condition)) {
+    // no monsters exist, destroy nothing
+    return;
+  }
+
+  const coords = [
+    ...rowCoords,
+    getHighestAtkZoneIdx(state, rowCoords, condition),
+  ] as ZoneCoords;
+  destroyAtCoords(state, coords);
+};
+
+export const destroyFirstFound = (
+  state: Duel,
+  rowCoords: RowCoords,
+  condition: (z: OccupiedZone) => boolean = () => true
+) => {
+  if (!countMatchesInRow(state, rowCoords, condition)) {
+    // no monsters exist, destroy nothing
+    return;
+  }
+
+  const coords = [
+    ...rowCoords,
+    getFirstOccupiedZoneIdx(state, rowCoords, condition),
+  ] as ZoneCoords;
+  destroyAtCoords(state, coords);
+};
+
+export const updateMatchesInRow = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedMonsterZone) => boolean,
+  effect: (z: OccupiedMonsterZone) => void
+) => {
+  state[dKey][rKey].forEach((z, idx, zones) => {
+    if (!z.isOccupied || !isMonster(z) || !condition(z)) return;
+    effect(zones[idx] as OccupiedMonsterZone);
+  });
+};
+
+export const clearFirstTrap = (state: Duel, targetKey: DuellistKey) => {
+  const trapIdx = state[targetKey].spellTrapZones.findIndex(isTrap);
+  if (trapIdx === -1) return; // no traps found
+  clearZone(state, [targetKey, RowKey.SpellTrap, trapIdx as FieldCol]);
+};
+
+export const clearAllTraps = (state: Duel, targetKey: DuellistKey) => {
+  state[targetKey].spellTrapZones.forEach((z, idx) => {
+    if (!isTrap(z)) return;
+    clearZone(state, [targetKey, RowKey.SpellTrap, idx as FieldCol]);
+  });
+};
+
+export const countConditional = (
+  rowConditionPairs: (
+    | [Duel, RowCoords, (z: Zone) => boolean]
+    | [Duel, RowCoords, (z: Zone) => boolean, number]
+  )[],
+  graveyardConditionPairs: (
+    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
+    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
+  )[] = []
+) => {
+  let count = 0;
+  rowConditionPairs.forEach(([state, coords, condition, value = 1]) => {
+    // TODO: exclude origin monster from the condition?
+    count += countMatchesInRow(state, coords, condition) * value;
+  });
+  graveyardConditionPairs.forEach(([state, dKey, condition, value = 1]) => {
+    const gy = state[dKey].graveyard;
+    if (gy && condition(getCard(gy) as MonsterCard)) {
+      count += value;
+    }
+  });
+  return count;
+};
+
+export const powerUpSelfConditional = (
+  state: Duel,
+  coords: ZoneCoords,
+  rowConditionPairs: (
+    | [Duel, RowCoords, (z: Zone) => boolean]
+    | [Duel, RowCoords, (z: Zone) => boolean, number]
+  )[],
+  graveyardConditionPairs: (
+    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
+    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
+  )[] = []
+) => {
+  let count = countConditional(rowConditionPairs, graveyardConditionPairs);
+  tempPowerUp(state, coords, count);
+};
+
+export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
+  const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
+  if (targetIdx === -1) return; // no monster to target
+  permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
+};

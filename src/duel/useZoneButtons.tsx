@@ -7,15 +7,10 @@ import {
   selectOpponentHasMonster,
   selectZone,
 } from "./duelSlice";
-import { useCardActions } from "./useCardActions";
-import { useInteractionActions } from "./useInteractionActions";
-import {
-  canActivateEffect,
-  getNumTributesRequired,
-  isMonster,
-  isSpell,
-} from "./util/duelUtil";
+import { useCardActions, useInteractionActions } from "./useDuelActions";
+import { getNumTributesRequired } from "./util/cardUtil";
 import { spellHasTarget } from "./util/targetedSpellUtil";
+import { canActivateEffect, isMonster, isSpell } from "./util/zoneUtil";
 
 export enum DuelButtonKey {
   Attack = "ATTACK",

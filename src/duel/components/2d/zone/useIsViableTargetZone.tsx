@@ -1,7 +1,7 @@
 import { DuellistKey, InteractionMode, RowKey } from "@/duel/common";
 import { selectDuel, selectInteraction, selectZone } from "@/duel/duelSlice";
-import { getZone } from "@/duel/util/duelUtil";
 import { isValidSpellTarget } from "@/duel/util/targetedSpellUtil";
+import { getZone } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 
 export const useIsViableTargetZone = (zoneCoords: ZoneCoords) => {

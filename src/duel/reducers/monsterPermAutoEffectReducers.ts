@@ -1,27 +1,25 @@
 import { Field, Monster, PermAutoEffectMonster } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
+import { getExodiaCards } from "../util/cardUtil";
+import { burn, isStartOfTurn } from "../util/duellistUtil";
+import { isStartOfEitherTurn, setField } from "../util/duelUtil";
+import { graveyardContainsCards } from "../util/graveyardUtil";
 import {
-  burn,
   clearAllTraps,
+  hasMatchInRow,
+  powerDownHighestAtk,
+  setRowFaceDown,
+} from "../util/rowUtil";
+import {
   clearZone,
   destroyAtCoords,
+  isAlignment,
+  isTrap,
   permPowerDown,
   permPowerUp,
-  powerDownHighestAtk,
-  setField,
-  setRowFaceDown,
   specialSummon,
   specialSummonAtCoords,
-} from "../util/cardEffectUtil";
-import {
-  getExodiaCards,
-  graveyardContainsCards,
-  hasMatchInRow,
-  isAlignment,
-  isStartOfEitherTurn,
-  isStartOfTurn,
-  isTrap,
-} from "../util/duelUtil";
+} from "../util/zoneUtil";
 
 type MonsterPermAutoEffectReducer = (
   state: Duel,

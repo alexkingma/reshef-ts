@@ -5,12 +5,10 @@ import {
   clearZone,
   destroyAtCoords,
   directAttack,
-} from "../util/cardEffectUtil";
-import {
   generateOccupiedMonsterZone,
   getZone,
   postDirectMonsterAction,
-} from "../util/duelUtil";
+} from "../util/zoneUtil";
 import { monsterFlipEffectReducers as flipReducers } from "./monsterFlipEffectReducers";
 import { spellEffectReducers as spellReducers } from "./spellEffectReducers";
 

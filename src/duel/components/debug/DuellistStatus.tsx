@@ -1,5 +1,5 @@
 import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
-import { useDuellistActions } from "@/duel/useDuellistActions";
+import { useDuellistActions } from "@/duel/useDuelActions";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 

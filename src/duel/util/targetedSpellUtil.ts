@@ -1,5 +1,5 @@
 import { Spell } from "../common";
-import { getCard } from "./duelUtil";
+import { getCard } from "./cardUtil";
 
 const targetedSpellMap: {
   [key in Spell]?: (card: MonsterCard) => boolean;

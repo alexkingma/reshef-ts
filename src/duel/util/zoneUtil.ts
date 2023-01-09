@@ -1,19 +1,74 @@
-import { BattlePosition, Field, Monster, Orientation, RowKey } from "../common";
-import { calculateAttack } from "./combatUtil";
 import {
-  containsAllCards,
-  countMatchesInRow,
-  generateOccupiedMonsterZone,
-  getCard,
+  BattlePosition,
+  Field,
+  FlipEffectMonster,
+  Monster,
+  Orientation,
+  RowKey,
+} from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
+import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
+import { getAlignmentResult, getCard, getFieldMultiplier } from "./cardUtil";
+import {
+  burn,
+  getDuellistCoordsMap,
+  getOtherDuellistKey,
+} from "./duellistUtil";
+import {
   getFirstEmptyZoneIdx,
   getFirstMatchInRowIdx,
-  getFirstOccupiedZoneIdx,
   getHighestAtkZoneIdx,
-  getOtherDuellistKey,
-  getZone,
-  isMonster,
-  isTrap,
-} from "./duelUtil";
+  rowContainsAllCards,
+} from "./rowUtil";
+
+export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
+  return state[dKey][rKey][col];
+};
+
+export const isTrap = (z: Zone): z is OccupiedSpellTrapZone => {
+  return z.isOccupied && z.card.category === "Trap";
+};
+
+export const isSpell = (z: Zone): z is OccupiedSpellTrapZone => {
+  return z.isOccupied && z.card.category === "Magic";
+};
+
+export const isMonster = (z: Zone): z is OccupiedMonsterZone => {
+  return z.isOccupied && z.card.category === "Monster";
+};
+
+export const isDefMode = (z: Zone): z is OccupiedMonsterZone => {
+  return isMonster(z) && z.battlePosition === BattlePosition.Defence;
+};
+
+export const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
+  isMonster(z) && z.card.type === type;
+
+export const isAlignment = (
+  z: Zone,
+  alignment: Alignment
+): z is OccupiedMonsterZone => isMonster(z) && z.card.alignment === alignment;
+
+export const isSpecificMonster = (
+  z: Zone,
+  cardName: CardName
+): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
+
+const isOrientation = (z: Zone, o: Orientation): z is OccupiedMonsterZone =>
+  z.isOccupied && z.orientation === o;
+
+export const isFaceDown = (z: OccupiedZone) =>
+  isOrientation(z, Orientation.FaceDown);
+
+export const isFaceUp = (z: OccupiedZone) =>
+  isOrientation(z, Orientation.FaceUp);
+
+export const hasManualEffect = (z: OccupiedMonsterZone) =>
+  z.card.effect &&
+  !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];
+
+export const canActivateEffect = (z: OccupiedMonsterZone) =>
+  !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
 
 export const permPowerUp = (
   state: Duel,
@@ -49,15 +104,6 @@ export const tempPowerDown = (
   tempPowerUp(state, coords, -levels);
 };
 
-export const destroyRow = (state: Duel, rowCoords: RowCoords) => {
-  const [dKey, rKey] = rowCoords;
-  state[dKey][rKey].forEach((zone, idx) => {
-    if (zone.isOccupied) {
-      destroyAtCoords(state, [...rowCoords, idx as FieldCol]);
-    }
-  });
-};
-
 export const destroyAtCoords = (
   state: Duel,
   [dKey, rKey, colIdx]: ZoneCoords
@@ -68,10 +114,6 @@ export const destroyAtCoords = (
     state[dKey].graveyard = zone.card.name;
   }
   clearZone(state, [dKey, rKey, colIdx]);
-};
-
-export const clearGraveyard = (state: Duel, dKey: DuellistKey) => {
-  state[dKey].graveyard = null;
 };
 
 export const clearZone = (state: Duel, [dKey, rKey, colIdx]: ZoneCoords) => {
@@ -87,35 +129,9 @@ export const clearZones = (
   idxs.forEach((idx) => clearZone(state, [...rowCoords, idx] as ZoneCoords));
 };
 
-const setRowOrientation = (
-  state: Duel,
-  [dKey, rKey]: RowCoords,
-  orientation: Orientation
-) => {
-  state[dKey][rKey].forEach((zone, idx, row) => {
-    if (!zone.isOccupied) return;
-    (row[idx] as OccupiedZone).orientation = orientation;
-  });
-};
-
-export const setRowFaceUp = (state: Duel, rowCoords: RowCoords) => {
-  setRowOrientation(state, rowCoords, Orientation.FaceUp);
-};
-
-export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
-  setRowOrientation(state, rowCoords, Orientation.FaceDown);
-};
-
 export const immobiliseCard = (state: Duel, zoneCoords: ZoneCoords) => {
   const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
   zone.isLocked = true;
-};
-
-export const immobiliseRow = (state: Duel, [dKey, rKey]: RowCoords) => {
-  state[dKey][rKey].forEach((zone, idx) => {
-    if (!zone.isOccupied) return;
-    immobiliseCard(state, [dKey, rKey, idx as FieldCol]);
-  });
 };
 
 export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {
@@ -152,6 +168,46 @@ export const attackMonster = (
 
   if (attackerLpLoss) burn(state, attackerDKey, attackerLpLoss);
   if (targetLpLoss) burn(state, targetDKey, targetLpLoss);
+};
+
+export const calculateAttack = (
+  attacker: OccupiedMonsterZone,
+  target: OccupiedMonsterZone
+) => {
+  const isDefending = target.battlePosition === BattlePosition.Defence;
+  const diff =
+    attacker.card.effAtk -
+    (isDefending ? target.card.effDef : target.card.effAtk);
+  const { isWeak, isStrong } = getAlignmentResult(
+    attacker.card.alignment,
+    target.card.alignment
+  );
+
+  const attackerDestroyed =
+    !isStrong && (isWeak || (diff <= 0 && !isDefending));
+  const targetDestroyed =
+    !isWeak && (isStrong || diff > 0 || (diff === 0 && !isDefending));
+  const attackerLpLoss = targetDestroyed || diff >= 0 ? 0 : Math.abs(diff);
+  const targetLpLoss = attackerDestroyed || diff <= 0 || isDefending ? 0 : diff;
+
+  return {
+    attackerDestroyed,
+    targetDestroyed,
+    attackerLpLoss,
+    targetLpLoss,
+  };
+};
+
+export const getCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
+  const { card, permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
+  const fieldMultiplier = getFieldMultiplier(field, card.type);
+  const { atk: baseAtk, def: baseDef } = zone.card;
+  const calc = (base: number) =>
+    Math.max(0, base * fieldMultiplier + (perm + temp) * 500);
+  return {
+    effAtk: calc(baseAtk),
+    effDef: calc(baseDef),
+  };
 };
 
 export const specialSummon = (
@@ -227,7 +283,7 @@ export const xyzMergeAttempt = (
   const rowCoords: RowCoords = [dKey, rKey];
 
   for (const [inputMons, outputMon] of mergeCombos) {
-    if (containsAllCards(state, rowCoords, ...inputMons)) {
+    if (rowContainsAllCards(state, rowCoords, ...inputMons)) {
       const idxsToClear = [
         colIdx,
         ...inputMons.map((m) => getFirstMatchInRowIdx(state, rowCoords, m)),
@@ -237,104 +293,6 @@ export const xyzMergeAttempt = (
       break; // stop looking for merge combos after a match succeeds
     }
   }
-};
-
-export const resurrectOwn = (state: Duel, dKey: DuellistKey) => {
-  if (!state[dKey].graveyard) return;
-
-  specialSummon(state, dKey, state[dKey].graveyard as CardName);
-  clearGraveyard(state, dKey);
-};
-
-export const resurrectEnemy = (state: Duel, originatorKey: DuellistKey) => {
-  const targetKey = getOtherDuellistKey(originatorKey);
-  if (!state[targetKey].graveyard) return;
-
-  specialSummon(state, originatorKey, state[targetKey].graveyard as CardName);
-  clearGraveyard(state, targetKey);
-};
-
-export const burn = (state: Duel, dKey: DuellistKey, amt: number) => {
-  state[dKey].lp -= amt;
-};
-
-export const heal = (state: Duel, dKey: DuellistKey, amt: number) => {
-  state[dKey].lp += amt;
-};
-
-export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
-  for (let i = 0; i < numCards; i++) {
-    let zoneIdx: number;
-    try {
-      zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
-    } catch (e) {
-      // no space available in hand, don't draw a card
-      return;
-    }
-
-    const card = state[dKey].deck.shift();
-    if (!card) {
-      // TODO: player is out of cards, end game
-      return;
-    }
-
-    state[dKey].hand[zoneIdx] = {
-      isOccupied: true,
-      card,
-      orientation: Orientation.FaceDown,
-    };
-  }
-};
-
-export const setField = (state: Duel, field: Field) => {
-  state.activeField = field;
-};
-
-export const destroyHighestAtk = (
-  state: Duel,
-  dKey: DuellistKey,
-  condition: (z: OccupiedZone) => boolean = () => true
-) => {
-  const rowCoords: RowCoords = [dKey, RowKey.Monster];
-  if (!countMatchesInRow(state, rowCoords, condition)) {
-    // no monsters exist, destroy nothing
-    return;
-  }
-
-  const coords = [
-    ...rowCoords,
-    getHighestAtkZoneIdx(state, rowCoords, condition),
-  ] as ZoneCoords;
-  destroyAtCoords(state, coords);
-};
-
-export const destroyFirstFound = (
-  state: Duel,
-  rowCoords: RowCoords,
-  condition: (z: OccupiedZone) => boolean = () => true
-) => {
-  if (!countMatchesInRow(state, rowCoords, condition)) {
-    // no monsters exist, destroy nothing
-    return;
-  }
-
-  const coords = [
-    ...rowCoords,
-    getFirstOccupiedZoneIdx(state, rowCoords, condition),
-  ] as ZoneCoords;
-  destroyAtCoords(state, coords);
-};
-
-export const updateMatchesInRow = (
-  state: Duel,
-  [dKey, rKey]: RowCoords,
-  condition: (z: OccupiedMonsterZone) => boolean,
-  effect: (z: OccupiedMonsterZone) => void
-) => {
-  state[dKey][rKey].forEach((z, idx, zones) => {
-    if (!z.isOccupied || !isMonster(z) || !condition(z)) return;
-    effect(zones[idx] as OccupiedMonsterZone);
-  });
 };
 
 export const subsumeMonster = (
@@ -381,65 +339,6 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
   }
 };
 
-export const clearFirstTrap = (state: Duel, targetKey: DuellistKey) => {
-  const trapIdx = state[targetKey].spellTrapZones.findIndex(isTrap);
-  if (trapIdx === -1) return; // no traps found
-  clearZone(state, [targetKey, RowKey.SpellTrap, trapIdx as FieldCol]);
-};
-
-export const clearAllTraps = (state: Duel, targetKey: DuellistKey) => {
-  state[targetKey].spellTrapZones.forEach((z, idx) => {
-    if (!isTrap(z)) return;
-    clearZone(state, [targetKey, RowKey.SpellTrap, idx as FieldCol]);
-  });
-};
-
-export const countConditional = (
-  rowConditionPairs: (
-    | [Duel, RowCoords, (z: Zone) => boolean]
-    | [Duel, RowCoords, (z: Zone) => boolean, number]
-  )[],
-  graveyardConditionPairs: (
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = []
-) => {
-  let count = 0;
-  rowConditionPairs.forEach(([state, coords, condition, value = 1]) => {
-    // TODO: exclude origin monster from the condition?
-    count += countMatchesInRow(state, coords, condition) * value;
-  });
-  graveyardConditionPairs.forEach(([state, dKey, condition, value = 1]) => {
-    const gy = state[dKey].graveyard;
-    if (gy && condition(getCard(gy) as MonsterCard)) {
-      count += value;
-    }
-  });
-  return count;
-};
-
-export const powerUpSelfConditional = (
-  state: Duel,
-  coords: ZoneCoords,
-  rowConditionPairs: (
-    | [Duel, RowCoords, (z: Zone) => boolean]
-    | [Duel, RowCoords, (z: Zone) => boolean, number]
-  )[],
-  graveyardConditionPairs: (
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = []
-) => {
-  let count = countConditional(rowConditionPairs, graveyardConditionPairs);
-  tempPowerUp(state, coords, count);
-};
-
-export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
-  const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
-  if (targetIdx === -1) return; // no monster to target
-  permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
-};
-
 export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
   try {
     const [dKey, rKey] = coords;
@@ -454,4 +353,48 @@ export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
   } catch (e) {
     // no space in hand, do nothing
   }
+};
+
+export const generateOccupiedMonsterZone = (
+  cardName: CardName
+): OccupiedMonsterZone => ({
+  // use this to avoid boilerplate elsewhere
+  isOccupied: true,
+  card: getCard(cardName) as MonsterCard,
+  battlePosition: BattlePosition.Attack,
+  orientation: Orientation.FaceUp,
+  isLocked: false,
+  permPowerUpLevel: 0,
+  tempPowerUpLevel: 0,
+});
+
+export const postDirectMonsterAction = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  originalCardName: CardName
+) => {
+  // After attacking or manually activating an effect,
+  // that monster should be flipped/locked, etc.
+
+  // The exception is if the monster has destroyed/replaced itself
+  // (e.g. special summoning another monster in its place).
+  const zonePostAction = getZone(state, zoneCoords);
+  if (!isSpecificMonster(zonePostAction, originalCardName)) return;
+
+  zonePostAction.battlePosition = BattlePosition.Attack;
+  zonePostAction.orientation = Orientation.FaceUp;
+  zonePostAction.isLocked = true;
+};
+
+export const isCoordMatch = (c1: ZoneCoords, c2: ZoneCoords) => {
+  return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2];
+};
+
+export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
+  const [dKey, , colIdx] = zoneCoords;
+  return {
+    zoneCoords,
+    colIdx,
+    ...getDuellistCoordsMap(dKey),
+  };
 };

@@ -1,5 +1,5 @@
 import { selectDuel } from "@/duel/duelSlice";
-import { getCard } from "@/duel/util/duelUtil";
+import { getCard } from "@/duel/util/cardUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 import { FaceUpCard } from "../card/FaceUpCard";

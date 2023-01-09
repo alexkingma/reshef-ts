@@ -8,32 +8,25 @@ import {
   Trap,
 } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
+import { getCard } from "../util/cardUtil";
+import { shuffle } from "../util/common";
+import { draw } from "../util/deckUtil";
+import { burn, heal } from "../util/duellistUtil";
 import {
-  attackMonster,
-  burn,
   clearFirstTrap,
-  clearZone,
-  convertMonster,
-  destroyAtCoords,
+  countMatchesInRow,
   destroyFirstFound,
   destroyHighestAtk,
   destroyRow,
-  directAttack,
-  draw,
-  heal,
-  immobiliseCard,
+  getFirstEmptyZoneIdx,
+  getHighestAtkZoneIdx,
+  hasMatchInRow,
   immobiliseRow,
-  magnetWarriorMergeAttempt,
-  permPowerDown,
-  permPowerUp,
   powerDownHighestAtk,
-  returnCardToHand,
+  rowContainsAnyCards,
   setRowFaceUp,
-  specialSummon,
-  subsumeMonster,
   updateMatchesInRow,
-  xyzMergeAttempt,
-} from "../util/cardEffectUtil";
+} from "../util/rowUtil";
 import {
   burnOther,
   destroyHighestAtk as destroyHighestAtk_Wrapped,
@@ -41,23 +34,29 @@ import {
   destroyMonsterType,
   destroyRows,
   draw as draw_Wrapped,
-  heal as heal_Wrapped,
+  healSelf as heal_Wrapped,
   setField as setField_Wrapped,
-} from "../util/cardEffectWrapped";
+} from "../util/wrappedUtil";
 import {
-  containsAnyCards,
-  countMatchesInRow,
-  getCard,
-  getFirstEmptyZoneIdx,
-  getHighestAtkZoneIdx,
-  hasMatchInRow,
+  attackMonster,
+  clearZone,
+  convertMonster,
+  destroyAtCoords,
+  directAttack,
+  immobiliseCard,
   isFaceDown,
   isFaceUp,
   isSpecificMonster,
   isSpell,
   isType,
-  shuffle,
-} from "../util/duelUtil";
+  magnetWarriorMergeAttempt,
+  permPowerDown,
+  permPowerUp,
+  returnCardToHand,
+  specialSummon,
+  subsumeMonster,
+  xyzMergeAttempt,
+} from "../util/zoneUtil";
 
 type MonsterFlipEffectReducer = (state: Duel, coordsMap: ZoneCoordsMap) => void;
 
@@ -247,7 +246,7 @@ export const monsterFlipEffectReducers: MonsterFlipEffectReducers = {
   },
   [Monster.Skelengel]: draw_Wrapped(),
   [Monster.KingsKnight]: (state, { dKey, ownMonsters }) => {
-    if (!containsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
+    if (!rowContainsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
       return;
     }
     specialSummon(state, dKey, Monster.JacksKnight);

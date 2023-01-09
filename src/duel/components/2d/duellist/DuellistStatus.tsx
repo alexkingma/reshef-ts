@@ -1,6 +1,6 @@
 import { DuellistKey } from "@/duel/common";
 import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
-import { useDuellistActions } from "@/duel/useDuellistActions";
+import { useDuellistActions } from "@/duel/useDuelActions";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";

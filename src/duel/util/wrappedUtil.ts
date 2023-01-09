@@ -1,29 +1,32 @@
 import { Field } from "../common";
 import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "../duelSlice";
+import { draw as drawDirect } from "./deckUtil";
+import { burn, heal } from "./duellistUtil";
+import { setField as setFieldDirect } from "./duelUtil";
 import {
-  burn as burnDirect,
   countConditional,
-  destroyAtCoords,
+  countMatchesInRow,
   destroyRow,
-  draw as drawDirect,
-  heal as healDirect,
-  permPowerUp as permPowerUpDirect,
-  setField as setFieldDirect,
-  tempPowerUp as tempPowerUpDirect,
+  getHighestAtkZoneIdx,
+  getRow,
   updateMatchesInRow,
-} from "./cardEffectUtil";
-import { countMatchesInRow, getHighestAtkZoneIdx, getRow } from "./duelUtil";
+} from "./rowUtil";
+import {
+  destroyAtCoords,
+  permPowerUp as permPowerUpDirect,
+  tempPowerUp as tempPowerUpDirect,
+} from "./zoneUtil";
 
 export const burnOther =
   (amt: number) =>
   (state: Duel, { otherDKey }: CoordsMap) => {
-    burnDirect(state, otherDKey, amt);
+    burn(state, otherDKey, amt);
   };
 
-export const heal =
+export const healSelf =
   (amt: number) =>
   (state: Duel, { dKey }: CoordsMap) => {
-    healDirect(state, dKey, amt);
+    heal(state, dKey, amt);
   };
 
 export const permPowerUp =

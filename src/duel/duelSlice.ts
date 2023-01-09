@@ -5,15 +5,12 @@ import { RowKey } from "./common";
 import { cardReducers } from "./reducers/cardReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
-import {
-  checkAutoEffects,
-  getInitialDuel,
-  getOtherDuellistKey,
-  getRow,
-  getTempCardQuantMap,
-  getZone,
-  hasMatchInRow,
-} from "./util/duelUtil";
+import { checkAutoEffects } from "./util/autoEffectUtil";
+import { getTempCardQuantMap } from "./util/deckUtil";
+import { getOtherDuellistKey } from "./util/duellistUtil";
+import { getInitialDuel } from "./util/duelUtil";
+import { getRow, hasMatchInRow } from "./util/rowUtil";
+import { getZone } from "./util/zoneUtil";
 
 export interface DuellistCoordsMap {
   dKey: DuellistKey;
