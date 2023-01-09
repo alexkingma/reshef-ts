@@ -32,8 +32,8 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
           return hasEmptyZone(state, ownMonsters);
         },
         effect: (state, { dKey }) => {
-          specialSummon(state, dKey, Monster.TheWingedDragonOfRaBattleMode);
           clearGraveyard(state, dKey);
+          specialSummon(state, dKey, Monster.TheWingedDragonOfRaBattleMode);
         },
       },
     ];
@@ -102,8 +102,8 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
           return hasEmptyZone(state, ownMonsters);
         },
         effect: (state, { dKey }) => {
-          specialSummon(state, dKey, Monster.MirageKnight);
           clearGraveyard(state, dKey);
+          specialSummon(state, dKey, Monster.MirageKnight);
         },
       },
     ];

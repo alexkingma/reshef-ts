@@ -160,22 +160,37 @@ export const specialSummon = (
   cardName: CardName,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
-  const duellist = state[dKey];
   try {
     const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
-    duellist.monsterZones[zoneIdx] = {
-      ...generateOccupiedMonsterZone(cardName),
-      ...customProps,
-    };
+    specialSummonAtCoords(
+      state,
+      [dKey, RowKey.Monster, zoneIdx],
+      cardName,
+      customProps
+    );
   } catch (e) {
     return; // no free zone;
   }
 };
 
+export const specialSummonAtCoords = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  cardName: CardName,
+  customProps: Partial<OccupiedMonsterZone> = {}
+) => {
+  const zone = getZone(state, zoneCoords) as MonsterZone;
+  Object.assign(zone, {
+    ...generateOccupiedMonsterZone(cardName),
+    ...customProps,
+  });
+};
+
 export const magnetWarriorMergeAttempt = (
   state: Duel,
-  [dKey, rKey]: ZoneCoords
+  zoneCoords: ZoneCoords
 ) => {
+  const [dKey, rKey] = zoneCoords;
   const rowCoords: RowCoords = [dKey, rKey];
   const alphaIdx = getFirstMatchInRowIdx(
     state,
@@ -200,7 +215,7 @@ export const magnetWarriorMergeAttempt = (
 
   // successful merge
   clearZones(state, rowCoords, [alphaIdx, betaIdx, gammaIdx]);
-  specialSummon(state, dKey, Monster.ValkyrionTheMagnaWarrior);
+  specialSummonAtCoords(state, zoneCoords, Monster.ValkyrionTheMagnaWarrior);
 };
 
 export const xyzMergeAttempt = (
@@ -218,7 +233,7 @@ export const xyzMergeAttempt = (
         ...inputMons.map((m) => getFirstMatchInRowIdx(state, rowCoords, m)),
       ];
       clearZones(state, rowCoords, idxsToClear);
-      specialSummon(state, dKey, outputMon, { isLocked: true });
+      specialSummonAtCoords(state, zoneCoords, outputMon, { isLocked: true });
       break; // stop looking for merge combos after a match succeeds
     }
   }
@@ -427,7 +442,7 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
 
 export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
   try {
-    const [dKey, rKey, colIdx] = coords;
+    const [dKey, rKey] = coords;
     const handIdx = getFirstEmptyZoneIdx(state, [dKey, rKey]);
     const targetZone = getZone(state, coords) as OccupiedZone;
     state[dKey].hand[handIdx] = {

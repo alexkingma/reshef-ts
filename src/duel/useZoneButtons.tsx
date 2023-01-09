@@ -10,10 +10,10 @@ import {
 import {
   canActivateEffect,
   getNumTributesRequired,
-  hasTarget,
   isMonster,
   isSpell,
 } from "./duelUtil";
+import { spellHasTarget } from "./targetedSpellUtil";
 import { useCardActions } from "./useCardActions";
 import { useInteractionActions } from "./useInteractionActions";
 
@@ -136,7 +136,7 @@ export const useZoneButtons = (zoneCoords: ZoneCoords) => {
       label: "Activate",
       condition: (z) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
       onClick: () => {
-        if (hasTarget(zone.card.name)) {
+        if (spellHasTarget(zone.card.name)) {
           setOriginZone(zoneCoords);
           setPendingAction(activateSpellEffect);
           setInteractionMode(InteractionMode.ChoosingOwnMonster);

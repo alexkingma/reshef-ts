@@ -9,6 +9,7 @@ import {
   setField,
   setRowFaceDown,
   specialSummon,
+  specialSummonAtCoords,
 } from "./cardEffectUtil";
 import { Field, Monster, PermAutoEffectMonster } from "./common";
 import { ZoneCoordsMap } from "./duelSlice";
@@ -35,20 +36,14 @@ type MonsterPermAutoEffectReducers = {
 };
 
 export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
-  [Monster.ThunderNyanNyan]: (
-    state,
-    { zoneCoords, ownMonsters, otherMonsters }
-  ) => {
+  [Monster.ThunderNyanNyan]: (state, { zoneCoords, ownMonsters }) => {
     return [
       {
         condition: () => {
-          return (
-            hasMatchInRow(
-              state,
-              ownMonsters,
-              (z) => !isAlignment(z, "Light")
-            ) ||
-            hasMatchInRow(state, otherMonsters, (z) => !isAlignment(z, "Light"))
+          return hasMatchInRow(
+            state,
+            ownMonsters,
+            (z) => !isAlignment(z, "Light")
           );
         },
         effect: () => {
@@ -172,9 +167,8 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: (state, { zoneCoords, dKey }) => {
-          clearZone(state, zoneCoords);
-          specialSummon(state, dKey, Monster.CocoonOfEvolution);
+        effect: (state, { zoneCoords }) => {
+          specialSummonAtCoords(state, zoneCoords, Monster.CocoonOfEvolution);
         },
       },
     ];
@@ -185,9 +179,8 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: (state, { zoneCoords, dKey }) => {
-          clearZone(state, zoneCoords);
-          specialSummon(state, dKey, Monster.GreatMoth);
+        effect: (state, { zoneCoords }) => {
+          specialSummonAtCoords(state, zoneCoords, Monster.GreatMoth);
         },
       },
     ];
@@ -198,9 +191,12 @@ export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
         condition: () => {
           return isStartOfTurn(state, dKey);
         },
-        effect: (state, { zoneCoords, dKey }) => {
-          clearZone(state, zoneCoords);
-          specialSummon(state, dKey, Monster.PerfectlyUltimateGreatMoth);
+        effect: (state, { zoneCoords }) => {
+          specialSummonAtCoords(
+            state,
+            zoneCoords,
+            Monster.PerfectlyUltimateGreatMoth
+          );
         },
       },
     ];

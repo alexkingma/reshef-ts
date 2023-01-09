@@ -10,7 +10,6 @@ import {
   Orientation,
   PermAutoEffectMonster,
   RowKey,
-  Spell,
   Trap,
 } from "./common";
 import { DuellistCoordsMap, ZoneCoordsMap } from "./duelSlice";
@@ -32,17 +31,17 @@ export const getCard = (cardName: CardName): Card => {
   };
 };
 
-const getRandomCardName = (cardRules: Partial<Card> = {}): CardName => {
-  const isMatch = (card: Card) => {
-    return Object.entries(cardRules).every(
-      ([key, val]) => card[key as keyof Card] === val
-    );
-  };
+export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {
+  return Object.entries(cardRules).every(
+    ([key, val]) => card[key as keyof Card] === val
+  );
+};
 
+const getRandomCardName = (cardRules: Partial<Card> = {}): CardName => {
   let dbCard;
   do {
     dbCard = cards[Math.floor(Math.random() * cards.length)];
-  } while (!isMatch(getCard(dbCard.name)));
+  } while (!isCardMatch(getCard(dbCard.name), cardRules));
   return dbCard.name;
 };
 
@@ -569,49 +568,4 @@ export const postDirectMonsterAction = (
 
 export const isCoordMatch = (c1: ZoneCoords, c2: ZoneCoords) => {
   return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2];
-};
-
-export const hasTarget = (card: CardName) => {
-  return [
-    // alignment/type-specific power-ups
-    Spell.LegendarySword,
-    Spell.SwordOfDarkDestruction,
-    Spell.DarkEnergy,
-    Spell.AxeOfDespair,
-    Spell.LaserCannonArmor,
-    Spell.InsectArmorWithLaserCannon,
-    Spell.ElfsLight,
-    Spell.BeastFangs,
-    Spell.SteelShell,
-    Spell.VileGerms,
-    Spell.BlackPendant,
-    Spell.SilverBowAndArrow,
-    Spell.HornOfLight,
-    Spell.HornOfTheUnicorn,
-    Spell.DragonTreasure,
-    Spell.ElectroWhip,
-    Spell.CyberShield,
-    Spell.MysticalMoon,
-    Spell.MalevolentNuzzler,
-    Spell.VioletCrystal,
-    Spell.BookOfSecretArts,
-    Spell.Invigoration,
-    Spell.MachineConversionFactory,
-    Spell.RaiseBodyHeat,
-    Spell.FollowWind,
-    Spell.PowerOfKaishin,
-    Spell.KunaiWithChain,
-    Spell.Salamandra,
-    Spell.Megamorph,
-    Spell.WingedTrumpeter,
-    Spell.BrightCastle,
-
-    // monster-specific power-up
-    Spell.CyclonLaser,
-    Spell.ElegantEgotist,
-    Spell.MagicalLabyrinth,
-    Spell.Cursebreaker,
-    Spell.Metalmorph,
-    Spell._7Completed,
-  ].includes(card as Spell);
 };

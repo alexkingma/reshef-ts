@@ -5,6 +5,8 @@ import {
   resurrectEnemy,
   setRowFaceDown,
   setRowFaceUp,
+  specialSummon,
+  specialSummonAtCoords,
 } from "./cardEffectUtil";
 import {
   burnOther,
@@ -29,9 +31,8 @@ import { ZoneCoordsMap } from "./duelSlice";
 import {
   containsAnyCards,
   countMatchesInRow,
-  generateOccupiedMonsterZone,
-  getFirstEmptyZoneIdx,
   getRow,
+  getZone,
 } from "./duelUtil";
 
 type SpellEffectReducers = {
@@ -90,10 +91,7 @@ export const spellEffectReducers: SpellEffectReducers = {
 
   // monster-specific power-up
   [Spell.CyclonLaser]: permPowerUp(),
-  [Spell.ElegantEgotist]: permPowerUp(),
   [Spell.MagicalLabyrinth]: permPowerUp(),
-  [Spell.Cursebreaker]: permPowerUp(),
-  [Spell.Metalmorph]: permPowerUp(),
   [Spell._7Completed]: permPowerUp(),
 
   // power-down
@@ -145,19 +143,45 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.LastDayOfWitch]: destroyMonsterType("Spellcaster"),
 
   // assorted
-  [Spell.JamBreedingMachine]: (state, { ownMonsters }) => {
-    try {
-      const zoneIdx = getFirstEmptyZoneIdx(state, ownMonsters);
-
-      const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-      monsterZones[zoneIdx] = {
-        ...generateOccupiedMonsterZone(Monster.ChangeSlime),
-        isLocked: true,
-      };
-      state.activeTurn.hasNormalSummoned = true;
-    } catch (e) {
-      // no free zone to summon monster
+  [Spell.Cursebreaker]: (state, { ownMonsters }) => {
+    // restores the power-up levels of all player's powered-down monsters
+    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
+    monsterZones.forEach((z, i, zones) => {
+      if (!z.isOccupied) return;
+      (zones[i] as OccupiedMonsterZone).permPowerUpLevel = Math.max(
+        z.permPowerUpLevel,
+        0
+      );
+    });
+  },
+  [Spell.Metalmorph]: (state) => {
+    const { targetCoords } = state.interaction;
+    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
+    // TODO: should it special summon in same orientation as original card?
+    if (z.card.name === Monster.Zoa) {
+      specialSummonAtCoords(state, targetCoords!, Monster.Metalzoa);
+      return;
     }
+    if (z.card.name === Monster.JiraiGumo) {
+      specialSummonAtCoords(state, targetCoords!, Monster.LauncherSpider);
+      return;
+    }
+  },
+  [Spell.ElegantEgotist]: (state) => {
+    const { targetCoords } = state.interaction;
+    // TODO: should it special summon in same orientation as original card?
+    const { permPowerUpLevel } = getZone(
+      state,
+      targetCoords!
+    ) as OccupiedMonsterZone;
+    specialSummonAtCoords(state, targetCoords!, Monster.HarpieLadySisters, {
+      permPowerUpLevel,
+    });
+  },
+  [Spell.JamBreedingMachine]: (state, { dKey }) => {
+    // TODO: this should be an auto effect?
+    specialSummon(state, dKey, Monster.ChangeSlime, { isLocked: true });
+    state.activeTurn.hasNormalSummoned = true;
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
     const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
@@ -194,16 +218,14 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell.ChangeOfHeart]: (state, { dKey }) => {
     convertMonster(state, dKey);
   },
-  [Spell.Multiply]: (state, { ownMonsters }) => {
+  [Spell.Multiply]: (state, { ownMonsters, dKey }) => {
     if (!containsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
     const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-    monsterZones.forEach((zone, idx, row) => {
+    monsterZones.forEach((zone) => {
       if (zone.isOccupied) return;
-      row[idx] = {
-        ...generateOccupiedMonsterZone(Monster.Kuriboh),
-        isLocked: true,
-      };
+      specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
+      // TODO: does this count as your normal summon for this turn?
     });
   },
   [Spell.PotOfGreed]: draw(2),
