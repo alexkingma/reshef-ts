@@ -1,14 +1,14 @@
-import { default as alignmentMap } from "../assets/alignment.json";
-import { default as fieldMultiplierMap } from "../assets/fields.json";
-import { BattlePosition, Field, RowKey, TempPowerUpMonster } from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+import { default as alignmentMap } from "../../assets/alignment.json";
+import { default as fieldMultiplierMap } from "../../assets/fields.json";
+import { BattlePosition, Field, RowKey, TempPowerUpMonster } from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
+import { monsterTempPowerUpReducers } from "../reducers/monsterTempPowerUpReducers";
 import {
   activateTempEffect,
   getOtherDuellistKey,
   getZone,
   getZoneCoordsMap,
 } from "./duelUtil";
-import { monsterTempPowerUpReducers } from "./monsterTempPowerUpReducers";
 
 export const calculateAttack = (
   attacker: OccupiedMonsterZone,

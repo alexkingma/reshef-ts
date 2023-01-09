@@ -1,4 +1,4 @@
-import { Monster } from "../common";
+import { Monster } from "../../common";
 import { generateOccupiedMonsterZone } from "../duelUtil";
 
 describe("getHighestAtkZoneIdx", () => {

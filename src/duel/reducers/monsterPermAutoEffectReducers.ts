@@ -1,3 +1,5 @@
+import { Field, Monster, PermAutoEffectMonster } from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
 import {
   burn,
   clearAllTraps,
@@ -10,9 +12,7 @@ import {
   setRowFaceDown,
   specialSummon,
   specialSummonAtCoords,
-} from "./cardEffectUtil";
-import { Field, Monster, PermAutoEffectMonster } from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+} from "../util/cardEffectUtil";
 import {
   getExodiaCards,
   graveyardContainsCards,
@@ -21,7 +21,7 @@ import {
   isStartOfEitherTurn,
   isStartOfTurn,
   isTrap,
-} from "./duelUtil";
+} from "../util/duelUtil";
 
 type MonsterPermAutoEffectReducer = (
   state: Duel,

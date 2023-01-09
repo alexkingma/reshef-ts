@@ -1,10 +1,10 @@
-import { tempPowerDown, tempPowerUp } from "./cardEffectUtil";
+import { Monster, TempPowerUpMonster } from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
+import { tempPowerDown, tempPowerUp } from "../util/cardEffectUtil";
 import {
   getEffCon_powerUpSelfConditional,
   getEffCon_updateMatchesInRow,
-} from "./cardEffectWrapped";
-import { Monster, TempPowerUpMonster } from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+} from "../util/cardEffectWrapped";
 import {
   countMatchesInRow,
   getHighestAtkZoneIdx,
@@ -12,7 +12,7 @@ import {
   isAlignment,
   isSpecificMonster,
   isType,
-} from "./duelUtil";
+} from "../util/duelUtil";
 
 export type MonsterAutoEffectReducer = (
   state: Duel,

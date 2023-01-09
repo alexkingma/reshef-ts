@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../hooks";
 import { actions as duelActions } from "./duelSlice";
-import { interactionReducers } from "./interactionReducers";
+import { interactionReducers } from "./reducers/interactionReducers";
 
 type InteractionActions = {
   [K in keyof typeof interactionReducers]: OmitFirstArg<

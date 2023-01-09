@@ -1,4 +1,4 @@
-import { InteractionMode } from "./common";
+import { InteractionMode } from "../common";
 
 export const interactionReducers = {
   setCursorZone: ({ interaction }: Duel, zoneCoords: ZoneCoords) => {

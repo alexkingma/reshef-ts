@@ -1,5 +1,4 @@
-import cards from "../assets/cards";
-import { recalcCombatStats } from "./combatUtil";
+import cards from "../../assets/cards";
 import {
   BattlePosition,
   Field,
@@ -11,13 +10,14 @@ import {
   PermAutoEffectMonster,
   RowKey,
   Trap,
-} from "./common";
-import { DuellistCoordsMap, ZoneCoordsMap } from "./duelSlice";
-import { monsterFlipEffectReducers } from "./monsterFlipEffectReducers";
-import { monsterGraveyardEffectReducers } from "./monsterGraveyardEffectReducers";
-import { monsterHandEffectReducers } from "./monsterHandEffectReducers";
-import { monsterPermAutoEffectReducers } from "./monsterPermAutoEffectReducers";
-import { MonsterAutoEffectReducer } from "./monsterTempPowerUpReducers";
+} from "../common";
+import { DuellistCoordsMap, ZoneCoordsMap } from "../duelSlice";
+import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
+import { monsterGraveyardEffectReducers } from "../reducers/monsterGraveyardEffectReducers";
+import { monsterHandEffectReducers } from "../reducers/monsterHandEffectReducers";
+import { monsterPermAutoEffectReducers } from "../reducers/monsterPermAutoEffectReducers";
+import { MonsterAutoEffectReducer } from "../reducers/monsterTempPowerUpReducers";
+import { recalcCombatStats } from "./combatUtil";
 
 export const getCard = (cardName: CardName): Card => {
   const dbCard = cards.find((c) => c.name === cardName)!;

@@ -1,4 +1,14 @@
 import {
+  DuellistKey,
+  Field,
+  FlipEffectMonster,
+  Monster,
+  Orientation,
+  RowKey,
+  Trap,
+} from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
+import {
   attackMonster,
   burn,
   clearFirstTrap,
@@ -23,7 +33,7 @@ import {
   subsumeMonster,
   updateMatchesInRow,
   xyzMergeAttempt,
-} from "./cardEffectUtil";
+} from "../util/cardEffectUtil";
 import {
   burnOther,
   destroyHighestAtk as destroyHighestAtk_Wrapped,
@@ -33,17 +43,7 @@ import {
   draw as draw_Wrapped,
   heal as heal_Wrapped,
   setField as setField_Wrapped,
-} from "./cardEffectWrapped";
-import {
-  DuellistKey,
-  Field,
-  FlipEffectMonster,
-  Monster,
-  Orientation,
-  RowKey,
-  Trap,
-} from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+} from "../util/cardEffectWrapped";
 import {
   containsAnyCards,
   countMatchesInRow,
@@ -57,7 +57,7 @@ import {
   isSpell,
   isType,
   shuffle,
-} from "./duelUtil";
+} from "../util/duelUtil";
 
 type MonsterFlipEffectReducer = (state: Duel, coordsMap: ZoneCoordsMap) => void;
 

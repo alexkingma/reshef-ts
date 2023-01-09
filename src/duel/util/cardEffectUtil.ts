@@ -1,5 +1,5 @@
+import { BattlePosition, Field, Monster, Orientation, RowKey } from "../common";
 import { calculateAttack } from "./combatUtil";
-import { BattlePosition, Field, Monster, Orientation, RowKey } from "./common";
 import {
   containsAllCards,
   countMatchesInRow,

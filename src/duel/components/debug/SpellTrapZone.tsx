@@ -1,6 +1,6 @@
 import { selectZone } from "@/duel/duelSlice";
-import { isTrap } from "@/duel/duelUtil";
 import { useZoneButtons } from "@/duel/useZoneButtons";
+import { isTrap } from "@/duel/util/duelUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 

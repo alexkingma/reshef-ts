@@ -5,8 +5,8 @@ import {
   RowKey,
 } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
-import { isDefMode } from "@/duel/duelUtil";
 import { useZoneButtons } from "@/duel/useZoneButtons";
+import { isDefMode } from "@/duel/util/duelUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";

@@ -1,4 +1,13 @@
 import {
+  BattlePosition,
+  DuellistKey,
+  Field,
+  Monster,
+  RowKey,
+  Spell,
+} from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
+import {
   burn as burnDirect,
   clearGraveyard,
   convertMonster,
@@ -7,7 +16,7 @@ import {
   setRowFaceUp,
   specialSummon,
   specialSummonAtCoords,
-} from "./cardEffectUtil";
+} from "../util/cardEffectUtil";
 import {
   burnOther,
   destroy1500PlusAtk,
@@ -18,22 +27,13 @@ import {
   heal,
   permPowerUp,
   setField,
-} from "./cardEffectWrapped";
-import {
-  BattlePosition,
-  DuellistKey,
-  Field,
-  Monster,
-  RowKey,
-  Spell,
-} from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+} from "../util/cardEffectWrapped";
 import {
   containsAnyCards,
   countMatchesInRow,
   getRow,
   getZone,
-} from "./duelUtil";
+} from "../util/duelUtil";
 
 type SpellEffectReducers = {
   [key in Spell]: (state: Duel, coordsMap: ZoneCoordsMap) => void;

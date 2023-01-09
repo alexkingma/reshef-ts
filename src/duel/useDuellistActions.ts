@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../hooks";
-import { duellistReducers } from "./duellistReducers";
 import { actions as duelActions, DuellistActionKey } from "./duelSlice";
-import { getDuellistCoordsMap } from "./duelUtil";
+import { duellistReducers } from "./reducers/duellistReducers";
+import { getDuellistCoordsMap } from "./util/duelUtil";
 
 type DuellistActions = {
   [K in keyof typeof duellistReducers]: () => void;

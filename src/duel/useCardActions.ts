@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../hooks";
-import { cardReducers } from "./cardReducers";
 import { actions as duelActions, CardActionKey } from "./duelSlice";
-import { getZoneCoordsMap } from "./duelUtil";
+import { cardReducers } from "./reducers/cardReducers";
+import { getZoneCoordsMap } from "./util/duelUtil";
 
 type CardActions = {
   [K in keyof typeof cardReducers]: () => void;

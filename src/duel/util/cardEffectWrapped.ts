@@ -1,3 +1,5 @@
+import { Field } from "../common";
+import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "../duelSlice";
 import {
   burn as burnDirect,
   countConditional,
@@ -10,8 +12,6 @@ import {
   tempPowerUp as tempPowerUpDirect,
   updateMatchesInRow,
 } from "./cardEffectUtil";
-import { Field } from "./common";
-import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "./duelSlice";
 import { countMatchesInRow, getHighestAtkZoneIdx, getRow } from "./duelUtil";
 
 export const burnOther =

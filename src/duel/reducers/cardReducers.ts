@@ -1,16 +1,16 @@
+import { BattlePosition, FlipEffectMonster, Spell } from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
 import {
   attackMonster,
   clearZone,
   destroyAtCoords,
   directAttack,
-} from "./cardEffectUtil";
-import { BattlePosition, FlipEffectMonster, Spell } from "./common";
-import { ZoneCoordsMap } from "./duelSlice";
+} from "../util/cardEffectUtil";
 import {
   generateOccupiedMonsterZone,
   getZone,
   postDirectMonsterAction,
-} from "./duelUtil";
+} from "../util/duelUtil";
 import { monsterFlipEffectReducers as flipReducers } from "./monsterFlipEffectReducers";
 import { spellEffectReducers as spellReducers } from "./spellEffectReducers";
 

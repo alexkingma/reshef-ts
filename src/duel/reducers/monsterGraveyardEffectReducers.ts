@@ -1,13 +1,17 @@
+import { GraveyardEffectMonster, Monster } from "../common";
+import { DuellistCoordsMap } from "../duelSlice";
 import {
   clearGraveyard,
   destroyFirstFound,
   destroyHighestAtk,
   resurrectOwn,
   specialSummon,
-} from "./cardEffectUtil";
-import { GraveyardEffectMonster, Monster } from "./common";
-import { DuellistCoordsMap } from "./duelSlice";
-import { countMatchesInRow, hasEmptyZone, isStartOfTurn } from "./duelUtil";
+} from "../util/cardEffectUtil";
+import {
+  countMatchesInRow,
+  hasEmptyZone,
+  isStartOfTurn,
+} from "../util/duelUtil";
 
 type GraveyardEffectReducer = (
   state: Duel,

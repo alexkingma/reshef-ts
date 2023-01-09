@@ -1,7 +1,7 @@
 import { DuellistKey, InteractionMode } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
-import { isCoordMatch } from "@/duel/duelUtil";
 import { useInteractionActions } from "@/duel/useInteractionActions";
+import { isCoordMatch } from "@/duel/util/duelUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React, { ReactNode } from "react";

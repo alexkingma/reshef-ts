@@ -1,9 +1,10 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { cardReducers } from "./cardReducers";
 import { RowKey } from "./common";
-import { duellistReducers } from "./duellistReducers";
+import { cardReducers } from "./reducers/cardReducers";
+import { duellistReducers } from "./reducers/duellistReducers";
+import { interactionReducers } from "./reducers/interactionReducers";
 import {
   checkAutoEffects,
   getInitialDuel,
@@ -12,8 +13,7 @@ import {
   getTempCardQuantMap,
   getZone,
   hasMatchInRow,
-} from "./duelUtil";
-import { interactionReducers } from "./interactionReducers";
+} from "./util/duelUtil";
 
 export interface DuellistCoordsMap {
   dKey: DuellistKey;

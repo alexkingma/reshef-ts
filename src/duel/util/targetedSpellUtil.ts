@@ -1,4 +1,4 @@
-import { Spell } from "./common";
+import { Spell } from "../common";
 import { getCard } from "./duelUtil";
 
 const targetedSpellMap: {
