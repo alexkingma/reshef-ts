@@ -1,6 +1,6 @@
 const imageMap = (() => {
   const reqContext = require.context(
-    "../assets/images/cards/",
+    "../assets/images/cards-simple/",
     false,
     /\.png$/
   );

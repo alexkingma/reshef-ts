@@ -1,10 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
-
+import "./App.scss";
 import { Duel } from "./duel/components/Duel";
 import { store } from "./store";
-
-import "./App.scss";
 
 const App = () => {
   return (
