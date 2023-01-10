@@ -1,21 +1,27 @@
 .statsContainer {
   position: absolute;
-  top: 103px;
-  left: 14px;
-  height: 33px;
-  width: 80px;
-  overflow: hidden;
+  top: 125px;
+  width: 100%;
+  display: none;
 
   .atk,
   .def {
     margin: 0;
-    font-size: 18px;
-    line-height: 16px;
-    font-weight: bold;
+    font-size: 16px;
     display: flex;
-    justify-content: right;
-    text-shadow: rgb(117, 9, 9) 0px 0px 8px;
-    transform: scale(1.6, 1);
-    transform-origin: right center;
+    justify-content: center;
+    color: black !important;
+    position: absolute;
+    width: 41px;
+    height: 16px;
+    align-items: center;
+  }
+
+  .atk {
+    left: 9px;
+  }
+
+  .def {
+    right: 9px;
   }
 }

@@ -12,7 +12,12 @@ export const Field = () => {
   return (
     <Zone>
       {activeField !== "Arena" ? (
-        <FaceUpCard card={getCard(activeField)} />
+        <div className="cardContainer">
+          <FaceUpCard
+            card={getCard(activeField)}
+            customClasses="alwaysVisible"
+          />
+        </div>
       ) : (
         <ZoneBackground customClasses={"fieldBackground"} />
       )}

@@ -17,7 +17,9 @@ export const Graveyard = ({ duellistKey }: Props) => {
   return (
     <Zone>
       {graveyard ? (
-        <FaceUpCard card={getCard(graveyard)} />
+        <div className="cardContainer">
+          <FaceUpCard card={getCard(graveyard)} customClasses="alwaysVisible" />
+        </div>
       ) : (
         <ZoneBackground customClasses="graveyardBackground" />
       )}

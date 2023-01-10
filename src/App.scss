@@ -1,5 +1,11 @@
+@font-face {
+  font-family: customFont;
+  src: url(./assets/fonts/YGODIY-Chinese.ttf);
+}
+
 * {
   box-sizing: border-box;
+  font-family: customFont;
 }
 
 html {

@@ -1,13 +1,13 @@
 .statusContainer {
   bottom: 0;
   left: 0;
+  width: var(--card-width);
   margin: 20px;
   border: 3px black solid;
   padding: 8px;
   display: flex;
   flex-direction: column;
   background-color: rgb(177, 182, 252);
-  max-width: var(--card-width);
 
   .spacer {
     height: 4px;

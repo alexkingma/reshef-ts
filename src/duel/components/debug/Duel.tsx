@@ -21,6 +21,7 @@ export const Duel = () => {
         display: "flex",
         justifyContent: "space-around",
         margin: "0 10px",
+        color: "white",
       }}
     >
       <div>

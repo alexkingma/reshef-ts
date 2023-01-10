@@ -12,7 +12,7 @@ import classNames from "classnames";
 import React from "react";
 import "./Card.scss";
 import { FaceDownCard } from "./FaceDownCard";
-import { SimpleFaceUpCard } from "./SimpleFaceUpCard";
+import { FaceUpCard } from "./FaceUpCard";
 
 interface Props {
   zoneCoords: ZoneCoords;
@@ -37,7 +37,7 @@ export const Card = ({ zoneCoords }: Props) => {
 
   return (
     <div className="cardContainer">
-      <SimpleFaceUpCard card={z.card} customClasses={customClasses} />
+      <FaceUpCard card={z.card} customClasses={customClasses} />
       <FaceDownCard customClasses={customClasses} />
       {mode === InteractionMode.ViewingOptions && (
         <div className="zoneButtonsContainer">{buttons}</div>

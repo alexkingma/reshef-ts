@@ -2,31 +2,35 @@
   position: relative;
   height: var(--card-height);
 
+  .alwaysVisible {
+    .statsContainer,
+    .faceUpCard {
+      display: block;
+    }
+  }
+
   &:hover {
     .zoneButtonsContainer {
       display: flex;
     }
 
-    .faceUpCard:not(.alwaysVisible).showOnHover {
-      display: block;
-    }
+    .showOnHover {
+      .statsContainer,
+      .faceUpCard {
+        display: block;
+      }
 
-    .faceDownCard.showOnHover {
-      display: none;
-    }
-  }
-
-  .faceUpCard {
-    border-radius: 3px;
-
-    &:not(.alwaysVisible) {
-      display: none;
+      &.faceDownCard {
+        display: none;
+      }
     }
   }
 
   .defenceModeCard {
-    transform-origin: calc(var(--card-width) / 2) calc(var(--card-height) / 2);
     transform: rotate(270deg);
+
+    // prevent the image from blurring due to rotation
+    transform-origin: 50% 51%;
   }
 
   .zoneButtonsContainer {
@@ -46,12 +50,16 @@
   }
 }
 
+.faceUpCard,
 .faceDownCard {
   width: var(--card-width);
   height: var(--card-height);
   border-radius: 3px;
+  display: none;
+}
 
-  &.alwaysVisible {
-    display: none;
+.faceDownCard {
+  &:not(.alwaysVisible) {
+    display: block;
   }
 }
