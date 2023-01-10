@@ -10,7 +10,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3000,
     def: 2500,
-    code: 8963113,
+    code: 89631139,
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 800,
     def: 2000,
-    code: 1502584,
+    code: 15025844,
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 7618469,
+    code: 76184692,
   },
   {
     id: 4,
@@ -49,7 +49,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 700,
-    code: 8881958,
+    code: 88819587,
   },
   {
     id: 5,
@@ -62,7 +62,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 500,
-    code: 1530329,
+    code: 15303296,
   },
   {
     id: 6,
@@ -75,7 +75,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1400,
-    code: 4139289,
+    code: 41392891,
   },
   {
     id: 7,
@@ -88,7 +88,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 8779690,
+    code: 87796900,
   },
   {
     id: 8,
@@ -101,7 +101,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 600,
-    code: 1418160,
+    code: 14181608,
   },
   {
     id: 9,
@@ -114,7 +114,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 500,
     def: 200,
-    code: 4057531,
+    code: 40575313,
   },
   {
     id: 10,
@@ -127,7 +127,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 800,
-    code: 8756435,
+    code: 87564352,
   },
   {
     id: 11,
@@ -140,7 +140,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1750,
     def: 2030,
-    code: 1306906,
+    code: 13069066,
   },
   {
     id: 12,
@@ -153,7 +153,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 4045376,
+    code: 40453765,
   },
   {
     id: 13,
@@ -166,7 +166,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 8755718,
+    code: 87557188,
   },
   {
     id: 14,
@@ -179,7 +179,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1300,
-    code: 1824647,
+    code: 18246479,
   },
   {
     id: 15,
@@ -192,7 +192,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1600,
-    code: 4523117,
+    code: 45231177,
   },
   {
     id: 16,
@@ -205,7 +205,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 400,
-    code: 7162522,
+    code: 71625222,
   },
   {
     id: 17,
@@ -218,7 +218,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 200,
     def: 300,
-    code: 812492,
+    code: 8124921,
     limit: 1,
   },
   {
@@ -232,7 +232,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 200,
     def: 300,
-    code: 4451953,
+    code: 44519536,
     limit: 1,
   },
   {
@@ -246,7 +246,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 200,
     def: 300,
-    code: 7090363,
+    code: 70903634,
     limit: 1,
   },
   {
@@ -260,7 +260,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 200,
     def: 300,
-    code: 790234,
+    code: 7902349,
     limit: 1,
   },
   {
@@ -274,7 +274,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 1000,
-    code: 3339694,
+    code: 33396948,
     limit: 1,
   },
   {
@@ -288,7 +288,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2500,
     def: 1200,
-    code: 7078105,
+    code: 70781052,
   },
   {
     id: 23,
@@ -301,7 +301,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1400,
     def: 700,
-    code: 628579,
+    code: 6285791,
   },
   {
     id: 24,
@@ -314,7 +314,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 200,
-    code: 3227449,
+    code: 32274490,
   },
   {
     id: 25,
@@ -327,7 +327,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1000,
-    code: 6966940,
+    code: 69669405,
   },
   {
     id: 26,
@@ -340,7 +340,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1000,
-    code: 505310,
+    code: 5053103,
   },
   {
     id: 27,
@@ -353,7 +353,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 3245281,
+    code: 32452818,
   },
   {
     id: 28,
@@ -366,7 +366,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1200,
-    code: 6884691,
+    code: 68846917,
   },
   {
     id: 29,
@@ -379,7 +379,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 1000,
-    code: 493156,
+    code: 4931562,
   },
   {
     id: 30,
@@ -392,7 +392,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 3133926,
+    code: 31339260,
   },
   {
     id: 31,
@@ -405,7 +405,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 6772437,
+    code: 67724379,
   },
   {
     id: 32,
@@ -418,7 +418,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1200,
-    code: 9411997,
+    code: 94119974,
   },
   {
     id: 33,
@@ -431,7 +431,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1500,
-    code: 3011368,
+    code: 30113682,
   },
   {
     id: 34,
@@ -444,7 +444,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 1500,
-    code: 6660278,
+    code: 66602787,
   },
   {
     id: 35,
@@ -457,7 +457,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2500,
     def: 2100,
-    code: 4698641,
+    code: 46986414,
   },
   {
     id: 36,
@@ -470,7 +470,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 2949103,
+    code: 29491031,
   },
   {
     id: 37,
@@ -483,7 +483,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 2100,
-    code: 6688913,
+    code: 66889139,
   },
   {
     id: 38,
@@ -496,7 +496,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2300,
     def: 2100,
-    code: 636803,
+    code: 6368038,
   },
   {
     id: 39,
@@ -509,7 +509,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2000,
     def: 1500,
-    code: 2827954,
+    code: 28279543,
   },
   {
     id: 40,
@@ -522,7 +522,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 200,
     def: 1800,
-    code: 5576355,
+    code: 55763552,
   },
   {
     id: 41,
@@ -535,7 +535,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 9115225,
+    code: 91152256,
   },
   {
     id: 42,
@@ -548,7 +548,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1200,
     def: 2200,
-    code: 2854690,
+    code: 28546905,
   },
   {
     id: 43,
@@ -561,7 +561,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 5454190,
+    code: 54541900,
   },
   {
     id: 44,
@@ -574,7 +574,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1000,
-    code: 9193960,
+    code: 91939608,
   },
   {
     id: 45,
@@ -587,7 +587,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 500,
-    code: 2732431,
+    code: 27324313,
   },
   {
     id: 46,
@@ -600,7 +600,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 5382941,
+    code: 53829412,
   },
   {
     id: 47,
@@ -613,7 +613,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 600,
-    code: 8081302,
+    code: 80813021,
   },
   {
     id: 48,
@@ -626,7 +626,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 600,
-    code: 2620216,
+    code: 26202165,
   },
   {
     id: 49,
@@ -639,7 +639,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 5360687,
+    code: 53606874,
   },
   {
     id: 50,
@@ -652,7 +652,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 700,
-    code: 8909157,
+    code: 89091579,
   },
   {
     id: 51,
@@ -665,7 +665,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 1548058,
+    code: 15480588,
   },
   {
     id: 52,
@@ -678,7 +678,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 2000,
-    code: 5258428,
+    code: 52584282,
   },
   {
     id: 53,
@@ -691,7 +691,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 8897999,
+    code: 88979991,
   },
   {
     id: 54,
@@ -704,7 +704,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1400,
-    code: 1536703,
+    code: 15367030,
   },
   {
     id: 55,
@@ -717,7 +717,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 4176263,
+    code: 41762634,
   },
   {
     id: 56,
@@ -730,7 +730,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 400,
-    code: 8775634,
+    code: 87756343,
     limit: 1,
   },
   {
@@ -744,7 +744,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2600,
     def: 2500,
-    code: 1414144,
+    code: 14141448,
     limit: 1,
   },
   {
@@ -758,7 +758,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 200,
-    code: 4064005,
+    code: 40640057,
   },
   {
     id: 59,
@@ -771,7 +771,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 800,
-    code: 4037492,
+    code: 40374923,
   },
   {
     id: 60,
@@ -784,7 +784,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 800,
-    code: 1342980,
+    code: 13429800,
   },
   {
     id: 61,
@@ -797,7 +797,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 800,
-    code: 4941750,
+    code: 49417509,
   },
   {
     id: 62,
@@ -810,7 +810,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1400,
-    code: 7681211,
+    code: 76812113,
   },
   {
     id: 63,
@@ -823,7 +823,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1950,
     def: 2100,
-    code: 1220621,
+    code: 12206212,
   },
   {
     id: 64,
@@ -836,7 +836,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1100,
-    code: 4979192,
+    code: 49791927,
   },
   {
     id: 65,
@@ -849,7 +849,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 800,
-    code: 9035709,
+    code: 90357090,
   },
   {
     id: 66,
@@ -862,7 +862,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 118462,
+    code: 1184620,
   },
   {
     id: 67,
@@ -875,7 +875,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3500,
     def: 3000,
-    code: 4857937,
+    code: 48579379,
     limit: 1,
   },
   {
@@ -889,7 +889,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 1497707,
+    code: 14977074,
   },
   {
     id: 69,
@@ -902,7 +902,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2000,
-    code: 4146208,
+    code: 41462083,
   },
   {
     id: 70,
@@ -915,7 +915,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1400,
-    code: 7745678,
+    code: 77456781,
   },
   {
     id: 71,
@@ -928,7 +928,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 1485149,
+    code: 14851496,
   },
   {
     id: 72,
@@ -941,7 +941,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 0,
     def: 2000,
-    code: 4024059,
+    code: 40240595,
     limit: 1,
   },
   {
@@ -955,7 +955,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 7663414,
+    code: 76634149,
   },
   {
     id: 74,
@@ -968,7 +968,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1300,
     def: 2000,
-    code: 1303984,
+    code: 13039848,
   },
   {
     id: 75,
@@ -981,7 +981,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 600,
-    code: 4912794,
+    code: 49127943,
   },
   {
     id: 76,
@@ -994,7 +994,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1200,
-    code: 7651265,
+    code: 76512652,
   },
   {
     id: 77,
@@ -1007,7 +1007,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1200,
-    code: 290625,
+    code: 2906250,
   },
   {
     id: 78,
@@ -1020,7 +1020,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1150,
-    code: 4830536,
+    code: 48305365,
   },
   {
     id: 79,
@@ -1033,7 +1033,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1800,
     def: 2000,
-    code: 7539000,
+    code: 75390004,
   },
   {
     id: 80,
@@ -1046,7 +1046,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 800,
-    code: 178461,
+    code: 1784619,
   },
   {
     id: 81,
@@ -1059,7 +1059,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1200,
-    code: 3828971,
+    code: 38289717,
   },
   {
     id: 82,
@@ -1072,7 +1072,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2000,
-    code: 7467742,
+    code: 74677422,
   },
   {
     id: 83,
@@ -1085,7 +1085,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 2500,
-    code: 6212,
+    code: 62121,
     limit: 1,
   },
   {
@@ -1099,7 +1099,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 2000,
-    code: 3306613,
+    code: 33066139,
   },
   {
     id: 85,
@@ -1112,7 +1112,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2600,
     def: 2300,
-    code: 6945583,
+    code: 69455834,
   },
   {
     id: 86,
@@ -1125,7 +1125,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 2000,
-    code: 684057,
+    code: 6840573,
   },
   {
     id: 87,
@@ -1138,7 +1138,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2100,
     def: 1900,
-    code: 3234468,
+    code: 32344688,
   },
   {
     id: 88,
@@ -1151,7 +1151,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 2800,
-    code: 6833928,
+    code: 68339286,
   },
   {
     id: 89,
@@ -1164,7 +1164,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1000,
     def: 2000,
-    code: 9572799,
+    code: 95727991,
   },
   {
     id: 90,
@@ -1177,7 +1177,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1800,
     def: 2000,
-    code: 3112209,
+    code: 31122090,
   },
   {
     id: 91,
@@ -1190,7 +1190,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1550,
-    code: 6851670,
+    code: 68516705,
   },
   {
     id: 92,
@@ -1203,7 +1203,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1700,
-    code: 9490534,
+    code: 94905343,
   },
   {
     id: 93,
@@ -1216,7 +1216,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 1700,
-    code: 3009045,
+    code: 30090452,
   },
   {
     id: 94,
@@ -1229,7 +1229,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1400,
-    code: 6749415,
+    code: 67494157,
   },
   {
     id: 95,
@@ -1242,7 +1242,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1350,
     def: 1400,
-    code: 9388975,
+    code: 93889755,
   },
   {
     id: 96,
@@ -1255,7 +1255,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1500,
     def: 0,
-    code: 2027786,
+    code: 20277860,
   },
   {
     id: 97,
@@ -1268,7 +1268,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1600,
     def: 0,
-    code: 6667256,
+    code: 66672569,
   },
   {
     id: 98,
@@ -1281,7 +1281,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 1350,
     def: 0,
-    code: 9266721,
+    code: 92667214,
   },
   {
     id: 99,
@@ -1294,7 +1294,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1800,
     def: 2000,
-    code: 2915521,
+    code: 29155212,
   },
   {
     id: 100,
@@ -1307,7 +1307,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1000,
-    code: 5555092,
+    code: 55550921,
   },
   {
     id: 101,
@@ -1320,7 +1320,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 9294462,
+    code: 92944626,
   },
   {
     id: 102,
@@ -1333,7 +1333,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 400,
-    code: 2893373,
+    code: 28933734,
   },
   {
     id: 103,
@@ -1346,7 +1346,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1550,
     def: 800,
-    code: 8632559,
+    code: 86325596,
   },
   {
     id: 104,
@@ -1359,7 +1359,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 500,
-    code: 2202670,
+    code: 22026707,
   },
   {
     id: 105,
@@ -1372,7 +1372,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 400,
-    code: 4645785,
+    code: 46457856,
   },
   {
     id: 106,
@@ -1385,7 +1385,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1400,
-    code: 5461578,
+    code: 54615781,
   },
   {
     id: 107,
@@ -1398,7 +1398,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1800,
-    code: 8730335,
+    code: 87303357,
   },
   {
     id: 108,
@@ -1411,7 +1411,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1450,
     def: 1700,
-    code: 543408,
+    code: 5434080,
   },
   {
     id: 109,
@@ -1424,7 +1424,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 5349320,
+    code: 53493204,
   },
   {
     id: 110,
@@ -1450,7 +1450,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1400,
-    code: 1697295,
+    code: 16972957,
   },
   {
     id: 112,
@@ -1463,7 +1463,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1600,
-    code: 8044110,
+    code: 80441106,
   },
   {
     id: 113,
@@ -1489,7 +1489,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 700,
-    code: 1515036,
+    code: 15150365,
   },
   {
     id: 115,
@@ -1502,7 +1502,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1600,
-    code: 42370,
+    code: 423705,
   },
   {
     id: 116,
@@ -1515,7 +1515,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 800,
-    code: 8864317,
+    code: 88643173,
   },
   {
     id: 117,
@@ -1528,7 +1528,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 1403771,
+    code: 14037717,
   },
   {
     id: 118,
@@ -1541,7 +1541,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 2600,
-    code: 9199811,
+    code: 91998119,
   },
   {
     id: 119,
@@ -1554,7 +1554,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 800,
     def: 2000,
-    code: 4682131,
+    code: 46821314,
   },
   {
     id: 120,
@@ -1567,7 +1567,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 1321523,
+    code: 13215230,
   },
   {
     id: 121,
@@ -1580,7 +1580,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 700,
     def: 1700,
-    code: 4020083,
+    code: 40200834,
   },
   {
     id: 122,
@@ -1593,7 +1593,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 300,
-    code: 7670494,
+    code: 76704943,
   },
   {
     id: 123,
@@ -1606,7 +1606,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 400,
-    code: 1319364,
+    code: 13193642,
   },
   {
     id: 124,
@@ -1619,7 +1619,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1500,
-    code: 7321641,
+    code: 73216412,
   },
   {
     id: 125,
@@ -1632,7 +1632,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1100,
-    code: 7558239,
+    code: 75582395,
   },
   {
     id: 126,
@@ -1645,7 +1645,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 297109,
+    code: 2971090,
   },
   {
     id: 127,
@@ -1658,7 +1658,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1200,
-    code: 4836570,
+    code: 48365709,
   },
   {
     id: 128,
@@ -1671,7 +1671,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1200,
     def: 1700,
-    code: 7585080,
+    code: 75850803,
   },
   {
     id: 129,
@@ -1684,7 +1684,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 700,
-    code: 9096348,
+    code: 90963488,
   },
   {
     id: 130,
@@ -1697,7 +1697,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 400,
-    code: 3724315,
+    code: 37243151,
   },
   {
     id: 131,
@@ -1710,7 +1710,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1400,
-    code: 7463726,
+    code: 74637266,
   },
   {
     id: 132,
@@ -1723,7 +1723,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2000,
-    code: 560012,
+    code: 5600127,
   },
   {
     id: 133,
@@ -1736,7 +1736,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 800,
-    code: 3742157,
+    code: 37421579,
   },
   {
     id: 134,
@@ -1749,7 +1749,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 500,
-    code: 3170982,
+    code: 31709826,
   },
   {
     id: 135,
@@ -1762,7 +1762,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 600,
-    code: 5280042,
+    code: 52800428,
   },
   {
     id: 136,
@@ -1775,7 +1775,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1300,
-    code: 3630492,
+    code: 36304921,
   },
   {
     id: 137,
@@ -1788,7 +1788,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 2300,
-    code: 7819383,
+    code: 78193831,
   },
   {
     id: 138,
@@ -1801,7 +1801,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2200,
     def: 2800,
-    code: 3182918,
+    code: 31829185,
   },
   {
     id: 139,
@@ -1814,7 +1814,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 3528243,
+    code: 35282433,
   },
   {
     id: 140,
@@ -1827,7 +1827,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 1000,
-    code: 6267144,
+    code: 62671448,
   },
   {
     id: 141,
@@ -1840,7 +1840,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1300,
-    code: 9807514,
+    code: 98075147,
   },
   {
     id: 142,
@@ -1853,7 +1853,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1000,
-    code: 3446085,
+    code: 34460851,
   },
   {
     id: 143,
@@ -1866,7 +1866,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 900,
-    code: 6145489,
+    code: 61454890,
   },
   {
     id: 144,
@@ -1879,7 +1879,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 900,
-    code: 9784350,
+    code: 97843505,
   },
   {
     id: 145,
@@ -1892,7 +1892,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 700,
-    code: 2434820,
+    code: 24348204,
   },
   {
     id: 146,
@@ -1905,7 +1905,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 900,
     def: 1300,
-    code: 73230,
+    code: 732302,
   },
   {
     id: 147,
@@ -1918,7 +1918,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 900,
-    code: 3612191,
+    code: 36121917,
   },
   {
     id: 148,
@@ -1931,7 +1931,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 700,
-    code: 6312561,
+    code: 63125616,
   },
   {
     id: 149,
@@ -1944,7 +1944,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1500,
-    code: 6265195,
+    code: 62651957,
   },
   {
     id: 150,
@@ -1957,7 +1957,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1400,
-    code: 3690446,
+    code: 36904469,
   },
   {
     id: 151,
@@ -1983,7 +1983,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 700,
-    code: 9889817,
+    code: 98898173,
   },
   {
     id: 153,
@@ -1996,7 +1996,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1200,
-    code: 2588288,
+    code: 25882881,
   },
   {
     id: 154,
@@ -2009,7 +2009,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 500,
-    code: 5358121,
+    code: 53581214,
   },
   {
     id: 155,
@@ -2022,7 +2022,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1000,
-    code: 9467553,
+    code: 94675535,
   },
   {
     id: 156,
@@ -2035,7 +2035,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 300,
     def: 1200,
-    code: 2006023,
+    code: 20060230,
   },
   {
     id: 157,
@@ -2048,7 +2048,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 5329354,
+    code: 53293545,
   },
   {
     id: 158,
@@ -2061,7 +2061,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 900,
-    code: 3412431,
+    code: 34124316,
   },
   {
     id: 159,
@@ -2074,7 +2074,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 800,
-    code: 2994864,
+    code: 29948642,
   },
   {
     id: 160,
@@ -2087,7 +2087,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 500,
-    code: 5634235,
+    code: 56342351,
   },
   {
     id: 161,
@@ -2100,7 +2100,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1000,
-    code: 9273145,
+    code: 92731455,
   },
   {
     id: 162,
@@ -2113,7 +2113,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 100,
     def: 2000,
-    code: 6152802,
+    code: 61528025,
   },
   {
     id: 163,
@@ -2126,7 +2126,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1300,
-    code: 5521070,
+    code: 55210709,
   },
   {
     id: 164,
@@ -2139,7 +2139,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1800,
-    code: 8198578,
+    code: 81985784,
   },
   {
     id: 165,
@@ -2152,7 +2152,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1400,
     def: 700,
-    code: 2800351,
+    code: 28003512,
   },
   {
     id: 166,
@@ -2165,7 +2165,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1500,
-    code: 5409812,
+    code: 54098121,
   },
   {
     id: 167,
@@ -2178,7 +2178,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 400,
     def: 200,
-    code: 8149222,
+    code: 81492226,
   },
   {
     id: 168,
@@ -2191,7 +2191,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1250,
-    code: 1788196,
+    code: 17881964,
   },
   {
     id: 169,
@@ -2204,7 +2204,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 800,
-    code: 5337557,
+    code: 53375573,
   },
   {
     id: 170,
@@ -2217,7 +2217,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 800,
     def: 2000,
-    code: 8077067,
+    code: 80770678,
   },
   {
     id: 171,
@@ -2230,7 +2230,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 1676838,
+    code: 16768387,
   },
   {
     id: 172,
@@ -2243,7 +2243,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1300,
-    code: 5315348,
+    code: 53153481,
   },
   {
     id: 173,
@@ -2256,7 +2256,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1450,
-    code: 9701712,
+    code: 97017120,
   },
   {
     id: 174,
@@ -2269,7 +2269,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1000,
-    code: 2340183,
+    code: 23401839,
   },
   {
     id: 175,
@@ -2282,7 +2282,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 6080643,
+    code: 60806437,
   },
   {
     id: 176,
@@ -2295,7 +2295,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 600,
-    code: 8843554,
+    code: 88435542,
   },
   {
     id: 177,
@@ -2308,7 +2308,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1000,
-    code: 1582014,
+    code: 15820147,
   },
   {
     id: 178,
@@ -2321,7 +2321,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 800,
-    code: 4121825,
+    code: 41218256,
   },
   {
     id: 179,
@@ -2334,7 +2334,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 7760395,
+    code: 77603950,
   },
   {
     id: 180,
@@ -2347,7 +2347,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1000,
-    code: 1470856,
+    code: 14708569,
   },
   {
     id: 181,
@@ -2360,7 +2360,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 2000,
-    code: 9689058,
+    code: 96890582,
   },
   {
     id: 182,
@@ -2373,7 +2373,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 1000,
-    code: 2328928,
+    code: 23289281,
   },
   {
     id: 183,
@@ -2386,7 +2386,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 800,
-    code: 398501,
+    code: 3985011,
   },
   {
     id: 184,
@@ -2399,7 +2399,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 900,
-    code: 4937002,
+    code: 49370026,
   },
   {
     id: 185,
@@ -2412,7 +2412,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 400,
-    code: 5978489,
+    code: 59784896,
   },
   {
     id: 186,
@@ -2425,7 +2425,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1400,
-    code: 286343,
+    code: 2863439,
   },
   {
     id: 187,
@@ -2438,7 +2438,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 800,
-    code: 4925857,
+    code: 49258578,
   },
   {
     id: 188,
@@ -2451,7 +2451,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 1000,
     def: 100,
-    code: 9517899,
+    code: 95178994,
   },
   {
     id: 189,
@@ -2464,7 +2464,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 164188,
+    code: 1641882,
   },
   {
     id: 190,
@@ -2477,7 +2477,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 1000,
     def: 100,
-    code: 2256760,
+    code: 22567609,
   },
   {
     id: 191,
@@ -2490,7 +2490,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 600,
-    code: 943038,
+    code: 9430387,
   },
   {
     id: 192,
@@ -2503,7 +2503,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 400,
     def: 300,
-    code: 192929,
+    code: 1929294,
   },
   {
     id: 193,
@@ -2531,7 +2531,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 500,
-    code: 75665,
+    code: 756652,
   },
   {
     id: 196,
@@ -2551,7 +2551,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 500,
-    code: 2134005,
+    code: 21340051,
   },
   {
     id: 198,
@@ -2564,7 +2564,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 500,
-    code: 9903016,
+    code: 99030164,
   },
   {
     id: 199,
@@ -2577,7 +2577,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 800,
-    code: 3603916,
+    code: 36039163,
   },
   {
     id: 200,
@@ -2590,7 +2590,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 700,
-    code: 7535656,
+    code: 75356564,
   },
   {
     id: 201,
@@ -2603,7 +2603,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 9881851,
+    code: 98818516,
   },
   {
     id: 202,
@@ -2616,7 +2616,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 400,
     def: 600,
-    code: 7588952,
+    code: 75889523,
   },
   {
     id: 203,
@@ -2629,7 +2629,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 800,
-    code: 6120122,
+    code: 61201220,
   },
   {
     id: 204,
@@ -2642,7 +2642,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1000,
-    code: 5783975,
+    code: 57839750,
   },
   {
     id: 205,
@@ -2655,7 +2655,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 900,
-    code: 8483486,
+    code: 84834865,
   },
   {
     id: 206,
@@ -2668,7 +2668,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 6058968,
+    code: 60589682,
   },
   {
     id: 207,
@@ -2681,7 +2681,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 500,
-    code: 9797338,
+    code: 97973387,
   },
   {
     id: 208,
@@ -2694,7 +2694,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 900,
-    code: 3814273,
+    code: 38142739,
   },
   {
     id: 209,
@@ -2707,7 +2707,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 700,
-    code: 3917598,
+    code: 39175982,
   },
   {
     id: 210,
@@ -2720,7 +2720,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 500,
-    code: 9685179,
+    code: 96851799,
   },
   {
     id: 211,
@@ -2733,7 +2733,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 1551098,
+    code: 15510988,
   },
   {
     id: 212,
@@ -2746,7 +2746,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 5383265,
+    code: 53832650,
   },
   {
     id: 213,
@@ -2759,7 +2759,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 2000,
-    code: 8563925,
+    code: 85639257,
   },
   {
     id: 214,
@@ -2772,7 +2772,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 400,
-    code: 1540163,
+    code: 15401633,
   },
   {
     id: 215,
@@ -2785,7 +2785,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 800,
-    code: 5852896,
+    code: 58528964,
   },
   {
     id: 216,
@@ -2798,7 +2798,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1300,
     def: 1750,
-    code: 8130658,
+    code: 81306586,
   },
   {
     id: 217,
@@ -2811,7 +2811,7 @@ const cards: DBCard[] = [
     level: 9,
     atk: 3200,
     def: 2500,
-    code: 1190167,
+    code: 11901678,
   },
   {
     id: 218,
@@ -2824,7 +2824,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 5730537,
+    code: 57305373,
   },
   {
     id: 219,
@@ -2837,7 +2837,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1050,
     def: 1000,
-    code: 8479401,
+    code: 84794011,
   },
   {
     id: 220,
@@ -2850,7 +2850,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 900,
     def: 1400,
-    code: 1018912,
+    code: 10189126,
   },
   {
     id: 221,
@@ -2863,7 +2863,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1400,
-    code: 5628372,
+    code: 56283725,
   },
   {
     id: 222,
@@ -2876,7 +2876,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 0,
     def: 1850,
-    code: 2022846,
+    code: 20228463,
   },
   {
     id: 223,
@@ -2889,7 +2889,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 1906653,
+    code: 19066538,
   },
   {
     id: 224,
@@ -2902,7 +2902,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1100,
-    code: 4646124,
+    code: 46461247,
   },
   {
     id: 225,
@@ -2915,7 +2915,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 800,
-    code: 2285588,
+    code: 22855882,
   },
   {
     id: 226,
@@ -2928,7 +2928,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1000,
-    code: 5761717,
+    code: 57617178,
   },
   {
     id: 227,
@@ -2941,7 +2941,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1100,
-    code: 8301127,
+    code: 83011277,
   },
   {
     id: 228,
@@ -2954,7 +2954,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 900,
-    code: 1773339,
+    code: 17733394,
   },
   {
     id: 229,
@@ -2967,7 +2967,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 878368,
+    code: 8783685,
   },
   {
     id: 230,
@@ -2980,7 +2980,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 8051600,
+    code: 80516007,
   },
   {
     id: 231,
@@ -2993,7 +2993,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1200,
-    code: 1751115,
+    code: 17511156,
   },
   {
     id: 232,
@@ -3006,7 +3006,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 0,
     def: 1600,
-    code: 1940682,
+    code: 19406822,
   },
   {
     id: 233,
@@ -3040,7 +3040,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1200,
-    code: 4288327,
+    code: 42883273,
   },
   {
     id: 236,
@@ -3053,7 +3053,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2700,
     def: 2200,
-    code: 1889169,
+    code: 18891691,
   },
   {
     id: 237,
@@ -3066,7 +3066,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 500,
-    code: 8428562,
+    code: 84285623,
   },
   {
     id: 238,
@@ -3093,7 +3093,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 7855632,
+    code: 78556320,
   },
   {
     id: 240,
@@ -3120,7 +3120,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1200,
-    code: 4194903,
+    code: 41949033,
   },
   {
     id: 242,
@@ -3133,7 +3133,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 600,
-    code: 4769541,
+    code: 47695416,
   },
   {
     id: 243,
@@ -3146,7 +3146,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 373274,
+    code: 3732747,
   },
   {
     id: 244,
@@ -3159,7 +3159,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1000,
-    code: 4082649,
+    code: 40826495,
   },
   {
     id: 245,
@@ -3172,7 +3172,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 800,
     def: 500,
-    code: 3198727,
+    code: 31987274,
   },
   {
     id: 246,
@@ -3185,7 +3185,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1000,
-    code: 360620,
+    code: 3606209,
   },
   {
     id: 247,
@@ -3198,7 +3198,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 800,
-    code: 3900480,
+    code: 39004808,
   },
   {
     id: 248,
@@ -3211,7 +3211,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2400,
     def: 2000,
-    code: 6737138,
+    code: 67371383,
   },
   {
     id: 249,
@@ -3224,7 +3224,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 248361,
+    code: 2483611,
   },
   {
     id: 250,
@@ -3237,7 +3237,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1500,
-    code: 336698,
+    code: 3366982,
   },
   {
     id: 251,
@@ -3250,7 +3250,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 7537696,
+    code: 75376965,
   },
   {
     id: 252,
@@ -3263,7 +3263,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 900,
-    code: 176106,
+    code: 1761063,
   },
   {
     id: 253,
@@ -3276,7 +3276,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 3086069,
+    code: 30860696,
   },
   {
     id: 254,
@@ -3302,7 +3302,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 500,
     def: 2000,
-    code: 54948,
+    code: 549481,
   },
   {
     id: 256,
@@ -3315,7 +3315,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 3704318,
+    code: 37043180,
   },
   {
     id: 257,
@@ -3328,7 +3328,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1850,
     def: 1600,
-    code: 364330,
+    code: 3643300,
   },
   {
     id: 258,
@@ -3341,7 +3341,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1100,
-    code: 9942683,
+    code: 99426834,
   },
   {
     id: 259,
@@ -3354,7 +3354,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 0,
     def: 0,
-    code: 5040023,
+    code: 50400231,
   },
   {
     id: 260,
@@ -3367,7 +3367,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 750,
     def: 1100,
-    code: 6221024,
+    code: 62210247,
   },
   {
     id: 261,
@@ -3380,7 +3380,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 1515037,
+    code: 15150371,
   },
   {
     id: 262,
@@ -3393,7 +3393,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1300,
-    code: 2510995,
+    code: 25109950,
   },
   {
     id: 263,
@@ -3406,7 +3406,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1400,
-    code: 6219369,
+    code: 62193699,
   },
   {
     id: 264,
@@ -3419,7 +3419,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1300,
-    code: 9858270,
+    code: 98582704,
   },
   {
     id: 265,
@@ -3432,7 +3432,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 700,
-    code: 1871070,
+    code: 18710707,
   },
   {
     id: 266,
@@ -3445,7 +3445,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 700,
-    code: 5137101,
+    code: 51371017,
   },
   {
     id: 267,
@@ -3458,7 +3458,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 700,
-    code: 7910636,
+    code: 79106360,
   },
   {
     id: 268,
@@ -3471,7 +3471,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1900,
     def: 1200,
-    code: 1489806,
+    code: 14898066,
   },
   {
     id: 269,
@@ -3484,7 +3484,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 900,
-    code: 5025946,
+    code: 50259460,
   },
   {
     id: 270,
@@ -3497,7 +3497,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 900,
-    code: 9664356,
+    code: 96643568,
   },
   {
     id: 271,
@@ -3510,7 +3510,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 600,
-    code: 2303227,
+    code: 23032273,
   },
   {
     id: 272,
@@ -3523,7 +3523,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 900,
-    code: 5903697,
+    code: 59036972,
   },
   {
     id: 273,
@@ -3536,7 +3536,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 600,
     def: 1500,
-    code: 8642198,
+    code: 86421986,
   },
   {
     id: 274,
@@ -3549,7 +3549,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1600,
-    code: 2291068,
+    code: 22910685,
   },
   {
     id: 275,
@@ -3562,7 +3562,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1000,
-    code: 5831439,
+    code: 58314394,
   },
   {
     id: 276,
@@ -3575,7 +3575,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 1000,
-    code: 8530943,
+    code: 85309439,
   },
   {
     id: 277,
@@ -3588,7 +3588,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1300,
-    code: 4259967,
+    code: 42599677,
   },
   {
     id: 278,
@@ -3601,7 +3601,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 200,
-    code: 5819274,
+    code: 58192742,
   },
   {
     id: 279,
@@ -3614,7 +3614,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1700,
-    code: 7898477,
+    code: 78984772,
   },
   {
     id: 280,
@@ -3627,7 +3627,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1150,
-    code: 538848,
+    code: 5388481,
   },
   {
     id: 281,
@@ -3640,7 +3640,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1000,
-    code: 4706015,
+    code: 47060154,
   },
   {
     id: 282,
@@ -3653,7 +3653,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1000,
-    code: 8346420,
+    code: 83464209,
   },
   {
     id: 283,
@@ -3666,7 +3666,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 700,
-    code: 1085990,
+    code: 10859908,
   },
   {
     id: 284,
@@ -3679,7 +3679,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 4624751,
+    code: 46247516,
   },
   {
     id: 285,
@@ -3692,7 +3692,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 8274261,
+    code: 82742611,
   },
   {
     id: 286,
@@ -3705,7 +3705,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2100,
     def: 1300,
-    code: 3147702,
+    code: 31477025,
   },
   {
     id: 287,
@@ -3718,7 +3718,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1400,
-    code: 4512102,
+    code: 45121025,
   },
   {
     id: 288,
@@ -3731,7 +3731,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1100,
-    code: 7886113,
+    code: 78861134,
   },
   {
     id: 289,
@@ -3744,7 +3744,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 400,
     def: 300,
-    code: 1891477,
+    code: 18914778,
   },
   {
     id: 290,
@@ -3757,7 +3757,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1000,
-    code: 4590947,
+    code: 45909477,
   },
   {
     id: 291,
@@ -3770,7 +3770,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1000,
-    code: 7140748,
+    code: 71407486,
   },
   {
     id: 292,
@@ -3783,7 +3783,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 300,
     def: 800,
-    code: 426683,
+    code: 4266839,
   },
   {
     id: 293,
@@ -3796,7 +3796,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1100,
-    code: 4428729,
+    code: 44287299,
   },
   {
     id: 294,
@@ -3809,7 +3809,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 7068199,
+    code: 70681994,
   },
   {
     id: 295,
@@ -3822,7 +3822,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1200,
-    code: 3065553,
+    code: 30655537,
   },
   {
     id: 296,
@@ -3835,7 +3835,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 1300,
-    code: 3306464,
+    code: 33064647,
   },
   {
     id: 297,
@@ -3862,7 +3862,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 900,
-    code: 295705,
+    code: 2957055,
   },
   {
     id: 299,
@@ -3875,7 +3875,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 3894205,
+    code: 38942059,
   },
   {
     id: 300,
@@ -3888,7 +3888,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 800,
-    code: 8570580,
+    code: 85705804,
   },
   {
     id: 301,
@@ -4261,7 +4261,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1500,
-    code: 7128081,
+    code: 71280811,
   },
   {
     id: 352,
@@ -4274,7 +4274,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1400,
-    code: 1282915,
+    code: 12829151,
   },
   {
     id: 353,
@@ -4287,7 +4287,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 4407366,
+    code: 44073668,
   },
   {
     id: 354,
@@ -4300,7 +4300,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 7106826,
+    code: 71068263,
   },
   {
     id: 355,
@@ -4313,7 +4313,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 1800,
-    code: 756237,
+    code: 7562372,
   },
   {
     id: 356,
@@ -4326,7 +4326,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2300,
     def: 2100,
-    code: 3395107,
+    code: 33951077,
     limit: 1,
   },
   {
@@ -4340,7 +4340,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1800,
-    code: 7034578,
+    code: 70345785,
     limit: 1,
   },
   {
@@ -4354,7 +4354,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2500,
     def: 2300,
-    code: 674072,
+    code: 6740720,
   },
   {
     id: 359,
@@ -4367,7 +4367,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 800,
-    code: 3373443,
+    code: 33734439,
   },
   {
     id: 360,
@@ -4380,7 +4380,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 2300,
-    code: 6912313,
+    code: 69123138,
     limit: 1,
   },
   {
@@ -4394,7 +4394,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 562823,
+    code: 5628232,
   },
   {
     id: 362,
@@ -4407,7 +4407,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 0,
     def: 3000,
-    code: 3201284,
+    code: 32012841,
     limit: 1,
   },
   {
@@ -4421,7 +4421,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1000,
-    code: 6840154,
+    code: 68401546,
   },
   {
     id: 364,
@@ -4434,7 +4434,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3000,
     def: 2500,
-    code: 540569,
+    code: 5405694,
     limit: 1,
   },
   {
@@ -4448,7 +4448,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 3189039,
+    code: 31890399,
     limit: 1,
   },
   {
@@ -4462,7 +4462,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 0,
     def: 3000,
-    code: 6728490,
+    code: 67284908,
   },
   {
     id: 367,
@@ -4475,7 +4475,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2200,
     def: 100,
-    code: 9477300,
+    code: 94773007,
   },
   {
     id: 368,
@@ -4488,7 +4488,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1300,
-    code: 3077871,
+    code: 30778711,
   },
   {
     id: 369,
@@ -4501,7 +4501,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 1600,
     def: 3000,
-    code: 6316231,
+    code: 63162310,
   },
   {
     id: 370,
@@ -4514,7 +4514,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2400,
-    code: 9955142,
+    code: 99551425,
   },
   {
     id: 371,
@@ -4527,7 +4527,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 2200,
-    code: 2595516,
+    code: 25955164,
   },
   {
     id: 372,
@@ -4540,7 +4540,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2200,
-    code: 6234086,
+    code: 62340868,
   },
   {
     id: 373,
@@ -4553,7 +4553,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2500,
     def: 2400,
-    code: 9843487,
+    code: 98434877,
   },
   {
     id: 374,
@@ -4566,7 +4566,7 @@ const cards: DBCard[] = [
     level: 11,
     atk: 3750,
     def: 3400,
-    code: 2583357,
+    code: 25833572,
     limit: 1,
   },
   {
@@ -4580,7 +4580,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 5122828,
+    code: 51228280,
   },
   {
     id: 376,
@@ -4593,7 +4593,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1600,
-    code: 9761238,
+    code: 97612389,
   },
   {
     id: 377,
@@ -4606,7 +4606,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1200,
-    code: 2461193,
+    code: 24611934,
   },
   {
     id: 378,
@@ -4619,7 +4619,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1600,
-    code: 5000563,
+    code: 50005633,
   },
   {
     id: 379,
@@ -4632,7 +4632,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1000,
-    code: 9759074,
+    code: 97590747,
   },
   {
     id: 380,
@@ -4645,7 +4645,7 @@ const cards: DBCard[] = [
     level: 12,
     atk: 4500,
     def: 3800,
-    code: 2399534,
+    code: 23995346,
     limit: 1,
   },
   {
@@ -4659,7 +4659,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 800,
     def: 1600,
-    code: 5938304,
+    code: 59383041,
   },
   {
     id: 382,
@@ -4672,7 +4672,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1600,
-    code: 2637815,
+    code: 26378150,
   },
   {
     id: 383,
@@ -4685,7 +4685,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2000,
     def: 1300,
-    code: 6276289,
+    code: 62762898,
   },
   {
     id: 384,
@@ -4698,7 +4698,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1500,
-    code: 9926140,
+    code: 99261403,
   },
   {
     id: 385,
@@ -4711,7 +4711,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2300,
     def: 2000,
-    code: 2565550,
+    code: 25655502,
   },
   {
     id: 386,
@@ -4724,7 +4724,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2000,
     def: 2500,
-    code: 5204021,
+    code: 52040216,
   },
   {
     id: 387,
@@ -4737,7 +4737,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 400,
     def: 300,
-    code: 9804991,
+    code: 98049915,
   },
   {
     id: 388,
@@ -4750,7 +4750,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1750,
     def: 2000,
-    code: 2443392,
+    code: 24433920,
   },
   {
     id: 389,
@@ -4763,7 +4763,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1850,
     def: 1500,
-    code: 5182862,
+    code: 51828629,
   },
   {
     id: 390,
@@ -4776,7 +4776,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2500,
-    code: 8732237,
+    code: 87322377,
   },
   {
     id: 391,
@@ -4789,7 +4789,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 1900,
-    code: 2431137,
+    code: 24311372,
   },
   {
     id: 392,
@@ -4802,7 +4802,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3000,
     def: 2300,
-    code: 5070507,
+    code: 50705071,
   },
   {
     id: 393,
@@ -4815,7 +4815,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 250,
     def: 200,
-    code: 8610078,
+    code: 86100785,
   },
   {
     id: 394,
@@ -4828,7 +4828,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 250,
     def: 300,
-    code: 1359988,
+    code: 13599884,
   },
   {
     id: 395,
@@ -4841,7 +4841,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 200,
-    code: 5998349,
+    code: 59983499,
   },
   {
     id: 396,
@@ -4854,7 +4854,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1550,
     def: 1650,
-    code: 8608813,
+    code: 86088138,
   },
   {
     id: 397,
@@ -4867,7 +4867,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 350,
-    code: 1247224,
+    code: 12472242,
   },
   {
     id: 398,
@@ -4880,7 +4880,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 250,
-    code: 5886194,
+    code: 58861941,
   },
   {
     id: 399,
@@ -4893,7 +4893,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1800,
-    code: 1154935,
+    code: 11549357,
   },
   {
     id: 400,
@@ -4906,7 +4906,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 1125065,
+    code: 11250655,
   },
   {
     id: 401,
@@ -4919,7 +4919,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2150,
     def: 1950,
-    code: 4864935,
+    code: 48649353,
   },
   {
     id: 402,
@@ -4932,7 +4932,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 250,
     def: 350,
-    code: 8413300,
+    code: 84133008,
   },
   {
     id: 403,
@@ -4945,7 +4945,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1750,
     def: 1550,
-    code: 1053800,
+    code: 10538007,
   },
   {
     id: 404,
@@ -4958,7 +4958,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1350,
     def: 1600,
-    code: 4792271,
+    code: 47922711,
   },
   {
     id: 405,
@@ -4971,7 +4971,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1450,
     def: 1500,
-    code: 7391141,
+    code: 73911410,
   },
   {
     id: 406,
@@ -4984,7 +4984,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1650,
-    code: 1744413,
+    code: 17444133,
   },
   {
     id: 407,
@@ -4997,7 +4997,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 2000,
-    code: 4670012,
+    code: 46700124,
   },
   {
     id: 408,
@@ -5010,7 +5010,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1750,
     def: 1900,
-    code: 7229983,
+    code: 72299832,
   },
   {
     id: 409,
@@ -5023,7 +5023,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1850,
     def: 1700,
-    code: 929397,
+    code: 9293977,
   },
   {
     id: 410,
@@ -5036,7 +5036,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 400,
     def: 500,
-    code: 4568858,
+    code: 45688586,
   },
   {
     id: 411,
@@ -5049,7 +5049,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 350,
-    code: 7207628,
+    code: 72076281,
   },
   {
     id: 412,
@@ -5076,7 +5076,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 1700,
-    code: 4486509,
+    code: 44865098,
   },
   {
     id: 414,
@@ -5089,7 +5089,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1200,
-    code: 7195009,
+    code: 71950093,
   },
   {
     id: 415,
@@ -5102,7 +5102,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1850,
     def: 800,
-    code: 735974,
+    code: 7359741,
   },
   {
     id: 416,
@@ -5115,7 +5115,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 850,
     def: 1800,
-    code: 3474344,
+    code: 34743446,
   },
   {
     id: 417,
@@ -5128,7 +5128,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 900,
-    code: 7013845,
+    code: 70138455,
   },
   {
     id: 418,
@@ -5141,7 +5141,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 900,
     def: 1600,
-    code: 752615,
+    code: 7526150,
   },
   {
     id: 419,
@@ -5154,7 +5154,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 800,
-    code: 313424,
+    code: 3134241,
   },
   {
     id: 420,
@@ -5167,7 +5167,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 500,
-    code: 6901596,
+    code: 69015963,
   },
   {
     id: 421,
@@ -5180,7 +5180,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 700,
-    code: 640051,
+    code: 6400512,
   },
   {
     id: 422,
@@ -5193,7 +5193,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 400,
-    code: 3280921,
+    code: 32809211,
   },
   {
     id: 423,
@@ -5206,7 +5206,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1650,
     def: 1800,
-    code: 6989331,
+    code: 69893315,
   },
   {
     id: 424,
@@ -5219,7 +5219,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1800,
-    code: 9528802,
+    code: 95288024,
   },
   {
     id: 425,
@@ -5232,7 +5232,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1500,
-    code: 3178662,
+    code: 31786629,
   },
   {
     id: 426,
@@ -5245,7 +5245,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2000,
     def: 2300,
-    code: 6817173,
+    code: 68171737,
   },
   {
     id: 427,
@@ -5258,7 +5258,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2300,
     def: 2000,
-    code: 9456643,
+    code: 94566432,
   },
   {
     id: 428,
@@ -5271,7 +5271,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 400,
-    code: 3156008,
+    code: 31560081,
   },
   {
     id: 429,
@@ -5284,7 +5284,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 950,
     def: 700,
-    code: 6795918,
+    code: 67959180,
   },
   {
     id: 430,
@@ -5297,7 +5297,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 800,
-    code: 1099225,
+    code: 10992251,
   },
   {
     id: 431,
@@ -5310,7 +5310,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1150,
     def: 900,
-    code: 2084859,
+    code: 20848593,
   },
   {
     id: 432,
@@ -5323,7 +5323,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 700,
-    code: 6683659,
+    code: 66836598,
   },
   {
     id: 433,
@@ -5336,7 +5336,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1450,
     def: 1200,
-    code: 9322120,
+    code: 93221206,
   },
   {
     id: 434,
@@ -5349,7 +5349,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 600,
-    code: 3053239,
+    code: 30532390,
   },
   {
     id: 435,
@@ -5375,7 +5375,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 400,
-    code: 9240965,
+    code: 92409659,
   },
   {
     id: 437,
@@ -5388,7 +5388,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1600,
-    code: 2859336,
+    code: 28593363,
   },
   {
     id: 438,
@@ -5401,7 +5401,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1900,
-    code: 5599846,
+    code: 55998462,
   },
   {
     id: 439,
@@ -5414,7 +5414,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 800,
-    code: 1367647,
+    code: 13676474,
   },
   {
     id: 440,
@@ -5427,7 +5427,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 800,
-    code: 2377171,
+    code: 23771716,
   },
   {
     id: 441,
@@ -5440,7 +5440,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 5017682,
+    code: 50176820,
   },
   {
     id: 442,
@@ -5453,7 +5453,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2250,
     def: 1900,
-    code: 8616452,
+    code: 86164529,
   },
   {
     id: 443,
@@ -5466,7 +5466,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1700,
-    code: 2365912,
+    code: 23659124,
   },
   {
     id: 444,
@@ -5479,7 +5479,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 450,
     def: 500,
-    code: 5905323,
+    code: 59053232,
   },
   {
     id: 445,
@@ -5492,7 +5492,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 1200,
-    code: 8028094,
+    code: 80280944,
   },
   {
     id: 446,
@@ -5505,7 +5505,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1050,
     def: 900,
-    code: 1243664,
+    code: 12436646,
   },
   {
     id: 447,
@@ -5518,7 +5518,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 800,
-    code: 5883168,
+    code: 58831685,
   },
   {
     id: 448,
@@ -5531,7 +5531,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1300,
-    code: 8532639,
+    code: 85326399,
   },
   {
     id: 449,
@@ -5544,7 +5544,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1250,
     def: 2100,
-    code: 1171409,
+    code: 11714098,
   },
   {
     id: 450,
@@ -5557,7 +5557,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 4810910,
+    code: 48109103,
   },
   {
     id: 451,
@@ -5570,7 +5570,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 650,
     def: 900,
-    code: 8410370,
+    code: 84103702,
   },
   {
     id: 452,
@@ -5583,7 +5583,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 700,
-    code: 1059840,
+    code: 10598400,
   },
   {
     id: 453,
@@ -5596,7 +5596,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 2200,
-    code: 4798655,
+    code: 47986555,
   },
   {
     id: 454,
@@ -5609,7 +5609,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1000,
-    code: 7348115,
+    code: 73481154,
   },
   {
     id: 455,
@@ -5622,7 +5622,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1300,
-    code: 1047686,
+    code: 10476868,
   },
   {
     id: 456,
@@ -5635,7 +5635,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1200,
-    code: 4686496,
+    code: 46864967,
   },
   {
     id: 457,
@@ -5648,7 +5648,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3200,
     def: 1800,
-    code: 4906441,
+    code: 49064413,
   },
   {
     id: 458,
@@ -5661,7 +5661,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1400,
-    code: 965327,
+    code: 9653271,
   },
   {
     id: 459,
@@ -5674,7 +5674,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1300,
-    code: 4504232,
+    code: 45042329,
   },
   {
     id: 460,
@@ -5687,7 +5687,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1400,
     def: 1500,
-    code: 1214602,
+    code: 12146024,
   },
   {
     id: 461,
@@ -5700,7 +5700,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 800,
-    code: 4853173,
+    code: 48531733,
   },
   {
     id: 462,
@@ -5713,7 +5713,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 8492673,
+    code: 84926738,
   },
   {
     id: 463,
@@ -5726,7 +5726,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 900,
-    code: 1132443,
+    code: 11324436,
   },
   {
     id: 464,
@@ -5739,7 +5739,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 4731914,
+    code: 47319141,
   },
   {
     id: 465,
@@ -5752,7 +5752,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 7470314,
+    code: 74703140,
   },
   {
     id: 466,
@@ -5765,7 +5765,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1550,
     def: 1200,
-    code: 1020289,
+    code: 10202894,
   },
   {
     id: 467,
@@ -5778,7 +5778,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2300,
     def: 1800,
-    code: 4669659,
+    code: 46696593,
   },
   {
     id: 468,
@@ -5791,7 +5791,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1200,
     def: 2000,
-    code: 7308160,
+    code: 73081602,
   },
   {
     id: 469,
@@ -5804,7 +5804,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 300,
-    code: 907620,
+    code: 9076207,
   },
   {
     id: 470,
@@ -5817,7 +5817,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1400,
-    code: 4647491,
+    code: 46474915,
   },
   {
     id: 471,
@@ -5830,7 +5830,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1800,
-    code: 7286901,
+    code: 72869010,
   },
   {
     id: 472,
@@ -5843,7 +5843,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2000,
     def: 700,
-    code: 6698969,
+    code: 66989694,
   },
   {
     id: 473,
@@ -5856,7 +5856,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1500,
-    code: 3575236,
+    code: 35752363,
   },
   {
     id: 474,
@@ -5869,7 +5869,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1300,
-    code: 7174646,
+    code: 71746462,
   },
   {
     id: 475,
@@ -5882,7 +5882,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 250,
-    code: 813117,
+    code: 8131171,
   },
   {
     id: 476,
@@ -5895,7 +5895,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 800,
-    code: 3453627,
+    code: 34536276,
   },
   {
     id: 477,
@@ -5908,7 +5908,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 950,
     def: 700,
-    code: 7092488,
+    code: 70924884,
   },
   {
     id: 478,
@@ -5921,7 +5921,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1000,
     def: 800,
-    code: 701952,
+    code: 7019529,
   },
   {
     id: 479,
@@ -5934,7 +5934,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 900,
-    code: 3341363,
+    code: 33413638,
   },
   {
     id: 480,
@@ -5947,7 +5947,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1250,
     def: 1000,
-    code: 6080223,
+    code: 60802233,
   },
   {
     id: 481,
@@ -5960,7 +5960,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 850,
     def: 800,
-    code: 629794,
+    code: 6297941,
   },
   {
     id: 482,
@@ -5973,7 +5973,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1500,
-    code: 3369104,
+    code: 33691040,
   },
   {
     id: 483,
@@ -5986,7 +5986,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1700,
-    code: 6978074,
+    code: 69780745,
   },
   {
     id: 484,
@@ -5999,7 +5999,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 350,
-    code: 9517435,
+    code: 95174353,
   },
   {
     id: 485,
@@ -6012,7 +6012,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 550,
     def: 400,
-    code: 3256949,
+    code: 32569498,
   },
   {
     id: 486,
@@ -6025,7 +6025,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 650,
     def: 500,
-    code: 6896310,
+    code: 68963107,
   },
   {
     id: 487,
@@ -6038,7 +6038,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1400,
-    code: 9595280,
+    code: 95952802,
   },
   {
     id: 488,
@@ -6051,7 +6051,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 400,
     def: 500,
-    code: 2134781,
+    code: 21347810,
   },
   {
     id: 489,
@@ -6064,7 +6064,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 600,
-    code: 6784151,
+    code: 67841515,
   },
   {
     id: 490,
@@ -6077,7 +6077,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 700,
-    code: 9423022,
+    code: 94230224,
   },
   {
     id: 491,
@@ -6090,7 +6090,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1500,
-    code: 2062426,
+    code: 20624263,
   },
   {
     id: 492,
@@ -6103,7 +6103,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 700,
-    code: 6762997,
+    code: 67629977,
   },
   {
     id: 493,
@@ -6116,7 +6116,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1550,
     def: 1400,
-    code: 9301367,
+    code: 93013676,
   },
   {
     id: 494,
@@ -6129,7 +6129,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1550,
     def: 1700,
-    code: 2940277,
+    code: 29402771,
   },
   {
     id: 495,
@@ -6142,7 +6142,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1750,
     def: 1500,
-    code: 5690738,
+    code: 56907389,
   },
   {
     id: 496,
@@ -6155,7 +6155,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1200,
-    code: 9239108,
+    code: 92391084,
   },
   {
     id: 497,
@@ -6168,7 +6168,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 900,
     def: 1700,
-    code: 2938013,
+    code: 29380133,
   },
   {
     id: 498,
@@ -6181,7 +6181,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1550,
     def: 1300,
-    code: 5578483,
+    code: 55784832,
   },
   {
     id: 499,
@@ -6194,7 +6194,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 850,
     def: 400,
-    code: 9845611,
+    code: 98456117,
   },
   {
     id: 500,
@@ -6207,7 +6207,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 2100,
-    code: 2856354,
+    code: 28563545,
   },
   {
     id: 501,
@@ -6220,7 +6220,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 450,
     def: 600,
-    code: 5465225,
+    code: 54652250,
   },
   {
     id: 502,
@@ -6233,7 +6233,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 350,
     def: 300,
-    code: 1767904,
+    code: 17679043,
   },
   {
     id: 503,
@@ -6246,7 +6246,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 700,
     def: 900,
-    code: 1744195,
+    code: 17441953,
   },
   {
     id: 504,
@@ -6259,7 +6259,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 550,
     def: 450,
-    code: 1288304,
+    code: 12883044,
   },
   {
     id: 505,
@@ -6272,7 +6272,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 800,
     def: 1000,
-    code: 8023430,
+    code: 80234301,
   },
   {
     id: 506,
@@ -6285,7 +6285,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 650,
     def: 600,
-    code: 1622931,
+    code: 16229315,
   },
   {
     id: 507,
@@ -6298,7 +6298,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1200,
-    code: 5371301,
+    code: 53713014,
   },
   {
     id: 508,
@@ -6311,7 +6311,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1400,
-    code: 8911272,
+    code: 89112729,
   },
   {
     id: 509,
@@ -6324,7 +6324,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 2000,
-    code: 1650782,
+    code: 16507828,
   },
   {
     id: 510,
@@ -6337,7 +6337,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 500,
-    code: 4259147,
+    code: 42591472,
   },
   {
     id: 511,
@@ -6350,7 +6350,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1300,
-    code: 8499017,
+    code: 84990171,
   },
   {
     id: 512,
@@ -6363,7 +6363,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1300,
-    code: 1138428,
+    code: 11384280,
   },
   {
     id: 513,
@@ -6376,7 +6376,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1650,
     def: 1600,
-    code: 4787998,
+    code: 47879985,
   },
   {
     id: 514,
@@ -6389,7 +6389,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1200,
-    code: 213434,
+    code: 2134346,
   },
   {
     id: 515,
@@ -6402,7 +6402,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1400,
-    code: 1026269,
+    code: 10262698,
   },
   {
     id: 516,
@@ -6415,7 +6415,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 300,
-    code: 4665733,
+    code: 46657337,
   },
   {
     id: 517,
@@ -6428,7 +6428,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2100,
     def: 500,
-    code: 8847245,
+    code: 88472456,
   },
   {
     id: 518,
@@ -6441,7 +6441,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1450,
     def: 2200,
-    code: 954004,
+    code: 9540040,
   },
   {
     id: 519,
@@ -6454,7 +6454,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1500,
-    code: 4653475,
+    code: 46534755,
   },
   {
     id: 520,
@@ -6467,7 +6467,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1700,
-    code: 7292945,
+    code: 72929454,
   },
   {
     id: 521,
@@ -6480,7 +6480,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1700,
-    code: 832746,
+    code: 8327462,
   },
   {
     id: 522,
@@ -6493,7 +6493,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1900,
-    code: 3571210,
+    code: 35712107,
   },
   {
     id: 523,
@@ -6506,7 +6506,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1000,
-    code: 7110781,
+    code: 71107816,
   },
   {
     id: 524,
@@ -6519,7 +6519,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 550,
     def: 500,
-    code: 820191,
+    code: 8201910,
   },
   {
     id: 525,
@@ -6532,7 +6532,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1300,
     def: 1800,
-    code: 3469051,
+    code: 34690519,
   },
   {
     id: 526,
@@ -6545,7 +6545,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 500,
     def: 2000,
-    code: 6710524,
+    code: 67105242,
   },
   {
     id: 527,
@@ -6558,7 +6558,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 300,
     def: 250,
-    code: 748932,
+    code: 7489323,
   },
   {
     id: 528,
@@ -6571,7 +6571,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1800,
-    code: 3387893,
+    code: 33878931,
   },
   {
     id: 529,
@@ -6584,7 +6584,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 6086267,
+    code: 60862676,
   },
   {
     id: 530,
@@ -6597,7 +6597,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1800,
-    code: 2864982,
+    code: 28649820,
   },
   {
     id: 531,
@@ -6610,7 +6610,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1700,
-    code: 3275148,
+    code: 32751480,
   },
   {
     id: 532,
@@ -6623,7 +6623,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1900,
     def: 900,
-    code: 6914009,
+    code: 69140098,
   },
   {
     id: 533,
@@ -6636,7 +6636,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1700,
-    code: 9514419,
+    code: 95144193,
   },
   {
     id: 534,
@@ -6649,7 +6649,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 850,
     def: 750,
-    code: 3253989,
+    code: 32539892,
   },
   {
     id: 535,
@@ -6662,7 +6662,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1400,
-    code: 5491297,
+    code: 54912977,
   },
   {
     id: 536,
@@ -6675,7 +6675,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 800,
     def: 600,
-    code: 9441254,
+    code: 94412545,
   },
   {
     id: 537,
@@ -6688,7 +6688,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 600,
-    code: 2181725,
+    code: 21817254,
   },
   {
     id: 538,
@@ -6701,7 +6701,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 800,
-    code: 780535,
+    code: 7805359,
   },
   {
     id: 539,
@@ -6714,7 +6714,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 2965473,
+    code: 29654737,
   },
   {
     id: 540,
@@ -6727,7 +6727,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 400,
-    code: 6069466,
+    code: 60694662,
   },
   {
     id: 541,
@@ -6740,7 +6740,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 450,
     def: 500,
-    code: 708971,
+    code: 7089711,
   },
   {
     id: 542,
@@ -6753,7 +6753,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1400,
     def: 1600,
-    code: 3317841,
+    code: 33178416,
   },
   {
     id: 543,
@@ -6766,7 +6766,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1900,
     def: 800,
-    code: 7079711,
+    code: 70797118,
   },
   {
     id: 544,
@@ -6779,7 +6779,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 900,
     def: 500,
-    code: 9696712,
+    code: 96967123,
   },
   {
     id: 545,
@@ -6792,7 +6792,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1700,
     def: 1900,
-    code: 3235582,
+    code: 32355828,
   },
   {
     id: 546,
@@ -6805,7 +6805,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1250,
     def: 900,
-    code: 6975053,
+    code: 69750536,
   },
   {
     id: 547,
@@ -6818,7 +6818,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 350,
     def: 300,
-    code: 9574453,
+    code: 95744531,
   },
   {
     id: 548,
@@ -6831,7 +6831,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 400,
     def: 300,
-    code: 2123928,
+    code: 21239280,
   },
   {
     id: 549,
@@ -6844,7 +6844,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 500,
-    code: 6863898,
+    code: 68638985,
   },
   {
     id: 550,
@@ -6870,7 +6870,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 800,
-    code: 2141769,
+    code: 21417692,
   },
   {
     id: 552,
@@ -6883,7 +6883,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 5740530,
+    code: 57405307,
   },
   {
     id: 553,
@@ -6896,7 +6896,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1250,
     def: 800,
-    code: 9390040,
+    code: 93900406,
   },
   {
     id: 554,
@@ -6909,7 +6909,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1550,
     def: 1800,
-    code: 2039404,
+    code: 20394040,
   },
   {
     id: 555,
@@ -6922,7 +6922,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1600,
-    code: 2565225,
+    code: 25652259,
   },
   {
     id: 556,
@@ -6935,7 +6935,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 400,
     def: 1500,
-    code: 7957562,
+    code: 79575620,
   },
   {
     id: 557,
@@ -6948,7 +6948,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1900,
     def: 1000,
-    code: 9087656,
+    code: 90876561,
   },
   {
     id: 558,
@@ -6961,7 +6961,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 400,
     def: 400,
-    code: 5556716,
+    code: 55567161,
   },
   {
     id: 559,
@@ -6974,7 +6974,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1250,
     def: 700,
-    code: 8206527,
+    code: 82065276,
   },
   {
     id: 560,
@@ -6987,7 +6987,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 950,
     def: 1400,
-    code: 2845091,
+    code: 28450915,
   },
   {
     id: 561,
@@ -7000,7 +7000,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1000,
-    code: 5544462,
+    code: 55444629,
   },
   {
     id: 562,
@@ -7013,7 +7013,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 600,
-    code: 8184362,
+    code: 81843628,
   },
   {
     id: 563,
@@ -7026,7 +7026,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1400,
-    code: 6478846,
+    code: 64788463,
   },
   {
     id: 564,
@@ -7039,7 +7039,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1800,
-    code: 5462203,
+    code: 54622031,
   },
   {
     id: 565,
@@ -7052,7 +7052,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1200,
-    code: 3844552,
+    code: 38445524,
   },
   {
     id: 566,
@@ -7065,7 +7065,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 1711574,
+    code: 17115745,
   },
   {
     id: 567,
@@ -7078,7 +7078,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1200,
     def: 900,
-    code: 4350048,
+    code: 43500484,
   },
   {
     id: 568,
@@ -7091,7 +7091,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1000,
-    code: 3950716,
+    code: 39507162,
   },
   {
     id: 569,
@@ -7104,7 +7104,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1200,
-    code: 7793694,
+    code: 77936940,
   },
   {
     id: 570,
@@ -7117,7 +7117,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1300,
     def: 800,
-    code: 4234880,
+    code: 42348802,
   },
   {
     id: 571,
@@ -7130,7 +7130,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 8983290,
+    code: 89832901,
   },
   {
     id: 572,
@@ -7143,7 +7143,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1700,
-    code: 1523761,
+    code: 15237615,
   },
   {
     id: 573,
@@ -7156,7 +7156,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 700,
-    code: 4262525,
+    code: 42625254,
   },
   {
     id: 574,
@@ -7169,7 +7169,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1200,
-    code: 7801036,
+    code: 78010363,
   },
   {
     id: 575,
@@ -7182,7 +7182,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1600,
-    code: 6562269,
+    code: 65622692,
   },
   {
     id: 576,
@@ -7195,7 +7195,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 1000,
-    code: 4140376,
+    code: 41403766,
   },
   {
     id: 577,
@@ -7208,7 +7208,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1850,
     def: 1600,
-    code: 7799877,
+    code: 77998771,
   },
   {
     id: 578,
@@ -7221,7 +7221,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2500,
     def: 2100,
-    code: 5072599,
+    code: 50725996,
   },
   {
     id: 579,
@@ -7234,7 +7234,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 400,
-    code: 4038712,
+    code: 40387124,
   },
   {
     id: 580,
@@ -7247,7 +7247,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 900,
-    code: 7677512,
+    code: 76775123,
   },
   {
     id: 581,
@@ -7260,7 +7260,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1450,
     def: 1000,
-    code: 317083,
+    code: 3170832,
   },
   {
     id: 582,
@@ -7273,7 +7273,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1700,
-    code: 3556553,
+    code: 35565537,
   },
   {
     id: 583,
@@ -7326,7 +7326,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 900,
     def: 1100,
-    code: 3432030,
+    code: 34320307,
   },
   {
     id: 589,
@@ -7339,7 +7339,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 600,
-    code: 6071540,
+    code: 60715406,
   },
   {
     id: 590,
@@ -7352,7 +7352,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 6450000,
+    code: 64500000,
   },
   {
     id: 591,
@@ -7365,7 +7365,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 700,
     def: 600,
-    code: 3350871,
+    code: 33508719,
   },
   {
     id: 592,
@@ -7378,7 +7378,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 850,
     def: 900,
-    code: 6999286,
+    code: 69992868,
   },
   {
     id: 593,
@@ -7391,7 +7391,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1900,
-    code: 211170,
+    code: 2111707,
   },
   {
     id: 594,
@@ -7404,7 +7404,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1800,
-    code: 3248527,
+    code: 32485271,
   },
   {
     id: 595,
@@ -7417,7 +7417,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1400,
-    code: 6887027,
+    code: 68870276,
   },
   {
     id: 596,
@@ -7430,7 +7430,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2400,
     def: 2100,
-    code: 9972476,
+    code: 99724761,
   },
   {
     id: 597,
@@ -7443,7 +7443,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 2200,
-    code: 2511946,
+    code: 25119460,
   },
   {
     id: 598,
@@ -7456,7 +7456,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 600,
     def: 550,
-    code: 6865872,
+    code: 68658728,
   },
   {
     id: 599,
@@ -7469,7 +7469,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1550,
     def: 800,
-    code: 9404233,
+    code: 94042337,
   },
   {
     id: 600,
@@ -7482,7 +7482,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 0,
-    code: 1260038,
+    code: 12600382,
   },
   {
     id: 601,
@@ -7503,7 +7503,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 750,
     def: 500,
-    code: 9392074,
+    code: 93920745,
   },
   {
     id: 603,
@@ -7516,7 +7516,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1100,
     def: 1200,
-    code: 2031585,
+    code: 20315854,
   },
   {
     id: 604,
@@ -7529,7 +7529,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2000,
     def: 1400,
-    code: 7605281,
+    code: 76052811,
     limit: 1,
   },
   {
@@ -7543,7 +7543,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3000,
     def: 2500,
-    code: 10238,
+    code: 102380,
   },
   {
     id: 606,
@@ -7556,7 +7556,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 800,
-    code: 433564,
+    code: 4335645,
     limit: 1,
   },
   {
@@ -7570,7 +7570,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 9098079,
+    code: 90980792,
   },
   {
     id: 608,
@@ -7583,7 +7583,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1100,
-    code: 8208561,
+    code: 82085619,
   },
   {
     id: 609,
@@ -7603,7 +7603,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 850,
     def: 800,
-    code: 5587532,
+    code: 55875323,
   },
   {
     id: 611,
@@ -7616,7 +7616,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 650,
     def: 500,
-    code: 8186306,
+    code: 81863068,
   },
   {
     id: 612,
@@ -7629,7 +7629,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1100,
     def: 800,
-    code: 1735817,
+    code: 17358176,
   },
   {
     id: 613,
@@ -7642,7 +7642,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2800,
     def: 2100,
-    code: 5475287,
+    code: 54752875,
   },
   {
     id: 614,
@@ -7655,7 +7655,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1400,
-    code: 8014148,
+    code: 80141480,
   },
   {
     id: 615,
@@ -7668,7 +7668,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 850,
     def: 1400,
-    code: 1753558,
+    code: 17535588,
   },
   {
     id: 616,
@@ -7681,7 +7681,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1200,
-    code: 2159397,
+    code: 21593977,
   },
   {
     id: 617,
@@ -7694,7 +7694,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1700,
     def: 1600,
-    code: 2992983,
+    code: 29929832,
   },
   {
     id: 618,
@@ -7707,7 +7707,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1700,
-    code: 5641393,
+    code: 56413937,
   },
   {
     id: 619,
@@ -7720,7 +7720,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 800,
     def: 600,
-    code: 1759705,
+    code: 17597059,
   },
   {
     id: 620,
@@ -7733,7 +7733,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1200,
-    code: 2980234,
+    code: 29802344,
   },
   {
     id: 621,
@@ -7746,7 +7746,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1650,
     def: 1300,
-    code: 5529135,
+    code: 55291359,
   },
   {
     id: 622,
@@ -7759,7 +7759,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1500,
-    code: 8168605,
+    code: 81686058,
   },
   {
     id: 623,
@@ -7772,7 +7772,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 500,
     def: 1200,
-    code: 5604344,
+    code: 56043446,
   },
   {
     id: 624,
@@ -7785,7 +7785,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1650,
     def: 1300,
-    code: 5457980,
+    code: 54579801,
   },
   {
     id: 625,
@@ -7798,7 +7798,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1100,
-    code: 8156341,
+    code: 81563416,
   },
   {
     id: 626,
@@ -7811,7 +7811,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1400,
-    code: 1796811,
+    code: 17968114,
   },
   {
     id: 627,
@@ -7824,7 +7824,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 2000,
-    code: 4335221,
+    code: 43352213,
   },
   {
     id: 628,
@@ -7837,7 +7837,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 550,
     def: 500,
-    code: 8074182,
+    code: 80741828,
   },
   {
     id: 629,
@@ -7850,7 +7850,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 0,
     def: 0,
-    code: 4144234,
+    code: 41442341,
   },
   {
     id: 630,
@@ -7863,7 +7863,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 5582189,
+    code: 55821894,
   },
   {
     id: 631,
@@ -7876,7 +7876,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1300,
-    code: 7962937,
+    code: 79629370,
   },
   {
     id: 632,
@@ -7889,7 +7889,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1500,
-    code: 1502398,
+    code: 15023985,
   },
   {
     id: 633,
@@ -7902,7 +7902,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1600,
-    code: 9400426,
+    code: 94004268,
   },
   {
     id: 634,
@@ -7915,7 +7915,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2000,
     def: 1500,
-    code: 5383983,
+    code: 53839837,
   },
   {
     id: 635,
@@ -7928,7 +7928,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 350,
     def: 300,
-    code: 590149,
+    code: 5901497,
   },
   {
     id: 636,
@@ -7941,7 +7941,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2900,
     def: 2400,
-    code: 9850211,
+    code: 98502113,
   },
   {
     id: 637,
@@ -7954,7 +7954,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 1800,
-    code: 7878014,
+    code: 78780140,
   },
   {
     id: 638,
@@ -7967,7 +7967,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1500,
-    code: 417984,
+    code: 4179849,
   },
   {
     id: 639,
@@ -7980,7 +7980,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1850,
     def: 1300,
-    code: 4017385,
+    code: 40173854,
   },
   {
     id: 640,
@@ -7993,7 +7993,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1200,
     def: 1500,
-    code: 5093912,
+    code: 50939127,
   },
   {
     id: 641,
@@ -8013,7 +8013,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 1150,
     def: 900,
-    code: 3045136,
+    code: 30451366,
   },
   {
     id: 643,
@@ -8026,7 +8026,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 3100,
-    code: 7686228,
+    code: 76862289,
   },
   {
     id: 644,
@@ -8039,7 +8039,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3300,
     def: 3000,
-    code: 8632722,
+    code: 86327225,
   },
   {
     id: 645,
@@ -8052,7 +8052,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 800,
-    code: 1372287,
+    code: 13722870,
     limit: 1,
   },
   {
@@ -8066,7 +8066,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 2000,
-    code: 4921757,
+    code: 49217579,
   },
   {
     id: 647,
@@ -8079,7 +8079,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3500,
     def: 0,
-    code: 8560568,
+    code: 85605684,
   },
   {
     id: 648,
@@ -8092,7 +8092,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1300,
-    code: 3811613,
+    code: 38116136,
   },
   {
     id: 649,
@@ -8118,7 +8118,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1650,
     def: 1600,
-    code: 9199658,
+    code: 91996584,
   },
   {
     id: 651,
@@ -8231,7 +8231,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1700,
-    code: 8105952,
+    code: 81059524,
   },
   {
     id: 666,
@@ -8244,7 +8244,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1700,
-    code: 9096035,
+    code: 90960358,
   },
   {
     id: 667,
@@ -8257,7 +8257,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 1400,
-    code: 3635400,
+    code: 36354007,
   },
   {
     id: 668,
@@ -8291,7 +8291,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2500,
     def: 2000,
-    code: 8919403,
+    code: 89194033,
   },
   {
     id: 672,
@@ -8312,7 +8312,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1300,
-    code: 8031658,
+    code: 80316585,
   },
   {
     id: 674,
@@ -8325,7 +8325,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 350,
     def: 750,
-    code: 2767132,
+    code: 27671321,
   },
   {
     id: 675,
@@ -8338,7 +8338,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1900,
-    code: 6374910,
+    code: 63749102,
   },
   {
     id: 676,
@@ -8351,7 +8351,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1500,
     def: 1800,
-    code: 9974780,
+    code: 99747800,
   },
   {
     id: 677,
@@ -8364,7 +8364,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1800,
     def: 2000,
-    code: 8628177,
+    code: 86281779,
   },
   {
     id: 678,
@@ -8377,7 +8377,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 8656912,
+    code: 86569121,
   },
   {
     id: 679,
@@ -8390,7 +8390,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 800,
-    code: 1295322,
+    code: 12953226,
   },
   {
     id: 680,
@@ -8403,7 +8403,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3300,
     def: 2500,
-    code: 4894893,
+    code: 48948935,
   },
   {
     id: 681,
@@ -8487,7 +8487,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3500,
     def: 3850,
-    code: 7534753,
+    code: 75347539,
   },
   {
     id: 692,
@@ -8529,7 +8529,7 @@ const cards: DBCard[] = [
     level: 9,
     atk: 2800,
     def: 3200,
-    code: 9237730,
+    code: 92377303,
   },
   {
     id: 697,
@@ -8542,7 +8542,7 @@ const cards: DBCard[] = [
     level: 12,
     atk: 5000,
     def: 5000,
-    code: 9926715,
+    code: 99267150,
     limit: 1,
   },
   {
@@ -8556,7 +8556,7 @@ const cards: DBCard[] = [
     level: 12,
     atk: 5000,
     def: 5000,
-    code: 6287354,
+    code: 62873545,
     limit: 1,
   },
   {
@@ -8585,7 +8585,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1950,
     def: 1850,
-    code: 484903,
+    code: 4849037,
     limit: 1,
   },
   {
@@ -8599,7 +8599,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1850,
-    code: 3024363,
+    code: 30243636,
     limit: 1,
   },
   {
@@ -8613,7 +8613,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2750,
     def: 2500,
-    code: 7623234,
+    code: 76232340,
     limit: 1,
   },
   {
@@ -8627,7 +8627,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2050,
     def: 2500,
-    code: 362744,
+    code: 3627449,
     limit: 1,
   },
   {
@@ -8641,7 +8641,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2850,
     def: 2350,
-    code: 3911115,
+    code: 39111158,
     limit: 1,
   },
   {
@@ -8655,7 +8655,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2350,
     def: 2400,
-    code: 6651679,
+    code: 66516792,
     limit: 1,
   },
   {
@@ -8669,7 +8669,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2650,
     def: 2250,
-    code: 250489,
+    code: 2504891,
   },
   {
     id: 708,
@@ -8682,7 +8682,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2900,
     def: 2450,
-    code: 3899950,
+    code: 38999506,
     limit: 1,
   },
   {
@@ -8696,7 +8696,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2450,
     def: 2000,
-    code: 6539320,
+    code: 65393205,
     limit: 1,
   },
   {
@@ -8710,7 +8710,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2550,
     def: 2500,
-    code: 9178221,
+    code: 91782219,
     limit: 1,
   },
   {
@@ -8724,7 +8724,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2350,
-    code: 3827791,
+    code: 38277918,
   },
   {
     id: 712,
@@ -8737,7 +8737,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1800,
     def: 2000,
-    code: 6427166,
+    code: 64271667,
   },
   {
     id: 713,
@@ -8750,7 +8750,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3500,
     def: 2000,
-    code: 9066076,
+    code: 90660762,
   },
   {
     id: 714,
@@ -8763,7 +8763,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2250,
     def: 1800,
-    code: 2705437,
+    code: 27054370,
   },
   {
     id: 715,
@@ -8790,7 +8790,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2550,
     def: 2150,
-    code: 9084418,
+    code: 90844184,
     limit: 1,
   },
   {
@@ -8804,7 +8804,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2450,
     def: 2550,
-    code: 2693278,
+    code: 26932788,
     limit: 1,
   },
   {
@@ -8818,7 +8818,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2350,
     def: 2150,
-    code: 6233748,
+    code: 62337487,
     limit: 1,
   },
   {
@@ -8832,7 +8832,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 1850,
-    code: 9972153,
+    code: 99721536,
     limit: 1,
   },
   {
@@ -8860,7 +8860,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 2600,
-    code: 3020847,
+    code: 30208479,
     limit: 1,
   },
   {
@@ -8881,7 +8881,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2000,
     def: 2300,
-    code: 379788,
+    code: 3797883,
   },
   {
     id: 724,
@@ -8907,7 +8907,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1500,
-    code: 6557059,
+    code: 65570596,
   },
   {
     id: 726,
@@ -8920,7 +8920,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2600,
-    code: 296420,
+    code: 2964201,
   },
   {
     id: 727,
@@ -8933,7 +8933,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2600,
-    code: 3836934,
+    code: 38369349,
   },
   {
     id: 728,
@@ -8946,7 +8946,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1500,
-    code: 6545894,
+    code: 65458948,
   },
   {
     id: 729,
@@ -8959,7 +8959,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2500,
     def: 1200,
-    code: 9184265,
+    code: 91842653,
   },
   {
     id: 730,
@@ -8972,7 +8972,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 0,
     def: 0,
-    code: 3824775,
+    code: 38247752,
   },
   {
     id: 731,
@@ -8985,7 +8985,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 0,
     def: 0,
-    code: 6463146,
+    code: 64631466,
     limit: 1,
   },
   {
@@ -8999,7 +8999,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 200,
     def: 1000,
-    code: 9002006,
+    code: 90020065,
   },
   {
     id: 733,
@@ -9012,7 +9012,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 0,
     def: 0,
-    code: 2712511,
+    code: 27125110,
   },
   {
     id: 734,
@@ -9025,7 +9025,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 0,
     def: 0,
-    code: 6351981,
+    code: 63519819,
     limit: 1,
   },
   {
@@ -9039,7 +9039,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1900,
     def: 2200,
-    code: 9090842,
+    code: 90908427,
   },
   {
     id: 736,
@@ -9052,7 +9052,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1400,
-    code: 2630252,
+    code: 26302522,
   },
   {
     id: 737,
@@ -9065,7 +9065,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2100,
     def: 2800,
-    code: 6239723,
+    code: 62397231,
   },
   {
     id: 738,
@@ -9078,7 +9078,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1700,
-    code: 9978593,
+    code: 99785935,
   },
   {
     id: 739,
@@ -9091,7 +9091,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1500,
-    code: 2528097,
+    code: 25280974,
   },
   {
     id: 740,
@@ -9104,7 +9104,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1500,
     def: 1800,
-    code: 5267568,
+    code: 52675689,
   },
   {
     id: 741,
@@ -9117,7 +9117,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1100,
-    code: 1798557,
+    code: 17985575,
   },
   {
     id: 742,
@@ -9130,7 +9130,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 2800,
     def: 2400,
-    code: 6433580,
+    code: 64335804,
   },
   {
     id: 743,
@@ -9143,7 +9143,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2600,
     def: 2200,
-    code: 8148046,
+    code: 81480460,
   },
   {
     id: 744,
@@ -9156,7 +9156,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1400,
     def: 1800,
-    code: 564033,
+    code: 5640330,
   },
   {
     id: 745,
@@ -9169,7 +9169,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 2000,
     def: 1600,
-    code: 4203504,
+    code: 42035044,
   },
   {
     id: 746,
@@ -9182,7 +9182,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1400,
-    code: 7842364,
+    code: 78423643,
   },
   {
     id: 747,
@@ -9195,7 +9195,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 581879,
+    code: 5818798,
   },
   {
     id: 748,
@@ -9208,7 +9208,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 300,
     def: 2000,
-    code: 3181249,
+    code: 31812496,
   },
   {
     id: 749,
@@ -9221,7 +9221,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1400,
     def: 1800,
-    code: 7720719,
+    code: 77207191,
   },
   {
     id: 750,
@@ -9234,7 +9234,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2100,
     def: 1800,
-    code: 479610,
+    code: 4796100,
   },
   {
     id: 751,
@@ -9247,7 +9247,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 800,
     def: 2200,
-    code: 3019080,
+    code: 30190809,
   },
   {
     id: 752,
@@ -9260,7 +9260,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2400,
     def: 1500,
-    code: 7758551,
+    code: 77585513,
   },
   {
     id: 753,
@@ -9273,7 +9273,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1200,
-    code: 357351,
+    code: 3573512,
   },
   {
     id: 754,
@@ -9286,7 +9286,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1400,
     def: 1000,
-    code: 3997826,
+    code: 39978267,
   },
   {
     id: 755,
@@ -9299,7 +9299,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 1200,
-    code: 6636296,
+    code: 66362965,
   },
   {
     id: 756,
@@ -9312,7 +9312,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1000,
-    code: 285107,
+    code: 2851070,
   },
   {
     id: 757,
@@ -9325,7 +9325,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1600,
-    code: 3925667,
+    code: 39256679,
   },
   {
     id: 758,
@@ -9338,7 +9338,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 100,
     def: 2600,
-    code: 6524038,
+    code: 65240384,
   },
   {
     id: 759,
@@ -9364,7 +9364,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2000,
     def: 1700,
-    code: 3803312,
+    code: 38033121,
   },
   {
     id: 761,
@@ -9377,7 +9377,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1500,
     def: 1200,
-    code: 6442873,
+    code: 64428736,
   },
   {
     id: 762,
@@ -9390,7 +9390,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2200,
     def: 2400,
-    code: 9151283,
+    code: 91512835,
   },
   {
     id: 763,
@@ -9403,7 +9403,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 300,
-    code: 2791154,
+    code: 27911549,
   },
   {
     id: 764,
@@ -9416,7 +9416,7 @@ const cards: DBCard[] = [
     level: 3,
     atk: 500,
     def: 1500,
-    code: 6430624,
+    code: 64306248,
   },
   {
     id: 765,
@@ -9429,7 +9429,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1400,
     def: 1800,
-    code: 9079025,
+    code: 90790253,
   },
   {
     id: 766,
@@ -9442,7 +9442,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1200,
-    code: 2618599,
+    code: 26185991,
   },
   {
     id: 767,
@@ -9455,7 +9455,7 @@ const cards: DBCard[] = [
     level: 8,
     atk: 3000,
     def: 2500,
-    code: 5318360,
+    code: 53183600,
   },
   {
     id: 768,
@@ -9468,7 +9468,7 @@ const cards: DBCard[] = [
     level: 1,
     atk: 0,
     def: 100,
-    code: 5127502,
+    code: 51275027,
   },
   {
     id: 769,
@@ -9481,7 +9481,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1000,
     def: 1850,
-    code: 1394528,
+    code: 13945283,
   },
   {
     id: 770,
@@ -9494,7 +9494,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1700,
     def: 1000,
-    code: 5093099,
+    code: 50930991,
   },
   {
     id: 771,
@@ -9507,7 +9507,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1600,
     def: 1000,
-    code: 1372360,
+    code: 13723605,
   },
   {
     id: 772,
@@ -9520,7 +9520,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1000,
-    code: 1695645,
+    code: 16956455,
   },
   {
     id: 773,
@@ -9533,7 +9533,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2450,
     def: 1700,
-    code: 5134546,
+    code: 51345461,
   },
   {
     id: 774,
@@ -9546,7 +9546,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 1100,
     def: 200,
-    code: 8873357,
+    code: 88733579,
   },
   {
     id: 775,
@@ -9559,7 +9559,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1600,
     def: 1800,
-    code: 2412827,
+    code: 24128274,
   },
   {
     id: 776,
@@ -9572,7 +9572,7 @@ const cards: DBCard[] = [
     level: 2,
     atk: 500,
     def: 300,
-    code: 5012288,
+    code: 50122883,
   },
   {
     id: 777,
@@ -9585,7 +9585,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 1800,
     def: 1700,
-    code: 8751198,
+    code: 87511987,
   },
   {
     id: 778,
@@ -9598,7 +9598,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 2200,
     def: 2500,
-    code: 5028706,
+    code: 50287060,
   },
   {
     id: 779,
@@ -9611,7 +9611,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1200,
     def: 1500,
-    code: 3254177,
+    code: 32541773,
   },
   {
     id: 780,
@@ -9624,7 +9624,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1300,
     def: 1800,
-    code: 6804947,
+    code: 68049471,
   },
   {
     id: 781,
@@ -9750,7 +9750,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2350,
     def: 2300,
-    code: 8609978,
+    code: 86099788,
   },
   {
     id: 795,
@@ -9763,7 +9763,7 @@ const cards: DBCard[] = [
     level: 4,
     atk: 1800,
     def: 1050,
-    code: 1249348,
+    code: 12493482,
   },
   {
     id: 796,
@@ -9776,7 +9776,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2000,
-    code: 4988819,
+    code: 49888191,
   },
   {
     id: 797,
@@ -9789,7 +9789,7 @@ const cards: DBCard[] = [
     level: 6,
     atk: 1550,
     def: 2500,
-    code: 7537229,
+    code: 75372290,
   },
   {
     id: 798,
@@ -9802,7 +9802,7 @@ const cards: DBCard[] = [
     level: 7,
     atk: 2400,
     def: 2150,
-    code: 1176184,
+    code: 11761845,
   },
   {
     id: 799,
@@ -9815,7 +9815,7 @@ const cards: DBCard[] = [
     level: 5,
     atk: 2500,
     def: 1600,
-    code: 4876654,
+    code: 48766543,
   },
   {
     id: 800,
