@@ -1,8 +1,8 @@
 import { DuellistKey } from "@/duel/common";
 import React from "react";
-import { Duellist } from "./duellist/Duellist";
-
 import "./Duel.scss";
+import { Duellist } from "./duellist/Duellist";
+import { ZoneSummaryBar } from "./ZoneSummaryBar";
 
 export const Duel = () => {
   return (
@@ -10,6 +10,7 @@ export const Duel = () => {
       <Duellist duellistKey={DuellistKey.Opponent} />
       <hr style={{ width: "100px" }} />
       <Duellist duellistKey={DuellistKey.Player} />
+      <ZoneSummaryBar />
     </div>
   );
 };

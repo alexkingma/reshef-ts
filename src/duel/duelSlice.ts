@@ -112,6 +112,8 @@ export const selectZone =
   (coords: ZoneCoords) =>
   ({ duel }: RootState) =>
     getZone(duel, coords);
+export const selectCursorZone = ({ duel }: RootState) =>
+  getZone(duel, duel.interaction.cursorCoords);
 export const selectOpponentHasMonster =
   (dKey: DuellistKey) =>
   ({ duel }: RootState) =>

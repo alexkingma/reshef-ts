@@ -1,0 +1,67 @@
+.zoneSummaryBar {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  height: 56px;
+
+  .leftJustify,
+  .rightJustify {
+    padding: 0 8px;
+  }
+
+  .leftJustify {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+
+    .name {
+      font-size: 28px;
+    }
+
+    .levelContainer {
+      display: flex;
+      align-items: center;
+      margin-top: 2px;
+
+      .levelIcon {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .rightJustify {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+
+    .atkDefContainer {
+      display: flex;
+      align-items: center;
+
+      .atkDefIcons {
+        margin-right: 2px;
+
+        :first-child {
+          // sword icon seems slightly smaller than shield, so this aligns the two
+          margin-left: 2px;
+        }
+      }
+
+      .atkDefValues {
+        > div {
+          display: flex;
+          justify-content: right;
+        }
+      }
+    }
+  }
+
+  .icon {
+    width: 48px;
+    height: 48px;
+    margin: 2px 0 2px 16px;
+  }
+}

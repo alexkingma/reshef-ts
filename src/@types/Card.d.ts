@@ -1,26 +1,26 @@
 type CardCategory = "Monster" | "Magic" | "Trap" | "Ritual";
 
 type CardType =
-  | "Warrior"
-  | "Fiend"
-  | "Spellcaster"
-  | "Machine"
   | "Aqua"
-  | "Dragon"
-  | "Insect"
-  | "Beast"
-  | "Fairy"
-  | "Zombie"
-  | "Rock"
-  | "Winged Beast"
   | "Beast-Warrior"
-  | "Plant"
-  | "Fish"
-  | "Pyro"
-  | "Thunder"
+  | "Beast"
   | "Dinosaur"
+  | "Dragon"
+  | "Fairy"
+  | "Fiend"
+  | "Fish"
+  | "Insect"
+  | "Machine"
+  | "Plant"
+  | "Pyro"
   | "Reptile"
-  | "Sea Serpent";
+  | "Rock"
+  | "Sea Serpent"
+  | "Spellcaster"
+  | "Thunder"
+  | "Warrior"
+  | "Winged Beast"
+  | "Zombie";
 
 type Alignment =
   | "Fiend"

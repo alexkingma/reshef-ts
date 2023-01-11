@@ -23,6 +23,11 @@ const alignmentImageReqContext = require.context(
   false,
   /\.(jpg|png)$/
 );
+const typeImageReqContext = require.context(
+  "@/assets/images/type/",
+  false,
+  /\.(jpg|png)$/
+);
 const overrideImageReqContext = require.context(
   "@/assets/images/cards-override/",
   false,
@@ -47,6 +52,7 @@ const simpleImageMap = buildImageMap(simpleImageReqContext);
 const imageMap = buildImageMap(imageReqContext);
 const animeImageMap = buildImageMap(animeImageReqContext);
 const alignmentImageMap = buildImageMap(alignmentImageReqContext);
+const typeImageMap = buildImageMap(typeImageReqContext);
 const overrideImageMap = buildImageMap(overrideImageReqContext);
 const referenceAnimeImageMap = buildImageMap(referenceAnimeImageReqContext);
 
@@ -83,9 +89,17 @@ export const getAnimeImage = (cardName: CardName) => {
 export const getAlignmentImage = (alignment: Alignment) => {
   // filenames have no spaces or special characters
   if (!alignmentImageMap[alignment]) {
-    throw new Error(`Could not find alignment image with key: ${alignment}`);
+    throw new Error(`Could not find image of alignment: ${alignment}`);
   }
   return alignmentImageMap[alignment];
+};
+
+export const getTypeImage = (type: CardType) => {
+  // filenames have no spaces or special characters
+  if (!typeImageMap[type]) {
+    throw new Error(`Could not find image of type: ${type}`);
+  }
+  return typeImageMap[type];
 };
 
 export const getOverrideImage = (cardName: CardName) => {
