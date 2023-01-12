@@ -1,4 +1,4 @@
-import { getAnimeImage } from "@/common/image";
+import { getCardImage } from "@/common/image";
 import classNames from "classnames";
 import React from "react";
 import { MonsterStats } from "./MonsterStats";
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const FaceUpCard = ({ card, customClasses }: Props) => {
-  const cardFront = getAnimeImage(card.name);
+  const cardFront = getCardImage(card.name);
 
   return (
     <div className={classNames(customClasses)}>

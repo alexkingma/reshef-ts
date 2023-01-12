@@ -1,20 +1,10 @@
-const imageReqContext = require.context(
-  "@/assets/images/cards-simple/",
+const cardImageReqContext = require.context(
+  "@/assets/images/cards/",
   false,
   /\.(jpg|png)$/
 );
-const simpleImageReqContext = require.context(
-  "@/assets/images/cards-simple/",
-  false,
-  /\.(jpg|png)$/
-);
-const animeImageReqContext = require.context(
-  "@/assets/images/cards-anime/",
-  false,
-  /\.(jpg|png)$/
-);
-const referenceAnimeImageReqContext = require.context(
-  "@/assets/images/cards-anime-all/",
+const referenceCardImageReqContext = require.context(
+  "@/assets/images/cards-all/",
   false,
   /\.(jpg|png)$/
 );
@@ -48,36 +38,16 @@ const buildImageMap = (reqContext: __WebpackModuleApi.RequireContext) => {
   return map;
 };
 
-const simpleImageMap = buildImageMap(simpleImageReqContext);
-const imageMap = buildImageMap(imageReqContext);
-const animeImageMap = buildImageMap(animeImageReqContext);
+const animeImageMap = buildImageMap(cardImageReqContext);
 const alignmentImageMap = buildImageMap(alignmentImageReqContext);
 const typeImageMap = buildImageMap(typeImageReqContext);
 const overrideImageMap = buildImageMap(overrideImageReqContext);
-const referenceAnimeImageMap = buildImageMap(referenceAnimeImageReqContext);
+const referenceAnimeImageMap = buildImageMap(referenceCardImageReqContext);
 
 export const cardNameToFilename = (cardName: string) =>
   cardName.replaceAll(/(\s|-|#|\.|'|,|&|\"|\(|\))/g, "");
 
-export const getImage = (cardName: CardName) => {
-  // filenames have no spaces or special characters
-  const condensedKey = cardNameToFilename(cardName);
-  if (!imageMap[condensedKey]) {
-    throw new Error(`Could not find image with key: ${cardName}`);
-  }
-  return imageMap[condensedKey];
-};
-
-export const getSimpleImage = (cardName: CardName) => {
-  // filenames have no spaces or special characters
-  const condensedKey = cardNameToFilename(cardName);
-  if (!simpleImageMap[condensedKey]) {
-    throw new Error(`Could not find image with key: ${cardName}`);
-  }
-  return simpleImageMap[condensedKey];
-};
-
-export const getAnimeImage = (cardName: CardName) => {
+export const getCardImage = (cardName: CardName) => {
   // filenames have no spaces or special characters
   const condensedKey = cardNameToFilename(cardName);
   if (!animeImageMap[condensedKey]) {

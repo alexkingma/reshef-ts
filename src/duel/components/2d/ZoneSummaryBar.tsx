@@ -1,4 +1,4 @@
-import levelIcon from "@/assets/images/Level.png";
+import levelIcon from "@/assets/images/level.png";
 import spellIcon from "@/assets/images/spell.png";
 import trapIcon from "@/assets/images/trap.png";
 import { getAlignmentImage, getTypeImage } from "@/common/image";
