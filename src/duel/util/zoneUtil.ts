@@ -398,3 +398,10 @@ export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
     ...getDuellistCoordsMap(dKey),
   };
 };
+
+export const getFinalPowerUpLevel = (zone: OccupiedMonsterZone) => {
+  const { isOccupied, card, tempPowerUpLevel = 0, permPowerUpLevel = 0 } = zone;
+  if (!isOccupied || card.category !== "Monster") return 0;
+
+  return tempPowerUpLevel + permPowerUpLevel;
+};

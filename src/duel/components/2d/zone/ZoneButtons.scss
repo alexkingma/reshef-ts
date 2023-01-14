@@ -1,0 +1,15 @@
+.zoneButtonsContainer {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+
+  > button {
+    min-width: 80%;
+  }
+}

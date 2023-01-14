@@ -2,64 +2,38 @@
   position: relative;
   height: var(--card-height);
 
-  .alwaysVisible {
+  .alwaysVisible,
+  &:hover .showOnHover {
+    &.indicatorContainer,
+    .indicatorContainer,
     .statsContainer,
     .faceUpCard {
       display: block;
     }
-  }
 
-  &:hover {
-    .zoneButtonsContainer {
-      display: flex;
-    }
-
-    .showOnHover {
-      .statsContainer,
-      .faceUpCard {
-        display: block;
-      }
-
-      &.faceDownCard {
-        display: none;
-      }
+    &.faceDownCard {
+      display: none;
     }
   }
 
-  .defenceModeCard {
-    transform: rotate(270deg);
-
-    // prevent the image from blurring due to rotation
-    transform-origin: 50% 51%;
-  }
-
-  .zoneButtonsContainer {
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    top: 100%;
-    right: 0;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  .faceUpCard,
+  .faceDownCard {
+    width: var(--card-width);
+    height: var(--card-height);
+    border-radius: 3px;
     display: none;
+  }
 
-    > button {
-      min-width: 80%;
+  .faceDownCard {
+    &:not(.alwaysVisible) {
+      display: block;
     }
   }
 }
 
-.faceUpCard,
-.faceDownCard {
-  width: var(--card-width);
-  height: var(--card-height);
-  border-radius: 3px;
-  display: none;
-}
+.defenceMode {
+  transform: rotate(270deg);
 
-.faceDownCard {
-  &:not(.alwaysVisible) {
-    display: block;
-  }
+  // prevent the image from blurring due to rotation
+  transform-origin: 50% 51%;
 }

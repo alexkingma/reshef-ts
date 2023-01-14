@@ -37,9 +37,28 @@
     align-items: center;
     font-size: 18px;
 
+    .powerUpLevel {
+      &.negative {
+        color: var(--power-down-color);
+      }
+
+      &.positive {
+        color: var(--power-up-color);
+      }
+    }
+
     .atkDefContainer {
       display: flex;
       align-items: center;
+      margin-left: 16px;
+
+      .positive {
+        color: var(--power-up-color);
+      }
+
+      .negative {
+        color: var(--power-down-color);
+      }
 
       .atkDefIcons {
         margin-right: 2px;

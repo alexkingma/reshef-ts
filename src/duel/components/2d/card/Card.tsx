@@ -1,18 +1,13 @@
-import {
-  DuellistKey,
-  InteractionMode,
-  Orientation,
-  RowKey,
-} from "@/duel/common";
-import { selectInteraction, selectZone } from "@/duel/duelSlice";
-import { useZoneButtons } from "@/duel/useZoneButtons";
-import { isDefMode } from "@/duel/util/zoneUtil";
+import { DuellistKey, Orientation, RowKey } from "@/duel/common";
+import { selectZone } from "@/duel/duelSlice";
+import { isDefMode, isMonster } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
 import "./Card.scss";
 import { FaceDownCard } from "./FaceDownCard";
 import { FaceUpCard } from "./FaceUpCard";
+import { PowerUpLevelIndicator } from "./PowerUpLevelIndicator";
 
 interface Props {
   zoneCoords: ZoneCoords;
@@ -21,8 +16,6 @@ interface Props {
 export const Card = ({ zoneCoords }: Props) => {
   const [dKey, rKey] = zoneCoords;
   const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
-  const { mode } = useAppSelector(selectInteraction);
-  const buttons = useZoneButtons(zoneCoords);
 
   if (!z.isOccupied) return null;
 
@@ -30,17 +23,19 @@ export const Card = ({ zoneCoords }: Props) => {
   const isFaceUp = z.orientation === Orientation.FaceUp;
   const alwaysVisible = isFaceUp || (rKey === RowKey.Hand && isPlayerZone);
   const customClasses = classNames(
-    isDefMode(z) && "defenceModeCard",
     alwaysVisible && "alwaysVisible",
     isPlayerZone && "showOnHover"
   );
 
   return (
-    <div className="cardContainer">
+    <div className={classNames("cardContainer", isDefMode(z) && "defenceMode")}>
       <FaceUpCard card={z.card} customClasses={customClasses} />
       <FaceDownCard customClasses={customClasses} />
-      {mode === InteractionMode.ViewingOptions && (
-        <div className="zoneButtonsContainer">{buttons}</div>
+      {isMonster(z) && (
+        <PowerUpLevelIndicator
+          zoneCoords={zoneCoords}
+          customClasses={customClasses}
+        />
       )}
     </div>
   );

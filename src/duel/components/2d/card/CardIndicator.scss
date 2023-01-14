@@ -1,0 +1,41 @@
+.indicatorContainer {
+  position: absolute;
+  height: 25px;
+  padding: 0 4px;
+  border: 2px solid grey;
+  background: black;
+  display: flex;
+  justify-content: center;
+  display: none;
+
+  &.topLeft {
+    top: -4px;
+    left: -4px;
+  }
+
+  &.topRight {
+    top: -4px;
+    right: -4px;
+  }
+
+  .numTributes,
+  .powerUpLevel {
+    position: relative;
+    top: -6px;
+    font-size: 28px;
+  }
+
+  .numTributes {
+    color: var(--num-tributes-color);
+  }
+
+  .powerUpLevel {
+    &.positive {
+      color: var(--power-up-color);
+    }
+
+    &.negative {
+      color: var(--power-down-color);
+    }
+  }
+}

@@ -33,6 +33,7 @@ export const randomiseDuellistState = (
               ? BattlePosition.Attack
               : BattlePosition.Defence,
             orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
+            permPowerUpLevel: Math.floor(Math.random() * 9) - 5,
           }
     ),
     spellTrapZones: Array.from({ length: 5 }).map(() =>

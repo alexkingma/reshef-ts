@@ -1,12 +1,14 @@
 import { DuellistKey, InteractionMode } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
 import { useInteractionActions } from "@/duel/useDuelActions";
+import { useZoneButtons } from "@/duel/useZoneButtons";
 import { isCoordMatch } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { useIsViableTargetZone } from "./useIsViableTargetZone";
 import { Zone } from "./Zone";
+import "./ZoneButtons.scss";
 
 interface Props {
   children?: ReactNode;
@@ -16,6 +18,7 @@ interface Props {
 export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   const { cursorCoords, originCoords, mode, pendingAction } =
     useAppSelector(selectInteraction);
+  const buttons = useZoneButtons(zoneCoords);
 
   const {
     setCursorZone,
@@ -77,6 +80,9 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
         )}
       >
         {children}
+        {mode === InteractionMode.ViewingOptions && isCursor && (
+          <div className="zoneButtonsContainer">{buttons}</div>
+        )}
       </Zone>
     </div>
   );

@@ -4,12 +4,11 @@ import "./MonsterStats.scss";
 
 interface Props {
   card: MonsterCard;
-  customClasses?: string;
 }
 
-export const MonsterStats = ({ card, customClasses }: Props) => {
+export const MonsterStats = ({ card }: Props) => {
   return (
-    <div className={classNames("statsContainer", customClasses)}>
+    <div className={classNames("statsContainer")}>
       <p className="atk">{card.effAtk}</p>
       <p className="def">{card.effDef}</p>
     </div>

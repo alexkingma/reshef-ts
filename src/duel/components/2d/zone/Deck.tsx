@@ -19,7 +19,9 @@ export const Deck = ({ duellistKey }: Props) => {
       {!deck.length ? (
         <ZoneBackground customClasses={"deckBackground"} />
       ) : (
-        <FaceDownCard />
+        <div className="cardContainer">
+          <FaceDownCard />
+        </div>
       )}
     </Zone>
   );

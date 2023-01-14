@@ -3,6 +3,7 @@ import spellIcon from "@/assets/images/spell.png";
 import trapIcon from "@/assets/images/trap.png";
 import { getAlignmentImage, getTypeImage } from "@/common/image";
 import { selectCursorZone } from "@/duel/duelSlice";
+import { getFinalPowerUpLevel } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
@@ -43,18 +44,47 @@ export const ZoneSummaryBar = () => {
 
 const MonsterZonePartialSummaryBar = () => {
   const z = useAppSelector(selectCursorZone) as OccupiedMonsterZone;
-  const { effAtk, effDef, alignment, type } = z.card;
+  const finalPowerUpLevel = getFinalPowerUpLevel(z);
+  const { effAtk, effDef, atk, def, alignment, type } = z.card;
+  const hasPositivePowerUpLevel = finalPowerUpLevel > 0;
+  const hasNegativePowerUpLevel = finalPowerUpLevel < 0;
 
   return (
     <>
+      {(hasPositivePowerUpLevel || hasNegativePowerUpLevel) && (
+        <div
+          className={classNames(
+            "powerUpLevel",
+            hasPositivePowerUpLevel && "positive",
+            hasNegativePowerUpLevel && "negative"
+          )}
+        >
+          ({(hasPositivePowerUpLevel ? "+" : "") + finalPowerUpLevel})
+        </div>
+      )}
+
       <div className="atkDefContainer">
         <div className="atkDefIcons">
           <div>{"\u2694"}</div>
           <div>{"\u26CA"}</div>
         </div>
         <div className="atkDefValues">
-          <div>{effAtk}</div>
-          <div>{effDef}</div>
+          <div
+            className={classNames(
+              effAtk > atk && "positive",
+              effAtk < atk && "negative"
+            )}
+          >
+            {effAtk}
+          </div>
+          <div
+            className={classNames(
+              effDef > def && "positive",
+              effDef < def && "negative"
+            )}
+          >
+            {effDef}
+          </div>
         </div>
       </div>
 
