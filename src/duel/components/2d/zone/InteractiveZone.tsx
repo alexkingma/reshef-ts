@@ -1,6 +1,7 @@
-import { DuellistKey, InteractionMode } from "@/duel/common";
+import { DuellistKey, InteractionMode, RowKey } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
 import { useInteractionActions } from "@/duel/useDuelActions";
+import { InteractionKey, useDuelInteraction } from "@/duel/useDuelInteraction";
 import { useZoneButtons } from "@/duel/useZoneButtons";
 import { isCoordMatch } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
@@ -19,6 +20,7 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   const { cursorCoords, originCoords, mode, pendingAction } =
     useAppSelector(selectInteraction);
   const buttons = useZoneButtons(zoneCoords);
+  const interactionMap = useDuelInteraction(zoneCoords);
 
   const {
     setCursorZone,
@@ -35,7 +37,7 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   ].includes(mode);
   const zone = useAppSelector(selectZone(zoneCoords));
   const hasCard = zone.isOccupied;
-  const [dKey] = zoneCoords;
+  const [dKey, rKey] = zoneCoords as [DuellistKey, RowKey, FieldCol];
   const isOwn = dKey === DuellistKey.Player;
 
   const handleMouseEnter = () => {
@@ -50,7 +52,25 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
 
   const handleZoneClick = () => {
     if (mode === InteractionMode.FreeMovement && isOwn && hasCard) {
-      setInteractionMode(InteractionMode.ViewingOptions);
+      let key: InteractionKey;
+      switch (rKey) {
+        case RowKey.Monster:
+          key = InteractionKey.Attack;
+          break;
+        case RowKey.SpellTrap:
+          key = InteractionKey.ActivateSpell;
+          break;
+        case RowKey.Hand:
+          key =
+            zone.card.category === "Monster"
+              ? InteractionKey.Summon
+              : InteractionKey.SetSpellTrap;
+          break;
+        default:
+          return;
+      }
+      const { effect, condition } = interactionMap[key];
+      if (condition(zone)) effect();
       return;
     }
 
@@ -61,15 +81,31 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
       return;
     }
 
-    if (originCoords && isCoordMatch(zoneCoords, originCoords)) {
-      // clicking the origin card cancels out
-      // of all coord/mode selections so far
+    if (originCoords || mode === InteractionMode.ViewingOptions) {
+      // clicking an invalid zone cancels out of coord/mode selections so far
+      resetInteractions();
+    }
+  };
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (mode === InteractionMode.FreeMovement && isOwn && hasCard) {
+      setInteractionMode(InteractionMode.ViewingOptions);
+      return;
+    }
+
+    if (originCoords || mode === InteractionMode.ViewingOptions) {
+      // player is likely in another menu
       resetInteractions();
     }
   };
 
   return (
-    <div onClick={handleZoneClick} onMouseEnter={handleMouseEnter}>
+    <div
+      onClick={handleZoneClick}
+      onMouseEnter={handleMouseEnter}
+      onContextMenu={handleRightClick}
+    >
       <Zone
         customClasses={classNames(
           "zone",
