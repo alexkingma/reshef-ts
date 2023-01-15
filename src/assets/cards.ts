@@ -268,7 +268,7 @@ const cards: DBCard[] = [
     name: "Exodia the Forbidden One",
     cost: 137,
     category: "Monster",
-    effect: false,
+    effect: true,
     type: "Spellcaster",
     alignment: "Dark",
     level: 3,

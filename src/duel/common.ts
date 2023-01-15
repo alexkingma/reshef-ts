@@ -745,7 +745,10 @@ export type GraveyardEffectMonster = Extract<
   | Monster.DarkFlareKnight
 >;
 
-export type HandEffectMonster = Extract<Monster, Monster.LavaGolem>;
+export type HandEffectMonster = Extract<
+  Monster,
+  Monster.LavaGolem | Monster.ExodiaTheForbiddenOne
+>;
 
 export type FlipEffectMonster = Extract<
   Monster,

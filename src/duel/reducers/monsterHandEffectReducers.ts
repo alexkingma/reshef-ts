@@ -1,7 +1,11 @@
 import { HandEffectMonster, Monster } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
 import { isStartOfEitherTurn } from "../util/duelUtil";
-import { countMatchesInRow, destroyFirstFound } from "../util/rowUtil";
+import {
+  countMatchesInRow,
+  destroyFirstFound,
+  hasFullExodia,
+} from "../util/rowUtil";
 import { clearZone, specialSummon } from "../util/zoneUtil";
 
 type MonsterAutoEffectReducer = (
@@ -33,6 +37,18 @@ export const monsterHandEffectReducers: MonsterAutoEffectReducers = {
           destroyFirstFound(state, otherMonsters);
           specialSummon(state, otherDKey, Monster.LavaGolem);
           clearZone(state, zoneCoords);
+        },
+      },
+    ];
+  },
+  [Monster.ExodiaTheForbiddenOne]: (state, { ownHand }) => {
+    return [
+      {
+        condition: () => {
+          return hasFullExodia(state, ownHand);
+        },
+        effect: (state, { dKey }) => {
+          // TODO: set victory flag
         },
       },
     ];
