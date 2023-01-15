@@ -1,4 +1,4 @@
-import { Spell } from "../common";
+import { Monster, Spell } from "../common";
 import { getCard } from "./cardUtil";
 
 const targetedSpellMap: {
@@ -138,7 +138,9 @@ const targetedSpellMap: {
     return name === "Slot Machine";
   },
   [Spell.Metalmorph]: ({ name }) => {
-    return ["Zoa", "Jirai Gumo"].includes(name);
+    return [Monster.Zoa, Monster.JiraiGumo, Monster.RedEyesBDragon].includes(
+      name as Monster
+    );
   },
 
   // assorted

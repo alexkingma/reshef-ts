@@ -165,6 +165,14 @@ export const spellEffectReducers: SpellEffectReducers = {
       specialSummonAtCoords(state, targetCoords!, Monster.LauncherSpider);
       return;
     }
+    if (z.card.name === Monster.RedEyesBDragon) {
+      specialSummonAtCoords(
+        state,
+        targetCoords!,
+        Monster.RedEyesBlackMetalDragon
+      );
+      return;
+    }
   },
   [Spell.ElegantEgotist]: (state) => {
     const { targetCoords } = state.interaction;
