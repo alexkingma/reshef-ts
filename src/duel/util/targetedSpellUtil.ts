@@ -185,3 +185,15 @@ export const isValidSpellTarget = (
   const monsterCard = getCard(targetMonster) as MonsterCard;
   return condition(monsterCard);
 };
+
+export const isReflectablePowerUp = (cardName: CardName) => {
+  // i.e. should it trigger Bad Reaction to Simochi
+  return (
+    spellHasTarget(cardName) &&
+    ![
+      // non-power-up effects
+      Spell.ElegantEgotist,
+      Spell.Metalmorph,
+    ].includes(cardName as Spell)
+  );
+};

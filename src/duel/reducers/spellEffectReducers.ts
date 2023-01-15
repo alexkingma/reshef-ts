@@ -15,6 +15,7 @@ import {
   rowContainsAnyCards,
   setRowFaceDown,
   setRowFaceUp,
+  updateMatchesInRow,
 } from "../util/rowUtil";
 import {
   burnOther,
@@ -94,8 +95,22 @@ export const spellEffectReducers: SpellEffectReducers = {
   [Spell._7Completed]: permPowerUp(),
 
   // power-down
-  [Spell.SpellbindingCircle]: permPowerUp(-1),
-  [Spell.ShadowSpell]: permPowerUp(-2),
+  [Spell.SpellbindingCircle]: (state, { otherMonsters }) => {
+    updateMatchesInRow(
+      state,
+      otherMonsters,
+      () => true,
+      (z) => z.permPowerUpLevel--
+    );
+  },
+  [Spell.ShadowSpell]: (state, { otherMonsters }) => {
+    updateMatchesInRow(
+      state,
+      otherMonsters,
+      () => true,
+      (z) => (z.permPowerUpLevel -= 2)
+    );
+  },
 
   // field
   [Spell.Forest]: setField(Field.Forest),

@@ -1000,6 +1000,38 @@ export enum Trap {
   AntiRaigeki = "Anti Raigeki",
 }
 
+export type CounterSpellTrap = Extract<
+  Trap,
+  | Trap.GoblinFan
+  | Trap.BadReactionToSimochi
+  | Trap.ReverseTrap
+  | Trap.FakeTrap
+  | Trap.AntiRaigeki
+>;
+
+export type CounterAttackTrap = Extract<
+  Trap,
+  | Trap.AmazonArchers
+  | Trap.HouseOfAdhesiveTape
+  | Trap.Eatgaboon
+  | Trap.BearTrap
+  | Trap.InvisibleWire
+  | Trap.AcidTrapHole
+  | Trap.WidespreadRuin
+  | Trap.TorrentialTribute
+  | Trap.InfiniteDismissal
+>;
+
+export type PerpetualTrap = Extract<
+  Trap,
+  | Trap.DragonCaptureJar
+  | Trap.DestinyBoard
+  | Trap.SpiritMessageI
+  | Trap.SpiritMessageN
+  | Trap.SpiritMessageA
+  | Trap.SpiritMessageL
+>;
+
 // this will error if an enum value doesn't match a card name
 interface CheckCardName {
   [key: string]: CardName;

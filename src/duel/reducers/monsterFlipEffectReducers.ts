@@ -3,7 +3,6 @@ import {
   Field,
   FlipEffectMonster,
   Monster,
-  Orientation,
   RowKey,
   Trap,
 } from "../common";
@@ -18,7 +17,6 @@ import {
   destroyFirstFound,
   destroyHighestAtk,
   destroyRow,
-  getFirstEmptyZoneIdx,
   getHighestAtkZoneIdx,
   hasMatchInRow,
   immobiliseRow,
@@ -53,6 +51,7 @@ import {
   permPowerDown,
   permPowerUp,
   returnCardToHand,
+  setSpellTrap,
   specialSummon,
   subsumeMonster,
   xyzMergeAttempt,
@@ -163,17 +162,8 @@ export const monsterFlipEffectReducers: MonsterFlipEffectReducers = {
   [Monster.Doron]: (state, { dKey }) => {
     specialSummon(state, dKey, Monster.Doron, { isLocked: true });
   },
-  [Monster.TrapMaster]: (state, { dKey, ownSpellTrap }) => {
-    try {
-      const spellIdx = getFirstEmptyZoneIdx(state, ownSpellTrap);
-      state[dKey].spellTrapZones[spellIdx] = {
-        isOccupied: true,
-        orientation: Orientation.FaceDown,
-        card: getCard(Trap.AcidTrapHole) as SpellOrTrapOrRitualCard,
-      };
-    } catch {
-      // no free spell zone
-    }
+  [Monster.TrapMaster]: (state, { dKey }) => {
+    setSpellTrap(state, dKey, Trap.AcidTrapHole);
   },
   [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
     burn(state, dKey, 1000);

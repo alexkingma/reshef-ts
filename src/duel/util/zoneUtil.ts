@@ -1,5 +1,7 @@
 import {
   BattlePosition,
+  CounterAttackTrap,
+  CounterSpellTrap,
   Field,
   FlipEffectMonster,
   Monster,
@@ -7,6 +9,8 @@ import {
   RowKey,
 } from "../common";
 import { ZoneCoordsMap } from "../duelSlice";
+import { counterAttackTrapReducers } from "../reducers/counterAttackTrapReducers";
+import { counterSpellTrapReducers } from "../reducers/counterSpellTrapReducers";
 import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
 import { getAlignmentResult, getCard, getFieldMultiplier } from "./cardUtil";
 import {
@@ -23,6 +27,13 @@ import {
 
 export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
   return state[dKey][rKey][col];
+};
+
+export const getOriginZone = (state: Duel) => {
+  if (!state.interaction.originCoords) {
+    throw Error("Origin coords not set!");
+  }
+  return getZone(state, state.interaction.originCoords);
 };
 
 export const isTrap = (z: Zone): z is OccupiedSpellTrapZone => {
@@ -66,6 +77,12 @@ export const isFaceUp = (z: OccupiedZone) =>
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
   z.card.effect &&
   !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];
+
+export const hasTrapCounterAttackEffect = (z: OccupiedMonsterZone) =>
+  !!counterAttackTrapReducers[z.card.name as CounterAttackTrap];
+
+export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
+  !!counterSpellTrapReducers[z.card.name as CounterSpellTrap];
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
@@ -238,6 +255,40 @@ export const specialSummonAtCoords = (
   const zone = getZone(state, zoneCoords) as MonsterZone;
   Object.assign(zone, {
     ...generateOccupiedMonsterZone(cardName),
+    ...customProps,
+  });
+};
+
+export const setSpellTrap = (
+  state: Duel,
+  dKey: DuellistKey,
+  cardName: CardName,
+  customProps: Partial<OccupiedSpellTrapZone> = {}
+) => {
+  try {
+    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.SpellTrap]);
+    setSpellTrapAtCoords(
+      state,
+      [dKey, RowKey.SpellTrap, zoneIdx],
+      cardName,
+      customProps
+    );
+  } catch (e) {
+    return; // no free zone;
+  }
+};
+
+export const setSpellTrapAtCoords = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  cardName: CardName,
+  customProps: Partial<OccupiedSpellTrapZone> = {}
+) => {
+  const zone = getZone(state, zoneCoords) as SpellTrapZone;
+  Object.assign(zone, {
+    isOccupied: true,
+    card: getCard(cardName),
+    orientation: Orientation.FaceDown,
     ...customProps,
   });
 };

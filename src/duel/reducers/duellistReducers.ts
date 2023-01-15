@@ -2,12 +2,22 @@ import { BattlePosition, Orientation } from "../common";
 import { DuellistCoordsMap } from "../duelSlice";
 import { checkAutoEffects } from "../util/autoEffectUtil";
 import { shuffle } from "../util/common";
-import { draw } from "../util/deckUtil";
+import { draw, getTempCardQuantMap } from "../util/deckUtil";
+import { getInitialDuel } from "../util/duelUtil";
 import { getRow } from "../util/rowUtil";
 
 export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
     shuffle(state[dKey].deck);
+  },
+  randomiseDuel: (state: Duel) => {
+    const randomGame = getInitialDuel(
+      getTempCardQuantMap(),
+      getTempCardQuantMap()
+    );
+    Object.entries(randomGame).forEach(([key, val]) => {
+      state[key as keyof Duel] = val;
+    });
   },
   endTurn: (state: Duel, { ownMonsters, otherDKey }: DuellistCoordsMap) => {
     // reset all turn-based params, then hand over to other player

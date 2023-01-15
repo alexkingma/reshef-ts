@@ -1,4 +1,4 @@
-import { Field } from "../common";
+import { Field, Trap } from "../common";
 import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "../duelSlice";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
@@ -9,10 +9,13 @@ import {
   destroyRow,
   getHighestAtkZoneIdx,
   getRow,
+  rowContainsAnyCards,
   updateMatchesInRow,
 } from "./rowUtil";
 import {
+  clearZone,
   destroyAtCoords,
+  getOriginZone,
   permPowerUp as permPowerUpDirect,
   tempPowerUp as tempPowerUpDirect,
 } from "./zoneUtil";
@@ -142,3 +145,33 @@ export const getEffCon_updateMatchesInRow = (
     },
   };
 };
+
+export const trapDestroyAttacker =
+  (atkCondition: (z: OccupiedMonsterZone) => boolean) => (state: Duel) => {
+    return {
+      condition: () => {
+        const attackerZone = getOriginZone(state) as OccupiedMonsterZone;
+        return atkCondition(attackerZone);
+      },
+      effect: () => {
+        destroyAtCoords(state, state.interaction.originCoords!);
+      },
+    };
+  };
+
+export const getEffCon_requireDestinyBoard =
+  () =>
+  (state: Duel, { zoneCoords, ownSpellTrap }: ZoneCoordsMap) => {
+    return [
+      {
+        condition: () => {
+          return !rowContainsAnyCards(state, ownSpellTrap, Trap.DestinyBoard);
+        },
+        effect: () => {
+          // I/N/A/L letters require Destiny Board to also be
+          // on the field or they auto-disappear
+          clearZone(state, zoneCoords);
+        },
+      },
+    ];
+  };

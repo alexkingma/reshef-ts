@@ -89,7 +89,11 @@ export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
       label: "Defend",
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      effect: () => defendAction(),
+      effect: () => {
+        setOriginZone(zoneCoords);
+        defendAction();
+        resetInteractions();
+      },
     },
     [InteractionKey.Summon]: {
       label: "Summon",
@@ -119,13 +123,14 @@ export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
       label: "Activate",
       condition: (z: Zone) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
       effect: () => {
+        setOriginZone(zoneCoords);
         if (spellHasTarget(zone.card.name)) {
-          setOriginZone(zoneCoords);
           setPendingAction(activateSpellEffectAction);
           setInteractionMode(InteractionMode.ChoosingOwnMonster);
           // TODO: set cursor to be on first monster
         } else {
           activateSpellEffectAction();
+          resetInteractions();
         }
       },
     },
@@ -137,18 +142,30 @@ export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
         !z.isLocked &&
         canActivateEffect(z) &&
         isRow(RowKey.Monster),
-      effect: () => activateMonsterFlipEffectAction(),
+      effect: () => {
+        setOriginZone(zoneCoords);
+        activateMonsterFlipEffectAction();
+        resetInteractions();
+      },
     },
     [InteractionKey.Tribute]: {
       label: "Tribute",
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
-      effect: () => tributeAction(),
+      effect: () => {
+        setOriginZone(zoneCoords);
+        tributeAction();
+        resetInteractions();
+      },
     },
     [InteractionKey.Discard]: {
       label: "Discard",
       condition: () => isMyTurn,
-      effect: () => discardAction(),
+      effect: () => {
+        setOriginZone(zoneCoords);
+        discardAction();
+        resetInteractions();
+      },
     },
   };
 

@@ -1,8 +1,11 @@
 import { Orientation, RowKey, Trap } from "../common";
+import { ZoneCoordsMap } from "../duelSlice";
 import { getCard, getExodiaCards } from "./cardUtil";
 import {
   clearZone,
   destroyAtCoords,
+  hasTrapCounterAttackEffect,
+  hasTrapCounterSpellEffect,
   immobiliseCard,
   isMonster,
   isTrap,
@@ -270,4 +273,20 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
   const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
   if (targetIdx === -1) return; // no monster to target
   permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
+};
+
+export const getFirstTriggerableTrapIdx = (
+  state: Duel,
+  zoneCoordsMap: ZoneCoordsMap
+) => {
+  const { otherSpellTrap } = zoneCoordsMap;
+  return getRow(state, otherSpellTrap).findIndex((z) => {
+    if (!z.isOccupied) return false;
+    if (z.card.category === "Trap") {
+      return hasTrapCounterSpellEffect(z as OccupiedSpellTrapZone);
+    } else if (z.card.category === "Monster") {
+      return !!hasTrapCounterAttackEffect(z as OccupiedMonsterZone);
+    }
+    return false;
+  }) as FieldCol | -1;
 };

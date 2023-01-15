@@ -6,9 +6,8 @@ import { Duel as Duel2D } from "./2d/Duel";
 import { Duel as DuelDebug } from "./debug/Duel";
 
 export const Duel = () => {
-  const state = useAppSelector(({ duel }) => duel);
   const { duellistKey, isStartOfTurn } = useAppSelector(selectActiveTurn);
-  const { startTurn } = useDuellistActions(duellistKey);
+  const { startTurn, randomiseDuel } = useDuellistActions(duellistKey);
 
   useEffect(() => {
     if (isStartOfTurn) {
@@ -31,6 +30,8 @@ export const Duel = () => {
             Go To Game Mode
           </button>
         ) : null}
+        <br />
+        <button onClick={() => randomiseDuel()}>Randomise Duel</button>
       </div>
       <div
         style={{
