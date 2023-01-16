@@ -1,5 +1,6 @@
 import {
   BattlePosition,
+  DirectSpell,
   DuellistKey,
   Field,
   Monster,
@@ -34,7 +35,10 @@ import {
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
-export const spellEffectReducers: CardReducerMap<Spell, DirectEffectReducer> = {
+export const spellEffectReducers: CardReducerMap<
+  DirectSpell,
+  DirectEffectReducer
+> = {
   // burn
   [Spell.Sparks]: burnOther(50),
   [Spell.Hinotama]: burnOther(100),
@@ -195,11 +199,6 @@ export const spellEffectReducers: CardReducerMap<Spell, DirectEffectReducer> = {
       permPowerUpLevel,
     });
   },
-  [Spell.JamBreedingMachine]: (state, { dKey }) => {
-    // TODO: this should be an auto effect?
-    specialSummon(state, dKey, Monster.ChangeSlime, { isLocked: true });
-    state.activeTurn.hasNormalSummoned = true;
-  },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
     const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
     monsterZones.forEach((zone, idx, row) => {
@@ -219,11 +218,6 @@ export const spellEffectReducers: CardReducerMap<Spell, DirectEffectReducer> = {
   [Spell.GravediggerGhoul]: (state, { dKey, otherDKey }) => {
     clearGraveyard(state, dKey);
     clearGraveyard(state, otherDKey);
-  },
-  [Spell.MessengerOfPeace]: () => {
-    // TODO
-    // perpetual activation as long as 1500+ monster is out, remains face up permanently
-    // basically like DCJ
   },
   [Spell.DarknessApproaches]: (state, { ownMonsters }) => {
     setRowFaceDown(state, ownMonsters);

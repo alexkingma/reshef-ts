@@ -9,7 +9,7 @@ import { monsterGraveyardEffectReducers } from "../reducers/monsterGraveyardEffe
 import { monsterHandEffectReducers } from "../reducers/monsterHandEffectReducers";
 import { monsterPermAutoEffectReducers } from "../reducers/monsterPermAutoEffectReducers";
 import { monsterTempPowerUpReducers } from "../reducers/monsterTempPowerUpReducers";
-import { perpetualTrapReducers } from "../reducers/perpetualTrapReducers";
+import { perpetualSpellTrapReducers } from "../reducers/perpetualSpellTrapReducers";
 import { getDuellistCoordsMap, getOtherDuellistKey } from "./duellistUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
 
@@ -152,14 +152,14 @@ export const checkPermAutoEffects = (state: Duel) => {
     checkAutoEffect(
       state,
       getZoneCoordsMap([dKey, RowKey.SpellTrap, i as FieldCol]),
-      perpetualTrapReducers
+      perpetualSpellTrapReducers
     );
   });
   targetState.spellTrapZones.forEach((_, i) => {
     checkAutoEffect(
       state,
       getZoneCoordsMap([otherDKey, RowKey.SpellTrap, i as FieldCol]),
-      perpetualTrapReducers
+      perpetualSpellTrapReducers
     );
   });
 

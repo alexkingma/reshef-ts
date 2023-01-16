@@ -1000,6 +1000,8 @@ export enum Trap {
   AntiRaigeki = "Anti Raigeki",
 }
 
+export type DirectSpell = Exclude<Spell, PerpetualSpellTrap>;
+
 export type CounterSpellTrap = Extract<
   Trap,
   | Trap.GoblinFan
@@ -1022,15 +1024,17 @@ export type CounterAttackTrap = Extract<
   | Trap.InfiniteDismissal
 >;
 
-export type PerpetualTrap = Extract<
-  Trap,
-  | Trap.DragonCaptureJar
-  | Trap.DestinyBoard
-  | Trap.SpiritMessageI
-  | Trap.SpiritMessageN
-  | Trap.SpiritMessageA
-  | Trap.SpiritMessageL
->;
+export type PerpetualSpellTrap =
+  | Extract<
+      Trap,
+      | Trap.DragonCaptureJar
+      | Trap.DestinyBoard
+      | Trap.SpiritMessageI
+      | Trap.SpiritMessageN
+      | Trap.SpiritMessageA
+      | Trap.SpiritMessageL
+    >
+  | Extract<Spell, Spell.MessengerOfPeace | Spell.JamBreedingMachine>;
 
 // this will error if an enum value doesn't match a card name
 interface CheckCardName {

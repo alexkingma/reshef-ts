@@ -1,5 +1,11 @@
-import { Orientation, PerpetualTrap, Trap } from "../common";
-import { isStartOfTurn } from "../util/duellistUtil";
+import {
+  Monster,
+  Orientation,
+  PerpetualSpellTrap,
+  Spell,
+  Trap,
+} from "../common";
+import { burn, isStartOfTurn } from "../util/duellistUtil";
 import {
   hasEmptyZone,
   hasMatchInRow,
@@ -7,12 +13,57 @@ import {
   updateMatchesInRow,
 } from "../util/rowUtil";
 import { getEffCon_requireDestinyBoard } from "../util/wrappedUtil";
-import { isType, setSpellTrap } from "../util/zoneUtil";
+import {
+  isMonster,
+  isType,
+  setSpellTrap,
+  specialSummon,
+} from "../util/zoneUtil";
 
-export const perpetualTrapReducers: CardReducerMap<
-  PerpetualTrap,
+export const perpetualSpellTrapReducers: CardReducerMap<
+  PerpetualSpellTrap,
   MultiEffConReducer
 > = {
+  [Spell.MessengerOfPeace]: (state, { dKey, ownMonsters, otherMonsters }) => {
+    const is1500 = (z: OccupiedZone) => isMonster(z) && z.card.effAtk >= 1500;
+    return [
+      {
+        // activates on player's next turn regardless of
+        // if there is a 1500+ on the field
+        condition: () => isStartOfTurn(state, dKey),
+        effect: () => burn(state, dKey, 1000),
+      },
+      {
+        condition: () => {
+          return (
+            hasMatchInRow(state, otherMonsters, is1500) ||
+            hasMatchInRow(state, ownMonsters, is1500)
+          );
+        },
+        effect: () => {
+          updateMatchesInRow(
+            state,
+            otherMonsters,
+            is1500,
+            (z) => (z.isLocked = true)
+          );
+        },
+      },
+    ];
+  },
+  [Spell.JamBreedingMachine]: (state, { dKey }) => {
+    return [
+      {
+        condition: () => isStartOfTurn(state, dKey),
+        effect: () => {
+          // player is prevented from summoning, even if the
+          // special summon fails due to no free zones
+          specialSummon(state, dKey, Monster.ChangeSlime);
+          state.activeTurn.hasNormalSummoned = true;
+        },
+      },
+    ];
+  },
   [Trap.DragonCaptureJar]: (state, { otherMonsters }) => {
     return [
       {
