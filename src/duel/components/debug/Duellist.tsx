@@ -15,13 +15,15 @@ interface Props {
 }
 
 export const Duellist = ({ name, duellistKey }: Props) => {
-  const { monsterZones, spellTrapZones, hand } = useAppSelector(
+  const { monsterZones, spellTrapZones, hand, activeEffects } = useAppSelector(
     selectDuellist(duellistKey)
   );
 
   return (
     <div style={{ minWidth: "400px" }}>
       <DuellistStatus duellistKey={duellistKey} name={name} />
+      <div>BC Zones: {activeEffects.brainControlZones.toString()}</div>
+      <div>SoRL Turns Remaining: {activeEffects.sorlTurnsRemaining}</div>
       <div>
         Monster Zones:
         <ol>

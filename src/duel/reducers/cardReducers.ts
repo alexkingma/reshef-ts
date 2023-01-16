@@ -6,16 +6,17 @@ import {
   FlipEffectMonster,
   Orientation,
 } from "../common";
+import { getActiveEffects, removeBrainControlZone } from "../util/duellistUtil";
 import { getRow } from "../util/rowUtil";
 import {
   attackMonster,
   clearZone,
   destroyAtCoords,
   directAttack,
-  generateOccupiedMonsterZone,
   getZone,
   postDirectMonsterAction,
   setSpellTrapAtCoords,
+  specialSummonAtCoords,
 } from "../util/zoneUtil";
 import { counterAttackTrapReducers } from "./counterAttackTrapReducers";
 import { counterSpellTrapReducers } from "./counterSpellTrapReducers";
@@ -30,10 +31,13 @@ export const cardReducers = {
       originCoords!
     ) as OccupiedMonsterZone;
     clearZone(state, originCoords!);
-    Object.assign(getZone(state, targetCoords!), {
-      ...generateOccupiedMonsterZone(card.name),
-      orientation,
-    });
+
+    // summoning a monster over the top of a BC-ed monster resets
+    // the flag, so that the newly summoned monster doesn't get
+    // "unconverted" come turn end and wind up in the opponent's hands
+    removeBrainControlZone(state, targetCoords!);
+
+    specialSummonAtCoords(state, targetCoords!, card.name, { orientation });
     state.activeTurn.hasNormalSummoned = true;
   },
   setSpellTrap: (state: Duel) => {
@@ -43,12 +47,18 @@ export const cardReducers = {
     setSpellTrapAtCoords(state, targetCoords!, card.name, { orientation });
   },
   attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
-    const { otherSpellTrap } = coordsMap;
+    const { otherSpellTrap, otherDKey } = coordsMap;
     const { originCoords, targetCoords } = state.interaction;
+    const { sorlTurnsRemaining } = getActiveEffects(state, otherDKey);
     const attackerZone = getZone(state, originCoords!) as OccupiedMonsterZone;
     attackerZone.battlePosition = BattlePosition.Attack;
     attackerZone.orientation = Orientation.FaceUp;
     attackerZone.isLocked = true;
+
+    // SoRL is active, no attacks permitted
+    // however, we still want to let the player click attack,
+    // so as to set their monsters in attack position
+    if (sorlTurnsRemaining !== 0) return;
 
     // check if any opponent traps are triggered
     for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
@@ -84,9 +94,15 @@ export const cardReducers = {
   tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords);
     state.activeTurn.numTributedMonsters++;
+
+    // tributing a BC-ed monster removes the BC flag from that zone
+    removeBrainControlZone(state, zoneCoords);
   },
   discard: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords);
+
+    // discarding a BC-ed monster removes the BC flag from that zone
+    removeBrainControlZone(state, zoneCoords);
   },
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords, otherSpellTrap } = coordsMap;

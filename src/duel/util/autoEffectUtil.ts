@@ -146,8 +146,7 @@ export const checkPermAutoEffects = (state: Duel) => {
     );
   });
 
-  // trap effects
-  // TODO: auto spell effects (MoP, maybe more)
+  // spell/trap effects
   originatorState.spellTrapZones.forEach((_, i) => {
     checkAutoEffect(
       state,

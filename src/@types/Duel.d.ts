@@ -39,6 +39,10 @@ interface Duellist {
   graveyard: Graveyard;
   monsterZones: MonsterZone[];
   spellTrapZones: SpellTrapZone[];
+  activeEffects: {
+    sorlTurnsRemaining: 0 | 1 | 2 | 3;
+    brainControlZones: ZoneCoords[];
+  };
 }
 
 interface DuelInteraction {

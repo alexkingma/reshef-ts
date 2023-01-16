@@ -21,6 +21,7 @@ import {
   getFirstEmptyZoneIdx,
   getFirstMatchInRowIdx,
   getHighestAtkZoneIdx,
+  hasEmptyZone,
   rowContainsAllCards,
 } from "./rowUtil";
 
@@ -234,12 +235,11 @@ export const specialSummon = (
 ) => {
   try {
     const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
-    specialSummonAtCoords(
-      state,
-      [dKey, RowKey.Monster, zoneIdx],
-      cardName,
-      customProps
-    );
+    const destCoords: ZoneCoords = [dKey, RowKey.Monster, zoneIdx];
+    specialSummonAtCoords(state, destCoords, cardName, customProps);
+
+    // sometimes we need to know which zone was just auto-summoned to
+    return destCoords;
   } catch (e) {
     return; // no free zone;
   }
@@ -363,30 +363,24 @@ export const subsumeMonster = (
 
 export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
   const targetKey = getOtherDuellistKey(originatorKey);
-  const targetZoneIdx = getHighestAtkZoneIdx(state, [
-    targetKey,
-    RowKey.Monster,
-  ]);
-  if (targetZoneIdx === -1) return; // no monster to target
-  const targetZone = state[targetKey].monsterZones[
-    targetZoneIdx
-  ] as OccupiedMonsterZone;
+  const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
+  if (targetIdx === -1) return; // no monster to target
+  const targetCoords: ZoneCoords = [targetKey, RowKey.Monster, targetIdx];
+  const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
 
-  try {
-    const originZoneIdx = getFirstEmptyZoneIdx(state, [
-      originatorKey,
-      RowKey.Monster,
-    ]);
-    state[originatorKey].monsterZones[originZoneIdx] = {
-      ...targetZone,
-      battlePosition: BattlePosition.Attack,
-      orientation: Orientation.FaceUp,
-      isLocked: false,
-    };
-    clearZone(state, [targetKey, RowKey.Monster, targetZoneIdx]);
-  } catch (e) {
-    // no space to put new monster
-  }
+  // no zone to house converted target --> conversion fails
+  if (!hasEmptyZone(state, [originatorKey, RowKey.Monster])) return;
+
+  const conversionCoords = specialSummon(
+    state,
+    originatorKey,
+    targetZone.card.name,
+    { permPowerUpLevel: targetZone.permPowerUpLevel }
+  )!;
+  clearZone(state, targetCoords);
+
+  // pass back the coords of the newly converted monster
+  return conversionCoords;
 };
 
 export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {

@@ -7,7 +7,7 @@ import {
   RowKey,
   Spell,
 } from "../common";
-import { burn } from "../util/duellistUtil";
+import { burn, getActiveEffects } from "../util/duellistUtil";
 import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {
   countMatchesInRow,
@@ -206,8 +206,9 @@ export const spellEffectReducers: CardReducerMap<
       (row[idx] as OccupiedMonsterZone).battlePosition = BattlePosition.Attack;
     });
   },
-  [Spell.SwordsOfRevealingLight]: (state, { otherMonsters }) => {
-    // TODO
+  [Spell.SwordsOfRevealingLight]: (state, { dKey }) => {
+    const activeEffects = getActiveEffects(state, dKey);
+    activeEffects.sorlTurnsRemaining = 3;
   },
   [Spell.DarkPiercingLight]: (state, { otherMonsters }) => {
     setRowFaceUp(state, otherMonsters);
@@ -223,8 +224,13 @@ export const spellEffectReducers: CardReducerMap<
     setRowFaceDown(state, ownMonsters);
   },
   [Spell.BrainControl]: (state, { dKey }) => {
-    convertMonster(state, dKey);
-    // TODO: make the converted monster revert back after turn end
+    const controlledMonIdx = convertMonster(state, dKey);
+
+    if (!controlledMonIdx) return; // conversion failed, no space to house monster
+
+    // converted monster must undo conversion on turn end
+    const activeEffects = getActiveEffects(state, dKey);
+    activeEffects.brainControlZones.push(controlledMonIdx);
   },
   [Spell.ChangeOfHeart]: (state, { dKey }) => {
     convertMonster(state, dKey);

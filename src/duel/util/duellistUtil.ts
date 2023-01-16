@@ -1,7 +1,7 @@
 import { BattlePosition, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardName } from "./cardUtil";
 import { initialiseDeck } from "./deckUtil";
-import { generateOccupiedMonsterZone } from "./zoneUtil";
+import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
 export const randomiseDuellistState = (
   name: string,
@@ -46,6 +46,10 @@ export const randomiseDuellistState = (
             ) as SpellOrTrapOrRitualCard,
           }
     ),
+    activeEffects: {
+      sorlTurnsRemaining: 0,
+      brainControlZones: [],
+    },
   };
 };
 
@@ -68,6 +72,10 @@ export const generateNewDuellist = (
     spellTrapZones: Array.from({ length: 5 }).map(() => ({
       isOccupied: false,
     })),
+    activeEffects: {
+      sorlTurnsRemaining: 0,
+      brainControlZones: [],
+    },
   };
 };
 
@@ -107,4 +115,16 @@ export const burn = (state: Duel, dKey: DuellistKey, amt: number) => {
 
 export const heal = (state: Duel, dKey: DuellistKey, amt: number) => {
   state[dKey].lp += amt;
+};
+
+export const getActiveEffects = (state: Duel, dKey: DuellistKey) => {
+  return state[dKey].activeEffects;
+};
+
+export const removeBrainControlZone = (state: Duel, coords: ZoneCoords) => {
+  const [dKey] = coords;
+  const activeEffects = getActiveEffects(state, dKey);
+  activeEffects.brainControlZones = activeEffects.brainControlZones.filter(
+    (zoneCoords) => !isCoordMatch(zoneCoords, coords)
+  );
 };
