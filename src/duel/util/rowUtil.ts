@@ -1,5 +1,4 @@
 import { Orientation, RowKey, Trap } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { getCard, getExodiaCards } from "./cardUtil";
 import {
   clearZone,
@@ -277,9 +276,9 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
 
 export const getFirstTriggerableTrapIdx = (
   state: Duel,
-  zoneCoordsMap: ZoneCoordsMap
+  coordsMap: ZoneCoordsMap
 ) => {
-  const { otherSpellTrap } = zoneCoordsMap;
+  const { otherSpellTrap } = coordsMap;
   return getRow(state, otherSpellTrap).findIndex((z) => {
     if (!z.isOccupied) return false;
     if (z.card.category === "Trap") {

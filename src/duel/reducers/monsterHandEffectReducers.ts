@@ -1,5 +1,4 @@
 import { HandEffectMonster, Monster } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { isStartOfEitherTurn } from "../util/duelUtil";
 import {
   countMatchesInRow,
@@ -8,19 +7,10 @@ import {
 } from "../util/rowUtil";
 import { clearZone, specialSummon } from "../util/zoneUtil";
 
-type MonsterAutoEffectReducer = (
-  state: Duel,
-  coords: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: (state: Duel, coords: ZoneCoordsMap) => void;
-}[];
-
-type MonsterAutoEffectReducers = {
-  [key in HandEffectMonster]: MonsterAutoEffectReducer;
-};
-
-export const monsterHandEffectReducers: MonsterAutoEffectReducers = {
+export const monsterHandEffectReducers: CardReducerMap<
+  HandEffectMonster,
+  MultiEffConReducer
+> = {
   [Monster.LavaGolem]: (state, { otherMonsters }) => {
     return [
       {

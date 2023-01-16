@@ -1,5 +1,4 @@
 import { BattlePosition, Orientation } from "../common";
-import { DuellistCoordsMap } from "../duelSlice";
 import { checkAutoEffects } from "../util/autoEffectUtil";
 import { shuffle } from "../util/common";
 import { draw, getTempCardQuantMap } from "../util/deckUtil";

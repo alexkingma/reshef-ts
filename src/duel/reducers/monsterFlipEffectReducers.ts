@@ -6,7 +6,6 @@ import {
   RowKey,
   Trap,
 } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { getCard } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
@@ -57,13 +56,10 @@ import {
   xyzMergeAttempt,
 } from "../util/zoneUtil";
 
-type MonsterFlipEffectReducer = (state: Duel, coordsMap: ZoneCoordsMap) => void;
-
-type MonsterFlipEffectReducers = {
-  [key in FlipEffectMonster]: MonsterFlipEffectReducer;
-};
-
-export const monsterFlipEffectReducers: MonsterFlipEffectReducers = {
+export const monsterFlipEffectReducers: CardReducerMap<
+  FlipEffectMonster,
+  DirectEffectReducer
+> = {
   [Monster.MysticalElf]: (state, { ownMonsters }) => {
     updateMatchesInRow(
       state,

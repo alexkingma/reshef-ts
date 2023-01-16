@@ -12,28 +12,6 @@ import { getInitialDuel } from "./util/duelUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
 import { getZone } from "./util/zoneUtil";
 
-export interface DuellistCoordsMap {
-  dKey: DuellistKey;
-  otherDKey: DuellistKey;
-
-  // own rows
-  ownMonsters: RowCoords;
-  ownSpellTrap: RowCoords;
-  ownHand: RowCoords;
-
-  // opponent rows
-  otherMonsters: RowCoords;
-  otherSpellTrap: RowCoords;
-  otherHand: RowCoords;
-}
-
-export type ZoneCoordsMap = DuellistCoordsMap & {
-  zoneCoords: ZoneCoords;
-  colIdx: FieldCol;
-};
-
-export type CoordsMap = ZoneCoordsMap | DuellistCoordsMap;
-
 export type CardActionKey = keyof typeof cardReducers;
 export type DuellistActionKey = keyof typeof duellistReducers;
 export type InteractionActionKey = keyof typeof interactionReducers;

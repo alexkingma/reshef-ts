@@ -1,5 +1,4 @@
 import { Field, Monster, PermAutoEffectMonster } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { getExodiaCards } from "../util/cardUtil";
 import { burn, isStartOfTurn } from "../util/duellistUtil";
 import { isStartOfEitherTurn, setField } from "../util/duelUtil";
@@ -21,19 +20,10 @@ import {
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
-type MonsterPermAutoEffectReducer = (
-  state: Duel,
-  coordsMap: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: (state: Duel, coordsMap: ZoneCoordsMap) => void;
-}[];
-
-type MonsterPermAutoEffectReducers = {
-  [key in PermAutoEffectMonster]: MonsterPermAutoEffectReducer;
-};
-
-export const monsterPermAutoEffectReducers: MonsterPermAutoEffectReducers = {
+export const monsterPermAutoEffectReducers: CardReducerMap<
+  PermAutoEffectMonster,
+  MultiEffConReducer
+> = {
   [Monster.ThunderNyanNyan]: (state, { zoneCoords, ownMonsters }) => {
     return [
       {

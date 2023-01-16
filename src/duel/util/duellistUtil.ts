@@ -1,5 +1,4 @@
 import { BattlePosition, Orientation, RowKey } from "../common";
-import { DuellistCoordsMap } from "../duelSlice";
 import { getCard, getRandomCardName } from "./cardUtil";
 import { initialiseDeck } from "./deckUtil";
 import { generateOccupiedMonsterZone } from "./zoneUtil";

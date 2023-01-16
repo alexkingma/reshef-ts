@@ -1,5 +1,4 @@
 import { GraveyardEffectMonster, Monster } from "../common";
-import { DuellistCoordsMap } from "../duelSlice";
 import { isStartOfTurn } from "../util/duellistUtil";
 import { clearGraveyard, resurrectOwn } from "../util/graveyardUtil";
 import {

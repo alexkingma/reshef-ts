@@ -1,5 +1,4 @@
 import { Field, Trap } from "../common";
-import { CoordsMap, DuellistCoordsMap, ZoneCoordsMap } from "../duelSlice";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
 import { setField as setFieldDirect } from "./duelUtil";

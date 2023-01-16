@@ -1,22 +1,12 @@
 import { CounterAttackTrap, Trap } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { destroyRow } from "../util/rowUtil";
 import { trapDestroyAttacker } from "../util/wrappedUtil";
 import { immobiliseCard, permPowerDown } from "../util/zoneUtil";
 
-type TrapEffectReducer = (
-  state: Duel,
-  coords: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: () => void;
-};
-
-type TrapEffectReducers = {
-  [key in CounterAttackTrap]: TrapEffectReducer;
-};
-
-export const counterAttackTrapReducers: TrapEffectReducers = {
+export const counterAttackTrapReducers: CardReducerMap<
+  CounterAttackTrap,
+  EffConReducer
+> = {
   [Trap.AmazonArchers]: (state) => {
     return {
       condition: () => true,

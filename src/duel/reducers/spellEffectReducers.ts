@@ -6,7 +6,6 @@ import {
   RowKey,
   Spell,
 } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { burn } from "../util/duellistUtil";
 import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {
@@ -35,11 +34,7 @@ import {
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
-type SpellEffectReducers = {
-  [key in Spell]: (state: Duel, coordsMap: ZoneCoordsMap) => void;
-};
-
-export const spellEffectReducers: SpellEffectReducers = {
+export const spellEffectReducers: CardReducerMap<Spell, DirectEffectReducer> = {
   // burn
   [Spell.Sparks]: burnOther(50),
   [Spell.Hinotama]: burnOther(100),

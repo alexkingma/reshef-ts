@@ -5,14 +5,10 @@ import {
   RowKey,
   TempPowerUpMonster,
 } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { monsterGraveyardEffectReducers } from "../reducers/monsterGraveyardEffectReducers";
 import { monsterHandEffectReducers } from "../reducers/monsterHandEffectReducers";
 import { monsterPermAutoEffectReducers } from "../reducers/monsterPermAutoEffectReducers";
-import {
-  MonsterAutoEffectReducer,
-  monsterTempPowerUpReducers,
-} from "../reducers/monsterTempPowerUpReducers";
+import { monsterTempPowerUpReducers } from "../reducers/monsterTempPowerUpReducers";
 import { perpetualTrapReducers } from "../reducers/perpetualTrapReducers";
 import { getDuellistCoordsMap, getOtherDuellistKey } from "./duellistUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
@@ -109,7 +105,7 @@ const calcZoneCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
 export const activateTempEffect = (
   state: Duel,
   coordsMap: ZoneCoordsMap,
-  reducer: MonsterAutoEffectReducer
+  reducer: MultiEffConReducer
 ) => {
   const { zoneCoords } = coordsMap;
   const zone = getZone(state, zoneCoords) as OccupiedZone;
@@ -199,18 +195,16 @@ export const checkGraveyardEffect = (state: Duel, dKey: DuellistKey) => {
   });
 };
 
-export const checkAutoEffect = (
+export function checkAutoEffect<T extends CardName>(
   state: Duel,
   coordsMap: ZoneCoordsMap,
-  reducerMap: {
-    [cardName in CardName]?: MonsterAutoEffectReducer;
-  }
-) => {
+  reducerMap: CardReducerMap<T, MultiEffConReducer>
+) {
   const { zoneCoords } = coordsMap;
   const zone = getZone(state, zoneCoords);
   if (!zone.isOccupied) return;
-  const reducer = reducerMap[zone.card.name];
+  const reducer = reducerMap[zone.card.name as T];
   if (!reducer) return;
 
   activateTempEffect(state, coordsMap, reducer);
-};
+}

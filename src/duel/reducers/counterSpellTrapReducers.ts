@@ -1,23 +1,13 @@
 import { CounterSpellTrap, Spell, Trap } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { burn } from "../util/duellistUtil";
 import { countMatchesInRow, destroyRow } from "../util/rowUtil";
 import { isReflectablePowerUp } from "../util/targetedSpellUtil";
 import { getOriginZone, permPowerDown } from "../util/zoneUtil";
 
-type TrapEffectReducer = (
-  state: Duel,
-  coords: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: () => void;
-};
-
-type TrapEffectReducers = {
-  [key in CounterSpellTrap]: TrapEffectReducer;
-};
-
-export const counterSpellTrapReducers: TrapEffectReducers = {
+export const counterSpellTrapReducers: CardReducerMap<
+  CounterSpellTrap,
+  EffConReducer
+> = {
   [Trap.GoblinFan]: (state, { otherHand, dKey }) => {
     return {
       condition: () => {

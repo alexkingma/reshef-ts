@@ -1,5 +1,4 @@
 import { Monster, TempPowerUpMonster } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import {
   countMatchesInRow,
   getHighestAtkZoneIdx,
@@ -17,19 +16,10 @@ import {
   tempPowerUp,
 } from "../util/zoneUtil";
 
-export type MonsterAutoEffectReducer = (
-  state: Duel,
-  coordsMap: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: (state: Duel, coordsMap: ZoneCoordsMap) => void;
-}[];
-
-type MonsterTempPowerUpReducers = {
-  [key in TempPowerUpMonster]: MonsterAutoEffectReducer;
-};
-
-export const monsterTempPowerUpReducers: MonsterTempPowerUpReducers = {
+export const monsterTempPowerUpReducers: CardReducerMap<
+  TempPowerUpMonster,
+  MultiEffConReducer
+> = {
   [Monster.SwampBattleguard]: (state, { ownMonsters }) => {
     const isLavaBattleguard = (z: Zone) =>
       isSpecificMonster(z, Monster.LavaBattleguard);

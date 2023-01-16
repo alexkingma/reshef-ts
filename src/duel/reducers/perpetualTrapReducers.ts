@@ -1,5 +1,4 @@
 import { Orientation, PerpetualTrap, Trap } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { isStartOfTurn } from "../util/duellistUtil";
 import {
   hasEmptyZone,
@@ -10,19 +9,10 @@ import {
 import { getEffCon_requireDestinyBoard } from "../util/wrappedUtil";
 import { isType, setSpellTrap } from "../util/zoneUtil";
 
-type TrapEffectReducer = (
-  state: Duel,
-  coords: ZoneCoordsMap
-) => {
-  condition: () => boolean;
-  effect: () => void;
-}[];
-
-type TrapEffectReducers = {
-  [key in PerpetualTrap]: TrapEffectReducer;
-};
-
-export const perpetualTrapReducers: TrapEffectReducers = {
+export const perpetualTrapReducers: CardReducerMap<
+  PerpetualTrap,
+  MultiEffConReducer
+> = {
   [Trap.DragonCaptureJar]: (state, { otherMonsters }) => {
     return [
       {

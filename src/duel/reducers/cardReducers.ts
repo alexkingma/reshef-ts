@@ -6,7 +6,6 @@ import {
   Orientation,
   Spell,
 } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { getRow } from "../util/rowUtil";
 import {
   attackMonster,
@@ -43,8 +42,8 @@ export const cardReducers = {
     clearZone(state, originCoords!);
     setSpellTrapAtCoords(state, targetCoords!, card.name, { orientation });
   },
-  attack: (state: Duel, zoneCoordsMap: ZoneCoordsMap) => {
-    const { otherSpellTrap } = zoneCoordsMap;
+  attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
+    const { otherSpellTrap } = coordsMap;
     const { originCoords, targetCoords } = state.interaction;
     const attackerZone = getZone(state, originCoords!) as OccupiedMonsterZone;
     attackerZone.battlePosition = BattlePosition.Attack;
@@ -59,11 +58,11 @@ export const cardReducers = {
           counterAttackTrapReducers[z.card.name as CounterAttackTrap];
         if (!reducer) continue;
 
-        const { condition, effect } = reducer(state, zoneCoordsMap);
+        const { condition, effect } = reducer(state, coordsMap);
         if (condition()) {
           // a trap triggering cancels the attack attempt and
           // carries out the trap's effect instead
-          effect();
+          effect(state, coordsMap);
           clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
           return;
         }
@@ -110,7 +109,7 @@ export const cardReducers = {
         if (condition()) {
           // a trap triggering cancels the spell activation
           // attempt and carries out the trap's effect instead
-          effect();
+          effect(state, coordsMap);
           clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
           clearZone(state, zoneCoords);
           return;

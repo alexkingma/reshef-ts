@@ -8,7 +8,6 @@ import {
   Orientation,
   RowKey,
 } from "../common";
-import { ZoneCoordsMap } from "../duelSlice";
 import { counterAttackTrapReducers } from "../reducers/counterAttackTrapReducers";
 import { counterSpellTrapReducers } from "../reducers/counterSpellTrapReducers";
 import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
