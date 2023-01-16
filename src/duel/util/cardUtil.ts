@@ -1,7 +1,7 @@
 import cards from "@/assets/cards";
 import { default as alignmentMap } from "../../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../../assets/fields.json";
-import { Field, Monster } from "../common";
+import { Field, Monster, Spell } from "../common";
 
 export const getCard = (cardName: CardName): Card => {
   const dbCard = cards.find((c) => c.name === cardName)!;
@@ -36,7 +36,28 @@ export const getExodiaCards = () => {
     Monster.LeftLegOfTheForbiddenOne,
     Monster.RightArmOfTheForbiddenOne,
     Monster.RightLegOfTheForbiddenOne,
-  ] as CardName[];
+  ];
+};
+
+export const getHealSpells = () => {
+  return [
+    Spell.MooyanCurry,
+    Spell.RedMedicine,
+    Spell.GoblinsSecretRemedy,
+    Spell.SoulOfThePure,
+    Spell.DianKetoTheCureMaster,
+  ];
+};
+
+export const getBurnSpells = () => {
+  return [
+    Spell.Sparks,
+    Spell.Hinotama,
+    Spell.FinalFlame,
+    Spell.Ookazi,
+    Spell.TremendousFire,
+    Spell.RestructerRevolution,
+  ];
 };
 
 export const getNumTributesRequired = ({

@@ -3,7 +3,7 @@ import spellIcon from "@/assets/images/spell.png";
 import trapIcon from "@/assets/images/trap.png";
 import { getAlignmentImage, getTypeImage } from "@/common/image";
 import { selectCursorZone } from "@/duel/duelSlice";
-import { getFinalPowerUpLevel } from "@/duel/util/zoneUtil";
+import { getFinalPowerUpLevel, isTrap } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
@@ -96,14 +96,11 @@ const MonsterZonePartialSummaryBar = () => {
 
 const SpellTrapRitualZonePartialSummaryBar = () => {
   const z = useAppSelector(selectCursorZone) as OccupiedSpellTrapZone;
-  const { category, name } = z.card;
 
   return (
     <>
-      {["Magic", "Ritual"].includes(category) && (
-        <img src={spellIcon} className="icon" />
-      )}
-      {category === "Trap" && <img src={trapIcon} className="icon" />}
+      {!isTrap(z) && <img src={spellIcon} className="icon" />}
+      {isTrap(z) && <img src={trapIcon} className="icon" />}
     </>
   );
 };

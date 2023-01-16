@@ -1,13 +1,11 @@
 import {
   BattlePosition,
-  CounterAttackTrap,
-  CounterSpellTrap,
   DirectSpell,
   FlipEffectMonster,
   Orientation,
 } from "../common";
 import { getActiveEffects, removeBrainControlZone } from "../util/duellistUtil";
-import { getRow } from "../util/rowUtil";
+import { checkTriggeredTraps } from "../util/rowUtil";
 import {
   attackMonster,
   clearZone,
@@ -47,7 +45,7 @@ export const cardReducers = {
     setSpellTrapAtCoords(state, targetCoords!, card.name, { orientation });
   },
   attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
-    const { otherSpellTrap, otherDKey } = coordsMap;
+    const { otherDKey } = coordsMap;
     const { originCoords, targetCoords } = state.interaction;
     const { sorlTurnsRemaining } = getActiveEffects(state, otherDKey);
     const attackerZone = getZone(state, originCoords!) as OccupiedMonsterZone;
@@ -55,31 +53,18 @@ export const cardReducers = {
     attackerZone.orientation = Orientation.FaceUp;
     attackerZone.isLocked = true;
 
-    // SoRL is active, no attacks permitted
-    // however, we still want to let the player click attack,
-    // so as to set their monsters in attack position
+    // SoRL is active, no attacks permitted.
+    // However, we still want to let the player click attack
+    // so as to set their monster in attack position.
     if (sorlTurnsRemaining !== 0) return;
 
-    // check if any opponent traps are triggered
-    for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
-      if (!z.isOccupied) continue;
-      if (z.card.category === "Trap") {
-        const reducer =
-          counterAttackTrapReducers[z.card.name as CounterAttackTrap];
-        if (!reducer) continue;
-
-        const { condition, effect } = reducer(state, coordsMap);
-        if (condition()) {
-          // a trap triggering cancels the attack attempt and
-          // carries out the trap's effect instead
-          effect(state, coordsMap);
-          clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
-          return;
-        }
-      }
+    // a trap triggering cancels the attack attempt and
+    // carries out the trap's effect instead
+    if (checkTriggeredTraps(state, coordsMap, counterAttackTrapReducers)) {
+      return;
     }
 
-    // no traps found, continue with the original attack
+    // no traps triggered, continue with the original attack
     if (!targetCoords) {
       // no monsters, attack directly
       directAttack(state, originCoords!);
@@ -105,7 +90,7 @@ export const cardReducers = {
     removeBrainControlZone(state, zoneCoords);
   },
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
-    const { zoneCoords, otherSpellTrap } = coordsMap;
+    const { zoneCoords } = coordsMap;
     const { card } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
     const spellReducer = spellReducers[card.name as DirectSpell];
     if (!spellReducer) {
@@ -113,24 +98,10 @@ export const cardReducers = {
       return;
     }
 
-    // check if any opponent traps are triggered
-    for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
-      if (!z.isOccupied) continue;
-      if (z.card.category === "Trap") {
-        const reducer =
-          counterSpellTrapReducers[z.card.name as CounterSpellTrap];
-        if (!reducer) continue;
-
-        const { condition, effect } = reducer(state, coordsMap);
-        if (condition()) {
-          // a trap triggering cancels the spell activation
-          // attempt and carries out the trap's effect instead
-          effect(state, coordsMap);
-          clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
-          clearZone(state, zoneCoords);
-          return;
-        }
-      }
+    // a trap triggering cancels the spell activation attempt
+    // and carries out the trap's effect instead
+    if (checkTriggeredTraps(state, coordsMap, counterSpellTrapReducers)) {
+      return;
     }
 
     // no traps triggered, activate original spell effect

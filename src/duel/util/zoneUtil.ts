@@ -443,9 +443,9 @@ export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
   };
 };
 
-export const getFinalPowerUpLevel = (zone: OccupiedMonsterZone) => {
-  const { isOccupied, card, tempPowerUpLevel = 0, permPowerUpLevel = 0 } = zone;
-  if (!isOccupied || card.category !== "Monster") return 0;
+export const getFinalPowerUpLevel = (z: OccupiedMonsterZone) => {
+  if (!isMonster(z)) return 0;
 
+  const { tempPowerUpLevel = 0, permPowerUpLevel = 0 } = z;
   return tempPowerUpLevel + permPowerUpLevel;
 };

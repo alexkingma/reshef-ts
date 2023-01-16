@@ -1,10 +1,14 @@
-import { Orientation, RowKey, Trap } from "../common";
+import {
+  CounterAttackTrap,
+  CounterSpellTrap,
+  Orientation,
+  RowKey,
+  Trap,
+} from "../common";
 import { getCard, getExodiaCards } from "./cardUtil";
 import {
   clearZone,
   destroyAtCoords,
-  hasTrapCounterAttackEffect,
-  hasTrapCounterSpellEffect,
   immobiliseCard,
   isMonster,
   isTrap,
@@ -78,7 +82,7 @@ export const getHighestAtkZoneIdx = (
   let idx = -1;
   let highestAtk = -1;
   state[dKey][rKey].forEach((z, i) => {
-    if (!z.isOccupied || z.card.category !== "Monster" || !condition(z)) return;
+    if (!isMonster(z) || !condition(z)) return;
     if (z.card.effAtk > highestAtk) {
       highestAtk = z.card.effAtk;
       idx = i;
@@ -274,18 +278,28 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
   permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
 };
 
-export const getFirstTriggerableTrapIdx = (
+export function checkTriggeredTraps<
+  T extends CounterAttackTrap | CounterSpellTrap
+>(
   state: Duel,
-  coordsMap: ZoneCoordsMap
-) => {
+  coordsMap: ZoneCoordsMap,
+  trapReducers: CardReducerMap<T, EffConReducer>
+): boolean {
   const { otherSpellTrap } = coordsMap;
-  return getRow(state, otherSpellTrap).findIndex((z) => {
-    if (!z.isOccupied) return false;
-    if (z.card.category === "Trap") {
-      return hasTrapCounterSpellEffect(z as OccupiedSpellTrapZone);
-    } else if (z.card.category === "Monster") {
-      return !!hasTrapCounterAttackEffect(z as OccupiedMonsterZone);
+  for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
+    if (!z.isOccupied) continue;
+    if (isTrap(z)) {
+      const reducer = trapReducers[z.card.name as T];
+      if (!reducer) continue;
+
+      const { condition, effect } = reducer(state, coordsMap);
+      if (condition()) {
+        // found valid trap, perform its effect instead of the original action
+        effect(state, coordsMap);
+        clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
+        return true;
+      }
     }
-    return false;
-  }) as FieldCol | -1;
-};
+  }
+  return false;
+}
