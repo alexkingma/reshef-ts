@@ -6,9 +6,8 @@ import { cardReducers } from "./reducers/cardReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
-import { getTempCardQuantMap } from "./util/deckUtil";
 import { getOtherDuellistKey } from "./util/duellistUtil";
-import { getInitialDuel } from "./util/duelUtil";
+import { getRandomDuel } from "./util/duelUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
 import { getZone } from "./util/zoneUtil";
 
@@ -41,9 +40,7 @@ type DuelReducers = {
   ) => void;
 };
 
-const playerCardMap = getTempCardQuantMap();
-const opponentCardMap = getTempCardQuantMap();
-const initialState: Duel = getInitialDuel(playerCardMap, opponentCardMap);
+const initialState: Duel = getRandomDuel();
 
 const transform = (map: CustomDuelReducers) => {
   const transformedMap = {} as DuelReducers;

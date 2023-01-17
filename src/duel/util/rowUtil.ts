@@ -91,6 +91,23 @@ export const getHighestAtkZoneIdx = (
   return idx as FieldCol | -1;
 };
 
+export const getLowestAtkZoneIdx = (
+  state: Duel,
+  [dKey, rKey]: RowCoords,
+  condition: (z: OccupiedZone, i: number) => boolean = () => true
+) => {
+  let idx = -1;
+  let lowestAtk = Number.MAX_SAFE_INTEGER;
+  state[dKey][rKey].forEach((z, i) => {
+    if (!isMonster(z) || !condition(z, i)) return;
+    if (z.card.effAtk < lowestAtk) {
+      lowestAtk = z.card.effAtk;
+      idx = i;
+    }
+  });
+  return idx as FieldCol | -1;
+};
+
 export const getFirstMatchInRowIdx = (
   state: Duel,
   [dKey, rKey]: RowCoords,

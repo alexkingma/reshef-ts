@@ -1,7 +1,8 @@
 import { RowKey } from "../common";
 import { getNumTributesRequired } from "./cardUtil";
-import { getRow } from "./rowUtil";
-import { getZone } from "./zoneUtil";
+import { getOtherDuellistKey } from "./duellistUtil";
+import { getRow, hasMatchInRow } from "./rowUtil";
+import { calculateAttack, getZone } from "./zoneUtil";
 
 export const canAISummonMonster = (
   state: Duel,
@@ -47,4 +48,73 @@ export const getMonsterIdxsByTributeable = (
       }
       return a.card.effAtk - b.card.effAtk;
     });
+};
+
+export const getWeakestVictorIdx = (
+  state: Duel,
+  dKey: DuellistKey,
+  targetIdx: FieldCol
+) => {
+  // When attacking a face-up enemy mon, the AI will use its weakest
+  // monster that will still destroy the opponent card.
+
+  if (
+    !hasMatchInRow(
+      state,
+      [dKey, RowKey.Monster],
+      (z) => !(z as OccupiedMonsterZone).isLocked
+    )
+  ) {
+    // no monsters to attack with
+    return -1;
+  }
+
+  const targetZone = getZone(state, [
+    getOtherDuellistKey(dKey),
+    RowKey.Monster,
+    targetIdx,
+  ]) as OccupiedMonsterZone;
+  const attackerZones = getRow(state, [
+    dKey,
+    RowKey.Monster,
+  ]) as OccupiedMonsterZone[];
+  const [weakestAttackerIdx] = attackerZones
+    .map((_, i) => i)
+    .filter((i) => attackerZones[i].isOccupied && !attackerZones[i].isLocked)
+    .sort((aI, bI) => {
+      const a = attackerZones[aI] as OccupiedMonsterZone;
+      const b = attackerZones[bI] as OccupiedMonsterZone;
+      const {
+        targetDestroyed: targetDestroyedA,
+        attackerDestroyed: attackerDestroyedA,
+      } = calculateAttack(a, targetZone);
+      const {
+        targetDestroyed: targetDestroyedB,
+        attackerDestroyed: attackerDestroyedB,
+      } = calculateAttack(b, targetZone);
+      if (
+        targetDestroyedA === targetDestroyedB &&
+        attackerDestroyedA === attackerDestroyedB
+      ) {
+        // between attackers who both destroy the target, and both survive
+        // the encounter, prefer the lowest atk of the two
+        return a.card.effAtk - b.card.effAtk;
+      }
+
+      if (targetDestroyedA === targetDestroyedB) {
+        // prefer not destroying self if another path can destroy target without that
+        return +attackerDestroyedA - +attackerDestroyedB;
+      }
+
+      // always prefer destroying target over not destroying it
+      return +targetDestroyedB - +targetDestroyedA;
+    }) as FieldCol[];
+
+  // Zones are sorted from the best attacker to worst. However, best might still
+  // be a failed attack; if so, return -1 instead of its idx.
+  const { targetDestroyed } = calculateAttack(
+    attackerZones[weakestAttackerIdx],
+    targetZone
+  );
+  return targetDestroyed ? weakestAttackerIdx : -1;
 };

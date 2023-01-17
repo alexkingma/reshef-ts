@@ -23,7 +23,7 @@ export const Duellist = ({ duellistKey }: Props) => {
 
   useEffect(() => {
     let decisionMakingTimeout: NodeJS.Timeout;
-    if (!isPlayer && isMyTurn) {
+    if (isPlayer && isMyTurn) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();
       }, 1000);

@@ -24,7 +24,7 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
     // don't overwrite existing cards in the map
     let cardName;
     do {
-      cardName = getRandomCardName({ effect: true });
+      cardName = getRandomCardName();
     } while (cardName in map);
 
     map[cardName] = quant;

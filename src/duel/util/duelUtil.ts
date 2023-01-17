@@ -1,13 +1,31 @@
 import { Field, InteractionMode, RowKey } from "../common";
-import { randomiseDuellistState } from "./duellistUtil";
+import { generateNewDuellist, randomiseDuellistState } from "./duellistUtil";
 
-export const getInitialDuel = (
-  cardQuantMap1: CardQuantityMap,
-  cardQuantMap2: CardQuantityMap
-): Duel => {
+export const getRandomDuel = (): Duel => {
   return {
-    p1: randomiseDuellistState("Player", cardQuantMap1),
-    p2: randomiseDuellistState("Opponent", cardQuantMap2),
+    p1: randomiseDuellistState("Player"),
+    p2: randomiseDuellistState("Opponent"),
+    activeTurn: {
+      duellistKey: "p1",
+      isStartOfTurn: true,
+      hasNormalSummoned: false,
+      numTributedMonsters: 0,
+    },
+    activeField: Field.Arena,
+    interaction: {
+      cursorCoords: ["p1", RowKey.Hand, 0],
+      originCoords: null,
+      targetCoords: null,
+      mode: InteractionMode.FreeMovement,
+      pendingAction: null,
+    },
+  };
+};
+
+export const getNewDuel = (): Duel => {
+  return {
+    p1: generateNewDuellist("Player"),
+    p2: generateNewDuellist("Opponent"),
     activeTurn: {
       duellistKey: "p1",
       isStartOfTurn: true,

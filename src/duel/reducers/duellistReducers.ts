@@ -3,9 +3,9 @@ import { getMonsterIdxsByTributeable } from "../util/aiUtil";
 import { checkAutoEffects } from "../util/autoEffectUtil";
 import { getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
-import { draw, getTempCardQuantMap } from "../util/deckUtil";
+import { draw } from "../util/deckUtil";
 import { getActiveEffects } from "../util/duellistUtil";
-import { getInitialDuel } from "../util/duelUtil";
+import { getRandomDuel } from "../util/duelUtil";
 import { getRow, hasEmptyZone } from "../util/rowUtil";
 import {
   clearZone,
@@ -19,10 +19,7 @@ export const duellistReducers = {
     shuffle(state[dKey].deck);
   },
   randomiseDuel: (state: Duel) => {
-    const randomGame = getInitialDuel(
-      getTempCardQuantMap(),
-      getTempCardQuantMap()
-    );
+    const randomGame = getRandomDuel();
     Object.entries(randomGame).forEach(([key, val]) => {
       state[key as keyof Duel] = val;
     });
