@@ -77,12 +77,12 @@ export const getFirstOccupiedZoneIdx = (
 export const getHighestAtkZoneIdx = (
   state: Duel,
   [dKey, rKey]: RowCoords,
-  condition: (z: OccupiedZone) => boolean = () => true
+  condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
   let idx = -1;
   let highestAtk = -1;
   state[dKey][rKey].forEach((z, i) => {
-    if (!isMonster(z) || !condition(z)) return;
+    if (!isMonster(z) || !condition(z, i)) return;
     if (z.card.effAtk > highestAtk) {
       highestAtk = z.card.effAtk;
       idx = i;

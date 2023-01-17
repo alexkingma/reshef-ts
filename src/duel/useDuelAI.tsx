@@ -2,9 +2,14 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { RowKey } from "./common";
 import { actions, selectDuel } from "./duelSlice";
 import { useInteractionActions } from "./useDuelActions";
-import { canAISummon } from "./util/aiUtil";
+import { canAISummonMonster } from "./util/aiUtil";
 import { getDuellistCoordsMap } from "./util/duellistUtil";
-import { getFirstEmptyZoneIdx, getRow, hasEmptyZone } from "./util/rowUtil";
+import {
+  getFirstEmptyZoneIdx,
+  getHighestAtkZoneIdx,
+  getRow,
+  hasEmptyZone,
+} from "./util/rowUtil";
 import { getZoneCoordsMap, isMonster, isSpell, isTrap } from "./util/zoneUtil";
 
 export const useDuelAI = (dKey: DuellistKey) => {
@@ -20,6 +25,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
     activateSpellEffect: activateSpellEffectAction,
     discard: discardAction,
     endTurn: endTurnAction,
+    aiNormalSummon: aiNormalSummonAction,
   } = actions;
   const { setOriginZone, setTargetZone, resetInteractions } =
     useInteractionActions();
@@ -71,46 +77,38 @@ export const useDuelAI = (dKey: DuellistKey) => {
   const summonMonster = (): boolean => {
     if (state.activeTurn.hasNormalSummoned) return false;
 
-    // TODO: what this should actually look like is:
-    // find highest atk, unlocked mon in hand
-    // if it can be summoned with the current number of tributes, summon it
-    // if it needs tributes, check if you have X (more) monsters below its atk on field
-    //  if enough tributes exist, find the lowest atk one and tribute it
-    //  if not enough tributes exist, mark the card as locked and start the loop again
-    // continue this process in a do-while until no unlocked mons remain to check
+    // A mon is "unsummonable" if the AI would have to tribute/overwrite
+    // an equal atk or higher monster to get it on the field.
+    const unsummonableIdxs: number[] = [];
+    do {
+      const originIdx = getHighestAtkZoneIdx(
+        state,
+        ownHand,
+        (_, i) => !unsummonableIdxs.includes(i)
+      );
 
-    let highestAtk = -1;
-    let highestAtkIdx = -1;
-    const hand = getRow(state, ownHand);
-    hand.forEach((handZone, i) => {
-      if (!isMonster(handZone)) return;
+      // no monsters left in hand to check --> do not normal summon this turn
+      if (originIdx === -1) return false;
 
-      if (
-        handZone.card.effAtk > highestAtk &&
-        canAISummon(state, [...ownHand, i as FieldCol])
-      ) {
-        highestAtk = handZone.card.effAtk;
-        highestAtkIdx = i;
+      const originCoords: ZoneCoords = [...ownHand, originIdx as FieldCol];
+      if (canAISummonMonster(state, originCoords)) {
+        // Note that AI summoning is different from the player's summon.
+        // Humans tribute mons one at a time, while the AI tributes and/or
+        // summons all in one discrete step.
+        setOriginZone(originCoords);
+        dispatch(aiNormalSummonAction(getZoneCoordsMap(originCoords)));
+        resetInteractions();
+        return true;
+      } else {
+        // this mon can't be summoned, try the next one
+        unsummonableIdxs.push(originIdx);
       }
-    });
-
-    // cannot summon any monsters
-    if (highestAtkIdx === -1) return false;
-
-    const originCoords: ZoneCoords = [...ownHand, highestAtkIdx as FieldCol];
-    const targetCoords: ZoneCoords = [...ownMonsters, 0 as FieldCol]; // TODO: calculate idx properly
-    setOriginZone(originCoords);
-    setTargetZone(targetCoords);
-    // TODO: if tributes are necessary, tribute them before summoning
-    // TODO: account for how many tributes have been made already
-    dispatch(normalSummonAction(getZoneCoordsMap(originCoords)));
-    resetInteractions();
-    return true;
+    } while (true);
   };
 
   const activateMonsterEffect = (): boolean => {
     // TODO: build a card-condition map for what state
-    // conditions are/aren't acceptable to activate.
+    // monsters are/aren't acceptable to activate.
     // activate for all facedowns who satisfy, left to right
     return false;
   };
