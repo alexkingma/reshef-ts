@@ -26,7 +26,7 @@ import {
   draw,
   healSelf,
   permPowerUp,
-  setField,
+  setOwnField,
 } from "../util/wrappedUtil";
 import {
   convertMonster,
@@ -112,12 +112,12 @@ export const spellEffectReducers: CardReducerMap<
   },
 
   // field
-  [Spell.Forest]: setField(Field.Forest),
-  [Spell.Wasteland]: setField(Field.Wasteland),
-  [Spell.Mountain]: setField(Field.Mountain),
-  [Spell.Sogen]: setField(Field.Sogen),
-  [Spell.Umi]: setField(Field.Umi),
-  [Spell.Yami]: setField(Field.Yami),
+  [Spell.Forest]: setOwnField(Field.Forest),
+  [Spell.Wasteland]: setOwnField(Field.Wasteland),
+  [Spell.Mountain]: setOwnField(Field.Mountain),
+  [Spell.Sogen]: setOwnField(Field.Sogen),
+  [Spell.Umi]: setOwnField(Field.Umi),
+  [Spell.Yami]: setOwnField(Field.Yami),
 
   // card destruction
   [Spell.FinalDestiny]: destroyRows([

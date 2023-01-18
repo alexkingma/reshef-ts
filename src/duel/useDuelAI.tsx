@@ -54,7 +54,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
     const hand = getRow(state, ownHand);
     for (const [idx, z] of hand.entries()) {
       if (!z.isOccupied || isMonster(z) || !condition(z)) continue;
-      const originCoords: ZoneCoords = [...ownHand, idx as FieldCol];
+      const originCoords: ZoneCoords = [...ownHand, idx];
       setOriginZone(originCoords);
       setTargetZone([...ownSpellTrap, emptyZoneIdx]);
       dispatch(setSpellTrapAction(getZoneCoordsMap(originCoords)));
@@ -91,7 +91,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
       // no monsters left in hand to check --> do not normal summon this turn
       if (originIdx === -1) return false;
 
-      const originCoords: ZoneCoords = [...ownHand, originIdx as FieldCol];
+      const originCoords: ZoneCoords = [...ownHand, originIdx];
       if (canAISummonMonster(state, originCoords)) {
         // Note that AI summoning is different from the player's summon.
         // Humans tribute mons one at a time, while the AI tributes and/or
@@ -134,14 +134,14 @@ export const useDuelAI = (dKey: DuellistKey) => {
       if (targetZone.orientation === Orientation.FaceDown) continue;
 
       // determine lowest atk own mon that still wins
-      const weakestVictorIdx = getWeakestVictorIdx(state, dKey, i as FieldCol);
+      const weakestVictorIdx = getWeakestVictorIdx(state, dKey, i);
       if (weakestVictorIdx === -1) {
         // no monsters exist that can beat this target
         continue;
       }
 
       const originCoords: ZoneCoords = [...ownMonsters, weakestVictorIdx];
-      const targetCoords: ZoneCoords = [...otherMonsters, i as FieldCol];
+      const targetCoords: ZoneCoords = [...otherMonsters, i];
       setOriginZone(originCoords);
       setTargetZone(targetCoords);
       dispatch(attackAction(getZoneCoordsMap(originCoords)));
@@ -166,7 +166,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
       }
 
       const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
-      const targetCoords: ZoneCoords = [...otherMonsters, i as FieldCol];
+      const targetCoords: ZoneCoords = [...otherMonsters, i];
       setOriginZone(originCoords);
       setTargetZone(targetCoords);
       dispatch(attackAction(getZoneCoordsMap(originCoords)));

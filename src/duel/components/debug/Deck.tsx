@@ -7,7 +7,7 @@ interface Props {
   duellistKey: DuellistKey;
 }
 
-export const DuellistDeck = ({ duellistKey }: Props) => {
+export const Deck = ({ duellistKey }: Props) => {
   const { deck } = useAppSelector(selectDuellist(duellistKey));
   const { shuffle } = useDuellistActions(duellistKey);
 
@@ -17,8 +17,8 @@ export const DuellistDeck = ({ duellistKey }: Props) => {
         Deck:&nbsp;
         <button onClick={() => shuffle()}>Shuffle</button>
         <ol>
-          {deck.slice(0, 5).map((card, idx) => (
-            <li key={idx}>{card.name}</li>
+          {deck.slice(0, 5).map((z, idx) => (
+            <li key={idx}>{z.card.name}</li>
           ))}
           {deck.length > 5 ? <i>{deck.length - 5} more...</i> : ""}
         </ol>

@@ -1,18 +1,18 @@
-type Zone = EmptyZone | OccupiedZone;
-
 interface EmptyZone {
   isOccupied: false;
 }
 
-interface OccupiedZone {
+interface OccupiedZone<K extends CardName = CardName> {
   isOccupied: true;
-  card: Card;
+  card: Card<K>;
   orientation: Orientation;
 }
 
+type Zone<K extends CardName = CardName> = EmptyZone | OccupiedZone<K>;
+
 type MonsterZone = EmptyZone | OccupiedMonsterZone;
 
-type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
+type OccupiedMonsterZone = Omit<OccupiedZone<MonsterName>, "card"> & {
   card: MonsterCard;
   battlePosition: BattlePosition;
   permPowerUpLevel: number; // lingers indefinitely
@@ -22,23 +22,24 @@ type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
 
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;
 
-type OccupiedSpellTrapZone = Omit<OccupiedZone, "card"> & {
-  card: SpellOrTrapOrRitualCard;
+type OccupiedSpellTrapZone = Omit<OccupiedZone<SpellTrapRitualName>, "card"> & {
+  card: SpellTrapCard;
 };
 
-type HandZone = EmptyZone | OccupiedZone;
-
-type Deck = Card[];
-type Graveyard = CardName | null;
+type HandZone = Zone;
+type DeckZone = OccupiedZone;
+type GraveyardZone = Zone<MonsterName>;
+type FieldZone = Zone<FieldName>;
 
 interface Duellist {
   name: string;
   lp: number;
   hand: HandZone[];
-  deck: Deck;
-  graveyard: Graveyard;
+  deck: DeckZone[];
+  graveyard: GraveyardZone[];
   monsterZones: MonsterZone[];
   spellTrapZones: SpellTrapZone[];
+  fieldZone: FieldZone[];
   activeEffects: {
     sorlTurnsRemaining: 0 | 1 | 2 | 3;
     brainControlZones: ZoneCoords[];
@@ -68,7 +69,6 @@ interface Duel {
   p1: Duellist;
   p2: Duellist;
   activeTurn: Turn;
-  activeField: Field;
   interaction: DuelInteraction;
 }
 
@@ -80,9 +80,14 @@ interface Turn {
 }
 
 type DuellistKey = "p1" | "p2";
-type FieldCol = 0 | 1 | 2 | 3 | 4;
-type RowKey = "hand" | "monsterZones" | "spellTrapZones";
+type RowKey =
+  | "hand"
+  | "monsterZones"
+  | "spellTrapZones"
+  | "deck"
+  | "graveyard"
+  | "fieldZone";
 
-type ZoneCoords = [dKey: DuellistKey, rowKey: RowKey, colIdx: FieldCol];
+type ZoneCoords = [dKey: DuellistKey, rowKey: RowKey, colIdx: number];
 type ZoneCoordsForDuellist = OmitFirst<ZoneCoords>;
 type RowCoords = OmitLast<ZoneCoords>;

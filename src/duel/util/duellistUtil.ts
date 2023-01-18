@@ -1,6 +1,7 @@
 import { BattlePosition, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardName } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
+import { getRandomFieldCard } from "./fieldUtil";
 import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
 export const randomiseDuellistState = (name: string): Duellist => {
@@ -9,17 +10,17 @@ export const randomiseDuellistState = (name: string): Duellist => {
   return {
     name,
     lp: Math.ceil(Math.random() * 8) * 1000,
-    hand: deck.splice(0, 5).map((card) =>
-      rand()
-        ? { isOccupied: false }
-        : {
-            isOccupied: true,
-            card,
-            orientation: Orientation.FaceDown,
-          }
-    ),
+    hand: deck
+      .splice(0, 5)
+      .map((card) => (rand() ? { isOccupied: false } : card)),
     deck: deck.slice(0, Math.floor(Math.random() * 35)),
-    graveyard: getRandomCardName({ category: "Monster" }),
+    graveyard: [
+      {
+        isOccupied: true,
+        card: getCard(getRandomCardName({ category: "Monster" })),
+        orientation: Orientation.FaceUp,
+      },
+    ],
     monsterZones: Array.from({ length: 5 }).map(() =>
       rand()
         ? { isOccupied: false }
@@ -47,6 +48,13 @@ export const randomiseDuellistState = (name: string): Duellist => {
       sorlTurnsRemaining: 0,
       brainControlZones: [],
     },
+    fieldZone: [
+      {
+        isOccupied: true,
+        card: getCard(getRandomFieldCard() as FieldName),
+        orientation: Orientation.FaceUp,
+      },
+    ],
   };
 };
 
@@ -55,13 +63,9 @@ export const generateNewDuellist = (name: string): Duellist => {
   return {
     name,
     lp: 8000,
-    hand: deck.splice(0, 5).map((card) => ({
-      isOccupied: true,
-      card,
-      orientation: Orientation.FaceDown,
-    })),
+    hand: deck.splice(0, 5).map((card) => card),
     deck: deck,
-    graveyard: null,
+    graveyard: [{ isOccupied: false }],
     monsterZones: Array.from({ length: 5 }).map(() => ({ isOccupied: false })),
     spellTrapZones: Array.from({ length: 5 }).map(() => ({
       isOccupied: false,
@@ -70,6 +74,7 @@ export const generateNewDuellist = (name: string): Duellist => {
       sorlTurnsRemaining: 0,
       brainControlZones: [],
     },
+    fieldZone: [],
   };
 };
 

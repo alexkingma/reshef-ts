@@ -10,6 +10,7 @@ import { getCard } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { burn, heal } from "../util/duellistUtil";
+import { graveyardContainsCards } from "../util/graveyardUtil";
 import {
   clearFirstTrap,
   countMatchesInRow,
@@ -32,7 +33,7 @@ import {
   destroyRows,
   draw as draw_Wrapped,
   healSelf as heal_Wrapped,
-  setField as setField_Wrapped,
+  setOwnField,
 } from "../util/wrappedUtil";
 import {
   attackMonster,
@@ -84,7 +85,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     );
   },
   [Monster.BattleOx]: destroyMonsterAlignment("Fire"),
-  [Monster.CurseOfDragon]: setField_Wrapped(Field.Wasteland),
+  [Monster.CurseOfDragon]: setOwnField(Field.Wasteland),
   [Monster.IllusionistFacelessMage]: (state, { otherMonsters }) => {
     immobiliseRow(state, otherMonsters);
   },
@@ -104,8 +105,8 @@ export const monsterFlipEffectReducers: CardReducerMap<
       (z) => (z.permPowerUpLevel += 2)
     );
   },
-  [Monster.KairyuShin]: setField_Wrapped(Field.Umi),
-  [Monster.GiantSoldierOfStone]: setField_Wrapped(Field.Arena),
+  [Monster.KairyuShin]: setOwnField(Field.Umi),
+  [Monster.GiantSoldierOfStone]: setOwnField(Field.Arena),
   [Monster.ReaperOfTheCards]: (state, { otherDKey }) => {
     clearFirstTrap(state, otherDKey);
   },
@@ -115,11 +116,11 @@ export const monsterFlipEffectReducers: CardReducerMap<
   ) => {
     // make all the unused monsters on the player's
     // field disappear and hit the foe with their combined power
-    const idxsToClear: FieldCol[] = [];
+    const idxsToClear: number[] = [];
     let combinedAtk = 0;
     state[dKey].monsterZones.forEach((zone, idx) => {
       if (!zone.isOccupied || zone.isLocked || idx === monsterIdx) return;
-      idxsToClear.push(idx as FieldCol);
+      idxsToClear.push(idx);
       combinedAtk += zone.card.atk;
     });
     idxsToClear.forEach((idx) => destroyAtCoords(state, [...ownMonsters, idx]));
@@ -139,7 +140,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
   [Monster.Nemuriko]: (state, { otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) return; // no monster to target
-    immobiliseCard(state, [...otherMonsters, targetIdx as FieldCol]);
+    immobiliseCard(state, [...otherMonsters, targetIdx]);
   },
   [Monster.RevivalJam]: (state, { dKey }) => {
     specialSummon(state, dKey, Monster.RevivalJam, { isLocked: true });
@@ -226,7 +227,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     destroyHighestAtk(state, otherDKey);
     permPowerDown(state, zoneCoords);
   },
-  [Monster.SpiritOfTheMountain]: setField_Wrapped(Field.Mountain),
+  [Monster.SpiritOfTheMountain]: setOwnField(Field.Mountain),
   [Monster.AncientLamp]: (state, { dKey }) => {
     specialSummon(state, dKey, Monster.LaJinnTheMysticalGenieOfTheLamp);
   },
@@ -306,7 +307,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     const returnRowToHand =
       (rowCoords: RowCoords) => (z: Zone, idx: number) => {
         if (!z.isOccupied) return;
-        returnCardToHand(state, [...rowCoords, idx as FieldCol]);
+        returnCardToHand(state, [...rowCoords, idx]);
       };
 
     state[dKey].monsterZones.forEach(returnRowToHand(ownMonsters));
@@ -315,7 +316,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     state[otherDKey].spellTrapZones.forEach(returnRowToHand(otherSpellTrap));
   },
   [Monster.PuppetMaster]: (state, { dKey, otherDKey }) => {
-    if (state[dKey].graveyard !== Monster.Gernia) return;
+    if (graveyardContainsCards(state, dKey, Monster.Gernia)) return;
     specialSummon(state, dKey, Monster.DarkNecrofear);
     specialSummon(state, dKey, Monster.HeadlessKnight);
     specialSummon(state, dKey, Monster.Gernia);
@@ -327,7 +328,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     destroyFirstFound(state, ownHand);
     destroyFirstFound(state, otherSpellTrap, isSpell);
   },
-  [Monster.Trent]: setField_Wrapped(Field.Forest),
+  [Monster.Trent]: setOwnField(Field.Forest),
   [Monster.BerserkDragon]: (
     state,
     { colIdx: monsterIdx, otherMonsters, zoneCoords, otherDKey, dKey }
@@ -338,7 +339,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
         // don't attack if Berserk Dragon itself has been destroyed
         return;
       }
-      attackMonster(state, zoneCoords, [...otherMonsters, idx as FieldCol]);
+      attackMonster(state, zoneCoords, [...otherMonsters, idx]);
     });
   },
   [Monster.DesVolstgalph]: (state, { otherDKey }) => {
@@ -416,8 +417,8 @@ export const monsterFlipEffectReducers: CardReducerMap<
     const idxsToTarget = shuffle(
       state[otherDKey].monsterZones.reduce((arr, z, idx) => {
         if (!z.isOccupied) return arr;
-        return [...arr, idx as FieldCol];
-      }, [] as FieldCol[])
+        return [...arr, idx];
+      }, [] as number[])
     ).slice(0, 3);
 
     // each targeted monster has a 50% chance to be destroyed

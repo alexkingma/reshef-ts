@@ -3,16 +3,17 @@ import { default as alignmentMap } from "../../assets/alignment.json";
 import { default as fieldMultiplierMap } from "../../assets/fields.json";
 import { Field, Monster, Spell } from "../common";
 
-export const getCard = (cardName: CardName): Card => {
+export const getCard = <T extends CardName>(cardName: T): Card<T> => {
   const dbCard = cards.find((c) => c.name === cardName)!;
   if (dbCard.category !== "Monster") {
     return dbCard;
   }
+
   return {
     ...dbCard,
     effAtk: dbCard.atk,
     effDef: dbCard.def,
-  };
+  } as Card<T>;
 };
 
 export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {

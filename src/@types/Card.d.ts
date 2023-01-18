@@ -36,17 +36,19 @@ type Alignment =
   | "Thunder";
 
 type DBCard = DBMonsterCard | SpellOrTrapOrRitualCard;
-type Card = MonsterCard | SpellOrTrapOrRitualCard;
+type Card<K extends CardName = CardName> =
+  | MonsterCard<K>
+  | SpellOrTrapOrRitualCard;
 
-interface BaseCard {
+interface BaseCard<K extends CardName = CardName> {
   id: number;
-  name: CardName;
+  name: K;
   cost: number;
   limit?: 1 | 2;
   category: CardCategory;
 }
 
-type DBMonsterCard = BaseCard & {
+type DBMonsterCard<K extends MonsterName = MonsterName> = BaseCard<K> & {
   category: "Monster";
   effect: boolean;
   type: CardType;
@@ -57,12 +59,12 @@ type DBMonsterCard = BaseCard & {
   code: number;
 };
 
-type MonsterCard = DBMonsterCard & {
+type MonsterCard<K extends MonsterName = MonsterName> = DBMonsterCard<K> & {
   effAtk: number;
   effDef: number;
 };
 
-type SpellOrTrapOrRitualCard = BaseCard & {
+type SpellOrTrapOrRitualCard = BaseCard<SpellTrapRitualName> & {
   category: "Magic" | "Trap" | "Ritual";
   code: number;
 };

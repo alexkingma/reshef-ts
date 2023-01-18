@@ -6,9 +6,9 @@ import { useDuelInteraction } from "./useDuelInteraction";
 interface Props {
   label: string;
   condition: (z: OccupiedZone) => boolean;
-  onClick: (zoneIdx: FieldCol) => void;
+  onClick: (zoneIdx: number) => void;
   zone: OccupiedZone;
-  zoneIdx: FieldCol;
+  zoneIdx: number;
 }
 
 const ZoneButton = ({ zone, zoneIdx, label, condition, onClick }: Props) => {

@@ -15,7 +15,7 @@ interface DuellistCoordsMap {
 
 type ZoneCoordsMap = DuellistCoordsMap & {
   zoneCoords: ZoneCoords;
-  colIdx: FieldCol;
+  colIdx: number;
 };
 
 type CoordsMap = ZoneCoordsMap | DuellistCoordsMap;

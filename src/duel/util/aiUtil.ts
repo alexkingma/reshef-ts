@@ -53,7 +53,7 @@ export const getMonsterIdxsByTributeable = (
 export const getWeakestVictorIdx = (
   state: Duel,
   dKey: DuellistKey,
-  targetIdx: FieldCol
+  targetIdx: number
 ) => {
   // When attacking a face-up enemy mon, the AI will use its weakest
   // monster that will still destroy the opponent card.
@@ -108,7 +108,7 @@ export const getWeakestVictorIdx = (
 
       // always prefer destroying target over not destroying it
       return +targetDestroyedB - +targetDestroyedA;
-    }) as FieldCol[];
+    });
 
   // Zones are sorted from the best attacker to worst. However, best might still
   // be a failed attack; if so, return -1 instead of its idx.

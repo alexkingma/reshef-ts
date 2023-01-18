@@ -37,7 +37,7 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   ].includes(mode);
   const zone = useAppSelector(selectZone(zoneCoords));
   const hasCard = zone.isOccupied;
-  const [dKey, rKey] = zoneCoords as [DuellistKey, RowKey, FieldCol];
+  const [dKey, rKey] = zoneCoords;
   const isOwn = dKey === DuellistKey.Player;
 
   const handleMouseEnter = () => {

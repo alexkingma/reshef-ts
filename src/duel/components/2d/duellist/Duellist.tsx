@@ -35,7 +35,7 @@ export const Duellist = ({ duellistKey }: Props) => {
   return (
     <div className={classNames(!isPlayer && "opponent")}>
       <div className="rowContainer">
-        <Field />
+        <Field duellistKey={duellistKey} />
         <Row rowCoords={[duellistKey, RowKey.Monster]} />
         <Graveyard duellistKey={duellistKey} />
       </div>

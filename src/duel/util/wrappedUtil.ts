@@ -1,7 +1,7 @@
 import { Field, Trap } from "../common";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
-import { setField as setFieldDirect } from "./duelUtil";
+import { setActiveField as setActiveFieldDirect } from "./fieldUtil";
 import {
   countConditional,
   countMatchesInRow,
@@ -38,8 +38,8 @@ export const permPowerUp =
     permPowerUpDirect(state, targetCoords!, levels);
   };
 
-export const setField = (newField: Field) => (state: Duel) => {
-  setFieldDirect(state, newField);
+export const setOwnField = (newField: Field) => (state: Duel) => {
+  setActiveFieldDirect(state, state.activeTurn.duellistKey, newField);
 };
 
 export const destroyRows = (rowsToDestroy: RowCoords[]) => (state: Duel) => {

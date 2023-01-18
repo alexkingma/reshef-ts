@@ -12,6 +12,9 @@ export enum RowKey {
   Hand = "hand",
   SpellTrap = "spellTrapZones",
   Monster = "monsterZones",
+  Deck = "deck",
+  Graveyard = "graveyard",
+  Field = "fieldZone",
 }
 
 export enum DuellistKey {

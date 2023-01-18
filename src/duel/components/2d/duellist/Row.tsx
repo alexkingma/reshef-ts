@@ -22,7 +22,7 @@ export const Row = ({ rowCoords }: Props) => {
   return (
     <div className="row">
       {zones.map((_, i) => {
-        const zoneCoords: ZoneCoords = [...rowCoords, i as FieldCol];
+        const zoneCoords: ZoneCoords = [...rowCoords, i];
         return (
           <InteractiveZone key={i} zoneCoords={zoneCoords}>
             {!isHand && (

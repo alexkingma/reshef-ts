@@ -8,6 +8,7 @@ import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
 import { getOtherDuellistKey } from "./util/duellistUtil";
 import { getRandomDuel } from "./util/duelUtil";
+import { getFieldZone } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
 import { getZone } from "./util/zoneUtil";
 
@@ -100,7 +101,15 @@ export const selectIsMyTurn =
 export const selectDuellist =
   (key: DuellistKey) =>
   ({ duel }: RootState) =>
-    duel[key] as Duellist;
+    duel[key];
+export const selectGraveyardZone =
+  (key: DuellistKey) =>
+  ({ duel }: RootState) =>
+    duel[key].graveyard[0];
+export const selectActiveField =
+  (key: DuellistKey) =>
+  ({ duel }: RootState) =>
+    getFieldZone(duel, key);
 export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 

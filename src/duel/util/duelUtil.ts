@@ -1,4 +1,4 @@
-import { Field, InteractionMode, RowKey } from "../common";
+import { InteractionMode, RowKey } from "../common";
 import { generateNewDuellist, randomiseDuellistState } from "./duellistUtil";
 
 export const getRandomDuel = (): Duel => {
@@ -11,7 +11,6 @@ export const getRandomDuel = (): Duel => {
       hasNormalSummoned: false,
       numTributedMonsters: 0,
     },
-    activeField: Field.Arena,
     interaction: {
       cursorCoords: ["p1", RowKey.Hand, 0],
       originCoords: null,
@@ -32,7 +31,6 @@ export const getNewDuel = (): Duel => {
       hasNormalSummoned: false,
       numTributedMonsters: 0,
     },
-    activeField: Field.Arena,
     interaction: {
       cursorCoords: ["p1", RowKey.Hand, 0],
       originCoords: null,
@@ -54,8 +52,4 @@ export const isVictor = (state: Duel) => {
   //   hasFullExodia(originatorState.hand) ||
   //   hasFullFINAL(originatorState.spellTrapZones)
   // );
-};
-
-export const setField = (state: Duel, field: Field) => {
-  state.activeField = field;
 };

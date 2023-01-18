@@ -6,6 +6,7 @@ import {
   Trap,
 } from "../common";
 import { getCard, getExodiaCards } from "./cardUtil";
+import { getGraveyardCard, isGraveyardEmpty } from "./graveyardUtil";
 import {
   clearZone,
   destroyAtCoords,
@@ -43,7 +44,7 @@ export const getFirstEmptyZoneIdx = (
 ) => {
   const row = state[dKey][rKey];
   const nextFreeZoneIdx = row.findIndex((zone) => !zone.isOccupied);
-  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx as FieldCol;
+  if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx;
   if (defaultToFirst) {
     // no free zones, return the default index
     return 0;
@@ -71,7 +72,7 @@ export const getFirstOccupiedZoneIdx = (
   condition: (z: OccupiedZone) => boolean = () => true
 ) => {
   const zone = state[dKey][rKey];
-  return zone.findIndex((z) => z.isOccupied && condition(z)) as FieldCol | -1;
+  return zone.findIndex((z) => z.isOccupied && condition(z));
 };
 
 export const getHighestAtkZoneIdx = (
@@ -88,7 +89,7 @@ export const getHighestAtkZoneIdx = (
       idx = i;
     }
   });
-  return idx as FieldCol | -1;
+  return idx;
 };
 
 export const getLowestAtkZoneIdx = (
@@ -105,7 +106,7 @@ export const getLowestAtkZoneIdx = (
       idx = i;
     }
   });
-  return idx as FieldCol | -1;
+  return idx;
 };
 
 export const getFirstMatchInRowIdx = (
@@ -158,7 +159,7 @@ export const destroyRow = (state: Duel, rowCoords: RowCoords) => {
   const [dKey, rKey] = rowCoords;
   state[dKey][rKey].forEach((zone, idx) => {
     if (zone.isOccupied) {
-      destroyAtCoords(state, [...rowCoords, idx as FieldCol]);
+      destroyAtCoords(state, [...rowCoords, idx]);
     }
   });
 };
@@ -185,7 +186,7 @@ export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
 export const immobiliseRow = (state: Duel, [dKey, rKey]: RowCoords) => {
   state[dKey][rKey].forEach((zone, idx) => {
     if (!zone.isOccupied) return;
-    immobiliseCard(state, [dKey, rKey, idx as FieldCol]);
+    immobiliseCard(state, [dKey, rKey, idx]);
   });
 };
 
@@ -239,13 +240,13 @@ export const updateMatchesInRow = (
 export const clearFirstTrap = (state: Duel, targetKey: DuellistKey) => {
   const trapIdx = state[targetKey].spellTrapZones.findIndex(isTrap);
   if (trapIdx === -1) return; // no traps found
-  clearZone(state, [targetKey, RowKey.SpellTrap, trapIdx as FieldCol]);
+  clearZone(state, [targetKey, RowKey.SpellTrap, trapIdx]);
 };
 
 export const clearAllTraps = (state: Duel, targetKey: DuellistKey) => {
   state[targetKey].spellTrapZones.forEach((z, idx) => {
     if (!isTrap(z)) return;
-    clearZone(state, [targetKey, RowKey.SpellTrap, idx as FieldCol]);
+    clearZone(state, [targetKey, RowKey.SpellTrap, idx]);
   });
 };
 
@@ -265,8 +266,10 @@ export const countConditional = (
     count += countMatchesInRow(state, coords, condition) * value;
   });
   graveyardConditionPairs.forEach(([state, dKey, condition, value = 1]) => {
-    const gy = state[dKey].graveyard;
-    if (gy && condition(getCard(gy) as MonsterCard)) {
+    if (
+      !isGraveyardEmpty(state, dKey) &&
+      condition(getCard(getGraveyardCard(state, dKey)) as MonsterCard)
+    ) {
       count += value;
     }
   });
@@ -295,13 +298,13 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
   permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
 };
 
-export function checkTriggeredTraps<
+export const checkTriggeredTraps = <
   T extends CounterAttackTrap | CounterSpellTrap
 >(
   state: Duel,
   coordsMap: ZoneCoordsMap,
   trapReducers: CardReducerMap<T, EffConReducer>
-): boolean {
+): boolean => {
   const { otherSpellTrap } = coordsMap;
   for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
     if (!z.isOccupied) continue;
@@ -319,4 +322,4 @@ export function checkTriggeredTraps<
     }
   }
   return false;
-}
+};

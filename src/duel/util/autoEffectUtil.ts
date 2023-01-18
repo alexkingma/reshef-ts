@@ -11,6 +11,8 @@ import { monsterPermAutoEffectReducers } from "../reducers/monsterPermAutoEffect
 import { monsterTempPowerUpReducers } from "../reducers/monsterTempPowerUpReducers";
 import { perpetualSpellTrapReducers } from "../reducers/perpetualSpellTrapReducers";
 import { getDuellistCoordsMap, getOtherDuellistKey } from "./duellistUtil";
+import { getActiveField } from "./fieldUtil";
+import { getGraveyardCard, isGraveyardEmpty } from "./graveyardUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
 
 export const checkAutoEffects = (state: Duel) => {
@@ -37,11 +39,17 @@ const resetCombatStats = (state: Duel) => {
   const targetState = state[getOtherDuellistKey(dKey)];
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
-    resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+    resetZoneCombatStats(
+      zones[i] as OccupiedMonsterZone,
+      getActiveField(state)
+    );
   });
   targetState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
-    resetZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+    resetZoneCombatStats(
+      zones[i] as OccupiedMonsterZone,
+      getActiveField(state)
+    );
   });
 };
 
@@ -51,11 +59,11 @@ const calcCombatStats = (state: Duel) => {
   const targetState = state[getOtherDuellistKey(dKey)];
   originatorState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
-    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, getActiveField(state));
   });
   targetState.monsterZones.forEach((z, i, zones) => {
     if (!z.isOccupied) return;
-    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, state.activeField);
+    calcZoneCombatStats(zones[i] as OccupiedMonsterZone, getActiveField(state));
   });
 };
 
@@ -69,14 +77,14 @@ const activateTempPowerUps = (state: Duel) => {
     if (!z.isOccupied) return;
     activateZoneTempPowerUps(
       state,
-      getZoneCoordsMap([activeKey, RowKey.Monster, i as FieldCol])
+      getZoneCoordsMap([activeKey, RowKey.Monster, i])
     );
   });
   targetState.monsterZones.forEach((z, i) => {
     if (!z.isOccupied) return;
     activateZoneTempPowerUps(
       state,
-      getZoneCoordsMap([inactiveKey, RowKey.Monster, i as FieldCol])
+      getZoneCoordsMap([inactiveKey, RowKey.Monster, i])
     );
   });
 };
@@ -134,14 +142,14 @@ export const checkPermAutoEffects = (state: Duel) => {
   originatorState.monsterZones.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([dKey, RowKey.Monster, i as FieldCol]),
+      getZoneCoordsMap([dKey, RowKey.Monster, i]),
       monsterPermAutoEffectReducers
     );
   });
   targetState.monsterZones.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([otherDKey, RowKey.Monster, i as FieldCol]),
+      getZoneCoordsMap([otherDKey, RowKey.Monster, i]),
       monsterPermAutoEffectReducers
     );
   });
@@ -150,14 +158,14 @@ export const checkPermAutoEffects = (state: Duel) => {
   originatorState.spellTrapZones.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([dKey, RowKey.SpellTrap, i as FieldCol]),
+      getZoneCoordsMap([dKey, RowKey.SpellTrap, i]),
       perpetualSpellTrapReducers
     );
   });
   targetState.spellTrapZones.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([otherDKey, RowKey.SpellTrap, i as FieldCol]),
+      getZoneCoordsMap([otherDKey, RowKey.SpellTrap, i]),
       perpetualSpellTrapReducers
     );
   });
@@ -166,24 +174,24 @@ export const checkPermAutoEffects = (state: Duel) => {
   originatorState.hand.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([dKey, RowKey.Hand, i as FieldCol]),
+      getZoneCoordsMap([dKey, RowKey.Hand, i]),
       monsterHandEffectReducers
     );
   });
   targetState.hand.forEach((_, i) => {
     checkAutoEffect(
       state,
-      getZoneCoordsMap([otherDKey, RowKey.Hand, i as FieldCol]),
+      getZoneCoordsMap([otherDKey, RowKey.Hand, i]),
       monsterHandEffectReducers
     );
   });
 };
 
 export const checkGraveyardEffect = (state: Duel, dKey: DuellistKey) => {
-  const { graveyard } = state[dKey];
-  if (!graveyard) return;
+  if (isGraveyardEmpty(state, dKey)) return;
+  const gyCard = getGraveyardCard(state, dKey);
   const reducer =
-    monsterGraveyardEffectReducers[graveyard as GraveyardEffectMonster];
+    monsterGraveyardEffectReducers[gyCard as GraveyardEffectMonster];
   if (!reducer) return;
 
   const conEffectPairs = reducer(state, getDuellistCoordsMap(dKey));
@@ -194,11 +202,11 @@ export const checkGraveyardEffect = (state: Duel, dKey: DuellistKey) => {
   });
 };
 
-export function checkAutoEffect<T extends CardName>(
+export const checkAutoEffect = <T extends CardName>(
   state: Duel,
   coordsMap: ZoneCoordsMap,
   reducerMap: CardReducerMap<T, MultiEffConReducer>
-) {
+) => {
   const { zoneCoords } = coordsMap;
   const zone = getZone(state, zoneCoords);
   if (!zone.isOccupied) return;
@@ -206,4 +214,4 @@ export function checkAutoEffect<T extends CardName>(
   if (!reducer) return;
 
   activateTempEffect(state, coordsMap, reducer);
-}
+};

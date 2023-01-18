@@ -1,5 +1,5 @@
 import { DuellistKey } from "@/duel/common";
-import { selectDuellist } from "@/duel/duelSlice";
+import { selectGraveyardZone } from "@/duel/duelSlice";
 import { getCard } from "@/duel/util/cardUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
@@ -12,13 +12,16 @@ interface Props {
 }
 
 export const Graveyard = ({ duellistKey }: Props) => {
-  const { graveyard } = useAppSelector(selectDuellist(duellistKey));
+  const z = useAppSelector(selectGraveyardZone(duellistKey));
 
   return (
     <Zone>
-      {graveyard ? (
+      {z.isOccupied ? (
         <div className="cardContainer">
-          <FaceUpCard card={getCard(graveyard)} customClasses="alwaysVisible" />
+          <FaceUpCard
+            card={getCard(z.card.name)}
+            customClasses="alwaysVisible"
+          />
         </div>
       ) : (
         <ZoneBackground customClasses="graveyardBackground" />

@@ -17,6 +17,7 @@ import {
   getDuellistCoordsMap,
   getOtherDuellistKey,
 } from "./duellistUtil";
+import { addToGraveyard } from "./graveyardUtil";
 import {
   getFirstEmptyZoneIdx,
   getFirstMatchInRowIdx,
@@ -128,7 +129,7 @@ export const destroyAtCoords = (
   const zone = state[dKey][rKey][colIdx];
   if (!zone.isOccupied) return;
   if (isMonster(zone)) {
-    state[dKey].graveyard = zone.card.name;
+    addToGraveyard(state, dKey, zone.card.name);
   }
   clearZone(state, [dKey, rKey, colIdx]);
 };

@@ -1,7 +1,8 @@
 import { Field, Monster, PermAutoEffectMonster } from "../common";
 import { getExodiaCards } from "../util/cardUtil";
 import { burn, isStartOfTurn } from "../util/duellistUtil";
-import { isStartOfEitherTurn, setField } from "../util/duelUtil";
+import { isStartOfEitherTurn } from "../util/duelUtil";
+import { setActiveField } from "../util/fieldUtil";
 import { graveyardContainsCards } from "../util/graveyardUtil";
 import {
   clearAllTraps,
@@ -78,8 +79,8 @@ export const monsterPermAutoEffectReducers: CardReducerMap<
         condition: () => {
           return isStartOfEitherTurn(state);
         },
-        effect: (state, { ownMonsters }) => {
-          setField(state, Field.Yami);
+        effect: (state, { dKey, ownMonsters }) => {
+          setActiveField(state, dKey, Field.Yami);
           setRowFaceDown(state, ownMonsters);
         },
       },

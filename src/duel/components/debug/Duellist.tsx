@@ -2,7 +2,7 @@ import { RowKey } from "@/duel/common";
 import { selectDuellist } from "@/duel/duelSlice";
 import { useAppSelector } from "@/hooks";
 import React from "react";
-import { DuellistDeck } from "./Deck";
+import { Deck } from "./Deck";
 import { DuellistStatus } from "./DuellistStatus";
 import { EmptyZone } from "./EmptyZone";
 import { HandZone } from "./HandZone";
@@ -30,9 +30,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
           {monsterZones.map((z, i) => (
             <li key={i}>
               {z.isOccupied ? (
-                <MonsterZone
-                  zoneCoords={[duellistKey, RowKey.Monster, i as FieldCol]}
-                />
+                <MonsterZone zoneCoords={[duellistKey, RowKey.Monster, i]} />
               ) : (
                 <EmptyZone key={i} />
               )}
@@ -48,7 +46,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
             <li key={i}>
               {z.isOccupied ? (
                 <SpellTrapZone
-                  zoneCoords={[duellistKey, RowKey.SpellTrap, i as FieldCol]}
+                  zoneCoords={[duellistKey, RowKey.SpellTrap, i]}
                 />
               ) : (
                 <EmptyZone key={i} />
@@ -64,9 +62,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
           {hand.map((z, i) => (
             <li key={i}>
               {z.isOccupied ? (
-                <HandZone
-                  zoneCoords={[duellistKey, RowKey.Hand, i as FieldCol]}
-                />
+                <HandZone zoneCoords={[duellistKey, RowKey.Hand, i]} />
               ) : (
                 <EmptyZone key={i} />
               )}
@@ -74,7 +70,7 @@ export const Duellist = ({ name, duellistKey }: Props) => {
           ))}
         </ol>
       </div>
-      <DuellistDeck duellistKey={duellistKey} />
+      <Deck duellistKey={duellistKey} />
     </div>
   );
 };

@@ -3,14 +3,23 @@ import { getCard, getRandomCardName } from "./cardUtil";
 import { shuffle } from "./common";
 import { getFirstEmptyZoneIdx } from "./rowUtil";
 
-export const initialiseDeck = (cardQuantMap: CardQuantityMap): Deck => {
+export const initialiseDeck = (cardQuantMap: CardQuantityMap) => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [cardName, qty]) => {
     const card = getCard(cardName as CardName);
     const cards: Card[] = Array.from({ length: qty });
     cards.fill(card);
-    deck.push(...cards);
+    deck.push(
+      ...cards.map(
+        (card) =>
+          ({
+            isOccupied: true,
+            card,
+            orientation: Orientation.FaceDown,
+          } as OccupiedZone)
+      )
+    );
     return deck;
-  }, [] as Deck);
+  }, [] as DeckZone[]);
   return shuffle(deck);
 };
 
@@ -49,10 +58,6 @@ export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
       return;
     }
 
-    state[dKey].hand[zoneIdx] = {
-      isOccupied: true,
-      card,
-      orientation: Orientation.FaceDown,
-    };
+    state[dKey].hand[zoneIdx] = card;
   }
 };

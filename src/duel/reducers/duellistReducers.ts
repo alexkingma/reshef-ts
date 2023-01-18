@@ -115,14 +115,14 @@ export const duellistReducers = {
 
       // tribute as many monsters as is necessary to bring out the chosen mon
       idxsToTribute.forEach((i) => {
-        destroyAtCoords(state, [...ownMonsters, i as FieldCol]);
+        destroyAtCoords(state, [...ownMonsters, i]);
         state.activeTurn.numTributedMonsters++;
       });
     }
 
     if (!hasEmptyZone(state, ownMonsters)) {
       // no space to summon at, clear the weakest mon to make space
-      clearZone(state, [dKey, RowKey.Monster, weakerIdxs[0] as FieldCol]);
+      clearZone(state, [dKey, RowKey.Monster, weakerIdxs[0]]);
     }
 
     // summon monster to field
