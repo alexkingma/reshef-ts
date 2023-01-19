@@ -4,7 +4,7 @@ import { getOtherDuellistKey } from "./duellistUtil";
 import { specialSummon } from "./zoneUtil";
 
 export const clearGraveyard = (state: Duel, dKey: DuellistKey) => {
-  state[dKey].graveyard = [];
+  state[dKey].graveyard = [{ isOccupied: false }];
 };
 
 export const isGraveyardEmpty = (state: Duel, dKey: DuellistKey) => {
