@@ -7,6 +7,7 @@ import React from "react";
 import "./Card.scss";
 import { FaceDownCard } from "./FaceDownCard";
 import { FaceUpCard } from "./FaceUpCard";
+import { LockedIndicator } from "./LockedIndicator";
 import { PowerUpLevelIndicator } from "./PowerUpLevelIndicator";
 
 interface Props {
@@ -32,10 +33,16 @@ export const Card = ({ zoneCoords }: Props) => {
       <FaceUpCard card={z.card} customClasses={customClasses} />
       <FaceDownCard customClasses={customClasses} />
       {isMonster(z) && (
-        <PowerUpLevelIndicator
-          zoneCoords={zoneCoords}
-          customClasses={customClasses}
-        />
+        <>
+          <LockedIndicator
+            zoneCoords={zoneCoords}
+            customClasses={customClasses}
+          />
+          <PowerUpLevelIndicator
+            zoneCoords={zoneCoords}
+            customClasses={customClasses}
+          />
+        </>
       )}
     </div>
   );

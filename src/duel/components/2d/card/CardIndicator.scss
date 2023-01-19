@@ -13,12 +13,18 @@
     left: -4px;
   }
 
+  &.bottomRight {
+    bottom: -4px;
+    right: -4px;
+  }
+
   &.topRight {
     top: -4px;
     right: -4px;
   }
 
   .numTributes,
+  .isLocked,
   .powerUpLevel {
     position: relative;
     top: -6px;
@@ -27,6 +33,10 @@
 
   .numTributes {
     color: var(--num-tributes-color);
+  }
+
+  .isLocked {
+    color: var(--is-locked-color);
   }
 
   .powerUpLevel {
