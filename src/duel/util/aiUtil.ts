@@ -1,7 +1,7 @@
 import { RowKey } from "../common";
 import { getNumTributesRequired } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { getRow, hasMatchInRow } from "./rowUtil";
+import { getRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
 import { calculateAttack, getZone } from "./zoneUtil";
 
 export const canAISummonMonster = (
@@ -10,20 +10,30 @@ export const canAISummonMonster = (
 ) => {
   // AI always summons the strongest monster possible.
   // However, it must have enough tributes available that are weaker than it.
-  // Technically, it should also have a free zone to summon at, or a weaker mon to
-  // replace, but this condition is automatically covered by a weaker tributeable
-  // monster existing, as per the aforementioned check, so no extra code is needed.
   const [dKey] = summonableCoords;
   const handZone = getZone(state, summonableCoords) as OccupiedMonsterZone;
   const numTributesRequired = getNumTributesRequired(handZone.card);
   const currentTributes = state.activeTurn.numTributedMonsters;
-  if (currentTributes >= numTributesRequired) return true;
   const numTributesAvailable = getMonsterIdxsByTributeable(
     state,
     dKey,
     handZone.card.effAtk
   ).length;
-  return currentTributes + numTributesAvailable >= numTributesRequired;
+
+  // If AI has no space to summon, must have >= one mon weaker than it
+  // to summon on top of. This is only really relevant when evaluating
+  // monsters that require no actual tributes can be summoned.
+  // e.g. can't summon Kuriboh on a board of 5 Slifers, even though it
+  // should require 0 tributes.
+  const hasFreeMonsterZone = hasEmptyZone(state, [
+    state.activeTurn.duellistKey,
+    RowKey.Monster,
+  ]);
+
+  return (
+    currentTributes + numTributesAvailable >=
+    Math.max(numTributesRequired, hasFreeMonsterZone ? 0 : 1)
+  );
 };
 
 export const getMonsterIdxsByTributeable = (
