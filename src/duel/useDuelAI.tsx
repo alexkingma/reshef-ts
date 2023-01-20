@@ -1,23 +1,37 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { Orientation, RowKey } from "./common";
+import { BattlePosition, RowKey } from "./common";
 import { actions, selectDuel } from "./duelSlice";
 import { useInteractionActions } from "./useDuelActions";
-import { canAISummonMonster, getWeakestVictorIdx } from "./util/aiUtil";
+import {
+  canAISummonMonster,
+  getFaceUpAttacker,
+  getFaceUpTarget,
+  getIdealBattlePos,
+} from "./util/aiUtil";
 import { getDuellistCoordsMap } from "./util/duellistUtil";
 import {
   getFirstEmptyZoneIdx,
+  getFirstOccupiedZoneIdx,
   getHighestAtkZoneIdx,
   getRow,
   hasEmptyZone,
 } from "./util/rowUtil";
-import { getZoneCoordsMap, isMonster, isSpell, isTrap } from "./util/zoneUtil";
+import {
+  getZoneCoordsMap,
+  isFaceDown,
+  isMonster,
+  isSpell,
+  isTrap,
+  isUnlocked,
+} from "./util/zoneUtil";
 
 export const useDuelAI = (dKey: DuellistKey) => {
   const state = useAppSelector(selectDuel);
   const dispatch = useAppDispatch();
   const {
     attack: attackAction,
-    defend: defendAction,
+    setDefencePos: setDefencePosAction,
+    setAttackPos: setAttackPosAction,
     tribute: tributeAction,
     activateMonsterFlipEffect: activateMonsterFlipEffectAction,
     normalSummon: normalSummonAction,
@@ -114,81 +128,91 @@ export const useDuelAI = (dKey: DuellistKey) => {
     return false;
   };
 
-  const attack = (): boolean => {
-    // TODO: change this
-    // if there are faceup enemy mons:
-    //   iterate own monsters, find lowest atk, unlocked, etc.
-    //   look for highest atk faceup target that attacker can destroy while surviving
-    // if there are still faceup mons after that, do the same loop, but this time accept mutual destruction outcomes
-    // at this point, if there are still faceups, we ignore them and focus on facedowns
-    //   this part should be mostly unchanged: attack with highest atk until one side runs out of mons
-    // once all facedowns are gone, if there are still attackers and (unkillable, at this point) targets:
-    //   all remaining attackers lock themselves in atk/def mode depending on if the enemy has a higher atk faceup or not
-    // if there are no targets remaining, all attackers with >0 direct attack
-
-    const targetMonsters = getRow(state, otherMonsters) as MonsterZone[];
-
-    // attack the faceup mon with highest atk
-    for (const [i, targetZone] of targetMonsters.entries()) {
-      if (!targetZone.isOccupied) continue;
-      if (targetZone.orientation === Orientation.FaceDown) continue;
-
-      // determine lowest atk own mon that still wins
-      const weakestVictorIdx = getWeakestVictorIdx(state, dKey, i);
-      if (weakestVictorIdx === -1) {
-        // no monsters exist that can beat this target
-        continue;
-      }
-
-      const originCoords: ZoneCoords = [...ownMonsters, weakestVictorIdx];
-      const targetCoords: ZoneCoords = [...otherMonsters, i];
-      setOriginZone(originCoords);
-      setTargetZone(targetCoords);
-      dispatch(attackAction(getZoneCoordsMap(originCoords)));
-      resetInteractions();
-      return true;
+  const commitAttack = (attackerIdx: number, targetIdx?: number) => {
+    // this is a helper fn only
+    const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
+    setOriginZone(originCoords);
+    if (Number.isInteger(targetIdx)) {
+      setTargetZone([...otherMonsters, targetIdx!]);
     }
+    dispatch(attackAction(getZoneCoordsMap(originCoords)));
+    resetInteractions();
+  };
 
-    // if there are no faceup mons, attack the facedowns instead
-    for (const [i, targetZone] of targetMonsters.entries()) {
-      if (!targetZone.isOccupied) continue;
-      if (targetZone.orientation === Orientation.FaceUp) continue;
-
-      // attack from strongest to weakest
-      const attackerIdx = getHighestAtkZoneIdx(
-        state,
-        ownMonsters,
-        (z) => !(z as OccupiedMonsterZone).isLocked
-      );
-      if (attackerIdx === -1) {
-        // no monsters to attack with
-        continue;
-      }
-
+  const attackFaceUpTarget = (): boolean => {
+    // if a mon fails to find a target, blacklist it for future attacker lookups
+    const failedOwnMonIdxs: number[] = [];
+    do {
+      // start by checking weakest attackers, since alignment advantage is a thing
+      const attackerIdx = getFaceUpAttacker(state, dKey, failedOwnMonIdxs);
       const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
-      const targetCoords: ZoneCoords = [...otherMonsters, i];
-      setOriginZone(originCoords);
-      setTargetZone(targetCoords);
-      dispatch(attackAction(getZoneCoordsMap(originCoords)));
-      resetInteractions();
-      return true;
-    }
 
-    // once there are no opponent monsters remaining, attack directly
+      // no valid attackers remain on own field
+      if (attackerIdx === -1) return false;
+
+      // look for highest atk opponent mon that the current attacker can destroy
+      const targetIdx = getFaceUpTarget(state, originCoords);
+
+      // selected attacker cannot defeat any opponent mons
+      if (targetIdx === -1) {
+        failedOwnMonIdxs.push(attackerIdx);
+        continue;
+      }
+
+      // valid attacker and target found, go ahead with attack
+      commitAttack(attackerIdx, targetIdx);
+      return true;
+    } while (true);
+  };
+
+  const attackFaceDownTarget = (): boolean => {
+    // use strongest own mons to attack facedown opp mons left to right
+    const targetIdx = getFirstOccupiedZoneIdx(state, otherMonsters, isFaceDown);
+    if (targetIdx === -1) return false;
+
+    const attackerIdx = getHighestAtkZoneIdx(state, ownMonsters, isUnlocked);
+    if (attackerIdx === -1) return false;
+
+    // valid attacker and target found, go ahead with attack
+    commitAttack(attackerIdx, targetIdx);
+    return true;
+  };
+
+  const attackDirectly = (): boolean => {
+    // Once there are no opponent monsters left, attack directly with remaining mons.
+
+    // If opponent monsters still exist, direct attacking is impossible.
+    // This can happen if the opponent's monsters are too strong to be beaten,
+    // forcing the AI to surrender further attacking chances with its remaining unlocked monsters.
+    const targetIdx = getFirstOccupiedZoneIdx(state, otherMonsters);
+    if (targetIdx !== -1) return false;
+
     const attackerIdx = getHighestAtkZoneIdx(
       state,
       ownMonsters,
-      (z) => !(z as OccupiedMonsterZone).isLocked
+      (z) => isUnlocked(z) && z.card.atk > 0
     );
+    if (attackerIdx === -1) return false;
 
-    if (attackerIdx === -1) {
-      // no monsters to attack with
-      return false;
-    }
+    commitAttack(attackerIdx);
+    return true;
+  };
 
-    const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
+  const defendIfWeak = (): boolean => {
+    // Any unlocked mons at this point will not be able to attack this turn.
+    // They should defend if they are stronger in DEF mode, or if an opponent
+    // monster exists with higher atk than them.
+    const originIdx = getFirstOccupiedZoneIdx(state, ownMonsters, isUnlocked);
+    const originCoords: ZoneCoords = [...ownMonsters, originIdx];
+    if (originIdx === -1) return false;
+
+    const coordsMap: ZoneCoordsMap = getZoneCoordsMap(originCoords);
     setOriginZone(originCoords);
-    dispatch(attackAction(getZoneCoordsMap(originCoords)));
+    if (getIdealBattlePos(state, originCoords) === BattlePosition.Attack) {
+      dispatch(setAttackPosAction(coordsMap));
+    } else {
+      dispatch(setDefencePosAction(coordsMap));
+    }
     resetInteractions();
     return true;
   };
@@ -219,8 +243,11 @@ export const useDuelAI = (dKey: DuellistKey) => {
     if (summonMonster()) return;
     if (activateSpell()) return; // powerups
     if (activateMonsterEffect()) return;
-    if (attack()) return;
-    // TODO: defend with any monsters that can't attack
+    if (attackFaceUpTarget()) return;
+    if (attackFaceUpTarget()) return;
+    if (attackFaceDownTarget()) return;
+    if (attackDirectly()) return;
+    if (defendIfWeak()) return;
     if (activateSpell()) return; // SoRL, PoG
     if (setSpellTrap(isTrap)) return;
     if (discardFromHand()) return;

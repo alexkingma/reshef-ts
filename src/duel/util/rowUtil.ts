@@ -109,7 +109,7 @@ export const getLowestAtkZoneIdx = (
   return idx;
 };
 
-export const getFirstMatchInRowIdx = (
+export const getFirstSpecficCardIdx = (
   state: Duel,
   [dKey, rKey]: RowCoords,
   cardName: CardName
@@ -141,7 +141,7 @@ export const rowContainsAllCards = (
 export const hasMatchInRow = (
   state: Duel,
   rowCoords: RowCoords,
-  condition: (z: OccupiedZone) => boolean = () => true
+  condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
   return countMatchesInRow(state, rowCoords, condition) > 0;
 };
@@ -149,10 +149,10 @@ export const hasMatchInRow = (
 export const countMatchesInRow = (
   state: Duel,
   [dKey, rKey]: RowCoords,
-  condition: (z: OccupiedZone) => boolean = () => true
+  condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
   const row = state[dKey][rKey];
-  return row.filter((z) => z.isOccupied && condition(z)).length;
+  return row.filter((z, i) => z.isOccupied && condition(z, i)).length;
 };
 
 export const destroyRow = (state: Duel, rowCoords: RowCoords) => {

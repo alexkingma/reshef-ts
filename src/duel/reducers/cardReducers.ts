@@ -72,9 +72,15 @@ export const cardReducers = {
       attackMonster(state, originCoords!, targetCoords);
     }
   },
-  defend: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
+  setDefencePos: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
     zone.battlePosition = BattlePosition.Defence;
+    zone.isLocked = true;
+  },
+  setAttackPos: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
+    const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    zone.battlePosition = BattlePosition.Attack;
+    zone.isLocked = true;
   },
   tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords);

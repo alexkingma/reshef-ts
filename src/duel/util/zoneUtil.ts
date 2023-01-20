@@ -20,7 +20,7 @@ import {
 import { addToGraveyard } from "./graveyardUtil";
 import {
   getFirstEmptyZoneIdx,
-  getFirstMatchInRowIdx,
+  getFirstSpecficCardIdx,
   getHighestAtkZoneIdx,
   hasEmptyZone,
   rowContainsAllCards,
@@ -66,14 +66,17 @@ export const isSpecificMonster = (
   cardName: CardName
 ): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
 
-const isOrientation = (z: Zone, o: Orientation): z is OccupiedMonsterZone =>
-  z.isOccupied && z.orientation === o;
+export const isOrientation = (
+  z: Zone,
+  o: Orientation
+): z is OccupiedMonsterZone => z.isOccupied && z.orientation === o;
 
-export const isFaceDown = (z: OccupiedZone) =>
-  isOrientation(z, Orientation.FaceDown);
+export const isFaceDown = (z: Zone) => isOrientation(z, Orientation.FaceDown);
 
-export const isFaceUp = (z: OccupiedZone) =>
-  isOrientation(z, Orientation.FaceUp);
+export const isFaceUp = (z: Zone) => isOrientation(z, Orientation.FaceUp);
+
+export const isUnlocked = (z: Zone): z is OccupiedMonsterZone =>
+  isMonster(z) && !z.isLocked;
 
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
   z.card.effect &&
@@ -170,7 +173,7 @@ export const attackMonster = (
   const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
 
   const { attackerDestroyed, targetDestroyed, attackerLpLoss, targetLpLoss } =
-    calculateAttack(attackerZone, targetZone);
+    calculateAttack(state, attackerCoords, targetCoords);
 
   if (attackerDestroyed) {
     destroyAtCoords(state, attackerCoords);
@@ -189,9 +192,12 @@ export const attackMonster = (
 };
 
 export const calculateAttack = (
-  attacker: OccupiedMonsterZone,
-  target: OccupiedMonsterZone
+  state: Duel,
+  attackerCoords: ZoneCoords,
+  targetCoords: ZoneCoords
 ) => {
+  const attacker = getZone(state, attackerCoords) as OccupiedMonsterZone;
+  const target = getZone(state, targetCoords) as OccupiedMonsterZone;
   const isDefending = target.battlePosition === BattlePosition.Defence;
   const diff =
     attacker.card.effAtk -
@@ -299,17 +305,17 @@ export const magnetWarriorMergeAttempt = (
 ) => {
   const [dKey, rKey] = zoneCoords;
   const rowCoords: RowCoords = [dKey, rKey];
-  const alphaIdx = getFirstMatchInRowIdx(
+  const alphaIdx = getFirstSpecficCardIdx(
     state,
     rowCoords,
     Monster.AlphaTheMagnetWarrior
   );
-  const betaIdx = getFirstMatchInRowIdx(
+  const betaIdx = getFirstSpecficCardIdx(
     state,
     rowCoords,
     Monster.BetaTheMagnetWarrior
   );
-  const gammaIdx = getFirstMatchInRowIdx(
+  const gammaIdx = getFirstSpecficCardIdx(
     state,
     rowCoords,
     Monster.GammaTheMagnetWarrior
@@ -337,7 +343,7 @@ export const xyzMergeAttempt = (
     if (rowContainsAllCards(state, rowCoords, ...inputMons)) {
       const idxsToClear = [
         colIdx,
-        ...inputMons.map((m) => getFirstMatchInRowIdx(state, rowCoords, m)),
+        ...inputMons.map((m) => getFirstSpecficCardIdx(state, rowCoords, m)),
       ];
       clearZones(state, rowCoords, idxsToClear);
       specialSummonAtCoords(state, zoneCoords, outputMon, { isLocked: true });

@@ -51,7 +51,7 @@ export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
 
   const {
     attack: attackAction,
-    defend: defendAction,
+    setDefencePos: defendAction,
     tribute: tributeAction,
     activateMonsterFlipEffect: activateMonsterFlipEffectAction,
     normalSummon: normalSummonAction,

@@ -1,8 +1,21 @@
-import { RowKey } from "../common";
+import { BattlePosition, RowKey } from "../common";
 import { getNumTributesRequired } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { getRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
-import { calculateAttack, getZone } from "./zoneUtil";
+import {
+  countMatchesInRow,
+  getHighestAtkZoneIdx,
+  getLowestAtkZoneIdx,
+  getRow,
+  hasEmptyZone,
+  hasMatchInRow,
+} from "./rowUtil";
+import {
+  calculateAttack,
+  getZone,
+  isFaceDown,
+  isFaceUp,
+  isUnlocked,
+} from "./zoneUtil";
 
 export const canAISummonMonster = (
   state: Duel,
@@ -60,71 +73,65 @@ export const getMonsterIdxsByTributeable = (
     });
 };
 
-export const getWeakestVictorIdx = (
+export const getFaceUpAttacker = (
   state: Duel,
   dKey: DuellistKey,
-  targetIdx: number
+  rejectedIdxs: number[]
 ) => {
-  // When attacking a face-up enemy mon, the AI will use its weakest
-  // monster that will still destroy the opponent card.
+  return getLowestAtkZoneIdx(
+    state,
+    [dKey, RowKey.Monster],
+    (z, i) => isUnlocked(z) && !rejectedIdxs.includes(i)
+  );
+};
 
-  if (
-    !hasMatchInRow(
+export const getFaceUpTarget = (state: Duel, attackerCoords: ZoneCoords) => {
+  const [dKey, rKey] = attackerCoords;
+  const otherMonsters: RowCoords = [getOtherDuellistKey(dKey), RowKey.Monster];
+
+  // The AI will allow mutual destruction, provided the current attacker is not
+  // the AI's last monster on the field.
+  const isLastOwnMonster = countMatchesInRow(state, [dKey, rKey]) === 1;
+
+  return getHighestAtkZoneIdx(state, otherMonsters, (z, i) => {
+    if (!isFaceUp(z)) return false;
+    const targetCoords: ZoneCoords = [...otherMonsters, i];
+    const { targetDestroyed, attackerDestroyed } = calculateAttack(
       state,
-      [dKey, RowKey.Monster],
-      (z) => !(z as OccupiedMonsterZone).isLocked
-    )
-  ) {
-    // no monsters to attack with
-    return -1;
+      attackerCoords,
+      targetCoords
+    );
+    return targetDestroyed && (!isLastOwnMonster || !attackerDestroyed);
+  });
+};
+
+export const getIdealBattlePos = (
+  state: Duel,
+  originCoords: ZoneCoords
+): BattlePosition => {
+  const [dKey] = originCoords;
+  const otherMonsters: RowCoords = [getOtherDuellistKey(dKey), RowKey.Monster];
+
+  if (hasMatchInRow(state, otherMonsters, isFaceDown)) {
+    // a defence pos monster exists and we can't attack it (SoRL, say)
+    return BattlePosition.Defence;
   }
 
-  const targetZone = getZone(state, [
-    getOtherDuellistKey(dKey),
-    RowKey.Monster,
-    targetIdx,
-  ]) as OccupiedMonsterZone;
-  const attackerZones = getRow(state, [
-    dKey,
-    RowKey.Monster,
-  ]) as OccupiedMonsterZone[];
-  const [weakestAttackerIdx] = attackerZones
-    .map((_, i) => i)
-    .filter((i) => attackerZones[i].isOccupied && !attackerZones[i].isLocked)
-    .sort((aI, bI) => {
-      const a = attackerZones[aI] as OccupiedMonsterZone;
-      const b = attackerZones[bI] as OccupiedMonsterZone;
-      const {
-        targetDestroyed: targetDestroyedA,
-        attackerDestroyed: attackerDestroyedA,
-      } = calculateAttack(a, targetZone);
-      const {
-        targetDestroyed: targetDestroyedB,
-        attackerDestroyed: attackerDestroyedB,
-      } = calculateAttack(b, targetZone);
-      if (
-        targetDestroyedA === targetDestroyedB &&
-        attackerDestroyedA === attackerDestroyedB
-      ) {
-        // between attackers who both destroy the target, and both survive
-        // the encounter, prefer the lowest atk of the two
-        return a.card.effAtk - b.card.effAtk;
-      }
+  const originZone = getZone(state, originCoords) as OccupiedMonsterZone;
+  const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isFaceUp);
+  if (targetIdx === -1) {
+    // no opponent mons exist, determine what is best for origin in isolation
+    return originZone.card.effDef >= originZone.card.effAtk
+      ? BattlePosition.Defence
+      : BattlePosition.Attack;
+  }
 
-      if (targetDestroyedA === targetDestroyedB) {
-        // prefer not destroying self if another path can destroy target without that
-        return +attackerDestroyedA - +attackerDestroyedB;
-      }
+  const targetCoords: ZoneCoords = [...otherMonsters, targetIdx];
+  const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
 
-      // always prefer destroying target over not destroying it
-      return +targetDestroyedB - +targetDestroyedA;
-    });
-
-  // Zones are sorted from the best attacker to worst. However, best might still
-  // be a failed attack; if so, return -1 instead of its idx.
-  const { targetDestroyed } = calculateAttack(
-    attackerZones[weakestAttackerIdx],
-    targetZone
-  );
-  return targetDestroyed ? weakestAttackerIdx : -1;
+  // a faceup opponent mon exists, determine best pos based on
+  // if it's stronger or weaker than origin card
+  return targetZone.card.effDef > originZone.card.effAtk
+    ? BattlePosition.Defence
+    : BattlePosition.Attack;
 };

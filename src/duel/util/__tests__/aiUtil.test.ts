@@ -1,73 +1,7 @@
 import { DuellistKey, Monster, RowKey } from "../../common";
-import { canAISummonMonster, getWeakestVictorIdx } from "../aiUtil";
+import { canAISummonMonster, getFaceUpTarget } from "../aiUtil";
 import { getNewDuel } from "../duelUtil";
 import { generateOccupiedMonsterZone } from "../zoneUtil";
-
-describe("getWeakestVictorIdx", () => {
-  const getState = (
-    ownMonsters: (Monster | null)[],
-    otherMonsters: (Monster | null)[]
-  ) => {
-    let state: Duel = getNewDuel();
-    state.p1.monsterZones.forEach((z, i, zones) => {
-      const c = ownMonsters[i];
-      zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
-    });
-    state.p2.monsterZones.forEach((z, i, zones) => {
-      const c = otherMonsters[i];
-      zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
-    });
-    return state;
-  };
-
-  test("0v0", () => {
-    const state = getState([], []);
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(-1);
-  });
-  test("0v1", () => {
-    const state = getState([], [Monster.Kuriboh]);
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(-1);
-  });
-  test("1v1", () => {
-    const state = getState([Monster.Kuriboh], [Monster.TheUnhappyMaiden]);
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(0);
-  });
-  test("1v1, non-first idxs", () => {
-    const state = getState(
-      [null, Monster.Kuriboh],
-      [null, null, null, Monster.TheUnhappyMaiden]
-    );
-    expect(getWeakestVictorIdx(state, "p1", 3)).toBe(1);
-  });
-  test("2v1, avoid killing self", () => {
-    const state = getState(
-      [Monster.PotTheTrick, Monster.DarkMagician],
-      [Monster.TheUnhappyMaiden]
-    );
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(1);
-  });
-  test("2v1, choose weaker atk", () => {
-    const state = getState(
-      [Monster.BlackLusterSoldier, Monster.Kuriboh],
-      [Monster.TheUnhappyMaiden]
-    );
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(1);
-  });
-  test("2v1, avoid mutual destruction when possible", () => {
-    const state = getState(
-      [Monster.Kuriboh, Monster.TheUnhappyMaiden],
-      [Monster.TheUnhappyMaiden]
-    );
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(0);
-  });
-  test("2v1, accept mutual destruction when last resort", () => {
-    const state = getState(
-      [Monster.PotTheTrick, Monster.TheUnhappyMaiden],
-      [Monster.TheUnhappyMaiden]
-    );
-    expect(getWeakestVictorIdx(state, "p1", 0)).toBe(1);
-  });
-});
 
 describe("canAISummonMonster", () => {
   const getState = (
@@ -151,5 +85,120 @@ describe("canAISummonMonster", () => {
       ]
     );
     expect(canAISummonMonster(state, makeCoords(0))).toBe(true);
+  });
+});
+
+describe("getFaceUpTarget", () => {
+  const getState = (
+    ownMonsters: (Monster | null)[],
+    otherMonsters: (Monster | null)[]
+  ) => {
+    let state: Duel = getNewDuel();
+    state.p1.monsterZones.forEach((z, i, zones) => {
+      const c = ownMonsters[i];
+      zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
+    });
+    state.p2.monsterZones.forEach((z, i, zones) => {
+      const c = otherMonsters[i];
+      zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
+    });
+    return state;
+  };
+
+  const makeCoords = (idx: number): ZoneCoords => [
+    DuellistKey.Player,
+    RowKey.Monster,
+    idx,
+  ];
+
+  describe("no targets", () => {
+    test("no targets", () => {
+      const state = getState([Monster.Kuriboh], []);
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(-1);
+    });
+  });
+
+  describe("single target", () => {
+    test("valid target", () => {
+      const state = getState([Monster.DarkMagician], [Monster.Kuriboh]);
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(0);
+    });
+    test("valid nonzero-idx target", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [null, null, Monster.Kuriboh]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(2);
+    });
+    test("target too strong", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.MaskedBeastDesGardius]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(-1);
+    });
+    test("equal atk target", () => {
+      const state = getState([Monster.DarkMagician], [Monster.SummonedSkull]);
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(-1);
+    });
+    test("equal atk target, has backup", () => {
+      const state = getState(
+        [Monster.DarkMagician, Monster.ThousandEyesIdol],
+        [Monster.SummonedSkull]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(0);
+    });
+  });
+
+  describe("multiple targets", () => {
+    test("weaker targets", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.Kuriboh, Monster.CurseOfDragon]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(1);
+    });
+    test("weaker/equal targets", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.Kuriboh, Monster.SkullServant]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(0);
+    });
+    test("stronger targets", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.FGD, Monster.BlueEyesUltimateDragon]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(-1);
+    });
+    test("weak/strong targets", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.FGD, Monster.DarkMagicianGirl]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(1);
+    });
+    test("equal/weak", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.SummonedSkull, Monster.DarkMagicianGirl]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(1);
+    });
+    test("equal/strong", () => {
+      const state = getState(
+        [Monster.DarkMagician],
+        [Monster.BlueEyesUltimateDragon, Monster.SummonedSkull]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(-1);
+    });
+    test("equal/strong, has backup", () => {
+      const state = getState(
+        [Monster.DarkMagician, Monster.HarpieLady],
+        [Monster.BlueEyesUltimateDragon, Monster.SummonedSkull]
+      );
+      expect(getFaceUpTarget(state, makeCoords(0))).toBe(1);
+    });
   });
 });
