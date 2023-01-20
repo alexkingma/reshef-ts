@@ -21,11 +21,11 @@ export const counterAttackTrapReducers: CardReducerMap<
   [Trap.InvisibleWire]: trapDestroyAttacker((z) => z.card.effAtk <= 2000),
   [Trap.AcidTrapHole]: trapDestroyAttacker((z) => z.card.effAtk <= 3000),
   [Trap.WidespreadRuin]: trapDestroyAttacker(() => true),
-  [Trap.TorrentialTribute]: (state, { otherMonsters }) => {
+  [Trap.TorrentialTribute]: (state, { ownMonsters }) => {
     return {
       condition: () => true,
       effect: () => {
-        destroyRow(state, otherMonsters);
+        destroyRow(state, ownMonsters);
       },
     };
   },
