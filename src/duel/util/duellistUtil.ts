@@ -88,11 +88,13 @@ export const getDuellistCoordsMap = (dKey: DuellistKey): DuellistCoordsMap => {
     ownMonsters: [dKey, RowKey.Monster],
     ownSpellTrap: [dKey, RowKey.SpellTrap],
     ownHand: [dKey, RowKey.Hand],
+    ownGraveyard: [dKey, RowKey.Graveyard],
 
     // opponent rows
     otherMonsters: [otherDKey, RowKey.Monster],
     otherSpellTrap: [otherDKey, RowKey.SpellTrap],
     otherHand: [otherDKey, RowKey.Hand],
+    otherGraveyard: [otherDKey, RowKey.Graveyard],
   };
 };
 
@@ -118,6 +120,10 @@ export const heal = (state: Duel, dKey: DuellistKey, amt: number) => {
 
 export const getActiveEffects = (state: Duel, dKey: DuellistKey) => {
   return state[dKey].activeEffects;
+};
+
+export const opponentIsUnderSoRL = (state: Duel, dKey: DuellistKey) => {
+  return state[dKey].activeEffects.sorlTurnsRemaining > 0;
 };
 
 export const removeBrainControlZone = (state: Duel, coords: ZoneCoords) => {

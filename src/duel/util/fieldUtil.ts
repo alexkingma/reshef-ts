@@ -1,3 +1,4 @@
+import { default as fieldMultiplierMap } from "@/assets/fields.json";
 import { Field, Orientation } from "../common";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
@@ -39,4 +40,13 @@ export const getActiveField = (state: Duel): Field => {
 export const getFieldZone = (state: Duel, dKey: DuellistKey): Field | null => {
   const z = state[dKey].fieldZone[0];
   return z.isOccupied ? (z.card.name as Field) : null;
+};
+
+export const getFieldMultiplier = (field: Field, type: CardType) => {
+  const map = fieldMultiplierMap[field] as { [key in CardType]: number };
+  return map[type] || 1;
+};
+
+export const isBuffedByField = (type: CardType, field: Field): boolean => {
+  return getFieldMultiplier(field, type) > 1;
 };

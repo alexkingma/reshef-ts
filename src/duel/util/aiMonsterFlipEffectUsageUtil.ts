@@ -1,0 +1,149 @@
+import { Field, FlipEffectMonster, Monster } from "../common";
+import {
+  hasEmptyMonsterZones,
+  opponentHasMonster,
+  opponentHasSpellTrap,
+  selfHasAllSpecificMonsters,
+  selfHasMonster,
+  selfHasSpecificMonster,
+  shouldUseField,
+} from "./aiWrappedUtil";
+import { always } from "./common";
+import { graveyardContainsCards } from "./graveyardUtil";
+import { countMatchesInRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
+import {
+  isAlignment,
+  isFaceDown,
+  isFaceUp,
+  isSpell,
+  isType,
+  isUnlocked,
+} from "./zoneUtil";
+
+export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
+  {
+    [Monster.MysticalElf]: selfHasSpecificMonster(Monster.BlueEyesWhiteDragon),
+    [Monster.FlameSwordsman]: opponentHasMonster((z) => isType(z, "Dinosaur")),
+    [Monster.TimeWizard]: selfHasSpecificMonster(
+      Monster.BabyDragon,
+      Monster.DarkMagician
+    ),
+    [Monster.BattleOx]: opponentHasMonster((z) => isAlignment(z, "Fire")),
+    [Monster.CurseOfDragon]: shouldUseField(Field.Wasteland),
+    [Monster.IllusionistFacelessMage]: opponentHasMonster(),
+    [Monster.HarpieLady]: selfHasMonster(),
+    [Monster.HarpieLadySisters]: selfHasSpecificMonster(
+      Monster.HarpiesPetDragon
+    ),
+    [Monster.KairyuShin]: shouldUseField(Field.Umi),
+    [Monster.GiantSoldierOfStone]: shouldUseField(Field.Arena),
+    [Monster.ReaperOfTheCards]: always,
+    [Monster.CatapultTurtle]: (state, { ownMonsters }) =>
+      countMatchesInRow(state, ownMonsters, isUnlocked) >= 2,
+    [Monster.GyakutennoMegami]: (state, { ownMonsters }) =>
+      hasMatchInRow(
+        state,
+        ownMonsters,
+        (z) => (z as OccupiedMonsterZone).card.effAtk <= 500
+      ),
+    [Monster.SpiritOfTheBooks]: hasEmptyMonsterZones(),
+    [Monster.Nemuriko]: opponentHasMonster(),
+    [Monster.RevivalJam]: hasEmptyMonsterZones(),
+    [Monster.FiendsHand]: opponentHasMonster(),
+    [Monster.DarkNecrofear]: opponentHasMonster(),
+    [Monster.ToadMaster]: hasEmptyMonsterZones(),
+    [Monster.FireReaper]: always,
+    [Monster.Doron]: hasEmptyMonsterZones(),
+    [Monster.TrapMaster]: (state, { ownSpellTrap }) =>
+      hasEmptyZone(state, ownSpellTrap),
+    [Monster.HourglassOfLife]: always,
+    [Monster.ObeliskTheTormentor]: always,
+    [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) =>
+      state[dKey].lp > state[otherDKey].lp,
+    [Monster.RocketWarrior]: opponentHasMonster(),
+    [Monster.BeastkingOfTheSwamps]: opponentHasMonster(),
+    [Monster.FairysGift]: always,
+    [Monster.MonsterTamer]: selfHasSpecificMonster(Monster.DungeonWorm),
+    [Monster.MysticLamp]: always,
+    [Monster.Leghul]: always,
+    [Monster.GammaTheMagnetWarrior]: selfHasAllSpecificMonsters(
+      Monster.AlphaTheMagnetWarrior,
+      Monster.BetaTheMagnetWarrior
+    ),
+    [Monster.MonsterEye]: (state, { otherHand }) =>
+      hasMatchInRow(state, otherHand, isFaceDown),
+    [Monster.TheWingedDragonOfRaPhoenixMode]: (
+      state,
+      { dKey, otherMonsters }
+    ) => state[dKey].lp > 1000 && hasMatchInRow(state, otherMonsters),
+    [Monster.GoddessOfWhim]: (state, { ownHand }) =>
+      hasEmptyZone(state, ownHand),
+    [Monster.DragonSeeker]: opponentHasMonster((z) => isType(z, "Dragon")),
+    [Monster.PenguinTorpedo]: always,
+    [Monster.ZombyraTheDark]: opponentHasMonster(),
+    [Monster.SpiritOfTheMountain]: shouldUseField(Field.Mountain),
+    [Monster.AncientLamp]: hasEmptyMonsterZones(),
+    [Monster.Skelengel]: (state, { ownHand }) => hasEmptyZone(state, ownHand),
+    [Monster.KingsKnight]: selfHasSpecificMonster(Monster.QueensKnight),
+    [Monster.XHeadCannon]: selfHasSpecificMonster(
+      Monster.YDragonHead,
+      Monster.ZMetalTank
+    ),
+    [Monster.YDragonHead]: selfHasSpecificMonster(
+      Monster.XHeadCannon,
+      Monster.ZMetalTank
+    ),
+    [Monster.ZMetalTank]: selfHasSpecificMonster(
+      Monster.XHeadCannon,
+      Monster.YDragonHead
+    ),
+    [Monster.XYDragonCannon]: opponentHasSpellTrap(isFaceUp),
+    [Monster.XZTankCannon]: opponentHasSpellTrap(isFaceDown),
+    [Monster.YZTankDragon]: opponentHasMonster(isFaceDown),
+    [Monster.XYZDragonCannon]: opponentHasMonster(),
+    [Monster.ElectricLizard]: opponentHasMonster(),
+    [Monster.LadyOfFaith]: always,
+    [Monster.ByserShock]: opponentHasMonster(),
+    [Monster.PuppetMaster]: (state, { dKey }) =>
+      graveyardContainsCards(state, dKey, Monster.Gernia) &&
+      state[dKey].lp > 1000,
+    [Monster.DarkPaladin]: opponentHasSpellTrap(
+      (z) => isFaceDown(z) || (isFaceUp(z) && isSpell(z))
+    ),
+    [Monster.Trent]: shouldUseField(Field.Forest),
+    [Monster.BerserkDragon]: opponentHasMonster(),
+    [Monster.DesVolstgalph]: opponentHasMonster(),
+    [Monster.GilfordTheLightning]: opponentHasMonster(),
+    [Monster.MysticalBeastSerket]: opponentHasMonster(),
+    [Monster.CyberHarpie]: selfHasSpecificMonster(Monster.HarpiesPetDragon),
+    [Monster.ExarionUniverse]: opponentHasMonster(),
+    [Monster.LegendaryFiend]: always,
+    [Monster.ValkyrionTheMagnaWarrior]: hasEmptyMonsterZones(2),
+    [Monster.FGD]: (state, { otherMonsters, otherSpellTrap }) =>
+      hasMatchInRow(state, otherMonsters) ||
+      hasMatchInRow(state, otherSpellTrap),
+    [Monster.RedArcheryGirl]: opponentHasMonster(),
+    [Monster.Relinquished]: opponentHasMonster(),
+    [Monster.ThousandEyesRestrict]: opponentHasMonster(),
+    [Monster.AlphaTheMagnetWarrior]: selfHasAllSpecificMonsters(
+      Monster.BetaTheMagnetWarrior,
+      Monster.GammaTheMagnetWarrior
+    ),
+    [Monster.InvitationToADarkSleep]: opponentHasMonster(),
+    [Monster.BarrelDragon]: opponentHasMonster(),
+    [Monster.ReflectBounder]: opponentHasMonster(),
+    [Monster.BetaTheMagnetWarrior]: selfHasAllSpecificMonsters(
+      Monster.AlphaTheMagnetWarrior,
+      Monster.GammaTheMagnetWarrior
+    ),
+    [Monster.ParasiteParacide]: opponentHasMonster(),
+    [Monster.SkullMarkLadyBug]: always,
+    [Monster.PinchHopper]: (state, { ownHand }) =>
+      hasMatchInRow(
+        state,
+        ownHand,
+        (z) => (z as OccupiedMonsterZone).card.type === "Insect"
+      ),
+    [Monster.ChironTheMage]: opponentHasMonster(),
+    [Monster.BeastOfGilfer]: opponentHasMonster(),
+  };

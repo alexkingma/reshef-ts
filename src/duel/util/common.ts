@@ -7,3 +7,6 @@ export const shuffle = <T extends any[]>(arr: T): T => {
   }
   return arr;
 };
+
+export const always = () => true;
+export const never = () => false;

@@ -120,7 +120,7 @@ export const activateTempEffect = (
 
   const conEffectPairs = reducer(state, coordsMap);
   conEffectPairs.forEach(({ condition, effect }) => {
-    if (condition()) {
+    if (condition(state, coordsMap)) {
       zone.orientation = Orientation.FaceUp;
       effect(state, coordsMap);
     }

@@ -925,11 +925,10 @@ export enum Spell {
   WingedTrumpeter = "Winged Trumpeter",
   BrightCastle = "Bright Castle",
 
-  // monster-specific power-up
+  // monster-specific
   CyclonLaser = "Cyclon Laser",
   ElegantEgotist = "Elegant Egotist",
   MagicalLabyrinth = "Magical Labyrinth",
-  Cursebreaker = "Cursebreaker",
   Metalmorph = "Metalmorph",
   _7Completed = "7 Completed",
 
@@ -965,6 +964,7 @@ export enum Spell {
   LastDayOfWitch = "Last Day of Witch",
 
   // assorted
+  Cursebreaker = "Cursebreaker",
   JamBreedingMachine = "Jam Breeding Machine",
   StopDefense = "Stop Defense",
   SwordsOfRevealingLight = "Swords of Revealing Light",

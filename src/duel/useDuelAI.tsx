@@ -1,7 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { BattlePosition, RowKey } from "./common";
+import {
+  BattlePosition,
+  DirectSpell,
+  FlipEffectMonster,
+  RowKey,
+  Spell,
+} from "./common";
 import { actions, selectDuel } from "./duelSlice";
 import { useInteractionActions } from "./useDuelActions";
+import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
+import { spellUsageMap } from "./util/aiSpellUsageUtil";
 import {
   canAISummonMonster,
   getFaceUpAttacker,
@@ -17,9 +25,12 @@ import {
   getRow,
   hasEmptyZone,
 } from "./util/rowUtil";
+import { isValidSpellTarget, spellHasTarget } from "./util/targetedSpellUtil";
 import {
   getZoneCoordsMap,
   isFaceDown,
+  isFaceUp,
+  isLocked,
   isMonster,
   isSpell,
   isTrap,
@@ -88,13 +99,33 @@ export const useDuelAI = (dKey: DuellistKey) => {
   };
 
   const activateSpell = (): boolean => {
-    // TODO: pass in one of three prebuilt spell-condition maps
-    // powerups -> a monster exists that it works on
-    // heal -> true
-    // burn -> true
-    // raigeki/BTK -> opponent has monster
-    // HFD -> opp has spell
-    // etc.
+    // activate all spells that the usage criteria are satisfied for
+    for (const [i, originZone] of getRow(state, ownSpellTrap).entries()) {
+      if (!isSpell(originZone)) continue;
+
+      const originCoords: ZoneCoords = [dKey, RowKey.SpellTrap, i];
+      const coordsMap = getZoneCoordsMap(originCoords);
+      const condition = spellUsageMap[originZone.card.name as DirectSpell];
+      if (!condition || !condition(state, coordsMap)) continue;
+
+      setOriginZone(originCoords);
+      if (spellHasTarget(originZone.card.name)) {
+        const targetIdx = getFirstOccupiedZoneIdx(
+          state,
+          ownMonsters,
+          (targetZone) =>
+            isValidSpellTarget(
+              originZone.card.name as Spell,
+              targetZone.card.name
+            )
+        );
+        if (targetIdx === -1) continue;
+        setTargetZone([dKey, RowKey.Monster, targetIdx]);
+      }
+      dispatch(activateSpellEffectAction(coordsMap));
+      resetInteractions();
+      return true;
+    }
     return false;
   };
 
@@ -131,9 +162,26 @@ export const useDuelAI = (dKey: DuellistKey) => {
   };
 
   const activateMonsterEffect = (): boolean => {
-    // TODO: build a card-condition map for what state
-    // monsters are/aren't acceptable to activate.
-    // activate for all facedowns who satisfy, left to right
+    // activate all monster effects that fulfil activation criteria
+    for (const [i, originZone] of getRow(state, ownMonsters).entries()) {
+      if (
+        !originZone.isOccupied ||
+        isFaceUp(originZone) ||
+        isLocked(originZone)
+      )
+        continue;
+
+      const originCoords: ZoneCoords = [dKey, RowKey.Monster, i];
+      const coordsMap = getZoneCoordsMap(originCoords);
+      const condition =
+        monsterUsageMap[originZone.card.name as FlipEffectMonster];
+      if (!condition || !condition(state, coordsMap)) continue;
+
+      setOriginZone(originCoords);
+      dispatch(activateMonsterFlipEffectAction(coordsMap));
+      resetInteractions();
+      return true;
+    }
     return false;
   };
 
@@ -248,16 +296,14 @@ export const useDuelAI = (dKey: DuellistKey) => {
     // should be moved onto in the same update cycle
     if (executeLethal()) return;
     if (setSpellTrap(isSpell)) return;
-    if (activateSpell()) return; // heal, raigeki, BTD
+    if (activateSpell()) return;
     if (summonMonster()) return;
-    if (activateSpell()) return; // powerups
     if (activateMonsterEffect()) return;
     if (attackFaceUpTarget()) return;
     if (attackFaceUpTarget()) return;
     if (attackFaceDownTarget()) return;
     if (attackDirectly()) return;
     if (defendIfWeak()) return;
-    if (activateSpell()) return; // SoRL, PoG
     if (setSpellTrap(isTrap)) return;
     if (discardFromHand()) return;
     endTurn();

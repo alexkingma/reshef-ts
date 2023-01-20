@@ -6,11 +6,13 @@ interface DuellistCoordsMap {
   ownMonsters: RowCoords;
   ownSpellTrap: RowCoords;
   ownHand: RowCoords;
+  ownGraveyard: RowCoords;
 
   // opponent rows
   otherMonsters: RowCoords;
   otherSpellTrap: RowCoords;
   otherHand: RowCoords;
+  otherGraveyard: RowCoords;
 }
 
 type ZoneCoordsMap = DuellistCoordsMap & {

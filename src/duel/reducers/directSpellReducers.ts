@@ -200,6 +200,8 @@ export const spellEffectReducers: CardReducerMap<
     });
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
+    // TODO: card description says it blocks def mode for a turn after
+    // check if that's how it really works
     const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
     monsterZones.forEach((zone, idx, row) => {
       if (!zone.isOccupied) return;

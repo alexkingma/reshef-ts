@@ -1,7 +1,6 @@
+import { default as alignmentMap } from "@/assets/alignment.json";
 import cards from "@/assets/cards";
-import { default as alignmentMap } from "../../assets/alignment.json";
-import { default as fieldMultiplierMap } from "../../assets/fields.json";
-import { Field, Monster, Spell } from "../common";
+import { Monster, Spell } from "../common";
 
 // Create a lookup map at runtime to avoid doing [].find()
 // every time card data needs to be fetched (100s of times per duel).
@@ -81,9 +80,4 @@ export const getNumTributesRequired = ({
 export const getAlignmentResult = (attacker: Alignment, target: Alignment) => {
   const { strong, weak } = alignmentMap[attacker];
   return { isStrong: strong === target, isWeak: weak === target };
-};
-
-export const getFieldMultiplier = (field: Field, type: CardType) => {
-  const map = fieldMultiplierMap[field] as { [key in CardType]: number };
-  return map[type] || 1;
 };

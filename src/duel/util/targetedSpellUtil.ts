@@ -179,7 +179,7 @@ export const isValidSpellTarget = (
   const condition = targetedSpellMap[originSpell as Spell];
   if (!condition) {
     console.log(`No spell target condition fn found for card: ${originSpell}`);
-    return;
+    return false;
   }
 
   const monsterCard = getCard(targetMonster) as MonsterCard;

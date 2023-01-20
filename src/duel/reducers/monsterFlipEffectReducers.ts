@@ -196,10 +196,10 @@ export const monsterFlipEffectReducers: CardReducerMap<
       (z) => z.permPowerUpLevel++
     );
   },
-  [Monster.MysticLamp]: (state, { colIdx: monsterIdx, zoneCoords }) => {
+  [Monster.MysticLamp]: (state, { zoneCoords }) => {
     directAttack(state, zoneCoords);
   },
-  [Monster.Leghul]: (state, { colIdx: monsterIdx, zoneCoords }) => {
+  [Monster.Leghul]: (state, { zoneCoords }) => {
     directAttack(state, zoneCoords);
   },
   [Monster.GammaTheMagnetWarrior]: (state, { zoneCoords }) => {
@@ -220,7 +220,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     destroyAtCoords(state, zoneCoords);
   },
   [Monster.DragonSeeker]: destroyMonsterType("Dragon"),
-  [Monster.PenguinTorpedo]: (state, { colIdx: monsterIdx, zoneCoords }) => {
+  [Monster.PenguinTorpedo]: (state, { zoneCoords }) => {
     directAttack(state, zoneCoords);
   },
   [Monster.ZombyraTheDark]: (state, { zoneCoords, otherDKey }) => {
@@ -316,7 +316,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     state[otherDKey].spellTrapZones.forEach(returnRowToHand(otherSpellTrap));
   },
   [Monster.PuppetMaster]: (state, { dKey, otherDKey }) => {
-    if (graveyardContainsCards(state, dKey, Monster.Gernia)) return;
+    if (!graveyardContainsCards(state, dKey, Monster.Gernia)) return;
     specialSummon(state, dKey, Monster.DarkNecrofear);
     specialSummon(state, dKey, Monster.HeadlessKnight);
     specialSummon(state, dKey, Monster.Gernia);

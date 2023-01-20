@@ -313,7 +313,7 @@ export const checkTriggeredTraps = <
       if (!reducer) continue;
 
       const { condition, effect } = reducer(state, coordsMap);
-      if (condition()) {
+      if (condition(state, coordsMap)) {
         // found valid trap, perform its effect instead of the original action
         effect(state, coordsMap);
         clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);

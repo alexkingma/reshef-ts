@@ -11,12 +11,13 @@ import {
 import { counterAttackTrapReducers } from "../reducers/counterAttackTrapReducers";
 import { counterSpellTrapReducers } from "../reducers/counterSpellTrapReducers";
 import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
-import { getAlignmentResult, getCard, getFieldMultiplier } from "./cardUtil";
+import { getAlignmentResult, getCard } from "./cardUtil";
 import {
   burn,
   getDuellistCoordsMap,
   getOtherDuellistKey,
 } from "./duellistUtil";
+import { getFieldMultiplier } from "./fieldUtil";
 import { addToGraveyard } from "./graveyardUtil";
 import {
   getFirstEmptyZoneIdx,
