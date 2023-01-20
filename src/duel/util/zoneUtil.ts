@@ -78,6 +78,9 @@ export const isFaceUp = (z: Zone) => isOrientation(z, Orientation.FaceUp);
 export const isUnlocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && !z.isLocked;
 
+export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
+  isMonster(z) && z.isLocked;
+
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
   z.card.effect &&
   !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];

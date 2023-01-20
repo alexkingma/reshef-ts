@@ -7,6 +7,7 @@ import {
   getFaceUpAttacker,
   getFaceUpTarget,
   getIdealBattlePos,
+  getLethalAttackerTarget,
 } from "./util/aiUtil";
 import { getDuellistCoordsMap } from "./util/duellistUtil";
 import {
@@ -47,13 +48,21 @@ export const useDuelAI = (dKey: DuellistKey) => {
     getDuellistCoordsMap(dKey);
 
   const executeLethal = (): boolean => {
-    // TODO:
-    // if opp has no monsters: check all mons from left to right
-    // if opp has attack pos mons:
-    //  check each mon, starting with highest atk, until one is successful (to account for alignment stuff)
-    //  probably need to keep track of which mons we've checked in an arr or something
-    // if opp has only defence pos mons: quit lethal attempt
-    return false;
+    // Attempt to end the duel in a single attack, to save time.
+    // Note that burn spells are never left on the field unused, so
+    // there's no need to consider them out of order.
+    const lethal = getLethalAttackerTarget(state, dKey);
+    if (!lethal) return false;
+
+    const { attackerIdx, targetIdx } = lethal;
+    if (Number.isInteger(targetIdx)) {
+      // direct attack
+      commitAttack(attackerIdx, targetIdx);
+    } else {
+      // mon-vs-mon attack
+      commitAttack(attackerIdx);
+    }
+    return true;
   };
 
   const setSpellTrap = (condition: (z: OccupiedZone) => boolean): boolean => {

@@ -135,3 +135,52 @@ export const getIdealBattlePos = (
     ? BattlePosition.Defence
     : BattlePosition.Attack;
 };
+
+export const getLethalAttackerTarget = (
+  state: Duel,
+  dKey: DuellistKey
+): { attackerIdx: number; targetIdx?: number } | false => {
+  const ownMonsters: RowCoords = [dKey, RowKey.Monster];
+  const otherDKey = getOtherDuellistKey(dKey);
+  const otherMonsters: RowCoords = [otherDKey, RowKey.Monster];
+
+  // no monsters to attack with, lethal is impossible
+  if (!hasMatchInRow(state, ownMonsters, isUnlocked)) return false;
+
+  const opponentLp = state[otherDKey].lp;
+  const attackerZones = getRow(state, ownMonsters) as OccupiedMonsterZone[];
+  const targetZones = getRow(state, otherMonsters) as OccupiedMonsterZone[];
+
+  for (const [attackerIdx, attackerZone] of attackerZones.entries()) {
+    const attackerCoords: ZoneCoords = [...ownMonsters, attackerIdx];
+    if (!isUnlocked(attackerZone)) continue;
+
+    // if opponent has no monsters, lethal takes the form of a direct attack
+    if (
+      !hasMatchInRow(state, otherMonsters) &&
+      attackerZone.card.effAtk >= opponentLp
+    ) {
+      return { attackerIdx };
+    }
+
+    // If the opponent has faceup (attack pos) monsters, lethal must involve
+    // dealing collateral lp damage through a mon-vs-mon attack.
+    for (const [targetIdx, targetZone] of targetZones.entries()) {
+      if (!targetZone.isOccupied || isFaceDown(targetZone)) continue;
+
+      const targetCoords: ZoneCoords = [...otherMonsters, targetIdx];
+      const { targetLpLoss } = calculateAttack(
+        state,
+        attackerCoords,
+        targetCoords
+      );
+
+      // collateral lp damage not great enough
+      if (targetLpLoss < opponentLp) continue;
+
+      return { attackerIdx, targetIdx };
+    }
+  }
+
+  return false;
+};
