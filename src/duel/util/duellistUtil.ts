@@ -126,6 +126,10 @@ export const opponentIsUnderSoRL = (state: Duel, dKey: DuellistKey) => {
   return state[dKey].activeEffects.sorlTurnsRemaining > 0;
 };
 
+export const selfUnderSoRL = (state: Duel, dKey: DuellistKey) => {
+  return state[getOtherDuellistKey(dKey)].activeEffects.sorlTurnsRemaining > 0;
+};
+
 export const removeBrainControlZone = (state: Duel, coords: ZoneCoords) => {
   const [dKey] = coords;
   const activeEffects = getActiveEffects(state, dKey);

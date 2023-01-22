@@ -17,7 +17,7 @@ import {
   getIdealBattlePos,
   getLethalAttackerTarget,
 } from "./util/aiUtil";
-import { getDuellistCoordsMap } from "./util/duellistUtil";
+import { getDuellistCoordsMap, selfUnderSoRL } from "./util/duellistUtil";
 import {
   getFirstEmptyZoneIdx,
   getFirstOccupiedZoneIdx,
@@ -197,6 +197,8 @@ export const useDuelAI = (dKey: DuellistKey) => {
   };
 
   const attackFaceUpTarget = (): boolean => {
+    if (selfUnderSoRL(state, dKey)) return false;
+
     // if a mon fails to find a target, blacklist it for future attacker lookups
     const failedOwnMonIdxs: number[] = [];
     do {
@@ -223,6 +225,8 @@ export const useDuelAI = (dKey: DuellistKey) => {
   };
 
   const attackFaceDownTarget = (): boolean => {
+    if (selfUnderSoRL(state, dKey)) return false;
+
     // use strongest own mons to attack facedown opp mons left to right
     const targetIdx = getFirstOccupiedZoneIdx(state, otherMonsters, isFaceDown);
     if (targetIdx === -1) return false;
@@ -237,6 +241,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
 
   const attackDirectly = (): boolean => {
     // Once there are no opponent monsters left, attack directly with remaining mons.
+    if (selfUnderSoRL(state, dKey)) return false;
 
     // If opponent monsters still exist, direct attacking is impossible.
     // This can happen if the opponent's monsters are too strong to be beaten,
