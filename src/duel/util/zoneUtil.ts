@@ -230,8 +230,12 @@ export const getCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
   const { card, permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
   const fieldMultiplier = getFieldMultiplier(field, card.type);
   const { atk: baseAtk, def: baseDef } = zone.card;
+
+  // Math.round() isn't necessary in 99.9% of cases, but there's some weird JS
+  // interaction with Aeris and Yami, where somehow 1400 * 0.7 = 979.9999999999,
+  // despite the IRL answer being a clean integer (980).
   const calc = (base: number) =>
-    Math.max(0, base * fieldMultiplier + (perm + temp) * 500);
+    Math.max(0, Math.round(base * fieldMultiplier + (perm + temp) * 500));
   return {
     effAtk: calc(baseAtk),
     effDef: calc(baseDef),
