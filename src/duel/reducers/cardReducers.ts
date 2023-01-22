@@ -111,6 +111,7 @@ export const cardReducers = {
     }
 
     // no traps triggered, activate original spell effect
+    console.log(`%c${card.name}`, "color: #39A24E;");
     spellReducer(state, coordsMap);
 
     // discard after activation
@@ -129,6 +130,7 @@ export const cardReducers = {
 
     if (flipReducer) {
       flipReducer(state, coordsMap);
+      console.log(`%c${originalCardName}`, "color: #D45420;");
 
       // lock/flip/etc.
       postDirectMonsterAction(state, zoneCoords, originalCardName);

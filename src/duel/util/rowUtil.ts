@@ -315,6 +315,7 @@ export const checkTriggeredTraps = <
       const { condition, effect } = reducer(state, coordsMap);
       if (condition(state, coordsMap)) {
         // found valid trap, perform its effect instead of the original action
+        console.log(`%c${z.card.name}`, "color: #AC4E8D;");
         effect(state, coordsMap);
         clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
         return true;
