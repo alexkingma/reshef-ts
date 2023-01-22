@@ -1,9 +1,10 @@
+import { RowKey } from "@/duel/common";
 import { selectActiveField } from "@/duel/duelSlice";
 import { getCard } from "@/duel/util/cardUtil";
 import { useAppSelector } from "@/hooks";
 import React from "react";
 import { FaceUpCard } from "../card/FaceUpCard";
-import { Zone } from "./Zone";
+import { InteractiveZone } from "./InteractiveZone";
 import { ZoneBackground } from "./ZoneBackground";
 
 interface Props {
@@ -14,7 +15,7 @@ export const Field = ({ duellistKey }: Props) => {
   const activeField = useAppSelector(selectActiveField(duellistKey));
 
   return (
-    <Zone>
+    <InteractiveZone zoneCoords={[duellistKey, RowKey.Field, 0]}>
       {activeField ? (
         <div className="cardContainer">
           <FaceUpCard
@@ -25,6 +26,6 @@ export const Field = ({ duellistKey }: Props) => {
       ) : (
         <ZoneBackground customClasses={"fieldBackground"} />
       )}
-    </Zone>
+    </InteractiveZone>
   );
 };

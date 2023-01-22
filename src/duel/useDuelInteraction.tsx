@@ -32,7 +32,9 @@ type DuelInteractionMap = {
   [key in InteractionKey]: InteractionProps;
 };
 
-export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
+export const useDuelInteraction = (
+  zoneCoords: ZoneCoords
+): DuelInteractionMap => {
   const [duellistKey, rowKey] = zoneCoords;
   const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
 
@@ -160,7 +162,8 @@ export const useDuelInteraction = (zoneCoords: ZoneCoords) => {
     },
     [InteractionKey.Discard]: {
       label: "Discard",
-      condition: () => isMyTurn,
+      condition: () =>
+        isMyTurn && isRow(RowKey.Hand, RowKey.SpellTrap, RowKey.Monster),
       effect: () => {
         setOriginZone(zoneCoords);
         discardAction();
