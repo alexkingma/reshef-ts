@@ -49,3 +49,9 @@
     }
   }
 }
+
+.lockedAlwaysVisible {
+  // locked indicator should be visible even on facedown
+  // cards, unlike other indicators
+  display: block;
+}

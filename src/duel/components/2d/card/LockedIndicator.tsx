@@ -16,7 +16,12 @@ export const LockedIndicator = ({ zoneCoords, customClasses }: Props) => {
 
   return (
     <div
-      className={classNames("indicatorContainer", "bottomRight", customClasses)}
+      className={classNames(
+        "indicatorContainer",
+        "bottomRight",
+        customClasses,
+        "lockedAlwaysVisible"
+      )}
     >
       <div className="isLocked">E</div>
     </div>
