@@ -9,7 +9,7 @@ import {
   getHighestAtkZoneIdx,
   getRow,
   rowContainsAnyCards,
-  updateMatchesInRow,
+  updateMonsters,
 } from "./rowUtil";
 import {
   clearZone,
@@ -128,8 +128,8 @@ export const getEffCon_powerUpSelfConditional = (
 export const getEffCon_updateMatchesInRow = (
   state: Duel,
   coords: RowCoords,
-  condition: (z: OccupiedMonsterZone) => boolean,
-  effect: (z: OccupiedMonsterZone) => void
+  effect: (z: OccupiedMonsterZone) => void,
+  condition: (z: OccupiedMonsterZone) => boolean = () => true
 ) => {
   return {
     condition: () => {
@@ -140,7 +140,7 @@ export const getEffCon_updateMatchesInRow = (
       );
     },
     effect: () => {
-      updateMatchesInRow(state, coords, condition, effect);
+      updateMonsters(state, coords, effect, condition);
     },
   };
 };

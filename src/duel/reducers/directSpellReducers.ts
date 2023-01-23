@@ -15,7 +15,7 @@ import {
   rowContainsAnyCards,
   setRowFaceDown,
   setRowFaceUp,
-  updateMatchesInRow,
+  updateMonsters,
 } from "../util/rowUtil";
 import {
   burnOther,
@@ -95,20 +95,10 @@ export const spellEffectReducers: CardReducerMap<
 
   // power-down
   [Spell.SpellbindingCircle]: (state, { otherMonsters }) => {
-    updateMatchesInRow(
-      state,
-      otherMonsters,
-      () => true,
-      (z) => z.permPowerUpLevel--
-    );
+    updateMonsters(state, otherMonsters, (z) => z.permPowerUpLevel--);
   },
   [Spell.ShadowSpell]: (state, { otherMonsters }) => {
-    updateMatchesInRow(
-      state,
-      otherMonsters,
-      () => true,
-      (z) => (z.permPowerUpLevel -= 2)
-    );
+    updateMonsters(state, otherMonsters, (z) => (z.permPowerUpLevel -= 2));
   },
 
   // field
@@ -158,13 +148,8 @@ export const spellEffectReducers: CardReducerMap<
   // assorted
   [Spell.Cursebreaker]: (state, { ownMonsters }) => {
     // restores the power-up levels of all player's powered-down monsters
-    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-    monsterZones.forEach((z, i, zones) => {
-      if (!z.isOccupied) return;
-      (zones[i] as OccupiedMonsterZone).permPowerUpLevel = Math.max(
-        z.permPowerUpLevel,
-        0
-      );
+    updateMonsters(state, ownMonsters, (z) => {
+      z.permPowerUpLevel = Math.max(z.permPowerUpLevel, 0);
     });
   },
   [Spell.Metalmorph]: (state) => {
@@ -202,10 +187,8 @@ export const spellEffectReducers: CardReducerMap<
   [Spell.StopDefense]: (state, { otherMonsters }) => {
     // TODO: card description says it blocks def mode for a turn after
     // check if that's how it really works
-    const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
-    monsterZones.forEach((zone, idx, row) => {
-      if (!zone.isOccupied) return;
-      (row[idx] as OccupiedMonsterZone).battlePosition = BattlePosition.Attack;
+    updateMonsters(state, otherMonsters, (z) => {
+      z.battlePosition = BattlePosition.Attack;
     });
   },
   [Spell.SwordsOfRevealingLight]: (state, { dKey }) => {
@@ -241,8 +224,8 @@ export const spellEffectReducers: CardReducerMap<
     if (!rowContainsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
     const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-    monsterZones.forEach((zone) => {
-      if (zone.isOccupied) return;
+    monsterZones.forEach((z) => {
+      if (z.isOccupied) return;
       specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
       // TODO: does this count as your normal summon for this turn?
     });

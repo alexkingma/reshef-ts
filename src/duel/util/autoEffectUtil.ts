@@ -5,7 +5,7 @@ import { monsterPermAutoEffectReducers as permReducers } from "../reducers/monst
 import { monsterTempPowerUpReducers as tempReducers } from "../reducers/monsterTempPowerUpReducers";
 import { perpetualSpellTrapReducers as spellReducers } from "../reducers/perpetualSpellTrapReducers";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { getRow, updateMatchesInRow } from "./rowUtil";
+import { getRow, updateMonsters } from "./rowUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
 
 export const checkAutoEffects = (state: Duel) => {
@@ -35,27 +35,17 @@ export const recalcCombatStats = (state: Duel) => {
 
 const calcRowCombatStats = (state: Duel, dKey: DuellistKey) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
-  updateMatchesInRow(
-    state,
-    rowCoords,
-    () => true,
-    (_, i) => {
-      calcZoneCombatStats(state, [...rowCoords, i]);
-    }
-  );
+  updateMonsters(state, rowCoords, (_, i) => {
+    calcZoneCombatStats(state, [...rowCoords, i]);
+  });
 };
 
 const resetRowCombatStats = (state: Duel, dKey: DuellistKey) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
-  updateMatchesInRow(
-    state,
-    rowCoords,
-    () => true,
-    (z, i) => {
-      z.tempPowerUpLevel = 0;
-      calcZoneCombatStats(state, [...rowCoords, i]);
-    }
-  );
+  updateMonsters(state, rowCoords, (z, i) => {
+    z.tempPowerUpLevel = 0;
+    calcZoneCombatStats(state, [...rowCoords, i]);
+  });
 };
 
 const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {

@@ -32,7 +32,6 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const effCon = getEffCon_updateMatchesInRow(
       state,
       otherMonsters,
-      () => true,
       (z) => z.tempPowerUpLevel--
     );
     return [effCon];
@@ -46,8 +45,8 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const effCon = getEffCon_updateMatchesInRow(
       state,
       ownMonsters,
-      (z) => cards.includes(z.card.name),
-      (z) => z.tempPowerUpLevel++
+      (z) => z.tempPowerUpLevel++,
+      (z) => cards.includes(z.card.name)
     );
     return [effCon];
   },
@@ -64,8 +63,8 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const effCon = getEffCon_updateMatchesInRow(
       state,
       ownMonsters,
-      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior2,
-      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
+      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
+      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior2
     );
     return [effCon];
   },
@@ -73,8 +72,8 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const effCon = getEffCon_updateMatchesInRow(
       state,
       ownMonsters,
-      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior1,
-      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
+      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
+      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior1
     );
     return [effCon];
   },
@@ -82,8 +81,8 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const effCon = getEffCon_updateMatchesInRow(
       state,
       ownMonsters,
-      (z) => ["Aqua", "Fish", "Sea Serpent", "Reptile"].includes(z.card.type),
-      (z) => z.tempPowerUpLevel++
+      (z) => z.tempPowerUpLevel++,
+      (z) => ["Aqua", "Fish", "Sea Serpent", "Reptile"].includes(z.card.type)
     );
     return [effCon];
   },
@@ -131,10 +130,10 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
     return [
-      getEffCon_updateMatchesInRow(state, ownMonsters, matchLight, up),
-      getEffCon_updateMatchesInRow(state, ownMonsters, matchDark, down),
-      getEffCon_updateMatchesInRow(state, otherMonsters, matchLight, up),
-      getEffCon_updateMatchesInRow(state, otherMonsters, matchDark, down),
+      getEffCon_updateMatchesInRow(state, ownMonsters, up, matchLight),
+      getEffCon_updateMatchesInRow(state, ownMonsters, down, matchDark),
+      getEffCon_updateMatchesInRow(state, otherMonsters, up, matchLight),
+      getEffCon_updateMatchesInRow(state, otherMonsters, down, matchDark),
     ];
   },
   [Monster.LavaBattleguard]: (state, { ownMonsters }) => {
@@ -178,18 +177,18 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
     return [
-      getEffCon_updateMatchesInRow(state, ownMonsters, matchLight, down),
-      getEffCon_updateMatchesInRow(state, ownMonsters, matchDark, up),
-      getEffCon_updateMatchesInRow(state, otherMonsters, matchLight, down),
-      getEffCon_updateMatchesInRow(state, otherMonsters, matchDark, up),
+      getEffCon_updateMatchesInRow(state, ownMonsters, down, matchLight),
+      getEffCon_updateMatchesInRow(state, ownMonsters, up, matchDark),
+      getEffCon_updateMatchesInRow(state, otherMonsters, down, matchLight),
+      getEffCon_updateMatchesInRow(state, otherMonsters, up, matchDark),
     ];
   },
   [Monster.CommandAngel]: (state, { ownMonsters }) => {
     const effCon = getEffCon_updateMatchesInRow(
       state,
       ownMonsters,
-      (z) => isType(z, "Fairy"),
-      (z) => z.tempPowerUpLevel++
+      (z) => z.tempPowerUpLevel++,
+      (z) => isType(z, "Fairy")
     );
     return [effCon];
   },

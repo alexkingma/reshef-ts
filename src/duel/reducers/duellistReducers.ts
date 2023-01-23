@@ -6,7 +6,7 @@ import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { getActiveEffects } from "../util/duellistUtil";
 import { getRandomDuel } from "../util/duelUtil";
-import { getRow, hasEmptyZone } from "../util/rowUtil";
+import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
   clearZone,
   destroyAtCoords,
@@ -48,9 +48,7 @@ export const duellistReducers = {
     }
 
     // unlock all monster zones
-    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-    monsterZones.forEach((z) => {
-      if (!z.isOccupied) return;
+    updateMonsters(state, ownMonsters, (z) => {
       if (z.battlePosition === BattlePosition.Attack) {
         z.orientation = Orientation.FaceUp;
       }

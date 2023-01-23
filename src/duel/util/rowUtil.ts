@@ -156,22 +156,18 @@ export const countMatchesInRow = (
 };
 
 export const destroyRow = (state: Duel, rowCoords: RowCoords) => {
-  const [dKey, rKey] = rowCoords;
-  state[dKey][rKey].forEach((zone, idx) => {
-    if (zone.isOccupied) {
-      destroyAtCoords(state, [...rowCoords, idx]);
-    }
+  updateMatches(state, rowCoords, (_, idx) => {
+    destroyAtCoords(state, [...rowCoords, idx]);
   });
 };
 
 const setRowOrientation = (
   state: Duel,
-  [dKey, rKey]: RowCoords,
+  rowCoords: RowCoords,
   orientation: Orientation
 ) => {
-  state[dKey][rKey].forEach((zone, idx, row) => {
-    if (!zone.isOccupied) return;
-    (row[idx] as OccupiedZone).orientation = orientation;
+  updateMatches(state, rowCoords, (z) => {
+    z.orientation = orientation;
   });
 };
 
@@ -183,10 +179,9 @@ export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
   setRowOrientation(state, rowCoords, Orientation.FaceDown);
 };
 
-export const immobiliseRow = (state: Duel, [dKey, rKey]: RowCoords) => {
-  state[dKey][rKey].forEach((zone, idx) => {
-    if (!zone.isOccupied) return;
-    immobiliseCard(state, [dKey, rKey, idx]);
+export const immobiliseRow = (state: Duel, rowCoords: RowCoords) => {
+  updateMatches(state, rowCoords, (_, idx) => {
+    immobiliseCard(state, [...rowCoords, idx]);
   });
 };
 
@@ -225,16 +220,30 @@ export const destroyFirstFound = (
   destroyAtCoords(state, coords);
 };
 
-export const updateMatchesInRow = (
+export const updateMatches = (
   state: Duel,
-  [dKey, rKey]: RowCoords,
-  condition: (z: OccupiedMonsterZone) => boolean,
-  effect: (z: OccupiedMonsterZone) => void
+  rowCoords: RowCoords,
+  effect: (z: OccupiedZone, i: number) => void,
+  condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
-  state[dKey][rKey].forEach((z, idx, zones) => {
-    if (!z.isOccupied || !isMonster(z) || !condition(z)) return;
-    effect(zones[idx] as OccupiedMonsterZone);
+  getRow(state, rowCoords).forEach((z, i, zones) => {
+    if (!z.isOccupied || !condition(z, i)) return;
+    effect(zones[i] as OccupiedZone, i);
   });
+};
+
+export const updateMonsters = (
+  state: Duel,
+  rowCoords: RowCoords,
+  effect: (z: OccupiedMonsterZone, i: number) => void,
+  condition: (z: OccupiedMonsterZone, i: number) => boolean = () => true
+) => {
+  updateMatches(
+    state,
+    rowCoords,
+    (z, i) => effect(z as OccupiedMonsterZone, i),
+    (z, i) => isMonster(z) && condition(z, i)
+  );
 };
 
 export const clearFirstTrap = (state: Duel, targetKey: DuellistKey) => {

@@ -23,7 +23,7 @@ import {
   powerDownHighestAtk,
   rowContainsAnyCards,
   setRowFaceUp,
-  updateMatchesInRow,
+  updateMonsters,
 } from "../util/rowUtil";
 import {
   burnOther,
@@ -41,6 +41,7 @@ import {
   convertMonster,
   destroyAtCoords,
   directAttack,
+  getZone,
   immobiliseCard,
   isFaceDown,
   isFaceUp,
@@ -62,26 +63,26 @@ export const monsterFlipEffectReducers: CardReducerMap<
   DirectEffectReducer
 > = {
   [Monster.MysticalElf]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.BlueEyesWhiteDragon),
-      (z) => z.permPowerUpLevel++
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.BlueEyesWhiteDragon)
     );
   },
   [Monster.FlameSwordsman]: destroyMonsterType("Dinosaur"),
   [Monster.TimeWizard]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.DarkMagician),
-      (z) => (z.card = getCard(Monster.DarkSage) as MonsterCard)
+      (z) => (z.card = getCard(Monster.DarkSage) as MonsterCard),
+      (z) => isSpecificMonster(z, Monster.DarkMagician)
     );
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.BabyDragon),
-      (z) => (z.card = getCard(Monster.ThousandDragon) as MonsterCard)
+      (z) => (z.card = getCard(Monster.ThousandDragon) as MonsterCard),
+      (z) => isSpecificMonster(z, Monster.BabyDragon)
     );
   },
   [Monster.BattleOx]: destroyMonsterAlignment("Fire"),
@@ -90,19 +91,19 @@ export const monsterFlipEffectReducers: CardReducerMap<
     immobiliseRow(state, otherMonsters);
   },
   [Monster.HarpieLady]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon),
-      (z) => z.permPowerUpLevel++
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
     );
   },
   [Monster.HarpieLadySisters]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon),
-      (z) => (z.permPowerUpLevel += 2)
+      (z) => (z.permPowerUpLevel += 2),
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
     );
   },
   [Monster.KairyuShin]: setOwnField(Field.Umi),
@@ -118,20 +119,20 @@ export const monsterFlipEffectReducers: CardReducerMap<
     // field disappear and hit the foe with their combined power
     const idxsToClear: number[] = [];
     let combinedAtk = 0;
-    state[dKey].monsterZones.forEach((zone, idx) => {
-      if (!zone.isOccupied || zone.isLocked || idx === monsterIdx) return;
+    state[dKey].monsterZones.forEach((z, idx) => {
+      if (!z.isOccupied || z.isLocked || idx === monsterIdx) return;
       idxsToClear.push(idx);
-      combinedAtk += zone.card.atk;
+      combinedAtk += z.card.atk;
     });
     idxsToClear.forEach((idx) => destroyAtCoords(state, [...ownMonsters, idx]));
     burn(state, otherDKey, combinedAtk);
   },
   [Monster.GyakutennoMegami]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z: OccupiedMonsterZone) => z.card.atk <= 500,
-      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++
+      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
+      (z: OccupiedMonsterZone) => z.card.atk <= 500
     );
   },
   [Monster.SpiritOfTheBooks]: (state, { dKey }) => {
@@ -164,12 +165,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
   },
   [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
     burn(state, dKey, 1000);
-    updateMatchesInRow(
-      state,
-      ownMonsters,
-      () => true,
-      (z) => z.permPowerUpLevel++
-    );
+    updateMonsters(state, ownMonsters, (z) => z.permPowerUpLevel++);
   },
   [Monster.ObeliskTheTormentor]: (state, { otherMonsters, otherDKey }) => {
     destroyRow(state, otherMonsters);
@@ -189,11 +185,11 @@ export const monsterFlipEffectReducers: CardReducerMap<
   ]),
   [Monster.FairysGift]: heal_Wrapped(1000),
   [Monster.MonsterTamer]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.DungeonWorm),
-      (z) => z.permPowerUpLevel++
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.DungeonWorm)
     );
   },
   [Monster.MysticLamp]: (state, { zoneCoords }) => {
@@ -331,11 +327,12 @@ export const monsterFlipEffectReducers: CardReducerMap<
   [Monster.Trent]: setOwnField(Field.Forest),
   [Monster.BerserkDragon]: (
     state,
-    { colIdx: monsterIdx, otherMonsters, zoneCoords, otherDKey, dKey }
+    { otherMonsters, zoneCoords, otherDKey }
   ) => {
     // attack all enemy monsters from left to right in a single action
+    const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
     state[otherDKey].monsterZones.forEach((z, idx) => {
-      if (!z.isOccupied || !state[dKey].monsterZones[monsterIdx].isOccupied) {
+      if (!z.isOccupied || !originZone.isOccupied) {
         // don't attack if Berserk Dragon itself has been destroyed
         return;
       }
@@ -356,11 +353,11 @@ export const monsterFlipEffectReducers: CardReducerMap<
     permPowerUp(state, zoneCoords);
   },
   [Monster.CyberHarpie]: (state, { ownMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       ownMonsters,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon),
-      (z) => z.permPowerUpLevel++
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
     );
   },
   [Monster.ExarionUniverse]: (state, { zoneCoords }) => {
@@ -467,10 +464,9 @@ export const monsterFlipEffectReducers: CardReducerMap<
   },
   [Monster.ChironTheMage]: destroyHighestAtk_Wrapped(),
   [Monster.BeastOfGilfer]: (state, { zoneCoords, otherMonsters }) => {
-    updateMatchesInRow(
+    updateMonsters(
       state,
       otherMonsters,
-      () => true,
       (z: OccupiedMonsterZone) => z.permPowerUpLevel--
     );
     destroyAtCoords(state, zoneCoords);

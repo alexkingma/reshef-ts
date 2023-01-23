@@ -10,7 +10,7 @@ import {
   hasEmptyZone,
   hasMatchInRow,
   rowContainsAnyCards,
-  updateMatchesInRow,
+  updateMonsters,
 } from "../util/rowUtil";
 import { getEffCon_requireDestinyBoard } from "../util/wrappedUtil";
 import {
@@ -41,11 +41,11 @@ export const perpetualSpellTrapReducers: CardReducerMap<
           );
         },
         effect: () => {
-          updateMatchesInRow(
+          updateMonsters(
             state,
             otherMonsters,
-            is1500,
-            (z) => (z.isLocked = true)
+            (z) => (z.isLocked = true),
+            is1500
           );
         },
       },
@@ -75,11 +75,11 @@ export const perpetualSpellTrapReducers: CardReducerMap<
           );
         },
         effect: () => {
-          updateMatchesInRow(
+          updateMonsters(
             state,
             otherMonsters,
-            (z) => isType(z, "Dragon"),
-            (z) => (z.isLocked = true)
+            (z) => (z.isLocked = true),
+            (z) => isType(z, "Dragon")
           );
         },
       },
