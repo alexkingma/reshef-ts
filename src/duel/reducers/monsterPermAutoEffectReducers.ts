@@ -157,6 +157,18 @@ export const monsterPermAutoEffectReducers: CardReducerMap<
           return isStartOfTurn(state, dKey);
         },
         effect: (state, { zoneCoords }) => {
+          specialSummonAtCoords(state, zoneCoords, Monster.LarvaeMoth);
+        },
+      },
+    ];
+  },
+  [Monster.LarvaeMoth]: (state, { dKey }) => {
+    return [
+      {
+        condition: () => {
+          return isStartOfTurn(state, dKey);
+        },
+        effect: (state, { zoneCoords }) => {
           specialSummonAtCoords(state, zoneCoords, Monster.CocoonOfEvolution);
         },
       },

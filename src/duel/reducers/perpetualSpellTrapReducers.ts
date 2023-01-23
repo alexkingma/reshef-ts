@@ -64,14 +64,17 @@ export const perpetualSpellTrapReducers: CardReducerMap<
       },
     ];
   },
-  [Trap.DragonCaptureJar]: (state, { otherMonsters }) => {
+  [Trap.DragonCaptureJar]: (state, { otherDKey, otherMonsters }) => {
     return [
       {
         condition: () => {
-          return hasMatchInRow(
-            state,
-            otherMonsters,
-            (z) => isType(z, "Dragon") && !z.isLocked
+          return (
+            isStartOfTurn(state, otherDKey) &&
+            hasMatchInRow(
+              state,
+              otherMonsters,
+              (z) => isType(z, "Dragon") && !z.isLocked
+            )
           );
         },
         effect: () => {

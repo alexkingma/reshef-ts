@@ -84,7 +84,7 @@ export const spellEffectReducers: CardReducerMap<
   [Spell.PowerOfKaishin]: permPowerUp(),
   [Spell.KunaiWithChain]: permPowerUp(),
   [Spell.Salamandra]: permPowerUp(),
-  [Spell.Megamorph]: permPowerUp(2),
+  [Spell.Megamorph]: permPowerUp(),
   [Spell.WingedTrumpeter]: permPowerUp(),
   [Spell.BrightCastle]: permPowerUp(),
 
@@ -185,8 +185,7 @@ export const spellEffectReducers: CardReducerMap<
     });
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
-    // TODO: card description says it blocks def mode for a turn after
-    // check if that's how it really works
+    // TODO: stop DEF mode for duellist as a whole for a turn, don't just move current monsters' pos
     updateMonsters(state, otherMonsters, (z) => {
       z.battlePosition = BattlePosition.Attack;
     });
@@ -206,6 +205,7 @@ export const spellEffectReducers: CardReducerMap<
     clearGraveyard(state, otherDKey);
   },
   [Spell.DarknessApproaches]: (state, { ownMonsters }) => {
+    // TODO: description says "all cards on own field" -- include spells/traps?
     setRowFaceDown(state, ownMonsters);
   },
   [Spell.BrainControl]: (state, { dKey }) => {

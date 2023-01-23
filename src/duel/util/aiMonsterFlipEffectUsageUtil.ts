@@ -4,7 +4,6 @@ import {
   opponentHasMonster,
   opponentHasSpellTrap,
   selfHasAllSpecificMonsters,
-  selfHasMonster,
   selfHasSpecificMonster,
   shouldUseField,
 } from "./aiWrappedUtil";
@@ -31,10 +30,6 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.BattleOx]: opponentHasMonster((z) => isAlignment(z, "Fire")),
     [Monster.CurseOfDragon]: shouldUseField(Field.Wasteland),
     [Monster.IllusionistFacelessMage]: opponentHasMonster(),
-    [Monster.HarpieLady]: selfHasMonster(),
-    [Monster.HarpieLadySisters]: selfHasSpecificMonster(
-      Monster.HarpiesPetDragon
-    ),
     [Monster.KairyuShin]: shouldUseField(Field.Umi),
     [Monster.GiantSoldierOfStone]: shouldUseField(Field.Arena),
     [Monster.ReaperOfTheCards]: always,
@@ -63,7 +58,6 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.RocketWarrior]: opponentHasMonster(),
     [Monster.BeastkingOfTheSwamps]: opponentHasMonster(),
     [Monster.FairysGift]: always,
-    [Monster.MonsterTamer]: selfHasSpecificMonster(Monster.DungeonWorm),
     [Monster.MysticLamp]: always,
     [Monster.Leghul]: always,
     [Monster.GammaTheMagnetWarrior]: selfHasAllSpecificMonsters(
@@ -115,7 +109,6 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.DesVolstgalph]: opponentHasMonster(),
     [Monster.GilfordTheLightning]: opponentHasMonster(),
     [Monster.MysticalBeastSerket]: opponentHasMonster(),
-    [Monster.CyberHarpie]: selfHasSpecificMonster(Monster.HarpiesPetDragon),
     [Monster.ExarionUniverse]: opponentHasMonster(),
     [Monster.LegendaryFiend]: always,
     [Monster.ValkyrionTheMagnaWarrior]: hasEmptyMonsterZones(2),

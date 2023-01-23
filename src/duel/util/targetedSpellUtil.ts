@@ -129,7 +129,7 @@ const targetedSpellMap: {
     return name === "Gradius";
   },
   [Spell.ElegantEgotist]: ({ name }) => {
-    return name === "Harpie Lady";
+    return [Monster.HarpieLady, Monster.CyberHarpie].includes(name as Monster);
   },
   [Spell.MagicalLabyrinth]: ({ name }) => {
     return name === "Labyrinth Wall";

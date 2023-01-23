@@ -221,14 +221,6 @@ export const monsterFlipEffectReducers: CardReducerMap<
   },
 
   // powerup/upgrade own monsters
-  [Monster.MysticalElf]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.BlueEyesWhiteDragon)
-    );
-  },
   [Monster.TimeWizard]: (state, { ownMonsters }) => {
     updateMonsters(
       state,
@@ -243,22 +235,6 @@ export const monsterFlipEffectReducers: CardReducerMap<
       (z) => isSpecificMonster(z, Monster.BabyDragon)
     );
   },
-  [Monster.HarpieLady]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
-  [Monster.HarpieLadySisters]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => (z.permPowerUpLevel += 2),
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
   [Monster.GyakutennoMegami]: (state, { ownMonsters }) => {
     updateMonsters(
       state,
@@ -271,22 +247,6 @@ export const monsterFlipEffectReducers: CardReducerMap<
     burn(state, dKey, 1000);
     updateMonsters(state, ownMonsters, (z) => z.permPowerUpLevel++);
   },
-  [Monster.MonsterTamer]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.DungeonWorm)
-    );
-  },
-  [Monster.CyberHarpie]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
   [Monster.LegendaryFiend]: (state, { zoneCoords }) => {
     permPowerUp(state, zoneCoords);
   },
@@ -296,9 +256,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     immobiliseRow(state, otherMonsters);
   },
   [Monster.Nemuriko]: (state, { otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return;
-    immobiliseCard(state, [...otherMonsters, targetIdx]);
+    immobiliseRow(state, otherMonsters);
   },
   [Monster.ElectricLizard]: (state, { otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);

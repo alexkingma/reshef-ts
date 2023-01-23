@@ -755,14 +755,11 @@ export type HandEffectMonster = Extract<
 
 export type FlipEffectMonster = Extract<
   Monster,
-  | Monster.MysticalElf
   | Monster.FlameSwordsman
   | Monster.TimeWizard
   | Monster.BattleOx
   | Monster.CurseOfDragon
   | Monster.IllusionistFacelessMage
-  | Monster.HarpieLady
-  | Monster.HarpieLadySisters
   | Monster.KairyuShin
   | Monster.GiantSoldierOfStone
   | Monster.ReaperOfTheCards
@@ -785,7 +782,6 @@ export type FlipEffectMonster = Extract<
   | Monster.RocketWarrior
   | Monster.BeastkingOfTheSwamps
   | Monster.FairysGift
-  | Monster.MonsterTamer
   | Monster.MysticLamp
   | Monster.Leghul
   | Monster.GammaTheMagnetWarrior
@@ -814,7 +810,6 @@ export type FlipEffectMonster = Extract<
   | Monster.DesVolstgalph
   | Monster.GilfordTheLightning
   | Monster.MysticalBeastSerket
-  | Monster.CyberHarpie
   | Monster.ExarionUniverse
   | Monster.LegendaryFiend
   | Monster.ValkyrionTheMagnaWarrior
@@ -846,12 +841,18 @@ export type PermAutoEffectMonster = Extract<
   | Monster.BerserkDragon
   | Monster.Jinzo
   | Monster.PetitMoth
+  | Monster.LarvaeMoth
   | Monster.CocoonOfEvolution
   | Monster.GreatMoth
 >;
 
 export type TempPowerUpMonster = Extract<
   Monster,
+  | Monster.MysticalElf
+  | Monster.HarpieLady
+  | Monster.HarpieLadySisters
+  | Monster.CyberHarpie
+  | Monster.MonsterTamer
   | Monster.SwampBattleguard
   | Monster.MammothGraveyard
   | Monster.PumpkingTheKingOfGhosts
