@@ -18,6 +18,7 @@ import {
   destroyHighestAtk,
   destroyRow,
   getHighestAtkZoneIdx,
+  getRow,
   hasMatchInRow,
   immobiliseRow,
   powerDownHighestAtk,
@@ -62,148 +63,22 @@ export const monsterFlipEffectReducers: CardReducerMap<
   FlipEffectMonster,
   DirectEffectReducer
 > = {
-  [Monster.MysticalElf]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.BlueEyesWhiteDragon)
-    );
-  },
+  // destroy opponent cards
   [Monster.FlameSwordsman]: destroyMonsterType("Dinosaur"),
-  [Monster.TimeWizard]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => (z.card = getCard(Monster.DarkSage) as MonsterCard),
-      (z) => isSpecificMonster(z, Monster.DarkMagician)
-    );
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => (z.card = getCard(Monster.ThousandDragon) as MonsterCard),
-      (z) => isSpecificMonster(z, Monster.BabyDragon)
-    );
-  },
+  [Monster.DragonSeeker]: destroyMonsterType("Dragon"),
   [Monster.BattleOx]: destroyMonsterAlignment("Fire"),
-  [Monster.CurseOfDragon]: setOwnField(Field.Wasteland),
-  [Monster.IllusionistFacelessMage]: (state, { otherMonsters }) => {
-    immobiliseRow(state, otherMonsters);
-  },
-  [Monster.HarpieLady]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
-  [Monster.HarpieLadySisters]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => (z.permPowerUpLevel += 2),
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
-  [Monster.KairyuShin]: setOwnField(Field.Umi),
-  [Monster.GiantSoldierOfStone]: setOwnField(Field.Arena),
-  [Monster.ReaperOfTheCards]: (state, { otherDKey }) => {
-    clearFirstTrap(state, otherDKey);
-  },
-  [Monster.CatapultTurtle]: (
-    state,
-    { dKey, ownMonsters, otherDKey, colIdx: monsterIdx }
-  ) => {
-    // make all the unused monsters on the player's
-    // field disappear and hit the foe with their combined power
-    const idxsToClear: number[] = [];
-    let combinedAtk = 0;
-    state[dKey].monsterZones.forEach((z, idx) => {
-      if (!z.isOccupied || z.isLocked || idx === monsterIdx) return;
-      idxsToClear.push(idx);
-      combinedAtk += z.card.atk;
-    });
-    idxsToClear.forEach((idx) => destroyAtCoords(state, [...ownMonsters, idx]));
-    burn(state, otherDKey, combinedAtk);
-  },
-  [Monster.GyakutennoMegami]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
-      (z: OccupiedMonsterZone) => z.card.atk <= 500
-    );
-  },
-  [Monster.SpiritOfTheBooks]: (state, { dKey }) => {
-    specialSummon(state, dKey, Monster.BooKoo);
-  },
-  [Monster.Nemuriko]: (state, { otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return; // no monster to target
-    immobiliseCard(state, [...otherMonsters, targetIdx]);
-  },
-  [Monster.RevivalJam]: (state, { dKey }) => {
-    specialSummon(state, dKey, Monster.RevivalJam, { isLocked: true });
-  },
   [Monster.FiendsHand]: (state, { otherDKey, zoneCoords }) => {
     destroyHighestAtk(state, otherDKey);
     destroyAtCoords(state, zoneCoords);
-  },
-  [Monster.DarkNecrofear]: (state, { dKey }) => {
-    convertMonster(state, dKey);
-  },
-  [Monster.ToadMaster]: (state, { dKey }) => {
-    specialSummon(state, dKey, Monster.FrogTheJam);
-  },
-  [Monster.FireReaper]: burnOther(50),
-  [Monster.Doron]: (state, { dKey }) => {
-    specialSummon(state, dKey, Monster.Doron, { isLocked: true });
-  },
-  [Monster.TrapMaster]: (state, { dKey }) => {
-    setSpellTrap(state, dKey, Trap.AcidTrapHole);
-  },
-  [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
-    burn(state, dKey, 1000);
-    updateMonsters(state, ownMonsters, (z) => z.permPowerUpLevel++);
   },
   [Monster.ObeliskTheTormentor]: (state, { otherMonsters, otherDKey }) => {
     destroyRow(state, otherMonsters);
     burn(state, otherDKey, 4000);
   },
-  [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) => {
-    const dmg = state[dKey].lp - 1;
-    burn(state, dKey, dmg);
-    burn(state, otherDKey, dmg);
-  },
-  [Monster.RocketWarrior]: (state, { dKey }) => {
-    powerDownHighestAtk(state, dKey);
-  },
   [Monster.BeastkingOfTheSwamps]: destroyRows([
     [DuellistKey.Player, RowKey.Monster],
     [DuellistKey.Opponent, RowKey.Monster],
   ]),
-  [Monster.FairysGift]: heal_Wrapped(1000),
-  [Monster.MonsterTamer]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.DungeonWorm)
-    );
-  },
-  [Monster.MysticLamp]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
-  [Monster.Leghul]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
-  [Monster.GammaTheMagnetWarrior]: (state, { zoneCoords }) => {
-    magnetWarriorMergeAttempt(state, zoneCoords);
-  },
-  [Monster.MonsterEye]: (state, { otherHand }) => {
-    setRowFaceUp(state, otherHand);
-  },
   [Monster.TheWingedDragonOfRaPhoenixMode]: (
     state,
     { dKey, otherMonsters }
@@ -211,51 +86,45 @@ export const monsterFlipEffectReducers: CardReducerMap<
     burn(state, dKey, 1000);
     destroyRow(state, otherMonsters);
   },
-  [Monster.GoddessOfWhim]: (state, { dKey, zoneCoords }) => {
-    draw(state, dKey);
-    destroyAtCoords(state, zoneCoords);
-  },
-  [Monster.DragonSeeker]: destroyMonsterType("Dragon"),
-  [Monster.PenguinTorpedo]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
   [Monster.ZombyraTheDark]: (state, { zoneCoords, otherDKey }) => {
     destroyHighestAtk(state, otherDKey);
     permPowerDown(state, zoneCoords);
   },
-  [Monster.SpiritOfTheMountain]: setOwnField(Field.Mountain),
-  [Monster.AncientLamp]: (state, { dKey }) => {
-    specialSummon(state, dKey, Monster.LaJinnTheMysticalGenieOfTheLamp);
+  [Monster.DesVolstgalph]: (state, { otherDKey }) => {
+    destroyHighestAtk(state, otherDKey);
+    burn(state, otherDKey, 500);
   },
-  [Monster.Skelengel]: draw_Wrapped(),
-  [Monster.KingsKnight]: (state, { dKey, ownMonsters }) => {
-    if (!rowContainsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
-      return;
-    }
-    specialSummon(state, dKey, Monster.JacksKnight);
+  [Monster.GilfordTheLightning]: destroyRows([
+    [DuellistKey.Opponent, RowKey.Monster],
+  ]),
+  [Monster.MysticalBeastSerket]: (state, { otherMonsters, zoneCoords }) => {
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    if (targetIdx === -1) return;
+    destroyAtCoords(state, [...otherMonsters, targetIdx]);
+    permPowerUp(state, zoneCoords);
   },
-  [Monster.XHeadCannon]: (state, { zoneCoords }) => {
-    // note that x/y/z CANNOT merge with their "stage 2" counterparts
-    // e.g. X cannot merge with YZ, only with individual Y and/or Z pieces
-    xyzMergeAttempt(state, zoneCoords, [
-      [[Monster.YDragonHead, Monster.ZMetalTank], Monster.XYZDragonCannon],
-      [[Monster.YDragonHead], Monster.XYDragonCannon],
-      [[Monster.ZMetalTank], Monster.XZTankCannon],
-    ]);
+  [Monster.FGD]: destroyRows([
+    [DuellistKey.Opponent, RowKey.Monster],
+    [DuellistKey.Opponent, RowKey.SpellTrap],
+  ]),
+  [Monster.BarrelDragon]: (state, { otherDKey, otherMonsters }) => {
+    // select up to 3 (random, occupied) enemy monster idxs
+    const idxsToTarget = shuffle(
+      state[otherDKey].monsterZones.reduce((arr, z, idx) => {
+        if (!z.isOccupied) return arr;
+        return [...arr, idx];
+      }, [] as number[])
+    ).slice(0, 3);
+
+    // each targeted monster has a 50% chance to be destroyed
+    idxsToTarget.forEach((i) => {
+      if (Math.random() > 0.5) return;
+      destroyAtCoords(state, [...otherMonsters, i]);
+    });
   },
-  [Monster.YDragonHead]: (state, { zoneCoords }) => {
-    xyzMergeAttempt(state, zoneCoords, [
-      [[Monster.XHeadCannon, Monster.ZMetalTank], Monster.XYZDragonCannon],
-      [[Monster.XHeadCannon], Monster.XYDragonCannon],
-      [[Monster.ZMetalTank], Monster.YZTankDragon],
-    ]);
-  },
-  [Monster.ZMetalTank]: (state, { zoneCoords }) => {
-    xyzMergeAttempt(state, zoneCoords, [
-      [[Monster.XHeadCannon, Monster.YDragonHead], Monster.XYZDragonCannon],
-      [[Monster.XHeadCannon], Monster.XZTankCannon],
-      [[Monster.YDragonHead], Monster.YZTankDragon],
-    ]);
+  [Monster.ChironTheMage]: destroyHighestAtk_Wrapped(),
+  [Monster.ReaperOfTheCards]: (state, { otherDKey }) => {
+    clearFirstTrap(state, otherDKey);
   },
   [Monster.XYDragonCannon]: (state, { otherSpellTrap, ownHand }) => {
     // destroy a [face-up spell/trap] by discarding from hand
@@ -281,35 +150,41 @@ export const monsterFlipEffectReducers: CardReducerMap<
     destroyFirstFound(state, ownHand);
     destroyHighestAtk(state, otherDKey);
   },
-  [Monster.ElectricLizard]: (state, { otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return;
-    immobiliseCard(state, [...otherMonsters, targetIdx]);
+  [Monster.DarkPaladin]: (state, { ownHand, otherSpellTrap }) => {
+    // destroy a [spell] by discarding from hand
+    if (!hasMatchInRow(state, otherSpellTrap, isSpell)) return;
+    destroyFirstFound(state, ownHand);
+    destroyFirstFound(state, otherSpellTrap, isSpell);
   },
-  [Monster.LadyOfFaith]: heal_Wrapped(500),
-  [Monster.ByserShock]: (
-    state,
-    {
-      ownMonsters,
-      otherMonsters,
-      ownSpellTrap,
-      otherSpellTrap,
-      dKey,
-      otherDKey,
-    }
-  ) => {
-    // return all face-down cards on both fields to
-    // the hands of both players if there is space in the hands
-    const returnRowToHand =
-      (rowCoords: RowCoords) => (z: Zone, idx: number) => {
-        if (!z.isOccupied) return;
-        returnCardToHand(state, [...rowCoords, idx]);
-      };
 
-    state[dKey].monsterZones.forEach(returnRowToHand(ownMonsters));
-    state[dKey].spellTrapZones.forEach(returnRowToHand(ownSpellTrap));
-    state[otherDKey].monsterZones.forEach(returnRowToHand(otherMonsters));
-    state[otherDKey].spellTrapZones.forEach(returnRowToHand(otherSpellTrap));
+  // field
+  [Monster.CurseOfDragon]: setOwnField(Field.Wasteland),
+  [Monster.KairyuShin]: setOwnField(Field.Umi),
+  [Monster.GiantSoldierOfStone]: setOwnField(Field.Arena),
+  [Monster.SpiritOfTheMountain]: setOwnField(Field.Mountain),
+  [Monster.Trent]: setOwnField(Field.Forest),
+
+  // special summon
+  [Monster.SpiritOfTheBooks]: (state, { dKey }) => {
+    specialSummon(state, dKey, Monster.BooKoo);
+  },
+  [Monster.RevivalJam]: (state, { dKey }) => {
+    specialSummon(state, dKey, Monster.RevivalJam, { isLocked: true });
+  },
+  [Monster.ToadMaster]: (state, { dKey }) => {
+    specialSummon(state, dKey, Monster.FrogTheJam);
+  },
+  [Monster.Doron]: (state, { dKey }) => {
+    specialSummon(state, dKey, Monster.Doron, { isLocked: true });
+  },
+  [Monster.AncientLamp]: (state, { dKey }) => {
+    specialSummon(state, dKey, Monster.LaJinnTheMysticalGenieOfTheLamp);
+  },
+  [Monster.KingsKnight]: (state, { dKey, ownMonsters }) => {
+    if (!rowContainsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
+      return;
+    }
+    specialSummon(state, dKey, Monster.JacksKnight);
   },
   [Monster.PuppetMaster]: (state, { dKey, otherDKey }) => {
     if (!graveyardContainsCards(state, dKey, Monster.Gernia)) return;
@@ -317,55 +192,6 @@ export const monsterFlipEffectReducers: CardReducerMap<
     specialSummon(state, dKey, Monster.HeadlessKnight);
     specialSummon(state, dKey, Monster.Gernia);
     burn(state, otherDKey, 1000);
-  },
-  [Monster.DarkPaladin]: (state, { ownHand, otherSpellTrap }) => {
-    // destroy a [spell] by discarding from hand
-    if (!hasMatchInRow(state, otherSpellTrap, isSpell)) return;
-    destroyFirstFound(state, ownHand);
-    destroyFirstFound(state, otherSpellTrap, isSpell);
-  },
-  [Monster.Trent]: setOwnField(Field.Forest),
-  [Monster.BerserkDragon]: (
-    state,
-    { otherMonsters, zoneCoords, otherDKey }
-  ) => {
-    // attack all enemy monsters from left to right in a single action
-    const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    state[otherDKey].monsterZones.forEach((z, idx) => {
-      if (!z.isOccupied || !originZone.isOccupied) {
-        // don't attack if Berserk Dragon itself has been destroyed
-        return;
-      }
-      attackMonster(state, zoneCoords, [...otherMonsters, idx]);
-    });
-  },
-  [Monster.DesVolstgalph]: (state, { otherDKey }) => {
-    destroyHighestAtk(state, otherDKey);
-    burn(state, otherDKey, 500);
-  },
-  [Monster.GilfordTheLightning]: destroyRows([
-    [DuellistKey.Opponent, RowKey.Monster],
-  ]),
-  [Monster.MysticalBeastSerket]: (state, { otherMonsters, zoneCoords }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return;
-    destroyAtCoords(state, [...otherMonsters, targetIdx]);
-    permPowerUp(state, zoneCoords);
-  },
-  [Monster.CyberHarpie]: (state, { ownMonsters }) => {
-    updateMonsters(
-      state,
-      ownMonsters,
-      (z) => z.permPowerUpLevel++,
-      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
-    );
-  },
-  [Monster.ExarionUniverse]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-    permPowerDown(state, zoneCoords);
-  },
-  [Monster.LegendaryFiend]: (state, { zoneCoords }) => {
-    permPowerUp(state, zoneCoords);
   },
   [Monster.ValkyrionTheMagnaWarrior]: (
     state,
@@ -380,15 +206,159 @@ export const monsterFlipEffectReducers: CardReducerMap<
     specialSummon(state, dKey, Monster.BetaTheMagnetWarrior, isLocked);
     specialSummon(state, dKey, Monster.GammaTheMagnetWarrior, isLocked);
   },
-  [Monster.FGD]: destroyRows([
-    [DuellistKey.Opponent, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.SpellTrap],
-  ]),
+  [Monster.PinchHopper]: (state, { zoneCoords, ownHand, dKey }) => {
+    // For its own demise, it can summon (the strongest) insect from the own hand
+    destroyAtCoords(state, zoneCoords);
+
+    const handIdx = getHighestAtkZoneIdx(state, ownHand, (z: OccupiedZone) =>
+      isType(z, "Insect")
+    );
+    if (handIdx === -1) return; // no insect to summon
+    const { card } = state[dKey].hand[handIdx] as OccupiedZone;
+    specialSummon(state, dKey, card.name);
+
+    clearZone(state, [...ownHand, handIdx]);
+  },
+
+  // powerup/upgrade own monsters
+  [Monster.MysticalElf]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.BlueEyesWhiteDragon)
+    );
+  },
+  [Monster.TimeWizard]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => (z.card = getCard(Monster.DarkSage) as MonsterCard),
+      (z) => isSpecificMonster(z, Monster.DarkMagician)
+    );
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => (z.card = getCard(Monster.ThousandDragon) as MonsterCard),
+      (z) => isSpecificMonster(z, Monster.BabyDragon)
+    );
+  },
+  [Monster.HarpieLady]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
+    );
+  },
+  [Monster.HarpieLadySisters]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => (z.permPowerUpLevel += 2),
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
+    );
+  },
+  [Monster.GyakutennoMegami]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
+      (z: OccupiedMonsterZone) => z.card.atk <= 500
+    );
+  },
+  [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
+    burn(state, dKey, 1000);
+    updateMonsters(state, ownMonsters, (z) => z.permPowerUpLevel++);
+  },
+  [Monster.MonsterTamer]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.DungeonWorm)
+    );
+  },
+  [Monster.CyberHarpie]: (state, { ownMonsters }) => {
+    updateMonsters(
+      state,
+      ownMonsters,
+      (z) => z.permPowerUpLevel++,
+      (z) => isSpecificMonster(z, Monster.HarpiesPetDragon)
+    );
+  },
+  [Monster.LegendaryFiend]: (state, { zoneCoords }) => {
+    permPowerUp(state, zoneCoords);
+  },
+
+  // immobilise opponent
+  [Monster.IllusionistFacelessMage]: (state, { otherMonsters }) => {
+    immobiliseRow(state, otherMonsters);
+  },
+  [Monster.Nemuriko]: (state, { otherMonsters }) => {
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    if (targetIdx === -1) return;
+    immobiliseCard(state, [...otherMonsters, targetIdx]);
+  },
+  [Monster.ElectricLizard]: (state, { otherMonsters }) => {
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    if (targetIdx === -1) return;
+    immobiliseCard(state, [...otherMonsters, targetIdx]);
+  },
   [Monster.RedArcheryGirl]: (state, { otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return; // no monster to target
+    if (targetIdx === -1) return;
     permPowerDown(state, [...otherMonsters, targetIdx]);
     immobiliseCard(state, [...otherMonsters, targetIdx]);
+  },
+  [Monster.InvitationToADarkSleep]: (state, { otherMonsters }) => {
+    immobiliseRow(state, otherMonsters);
+  },
+
+  // heal self
+  [Monster.FairysGift]: heal_Wrapped(1000),
+  [Monster.LadyOfFaith]: heal_Wrapped(500),
+  [Monster.SkullMarkLadyBug]: (state, { dKey, zoneCoords }) => {
+    heal(state, dKey, 500);
+    destroyAtCoords(state, zoneCoords);
+  },
+
+  // burn/direct attack
+  [Monster.FireReaper]: burnOther(50),
+  [Monster.MysticLamp]: (state, { zoneCoords }) => {
+    directAttack(state, zoneCoords);
+  },
+  [Monster.Leghul]: (state, { zoneCoords }) => {
+    directAttack(state, zoneCoords);
+  },
+  [Monster.PenguinTorpedo]: (state, { zoneCoords }) => {
+    directAttack(state, zoneCoords);
+  },
+  [Monster.ExarionUniverse]: (state, { zoneCoords }) => {
+    directAttack(state, zoneCoords);
+    permPowerDown(state, zoneCoords);
+  },
+  [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) => {
+    const dmg = state[dKey].lp - 1;
+    burn(state, dKey, dmg);
+    burn(state, otherDKey, dmg);
+  },
+  [Monster.ReflectBounder]: (
+    state,
+    { otherMonsters, otherDKey, zoneCoords }
+  ) => {
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    if (targetIdx === -1) return;
+    const { card } = state[otherDKey].monsterZones[
+      targetIdx
+    ] as OccupiedMonsterZone;
+    burn(state, otherDKey, card.atk);
+    destroyAtCoords(state, zoneCoords);
+  },
+
+  // control/subsume opponent monster
+  [Monster.DarkNecrofear]: (state, { dKey }) => {
+    convertMonster(state, dKey);
   },
   [Monster.Relinquished]: (state, { zoneCoords, otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
@@ -403,66 +373,107 @@ export const monsterFlipEffectReducers: CardReducerMap<
     subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
     permPowerUp(state, zoneCoords, 2);
   },
-  [Monster.AlphaTheMagnetWarrior]: (state, { zoneCoords }) => {
-    magnetWarriorMergeAttempt(state, zoneCoords);
-  },
-  [Monster.InvitationToADarkSleep]: (state, { otherMonsters }) => {
-    immobiliseRow(state, otherMonsters);
-  },
-  [Monster.BarrelDragon]: (state, { otherDKey, otherMonsters }) => {
-    // select up to 3 (random, occupied) enemy monster idxs
-    const idxsToTarget = shuffle(
-      state[otherDKey].monsterZones.reduce((arr, z, idx) => {
-        if (!z.isOccupied) return arr;
-        return [...arr, idx];
-      }, [] as number[])
-    ).slice(0, 3);
-
-    // each targeted monster has a 50% chance to be destroyed
-    idxsToTarget.forEach((i) => {
-      if (Math.random() > 0.5) return;
-      destroyAtCoords(state, [...otherMonsters, i]);
-    });
-  },
-  [Monster.ReflectBounder]: (
-    state,
-    { otherMonsters, otherDKey, zoneCoords }
-  ) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-    if (targetIdx === -1) return;
-    const { card } = state[otherDKey].monsterZones[
-      targetIdx
-    ] as OccupiedMonsterZone;
-    burn(state, otherDKey, card.atk);
-    destroyAtCoords(state, zoneCoords);
-  },
-  [Monster.BetaTheMagnetWarrior]: (state, { zoneCoords }) => {
-    magnetWarriorMergeAttempt(state, zoneCoords);
-  },
   [Monster.ParasiteParacide]: (state, { zoneCoords, otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) return;
 
     subsumeMonster(state, [...otherMonsters, targetIdx], zoneCoords);
   },
-  [Monster.SkullMarkLadyBug]: (state, { dKey, zoneCoords }) => {
-    heal(state, dKey, 500);
+
+  // merge with own monsters
+  [Monster.XHeadCannon]: (state, { zoneCoords }) => {
+    // note that x/y/z CANNOT merge with their "stage 2" counterparts
+    // e.g. X cannot merge with YZ, only with individual Y and/or Z pieces
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.YDragonHead, Monster.ZMetalTank], Monster.XYZDragonCannon],
+      [[Monster.YDragonHead], Monster.XYDragonCannon],
+      [[Monster.ZMetalTank], Monster.XZTankCannon],
+    ]);
+  },
+  [Monster.YDragonHead]: (state, { zoneCoords }) => {
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.XHeadCannon, Monster.ZMetalTank], Monster.XYZDragonCannon],
+      [[Monster.XHeadCannon], Monster.XYDragonCannon],
+      [[Monster.ZMetalTank], Monster.YZTankDragon],
+    ]);
+  },
+  [Monster.ZMetalTank]: (state, { zoneCoords }) => {
+    xyzMergeAttempt(state, zoneCoords, [
+      [[Monster.XHeadCannon, Monster.YDragonHead], Monster.XYZDragonCannon],
+      [[Monster.XHeadCannon], Monster.XZTankCannon],
+      [[Monster.YDragonHead], Monster.YZTankDragon],
+    ]);
+  },
+  [Monster.AlphaTheMagnetWarrior]: (state, { zoneCoords }) => {
+    magnetWarriorMergeAttempt(state, zoneCoords);
+  },
+  [Monster.BetaTheMagnetWarrior]: (state, { zoneCoords }) => {
+    magnetWarriorMergeAttempt(state, zoneCoords);
+  },
+  [Monster.GammaTheMagnetWarrior]: (state, { zoneCoords }) => {
+    magnetWarriorMergeAttempt(state, zoneCoords);
+  },
+
+  // assorted
+  [Monster.CatapultTurtle]: (
+    state,
+    { dKey, ownMonsters, otherDKey, colIdx: monsterIdx }
+  ) => {
+    // make all the unused monsters on the player's
+    // field disappear and hit the foe with their combined power
+    const idxsToClear: number[] = [];
+    let combinedAtk = 0;
+    state[dKey].monsterZones.forEach((z, idx) => {
+      if (!z.isOccupied || z.isLocked || idx === monsterIdx) return;
+      idxsToClear.push(idx);
+      combinedAtk += z.card.atk;
+    });
+    idxsToClear.forEach((idx) => destroyAtCoords(state, [...ownMonsters, idx]));
+    burn(state, otherDKey, combinedAtk);
+  },
+  [Monster.TrapMaster]: (state, { dKey }) => {
+    setSpellTrap(state, dKey, Trap.AcidTrapHole);
+  },
+  [Monster.RocketWarrior]: (state, { dKey }) => {
+    powerDownHighestAtk(state, dKey);
+  },
+  [Monster.MonsterEye]: (state, { otherHand }) => {
+    setRowFaceUp(state, otherHand);
+  },
+  [Monster.GoddessOfWhim]: (state, { dKey, zoneCoords }) => {
+    draw(state, dKey);
     destroyAtCoords(state, zoneCoords);
   },
-  [Monster.PinchHopper]: (state, { zoneCoords, ownHand, dKey }) => {
-    // For its own demise, it can summon (the strongest) insect from the own hand
-    destroyAtCoords(state, zoneCoords);
+  [Monster.Skelengel]: draw_Wrapped(),
+  [Monster.ByserShock]: (
+    state,
+    { ownMonsters, otherMonsters, ownSpellTrap, otherSpellTrap }
+  ) => {
+    // return all face-down cards on both fields to
+    // the hands of both players if there is space in the hands
+    const returnRowToHand = (rowCoords: RowCoords) => {
+      getRow(state, rowCoords).forEach((z, i) => {
+        if (!z.isOccupied) return;
+        returnCardToHand(state, [...rowCoords, i]);
+      });
+    };
 
-    const handIdx = getHighestAtkZoneIdx(state, ownHand, (z: OccupiedZone) =>
-      isType(z, "Insect")
-    );
-    if (handIdx === -1) return; // no insect to summon
-    const { card } = state[dKey].hand[handIdx] as OccupiedZone;
-    specialSummon(state, dKey, card.name);
-
-    clearZone(state, [...ownHand, handIdx]);
+    returnRowToHand(ownMonsters);
+    returnRowToHand(ownSpellTrap);
+    returnRowToHand(otherMonsters);
+    returnRowToHand(otherSpellTrap);
   },
-  [Monster.ChironTheMage]: destroyHighestAtk_Wrapped(),
+  [Monster.BerserkDragon]: (state, { otherMonsters, zoneCoords }) => {
+    // attack all enemy monsters from left to right in a single action
+    const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    getRow(state, otherMonsters).forEach((z, idx) => {
+      if (!z.isOccupied || !originZone.isOccupied) {
+        // don't attack if Berserk Dragon itself has been destroyed
+        return;
+      }
+      attackMonster(state, zoneCoords, [...otherMonsters, idx]);
+    });
+  },
   [Monster.BeastOfGilfer]: (state, { zoneCoords, otherMonsters }) => {
     updateMonsters(
       state,
