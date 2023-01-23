@@ -2,7 +2,6 @@ import {
   BattlePosition,
   CounterAttackTrap,
   CounterSpellTrap,
-  Field,
   FlipEffectMonster,
   Monster,
   Orientation,
@@ -17,7 +16,7 @@ import {
   getDuellistCoordsMap,
   getOtherDuellistKey,
 } from "./duellistUtil";
-import { getFieldMultiplier } from "./fieldUtil";
+import { getActiveField, getFieldMultiplier } from "./fieldUtil";
 import { addToGraveyard } from "./graveyardUtil";
 import {
   getFirstEmptyZoneIdx,
@@ -226,9 +225,11 @@ export const calculateAttack = (
   };
 };
 
-export const getCombatStats = (zone: OccupiedMonsterZone, field: Field) => {
+export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
+  const activeField = getActiveField(state);
+  const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
   const { card, permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
-  const fieldMultiplier = getFieldMultiplier(field, card.type);
+  const fieldMultiplier = getFieldMultiplier(activeField, card.type);
   const { atk: baseAtk, def: baseDef } = zone.card;
 
   // Math.round() isn't necessary in 99.9% of cases, but there's some weird JS
