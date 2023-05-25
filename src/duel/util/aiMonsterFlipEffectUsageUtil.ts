@@ -21,7 +21,6 @@ import {
 
 export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
   {
-    [Monster.MysticalElf]: selfHasSpecificMonster(Monster.BlueEyesWhiteDragon),
     [Monster.FlameSwordsman]: opponentHasMonster((z) => isType(z, "Dinosaur")),
     [Monster.TimeWizard]: selfHasSpecificMonster(
       Monster.BabyDragon,
