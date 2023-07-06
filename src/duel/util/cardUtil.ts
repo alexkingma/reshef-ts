@@ -1,6 +1,6 @@
 import { default as alignmentMap } from "@/assets/alignment.json";
 import cards from "@/assets/cards";
-import { Monster, Spell } from "../common";
+import { Monster, Spell, Trap } from "../common";
 
 // Create a lookup map at runtime to avoid doing [].find()
 // every time card data needs to be fetched (100s of times per duel).
@@ -47,6 +47,16 @@ export const getExodiaCards = () => {
     Monster.LeftLegOfTheForbiddenOne,
     Monster.RightArmOfTheForbiddenOne,
     Monster.RightLegOfTheForbiddenOne,
+  ];
+};
+
+export const getFinalCards = () => {
+  return [
+    Trap.DestinyBoard,
+    Trap.SpiritMessageI,
+    Trap.SpiritMessageN,
+    Trap.SpiritMessageA,
+    Trap.SpiritMessageL,
   ];
 };
 

@@ -6,8 +6,8 @@ import { cardReducers } from "./reducers/cardReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
+import { getRandomDuel, isDuelOver, postDuelEffect } from "./util/duelUtil";
 import { getOtherDuellistKey } from "./util/duellistUtil";
-import { getRandomDuel } from "./util/duelUtil";
 import { getFieldZone } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
 import { getZone } from "./util/zoneUtil";
@@ -52,6 +52,10 @@ const transform = (map: CustomDuelReducers) => {
       if (key !== "endTurn" && !(key in interactionReducers)) {
         // after every core dispatch to the field state as above,
         // the entire field passive/auto effects need to be recalculated
+        if (isDuelOver(state)) {
+          postDuelEffect(state);
+          return;
+        }
 
         // However, once endTurn has been dispatched and isStartOfTurn is set,
         // the target/originator states essentially get swapped, causing buggy
@@ -61,6 +65,11 @@ const transform = (map: CustomDuelReducers) => {
         // start-of-turn dispatch, which prompts "It's my turn" dialogue, card-
         // drawing, start-of-turn-only effects, etc.
         checkAutoEffects(state);
+
+        if (isDuelOver(state)) {
+          postDuelEffect(state);
+          return;
+        }
       }
     };
   }

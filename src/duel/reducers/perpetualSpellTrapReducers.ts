@@ -5,7 +5,8 @@ import {
   Spell,
   Trap,
 } from "../common";
-import { burn, isStartOfTurn } from "../util/duellistUtil";
+import { getFinalCards } from "../util/cardUtil";
+import { burn, isStartOfTurn, winByFINAL } from "../util/duellistUtil";
 import {
   hasEmptyZone,
   hasMatchInRow,
@@ -99,22 +100,21 @@ export const perpetualSpellTrapReducers: CardReducerMap<
         effect: () => {
           // The letters are always added in order, so you know which card
           // comes next based on the first letter that isn't in the row.
-          const letters = [
-            Trap.SpiritMessageI,
-            Trap.SpiritMessageN,
-            Trap.SpiritMessageA,
-            Trap.SpiritMessageL,
-          ];
-          for (const letter of letters) {
-            if (!rowContainsAnyCards(state, ownSpellTrap, letter)) {
-              setSpellTrap(state, dKey, letter, {
-                orientation: Orientation.FaceUp,
-              });
-              // TODO: if the letter added was L, set the isVictor flag
+          for (const letter of getFinalCards()) {
+            // letter already on board
+            if (rowContainsAnyCards(state, ownSpellTrap, letter)) continue;
 
-              // only add one letter per turn
-              return;
+            setSpellTrap(state, dKey, letter, {
+              orientation: Orientation.FaceUp,
+            });
+
+            if (letter === Trap.SpiritMessageL) {
+              // the FINAL message is complete
+              winByFINAL(state, dKey);
             }
+
+            // only add one letter per turn
+            return;
           }
         },
       },

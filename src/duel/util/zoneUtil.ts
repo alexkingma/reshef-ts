@@ -159,10 +159,10 @@ export const immobiliseCard = (state: Duel, zoneCoords: ZoneCoords) => {
 };
 
 export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {
-  const targetState = state[getOtherDuellistKey(attackerCoords[0])];
-  const zone = getZone(state, attackerCoords) as OccupiedMonsterZone;
-  zone.orientation = Orientation.FaceUp;
-  targetState.lp -= zone.card.effAtk;
+  const targetDKey = getOtherDuellistKey(attackerCoords[0]);
+  const attackerZone = getZone(state, attackerCoords) as OccupiedMonsterZone;
+  attackerZone.orientation = Orientation.FaceUp;
+  burn(state, targetDKey, attackerZone.card.effAtk);
 };
 
 export const attackMonster = (

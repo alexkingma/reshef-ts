@@ -3,9 +3,8 @@ import {
   CounterSpellTrap,
   Orientation,
   RowKey,
-  Trap,
 } from "../common";
-import { getCard, getExodiaCards } from "./cardUtil";
+import { getCard, getExodiaCards, getFinalCards } from "./cardUtil";
 import { getGraveyardCard, isGraveyardEmpty } from "./graveyardUtil";
 import {
   clearZone,
@@ -26,15 +25,7 @@ export const hasFullExodia = (state: Duel, rowCoords: RowCoords) => {
 };
 
 export const hasFullFINAL = (state: Duel, rowCoords: RowCoords) => {
-  return rowContainsAllCards(
-    state,
-    rowCoords,
-    Trap.DestinyBoard,
-    Trap.SpiritMessageI,
-    Trap.SpiritMessageN,
-    Trap.SpiritMessageA,
-    Trap.SpiritMessageL
-  );
+  return rowContainsAllCards(state, rowCoords, ...getFinalCards());
 };
 
 export const getFirstEmptyZoneIdx = (

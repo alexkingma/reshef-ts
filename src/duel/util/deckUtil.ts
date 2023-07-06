@@ -1,4 +1,4 @@
-import { Orientation, RowKey } from "../common";
+import { DuellistStatus, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardName } from "./cardUtil";
 import { shuffle } from "./common";
 import { getFirstEmptyZoneIdx } from "./rowUtil";
@@ -54,7 +54,8 @@ export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
 
     const card = state[dKey].deck.shift();
     if (!card) {
-      // TODO: player is out of cards, end game
+      // player is out of cards, end game
+      state[dKey].status = DuellistStatus.DECK_OUT;
       return;
     }
 

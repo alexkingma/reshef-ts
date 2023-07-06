@@ -19,7 +19,7 @@ export const checkAutoEffects = (state: Duel) => {
   recalcCombatStats(state);
 };
 
-export const recalcCombatStats = (state: Duel) => {
+const recalcCombatStats = (state: Duel) => {
   const dKey = state.activeTurn.duellistKey;
   const otherDKey = getOtherDuellistKey(dKey);
 
@@ -56,7 +56,7 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
   };
 };
 
-export const checkPermAutoEffects = (state: Duel) => {
+const checkPermAutoEffects = (state: Duel) => {
   const { activeTurn } = state;
 
   const dKey = activeTurn.duellistKey;

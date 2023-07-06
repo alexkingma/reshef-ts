@@ -1,4 +1,4 @@
-import { BattlePosition, Orientation, RowKey } from "../common";
+import { BattlePosition, DuellistStatus, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardName } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getRandomFieldCard } from "./fieldUtil";
@@ -55,6 +55,7 @@ export const randomiseDuellistState = (name: string): Duellist => {
         orientation: Orientation.FaceUp,
       },
     ],
+    status: DuellistStatus.HEALTHY,
   };
 };
 
@@ -75,6 +76,7 @@ export const generateNewDuellist = (name: string): Duellist => {
       brainControlZones: [],
     },
     fieldZone: [],
+    status: DuellistStatus.HEALTHY,
   };
 };
 
@@ -111,7 +113,14 @@ export const getOtherDuellistKey = (key: DuellistKey) => {
 };
 
 export const burn = (state: Duel, dKey: DuellistKey, amt: number) => {
-  state[dKey].lp -= amt;
+  if (amt >= state[dKey].lp) {
+    // all LP wiped out, duel ends
+    state[dKey].lp = 0;
+    state[dKey].status = DuellistStatus.OUT_OF_LP;
+  } else {
+    // target has LP remaining, duel continues
+    state[dKey].lp -= amt;
+  }
 };
 
 export const heal = (state: Duel, dKey: DuellistKey, amt: number) => {
@@ -136,4 +145,12 @@ export const removeBrainControlZone = (state: Duel, coords: ZoneCoords) => {
   activeEffects.brainControlZones = activeEffects.brainControlZones.filter(
     (zoneCoords) => !isCoordMatch(zoneCoords, coords)
   );
+};
+
+export const winByExodia = (state: Duel, dKey: DuellistKey) => {
+  state[dKey].status = DuellistStatus.EXODIA;
+};
+
+export const winByFINAL = (state: Duel, dKey: DuellistKey) => {
+  state[dKey].status = DuellistStatus.DESTINY_BOARD;
 };

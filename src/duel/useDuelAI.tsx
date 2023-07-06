@@ -17,6 +17,7 @@ import {
   getIdealBattlePos,
   getLethalAttackerTarget,
 } from "./util/aiUtil";
+import { isDuelOver } from "./util/duelUtil";
 import { getDuellistCoordsMap, selfUnderSoRL } from "./util/duellistUtil";
 import {
   getFirstEmptyZoneIdx,
@@ -296,6 +297,11 @@ export const useDuelAI = (dKey: DuellistKey) => {
   };
 
   const makeDecision = () => {
+    // if at any point in a turn a duellist wins/loses, the AI
+    // stops making decisions and surrenders control up the chain
+    // to display victory messages, quit the duel, etc.
+    if (isDuelOver(state)) return;
+
     // each fn returns true if a valid action was performed,
     // or false if no action was performed and the next priority task
     // should be moved onto in the same update cycle

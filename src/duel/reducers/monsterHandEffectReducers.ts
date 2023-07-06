@@ -1,5 +1,6 @@
 import { HandEffectMonster, Monster } from "../common";
 import { isStartOfEitherTurn } from "../util/duelUtil";
+import { winByExodia } from "../util/duellistUtil";
 import {
   countMatchesInRow,
   destroyFirstFound,
@@ -38,7 +39,7 @@ export const monsterHandEffectReducers: CardReducerMap<
           return hasFullExodia(state, ownHand);
         },
         effect: (state, { dKey }) => {
-          // TODO: set victory flag
+          winByExodia(state, dKey);
         },
       },
     ];

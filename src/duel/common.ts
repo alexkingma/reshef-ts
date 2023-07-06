@@ -42,6 +42,15 @@ export enum InteractionMode {
   ChoosingOpponentMonster = "CHOOSING_OPPONENT_MONSTER", // monster to attack (non-direct attacks)
 }
 
+export enum DuellistStatus {
+  HEALTHY = "HEALTHY",
+  OUT_OF_LP = "OUT_OF_LP",
+  DECK_OUT = "DECK_OUT",
+  SURRENDER = "SURRENDER",
+  EXODIA = "EXODIA",
+  DESTINY_BOARD = "DESTINY_BOARD",
+}
+
 export enum Monster {
   BlueEyesWhiteDragon = "Blue-Eyes White Dragon",
   MysticalElf = "Mystical Elf",

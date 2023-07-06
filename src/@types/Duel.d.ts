@@ -44,6 +44,7 @@ interface Duellist {
     sorlTurnsRemaining: 0 | 1 | 2 | 3;
     brainControlZones: ZoneCoords[];
   };
+  status: DuellistStatus;
 }
 
 interface DuelInteraction {
@@ -79,6 +80,7 @@ interface Turn {
   numTributedMonsters: number;
 }
 
+// recreate enums since they can't be imported in .d.ts files
 type DuellistKey = "p1" | "p2";
 type RowKey =
   | "hand"
@@ -91,3 +93,11 @@ type RowKey =
 type ZoneCoords = [dKey: DuellistKey, rowKey: RowKey, colIdx: number];
 type ZoneCoordsForDuellist = OmitFirst<ZoneCoords>;
 type RowCoords = OmitLast<ZoneCoords>;
+
+type DuellistStatus =
+  | "HEALTHY"
+  | "OUT_OF_LP"
+  | "DECK_OUT"
+  | "SURRENDER" // unused for now
+  | "EXODIA"
+  | "DESTINY_BOARD";

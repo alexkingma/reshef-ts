@@ -1,4 +1,9 @@
-import { InteractionMode, RowKey } from "../common";
+import {
+  DuellistKey,
+  DuellistStatus,
+  InteractionMode,
+  RowKey,
+} from "../common";
 import { generateNewDuellist, randomiseDuellistState } from "./duellistUtil";
 
 export const getRandomDuel = (): Duel => {
@@ -45,11 +50,23 @@ export const isStartOfEitherTurn = (state: Duel) => {
   return state.activeTurn.isStartOfTurn;
 };
 
-export const isVictor = (state: Duel) => {
-  // TODO: opponent deck-out flag
-  // return (
-  //   targetState.lp === 0 ||
-  //   hasFullExodia(originatorState.hand) ||
-  //   hasFullFINAL(originatorState.spellTrapZones)
-  // );
+export const isDuelOver = (state: Duel): boolean => {
+  // determine if either side has fulfilled a win/lose condition
+  return (
+    state.p1.status !== DuellistStatus.HEALTHY ||
+    state.p2.status !== DuellistStatus.HEALTHY
+  );
+};
+
+export const postDuelEffect = (state: Duel) => {
+  const victor =
+    state.p1.status === DuellistStatus.DECK_OUT ||
+    state.p1.status === DuellistStatus.OUT_OF_LP ||
+    state.p1.status === DuellistStatus.SURRENDER ||
+    state.p2.status === DuellistStatus.EXODIA ||
+    state.p2.status === DuellistStatus.DESTINY_BOARD
+      ? DuellistKey.Opponent
+      : DuellistKey.Player;
+
+  console.log(`${victor} won the duel!`);
 };
