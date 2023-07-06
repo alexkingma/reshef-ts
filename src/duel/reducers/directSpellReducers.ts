@@ -209,13 +209,13 @@ export const spellEffectReducers: CardReducerMap<
     setRowFaceDown(state, ownMonsters);
   },
   [Spell.BrainControl]: (state, { dKey }) => {
-    const controlledMonIdx = convertMonster(state, dKey);
+    const controlledMonCoords = convertMonster(state, dKey);
 
-    if (!controlledMonIdx) return; // conversion failed, no space to house monster
+    if (!controlledMonCoords) return; // conversion failed, no space to house monster
 
     // converted monster must undo conversion on turn end
     const activeEffects = getActiveEffects(state, dKey);
-    activeEffects.brainControlZones.push(controlledMonIdx);
+    activeEffects.brainControlZones.push(controlledMonCoords);
   },
   [Spell.ChangeOfHeart]: (state, { dKey }) => {
     convertMonster(state, dKey);

@@ -15,6 +15,7 @@ import {
   burn,
   getDuellistCoordsMap,
   getOtherDuellistKey,
+  removeBrainControlZone,
 } from "./duellistUtil";
 import { getActiveField, getFieldMultiplier } from "./fieldUtil";
 import { addToGraveyard } from "./graveyardUtil";
@@ -143,6 +144,7 @@ export const destroyAtCoords = (
 export const clearZone = (state: Duel, [dKey, rKey, colIdx]: ZoneCoords) => {
   // does NOT send anything to graveyard
   state[dKey][rKey][colIdx] = { isOccupied: false };
+  removeBrainControlZone(state, [dKey, rKey, colIdx]);
 };
 
 export const clearZones = (
