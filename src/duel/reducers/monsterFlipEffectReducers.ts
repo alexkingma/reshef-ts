@@ -423,8 +423,10 @@ export const monsterFlipEffectReducers: CardReducerMap<
   },
   [Monster.BerserkDragon]: (state, { otherMonsters, zoneCoords }) => {
     // attack all enemy monsters from left to right in a single action
-    const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
     getRow(state, otherMonsters).forEach((z, idx) => {
+      // must re-get zone on each iteration of loop in order to check if
+      // Berserk Dragon has destroyed itself before completing all attacks
+      const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
       if (!z.isOccupied || !originZone.isOccupied) {
         // don't attack if Berserk Dragon itself has been destroyed
         return;
