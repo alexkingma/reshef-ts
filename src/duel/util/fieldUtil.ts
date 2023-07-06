@@ -20,13 +20,21 @@ export const setActiveField = (
   dKey: DuellistKey,
   field: Field
 ) => {
+  // always clear the opponent's field slot on principle
   const otherDKey = getOtherDuellistKey(dKey);
   state[otherDKey].fieldZone[0] = { isOccupied: false };
-  state[dKey].fieldZone[0] = {
-    isOccupied: true,
-    card: getCard(field as FieldName) as Card<FieldName>,
-    orientation: Orientation.FaceUp,
-  };
+
+  if (field === Field.Arena) {
+    // setting the field to "Arena" actually means removing
+    // any active field cards, rather than setting one
+    state[dKey].fieldZone[0] = { isOccupied: false };
+  } else {
+    state[dKey].fieldZone[0] = {
+      isOccupied: true,
+      card: getCard(field as FieldName) as Card<FieldName>,
+      orientation: Orientation.FaceUp,
+    };
+  }
 };
 
 export const getActiveField = (state: Duel): Field => {
