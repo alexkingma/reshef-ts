@@ -197,11 +197,11 @@ export const flipDialogueMap: DialogueMap<FlipEffectMonster> = {
   [Monster.ZMetalTank]:
     "Z will combine with X and/or Y on the player's field.\nCombine with X to become XZ. Combine with Y to become YZ. Combine with X and Z to become XYZ.",
   [Monster.AlphaTheMagnetWarrior]:
-    "If Beta and Gamma are on the field, the trio integrates as one. Valkyrin the Magna Warrior will appear.",
+    "If Beta and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.",
   [Monster.BetaTheMagnetWarrior]:
-    "If Alpha and Gamma are on the field, the trio integrates as one. Valkyrin the Magna Warrior will appear.",
+    "If Alpha and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.",
   [Monster.GammaTheMagnetWarrior]:
-    "If Alpha and Beta are on the field, the trio integrates as one. Valkyrin the Magna Warrior will appear.",
+    "If Alpha and Beta are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.",
 
   // assorted
   [Monster.CatapultTurtle]:

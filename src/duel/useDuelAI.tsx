@@ -305,7 +305,6 @@ export const useDuelAI = (dKey: DuellistKey) => {
     if (summonMonster()) return;
     if (activateMonsterEffect()) return;
     if (attackFaceUpTarget()) return;
-    if (attackFaceUpTarget()) return;
     if (attackFaceDownTarget()) return;
     if (attackDirectly()) return;
     if (defendIfWeak()) return;

@@ -13,7 +13,7 @@ export const Duel = () => {
     if (isStartOfTurn) {
       startTurn();
     }
-  }, [isStartOfTurn]);
+  }, [isStartOfTurn, startTurn]);
 
   const [renderMode, setRenderMode] = useState("visual");
 

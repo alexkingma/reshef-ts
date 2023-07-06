@@ -59,8 +59,8 @@ export const monsterTempPowerUpReducers: CardReducerMap<
     ];
   },
   [Monster.WitchsApprentice]: (state, { ownMonsters, otherMonsters }) => {
-    const matchLight = (z: OccupiedMonsterZone) => z.card.alignment === "Light";
-    const matchDark = (z: OccupiedMonsterZone) => z.card.alignment === "Dark";
+    const matchLight = (z: OccupiedMonsterZone) => isAlignment(z, "Light");
+    const matchDark = (z: OccupiedMonsterZone) => isAlignment(z, "Dark");
     const up = (z: OccupiedMonsterZone) => z.tempPowerUpLevel++;
     const down = (z: OccupiedMonsterZone) => z.tempPowerUpLevel--;
 
