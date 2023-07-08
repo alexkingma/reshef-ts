@@ -137,5 +137,8 @@ export const selectIsDuelOver = ({ duel }: RootState) => {
     duel.p2.status !== DuellistStatus.HEALTHY
   );
 };
+export const selectIsSimulation = ({ duel }: RootState) => {
+  return duel.config.p1Type === "computer" && duel.config.p2Type === "computer";
+};
 
 export default duelSlice.reducer;

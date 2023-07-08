@@ -8,10 +8,12 @@ import { getTempCardQuantMap } from "./deckUtil";
 import { getDuellistState, getFreshDuellistState } from "./duellistUtil";
 
 export const getRandomDuel = (): Duel => {
+  const cardQuantMap1 = getTempCardQuantMap();
+  const cardQuantMap2 = getTempCardQuantMap();
   return {
-    config: getDefaultConfig(),
-    p1: getDuellistState(),
-    p2: getDuellistState(),
+    config: getDefaultConfig(cardQuantMap1, cardQuantMap2),
+    p1: getDuellistState(cardQuantMap1),
+    p2: getDuellistState(cardQuantMap2),
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   };
@@ -22,7 +24,7 @@ export const getNewDuel = (
   cardQuantMap2: CardQuantityMap
 ): Duel => {
   return {
-    config: getDefaultConfig(),
+    config: getDefaultConfig(cardQuantMap1, cardQuantMap2),
     p1: getFreshDuellistState("Player", cardQuantMap1),
     p2: getFreshDuellistState("Opponent", cardQuantMap2),
     activeTurn: getDefaultActiveTurn(),
@@ -30,14 +32,17 @@ export const getNewDuel = (
   };
 };
 
-export const getDefaultConfig = (): DuelConfig => {
+export const getDefaultConfig = (
+  cardQuantMap1: CardQuantityMap,
+  cardQuantMap2: CardQuantityMap
+): DuelConfig => {
   return {
-    p1Type: "player",
+    p1Type: "computer",
     p2Type: "computer",
-    p1Deck: getTempCardQuantMap(),
-    p2Deck: getTempCardQuantMap(),
-    computerDelayMs: 1000,
-    remainingDuels: 0,
+    p1Deck: cardQuantMap1,
+    p2Deck: cardQuantMap2,
+    computerDelayMs: 0,
+    remainingDuels: 1000,
   };
 };
 
@@ -64,16 +69,12 @@ export const isStartOfEitherTurn = (state: Duel) => {
   return state.activeTurn.isStartOfTurn;
 };
 
-export const postDuelEffect = (state: Duel) => {
-  // TODO: unused?
-  const victor =
-    state.p1.status === DuellistStatus.DECK_OUT ||
+export const getVictorKey = (state: Duel): DuellistKey => {
+  return state.p1.status === DuellistStatus.DECK_OUT ||
     state.p1.status === DuellistStatus.OUT_OF_LP ||
     state.p1.status === DuellistStatus.SURRENDER ||
     state.p2.status === DuellistStatus.EXODIA ||
     state.p2.status === DuellistStatus.DESTINY_BOARD
-      ? DuellistKey.Opponent
-      : DuellistKey.Player;
-
-  console.log(`%c${victor} won the duel!`, "color:#d4af37");
+    ? DuellistKey.Opponent
+    : DuellistKey.Player;
 };

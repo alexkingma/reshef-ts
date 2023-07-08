@@ -1,7 +1,12 @@
 import { useAppSelector } from "@/hooks";
 import React, { useCallback, useEffect, useState } from "react";
-import { selectConfig, selectIsDuelOver } from "../duelSlice";
+import {
+  selectConfig,
+  selectIsDuelOver,
+  selectIsSimulation,
+} from "../duelSlice";
 import { useDuelActions } from "../useDuelActions";
+import { useElo } from "../useElo";
 import { getTempCardQuantMap } from "../util/deckUtil";
 import { getNewDuel } from "../util/duelUtil";
 import { Duel as Duel2D } from "./2d/Duel";
@@ -14,11 +19,13 @@ export enum GameMode {
 
 export const DuelContainer = () => {
   const [mode, setMode] = useState(GameMode.Idle);
+  const isSimulation = useAppSelector(selectIsSimulation);
   const { remainingDuels } = useAppSelector(selectConfig);
   const isDuelOver = useAppSelector(selectIsDuelOver);
   const { setDuel, decrementRemainingDuels } = useDuelActions();
   const [p1Deck, setP1Deck] = useState(getTempCardQuantMap());
   const [p2Deck, setP2Deck] = useState(getTempCardQuantMap());
+  const { updateEloMap } = useElo();
 
   const startNewDuel = useCallback(() => {
     setP1Deck(getTempCardQuantMap());
@@ -28,20 +35,33 @@ export const DuelContainer = () => {
   }, [p1Deck, p2Deck, setDuel]);
 
   useEffect(() => {
-    if (mode !== GameMode.Duel) return;
+    if (!isDuelOver || mode !== GameMode.Duel) return;
 
-    if (isDuelOver) {
-      console.log(`%cDuel has ended!`, "color:#d4af37");
-      if (remainingDuels) {
-        // at least one more duel is needed, start it now
-        decrementRemainingDuels();
-        startNewDuel();
-      } else {
-        // all duels/simulations complete, quit duel view
-        setMode(GameMode.Idle);
-      }
+    console.log(`%cDuel has ended!`, "color:#d4af37");
+    if (isSimulation) {
+      // two computers are playing, so we can use the result of this duel
+      // to update the Elo records of each card/deck
+      updateEloMap();
     }
-  }, [mode, isDuelOver, remainingDuels, startNewDuel, decrementRemainingDuels]);
+
+    if (remainingDuels) {
+      // at least one more duel is needed, start it now
+      console.log(`${remainingDuels} duels remaining.`);
+      decrementRemainingDuels();
+      startNewDuel();
+    } else {
+      // all duels/simulations complete, quit duel view
+      setMode(GameMode.Idle);
+    }
+  }, [
+    mode,
+    isDuelOver,
+    isSimulation,
+    remainingDuels,
+    startNewDuel,
+    decrementRemainingDuels,
+    updateEloMap,
+  ]);
 
   return (
     <>
