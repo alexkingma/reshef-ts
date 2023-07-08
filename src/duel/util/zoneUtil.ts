@@ -131,14 +131,16 @@ export const tempPowerDown = (
 
 export const destroyAtCoords = (
   state: Duel,
-  [dKey, rKey, colIdx]: ZoneCoords
+  coords: ZoneCoords,
+  allowGodDestruction: boolean = false
 ) => {
-  const zone = state[dKey][rKey][colIdx];
-  if (!zone.isOccupied) return;
-  if (isMonster(zone)) {
-    addToGraveyard(state, dKey, zone.card.name);
+  const [dKey] = coords;
+  const z = getZone(state, coords);
+  if (!z.isOccupied || (!allowGodDestruction && isGodCard(z))) return;
+  if (isMonster(z)) {
+    addToGraveyard(state, dKey, z.card.name);
   }
-  clearZone(state, [dKey, rKey, colIdx]);
+  clearZone(state, coords);
 };
 
 export const clearZone = (state: Duel, [dKey, rKey, colIdx]: ZoneCoords) => {
@@ -181,13 +183,13 @@ export const attackMonster = (
     calculateAttack(state, attackerCoords, targetCoords);
 
   if (attackerDestroyed) {
-    destroyAtCoords(state, attackerCoords);
+    destroyAtCoords(state, attackerCoords, true);
   } else {
     attackerZone.orientation = Orientation.FaceUp;
   }
 
   if (targetDestroyed) {
-    destroyAtCoords(state, targetCoords);
+    destroyAtCoords(state, targetCoords, true);
   } else {
     targetZone.orientation = Orientation.FaceUp;
   }
@@ -381,8 +383,13 @@ export const subsumeMonster = (
 
 export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
   const targetKey = getOtherDuellistKey(originatorKey);
-  const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
+  const targetIdx = getHighestAtkZoneIdx(
+    state,
+    [targetKey, RowKey.Monster],
+    isNotGodCard
+  );
   if (targetIdx === -1) return; // no monster to target
+
   const targetCoords: ZoneCoords = [targetKey, RowKey.Monster, targetIdx];
   const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
 
@@ -467,3 +474,16 @@ export const getFinalPowerUpLevel = (z: OccupiedMonsterZone) => {
   const { tempPowerUpLevel = 0, permPowerUpLevel = 0 } = z;
   return tempPowerUpLevel + permPowerUpLevel;
 };
+
+export const isGodCard = (z: Zone) => {
+  const godCards: MonsterName[] = [
+    Monster.SliferTheSkyDragon,
+    Monster.ObeliskTheTormentor,
+    Monster.TheWingedDragonOfRaBattleMode,
+    Monster.TheWingedDragonOfRaSphereMode,
+    Monster.TheWingedDragonOfRaPhoenixMode,
+  ];
+  return isMonster(z) && godCards.includes(z.card.name);
+};
+
+export const isNotGodCard = (z: Zone) => !isGodCard(z);

@@ -83,14 +83,14 @@ export const cardReducers = {
     zone.isLocked = true;
   },
   tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
-    destroyAtCoords(state, zoneCoords);
+    destroyAtCoords(state, zoneCoords, true);
     state.activeTurn.numTributedMonsters++;
 
     // tributing a BC-ed monster removes the BC flag from that zone
     removeBrainControlZone(state, zoneCoords);
   },
   discard: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
-    destroyAtCoords(state, zoneCoords);
+    destroyAtCoords(state, zoneCoords, true);
 
     // discarding a BC-ed monster removes the BC flag from that zone
     removeBrainControlZone(state, zoneCoords);

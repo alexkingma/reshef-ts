@@ -14,6 +14,7 @@ import {
   isDefMode,
   isFaceDown,
   isFaceUp,
+  isNotGodCard,
   isSpecificMonster,
   isType,
   isUnlocked,
@@ -99,45 +100,73 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
     { ownMonsters, otherMonsters, otherSpellTrap, otherHand }
   ) =>
     !hasMatchInRow(state, ownMonsters) &&
-    (hasMatchInRow(state, otherMonsters) ||
+    (hasMatchInRow(state, otherMonsters, isNotGodCard) ||
       hasMatchInRow(state, otherSpellTrap) ||
       hasMatchInRow(state, otherHand)),
   [Spell.HeavyStorm]: (state, { ownMonsters, otherMonsters, otherSpellTrap }) =>
     !hasMatchInRow(state, ownMonsters) &&
-    (hasMatchInRow(state, otherMonsters) ||
+    (hasMatchInRow(state, otherMonsters, isNotGodCard) ||
       hasMatchInRow(state, otherSpellTrap)),
   [Spell.DarkHole]: (state, { ownMonsters, otherMonsters }) =>
-    !hasMatchInRow(state, ownMonsters) && hasMatchInRow(state, otherMonsters),
-  [Spell.Raigeki]: opponentHasMonster(),
-  [Spell.CrushCard]: opponentHasMonster(),
+    !hasMatchInRow(state, ownMonsters) &&
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
+  [Spell.Raigeki]: (state, { otherMonsters }) =>
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
+  [Spell.CrushCard]: (state, { otherMonsters }) =>
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
   [Spell.HarpiesFeatherDuster]: opponentHasSpellTrap(),
-  [Spell.BeckonToDarkness]: opponentHasMonster(),
+  [Spell.BeckonToDarkness]: (state, { otherMonsters }) =>
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
 
   // type-specific destruction
   [Spell.WarriorElimination]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Warrior")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Warrior")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Warrior") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Warrior")),
   [Spell.EternalRest]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Zombie")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Zombie")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Zombie") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Zombie")),
   [Spell.StainStorm]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Machine")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Machine")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Machine") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Machine")),
   [Spell.EradicatingAerosol]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Insect")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Insect")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Insect") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Insect")),
   [Spell.BreathOfLight]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Rock")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Rock")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Rock") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Rock")),
   [Spell.EternalDrought]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Fish")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Fish")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Fish") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Fish")),
   [Spell.ExileOfTheWicked]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Fiend")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Fiend")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Fiend") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Fiend")),
   [Spell.LastDayOfWitch]: (state, { ownMonsters, otherMonsters }) =>
-    hasMatchInRow(state, otherMonsters, (z) => isType(z, "Spellcaster")) &&
-    !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Spellcaster")),
+    hasMatchInRow(
+      state,
+      otherMonsters,
+      (z) => isType(z, "Spellcaster") && isNotGodCard(z)
+    ) && !hasMatchInRow(state, ownMonsters, (z) => isType(z, "Spellcaster")),
 
   // assorted
   [Spell.Cursebreaker]: (state, { ownMonsters }) =>
@@ -164,9 +193,11 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
         !isUnlocked(z)
     ),
   [Spell.BrainControl]: (state, { ownMonsters, otherMonsters }) =>
-    hasEmptyZone(state, ownMonsters) && hasMatchInRow(state, otherMonsters),
+    hasEmptyZone(state, ownMonsters) &&
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
   [Spell.ChangeOfHeart]: (state, { ownMonsters, otherMonsters }) =>
-    hasEmptyZone(state, ownMonsters) && hasMatchInRow(state, otherMonsters),
+    hasEmptyZone(state, ownMonsters) &&
+    hasMatchInRow(state, otherMonsters, isNotGodCard),
   [Spell.Multiply]: (state, { ownMonsters }) =>
     hasEmptyZone(state, ownMonsters) &&
     hasMatchInRow(state, ownMonsters, (z) =>
