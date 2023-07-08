@@ -75,7 +75,7 @@ export const generateNewDuellist = (name: string): Duellist => {
       sorlTurnsRemaining: 0,
       brainControlZones: [],
     },
-    fieldZone: [],
+    fieldZone: [{ isOccupied: false }],
     status: DuellistStatus.HEALTHY,
   };
 };
