@@ -67,10 +67,20 @@ interface DuelInteraction {
 }
 
 interface Duel {
+  config: DuelConfig;
   p1: Duellist;
   p2: Duellist;
   activeTurn: Turn;
   interaction: DuelInteraction;
+}
+
+interface DuelConfig {
+  p1Type: "player" | "computer"; // TODO: enum
+  p2Type: "player" | "computer";
+  p1Deck: CardQuantityMap;
+  p2Deck: CardQuantityMap;
+  computerDelayMs: number;
+  remainingDuels: number;
 }
 
 interface Turn {

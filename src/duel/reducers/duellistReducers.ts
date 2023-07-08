@@ -5,7 +5,6 @@ import { getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { getActiveEffects } from "../util/duellistUtil";
-import { getRandomDuel } from "../util/duelUtil";
 import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
   clearZone,
@@ -17,12 +16,6 @@ import {
 export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
     shuffle(state[dKey].deck);
-  },
-  randomiseDuel: (state: Duel) => {
-    const randomGame = getRandomDuel();
-    Object.entries(randomGame).forEach(([key, val]) => {
-      state[key as keyof Duel] = val;
-    });
   },
   endTurn: (
     state: Duel,

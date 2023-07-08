@@ -1,12 +1,13 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { RowKey } from "./common";
+import { DuellistStatus, RowKey } from "./common";
 import { cardReducers } from "./reducers/cardReducers";
+import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
-import { getRandomDuel, isDuelOver, postDuelEffect } from "./util/duelUtil";
+import { getRandomDuel } from "./util/duelUtil";
 import { getOtherDuellistKey } from "./util/duellistUtil";
 import { getFieldZone } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
@@ -15,27 +16,36 @@ import { getZone } from "./util/zoneUtil";
 export type CardActionKey = keyof typeof cardReducers;
 export type DuellistActionKey = keyof typeof duellistReducers;
 export type InteractionActionKey = keyof typeof interactionReducers;
+export type DuelActionKey = keyof typeof duelReducers;
 
-type DuelActionKey = CardActionKey | DuellistActionKey | InteractionActionKey;
+type UnionDuelActionKey =
+  | CardActionKey
+  | DuellistActionKey
+  | InteractionActionKey
+  | DuelActionKey;
 type CustomDuelReducers = {
-  [K in DuelActionKey]: (
+  [K in UnionDuelActionKey]: (
     state: Duel,
     coordsMap: K extends CardActionKey
       ? ZoneCoordsMap
       : K extends InteractionActionKey
       ? ExtractSecondArg<typeof interactionReducers[K]>
+      : K extends DuelActionKey
+      ? ExtractSecondArg<typeof duelReducers[K]>
       : DuellistCoordsMap
   ) => void;
 };
 
 type DuelReducers = {
-  [K in DuelActionKey]: (
+  [K in UnionDuelActionKey]: (
     state: Duel,
     action: PayloadAction<
       K extends CardActionKey
         ? ZoneCoordsMap
         : K extends InteractionActionKey
         ? ExtractSecondArg<typeof interactionReducers[K]>
+        : K extends DuelActionKey
+        ? ExtractSecondArg<typeof duelReducers[K]>
         : DuellistCoordsMap
     >
   ) => void;
@@ -46,16 +56,12 @@ const initialState: Duel = getRandomDuel();
 const transform = (map: CustomDuelReducers) => {
   const transformedMap = {} as DuelReducers;
   for (let key in map) {
-    transformedMap[key as DuelActionKey] = (state, action) => {
-      map[key as DuelActionKey](state, action.payload as any);
+    transformedMap[key as UnionDuelActionKey] = (state, action) => {
+      map[key as UnionDuelActionKey](state, action.payload as any);
 
       if (key !== "endTurn" && !(key in interactionReducers)) {
         // after every core dispatch to the field state as above,
         // the entire field passive/auto effects need to be recalculated
-        if (isDuelOver(state)) {
-          postDuelEffect(state);
-          return;
-        }
 
         // However, once endTurn has been dispatched and isStartOfTurn is set,
         // the target/originator states essentially get swapped, causing buggy
@@ -65,11 +71,6 @@ const transform = (map: CustomDuelReducers) => {
         // start-of-turn dispatch, which prompts "It's my turn" dialogue, card-
         // drawing, start-of-turn-only effects, etc.
         checkAutoEffects(state);
-
-        if (isDuelOver(state)) {
-          postDuelEffect(state);
-          return;
-        }
       }
     };
   }
@@ -83,6 +84,7 @@ export const duelSlice = createSlice({
     ...cardReducers,
     ...duellistReducers,
     ...interactionReducers,
+    ...duelReducers,
   }),
 });
 
@@ -121,5 +123,19 @@ export const selectActiveField =
     getFieldZone(duel, key);
 export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
+export const selectConfig = ({ duel }: RootState) => duel.config;
+export const selectIsComputer =
+  (key: DuellistKey) =>
+  ({ duel }: RootState) =>
+    key === "p1"
+      ? duel.config.p1Type === "computer"
+      : duel.config.p2Type === "computer";
+export const selectIsDuelOver = ({ duel }: RootState) => {
+  // determine if either side has fulfilled a win/lose condition
+  return (
+    duel.p1.status !== DuellistStatus.HEALTHY ||
+    duel.p2.status !== DuellistStatus.HEALTHY
+  );
+};
 
 export default duelSlice.reducer;

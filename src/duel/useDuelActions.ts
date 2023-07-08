@@ -1,10 +1,12 @@
 import { useAppDispatch } from "@/hooks";
 import {
-  actions as duelActions,
   CardActionKey,
+  DuelActionKey,
   DuellistActionKey,
+  actions as duelActions,
 } from "./duelSlice";
 import { cardReducers } from "./reducers/cardReducers";
+import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { getDuellistCoordsMap } from "./util/duellistUtil";
@@ -67,6 +69,25 @@ export const useInteractionActions = () => {
   for (let key in duelActions) {
     map[key as InteractionActionKey] = (arg?: any) => {
       dispatch(duelActions[key as InteractionActionKey](arg));
+    };
+  }
+
+  return map;
+};
+
+//  ----------------------------------------------------------------------- //
+
+type DuelActions = {
+  [K in keyof typeof duelReducers]: OmitFirstArg<typeof duelReducers[K]>;
+};
+
+export const useDuelActions = () => {
+  const dispatch = useAppDispatch();
+
+  const map = {} as DuelActions;
+  for (let key in duelActions) {
+    map[key as DuelActionKey] = (arg?: any) => {
+      dispatch(duelActions[key as DuelActionKey](arg));
     };
   }
 

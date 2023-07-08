@@ -1,5 +1,9 @@
 import { DuellistKey, RowKey } from "@/duel/common";
-import { selectIsMyTurn } from "@/duel/duelSlice";
+import {
+  selectConfig,
+  selectIsComputer,
+  selectIsMyTurn,
+} from "@/duel/duelSlice";
 import { useDuelAI } from "@/duel/useDuelAI";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
@@ -17,23 +21,24 @@ interface Props {
 }
 
 export const Duellist = ({ duellistKey }: Props) => {
-  const isPlayer = duellistKey === DuellistKey.Player;
+  const isPlayerSideOfField = duellistKey === DuellistKey.Player;
   const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const { computerDelayMs } = useAppSelector(selectConfig);
+  const isComputer = useAppSelector(selectIsComputer(duellistKey));
   const makeDecision = useDuelAI(duellistKey);
 
   useEffect(() => {
     let decisionMakingTimeout: NodeJS.Timeout;
-    if (!isPlayer && isMyTurn) {
+    if (isComputer && isMyTurn) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();
-      }, 1000);
+      }, computerDelayMs);
     }
-
     return () => clearTimeout(decisionMakingTimeout);
-  }, [isPlayer, isMyTurn, makeDecision]);
+  }, [isComputer, isMyTurn, computerDelayMs, makeDecision]);
 
   return (
-    <div className={classNames(!isPlayer && "opponent")}>
+    <div className={classNames(!isPlayerSideOfField && "opponent")}>
       <div className="rowContainer">
         <Field duellistKey={duellistKey} />
         <Row rowCoords={[duellistKey, RowKey.Monster]} />

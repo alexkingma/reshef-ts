@@ -1,11 +1,12 @@
 import { DuellistKey, Monster, RowKey } from "../../common";
+import { getTempCardQuantMap } from "../deckUtil";
 import { getNewDuel } from "../duelUtil";
 import { getHighestAtkZoneIdx } from "../rowUtil";
 import { generateOccupiedMonsterZone } from "../zoneUtil";
 
 describe("getHighestAtkZoneIdx", () => {
   const getState = (ownMonsters: (Monster | null)[]) => {
-    let state: Duel = getNewDuel();
+    let state: Duel = getNewDuel(getTempCardQuantMap(), getTempCardQuantMap());
     state.p1.monsterZones.forEach((z, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };

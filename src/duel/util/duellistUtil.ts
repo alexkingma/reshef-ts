@@ -4,11 +4,11 @@ import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getRandomFieldCard } from "./fieldUtil";
 import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
-export const randomiseDuellistState = (name: string): Duellist => {
+export const getDuellistState = (): Duellist => {
   const rand = () => Math.random() > 0.5;
   const deck = initialiseDeck(getTempCardQuantMap());
   return {
-    name,
+    name: (Math.random() + 1).toString(36).substring(7),
     lp: Math.ceil(Math.random() * 8) * 1000,
     hand: deck
       .splice(0, 5)
@@ -59,8 +59,11 @@ export const randomiseDuellistState = (name: string): Duellist => {
   };
 };
 
-export const generateNewDuellist = (name: string): Duellist => {
-  const deck = initialiseDeck(getTempCardQuantMap());
+export const getFreshDuellistState = (
+  name: string,
+  cardQuantMap: CardQuantityMap
+): Duellist => {
+  const deck = initialiseDeck(cardQuantMap);
   return {
     name,
     lp: 8000,

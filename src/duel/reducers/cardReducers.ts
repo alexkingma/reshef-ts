@@ -129,8 +129,8 @@ export const cardReducers = {
     }
 
     if (flipReducer) {
-      flipReducer(state, coordsMap);
       console.log(`%c${originalCardName}`, "color: #D45420;");
+      flipReducer(state, coordsMap);
 
       // lock/flip/etc.
       postDirectMonsterAction(state, zoneCoords, originalCardName);

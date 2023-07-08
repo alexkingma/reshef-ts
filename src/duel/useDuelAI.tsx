@@ -6,7 +6,7 @@ import {
   RowKey,
   Spell,
 } from "./common";
-import { actions, selectDuel } from "./duelSlice";
+import { actions, selectDuel, selectIsDuelOver } from "./duelSlice";
 import { useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";
@@ -17,7 +17,6 @@ import {
   getIdealBattlePos,
   getLethalAttackerTarget,
 } from "./util/aiUtil";
-import { isDuelOver } from "./util/duelUtil";
 import { getDuellistCoordsMap, selfUnderSoRL } from "./util/duellistUtil";
 import {
   getFirstEmptyZoneIdx,
@@ -40,6 +39,7 @@ import {
 
 export const useDuelAI = (dKey: DuellistKey) => {
   const state = useAppSelector(selectDuel);
+  const isDuelOver = useAppSelector(selectIsDuelOver);
   const dispatch = useAppDispatch();
   const {
     attack: attackAction,
@@ -300,7 +300,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
     // if at any point in a turn a duellist wins/loses, the AI
     // stops making decisions and surrenders control up the chain
     // to display victory messages, quit the duel, etc.
-    if (isDuelOver(state)) return;
+    if (isDuelOver) return;
 
     // each fn returns true if a valid action was performed,
     // or false if no action was performed and the next priority task
