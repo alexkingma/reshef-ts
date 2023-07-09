@@ -1,13 +1,6 @@
 import { DuellistKey, RowKey } from "@/duel/common";
-import {
-  selectConfig,
-  selectIsComputer,
-  selectIsMyTurn,
-} from "@/duel/duelSlice";
-import { useDuelAI } from "@/duel/useDuelAI";
-import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
-import React, { useEffect } from "react";
+import React from "react";
 import { Counterweight } from "../zone/Counterweight";
 import { Deck } from "../zone/Deck";
 import { Field } from "../zone/Field";
@@ -22,20 +15,6 @@ interface Props {
 
 export const Duellist = ({ duellistKey }: Props) => {
   const isPlayerSideOfField = duellistKey === DuellistKey.Player;
-  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
-  const { computerDelayMs } = useAppSelector(selectConfig);
-  const isComputer = useAppSelector(selectIsComputer(duellistKey));
-  const makeDecision = useDuelAI(duellistKey);
-
-  useEffect(() => {
-    let decisionMakingTimeout: NodeJS.Timeout;
-    if (isComputer && isMyTurn) {
-      decisionMakingTimeout = setTimeout(() => {
-        makeDecision();
-      }, computerDelayMs);
-    }
-    return () => clearTimeout(decisionMakingTimeout);
-  }, [isComputer, isMyTurn, computerDelayMs, makeDecision]);
 
   return (
     <div className={classNames(!isPlayerSideOfField && "opponent")}>

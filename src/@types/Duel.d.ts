@@ -75,12 +75,13 @@ interface Duel {
 }
 
 interface DuelConfig {
-  p1Type: "player" | "computer"; // TODO: enum
-  p2Type: "player" | "computer";
+  p1Type: PlayerType;
+  p2Type: PlayerType;
   p1Deck: CardQuantityMap;
   p2Deck: CardQuantityMap;
   computerDelayMs: number;
-  remainingDuels: number;
+  totalDuelsToPlay: number;
+  showDuelUI: boolean;
 }
 
 interface Turn {
@@ -111,3 +112,5 @@ type DuellistStatus =
   | "SURRENDER" // unused for now
   | "EXODIA"
   | "DESTINY_BOARD";
+
+type PlayerType = "HUMAN" | "COMPUTER";

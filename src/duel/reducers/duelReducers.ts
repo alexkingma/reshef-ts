@@ -2,10 +2,12 @@ import { getRandomDuel } from "../util/duelUtil";
 
 export const duelReducers = {
   setDuel: (state: Duel, newDuel: Duel) => {
-    // TODO: remainingDuels shouldn't be a sub-property of an existing duel.
+    // TODO: these props aren't part of a duel and need to be moved.
     // This is a cheap workaround to prevent it being overwritten
     // every time a new duel is instantiated as part of a simulation loop.
-    newDuel.config.remainingDuels = state.config.remainingDuels;
+    newDuel.config.showDuelUI = state.config.showDuelUI;
+    newDuel.config.totalDuelsToPlay = state.config.totalDuelsToPlay;
+    newDuel.config.computerDelayMs = state.config.computerDelayMs;
 
     Object.entries(newDuel).forEach(([key, val]) => {
       state[key as keyof Duel] = val;
@@ -17,7 +19,7 @@ export const duelReducers = {
       state[key as keyof Duel] = val;
     });
   },
-  decrementRemainingDuels: (state: Duel) => {
-    state.config.remainingDuels--;
+  updateConfig: (state: Duel, newConfig: Partial<DuelConfig>) => {
+    state.config = { ...state.config, ...newConfig };
   },
 };

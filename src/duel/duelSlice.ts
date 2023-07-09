@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { DuellistStatus, RowKey } from "./common";
+import { DuellistStatus, PlayerType, RowKey } from "./common";
 import { cardReducers } from "./reducers/cardReducers";
 import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
@@ -128,8 +128,8 @@ export const selectIsComputer =
   (key: DuellistKey) =>
   ({ duel }: RootState) =>
     key === "p1"
-      ? duel.config.p1Type === "computer"
-      : duel.config.p2Type === "computer";
+      ? duel.config.p1Type === PlayerType.Computer
+      : duel.config.p2Type === PlayerType.Computer;
 export const selectIsDuelOver = ({ duel }: RootState) => {
   // determine if either side has fulfilled a win/lose condition
   return (
@@ -138,7 +138,10 @@ export const selectIsDuelOver = ({ duel }: RootState) => {
   );
 };
 export const selectIsSimulation = ({ duel }: RootState) => {
-  return duel.config.p1Type === "computer" && duel.config.p2Type === "computer";
+  return (
+    duel.config.p1Type === PlayerType.Computer &&
+    duel.config.p2Type === PlayerType.Computer
+  );
 };
 
 export default duelSlice.reducer;

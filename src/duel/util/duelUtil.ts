@@ -2,6 +2,7 @@ import {
   DuellistKey,
   DuellistStatus,
   InteractionMode,
+  PlayerType,
   RowKey,
 } from "../common";
 import { getTempCardQuantMap } from "./deckUtil";
@@ -37,12 +38,13 @@ export const getDefaultConfig = (
   cardQuantMap2: CardQuantityMap
 ): DuelConfig => {
   return {
-    p1Type: "computer",
-    p2Type: "computer",
+    p1Type: PlayerType.Computer,
+    p2Type: PlayerType.Computer,
     p1Deck: cardQuantMap1,
     p2Deck: cardQuantMap2,
     computerDelayMs: 0,
-    remainingDuels: 1000,
+    totalDuelsToPlay: 100,
+    showDuelUI: false,
   };
 };
 

@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useEffect } from "react";
 import {
   BattlePosition,
   DirectSpell,
@@ -6,8 +7,16 @@ import {
   RowKey,
   Spell,
 } from "./common";
-import { actions, selectDuel, selectIsDuelOver } from "./duelSlice";
-import { useInteractionActions } from "./useDuelActions";
+import {
+  actions,
+  selectActiveTurn,
+  selectConfig,
+  selectDuel,
+  selectIsComputer,
+  selectIsDuelOver,
+  selectIsMyTurn,
+} from "./duelSlice";
+import { useDuellistActions, useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";
 import {
@@ -37,7 +46,7 @@ import {
   isUnlocked,
 } from "./util/zoneUtil";
 
-export const useDuelAI = (dKey: DuellistKey) => {
+export const useDuelAI = () => {
   const state = useAppSelector(selectDuel);
   const isDuelOver = useAppSelector(selectIsDuelOver);
   const dispatch = useAppDispatch();
@@ -54,10 +63,22 @@ export const useDuelAI = (dKey: DuellistKey) => {
     endTurn: endTurnAction,
     aiNormalSummon: aiNormalSummonAction,
   } = actions;
+  const { duellistKey: dKey, isStartOfTurn } = useAppSelector(selectActiveTurn);
+  const { startTurn } = useDuellistActions(dKey);
   const { setOriginZone, setTargetZone, resetInteractions } =
     useInteractionActions();
   const { ownHand, ownMonsters, ownSpellTrap, otherMonsters } =
     getDuellistCoordsMap(dKey);
+
+  useEffect(() => {
+    if (isStartOfTurn) {
+      startTurn();
+    }
+  }, [isStartOfTurn, startTurn]);
+
+  const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
+  const { computerDelayMs } = useAppSelector(selectConfig);
+  const isComputer = useAppSelector(selectIsComputer(dKey));
 
   const executeLethal = (): boolean => {
     // Attempt to end the duel in a single attack, to save time.
@@ -296,6 +317,7 @@ export const useDuelAI = (dKey: DuellistKey) => {
     dispatch(endTurnAction(getDuellistCoordsMap(dKey)));
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const makeDecision = () => {
     // if at any point in a turn a duellist wins/loses, the AI
     // stops making decisions and surrenders control up the chain
@@ -319,5 +341,13 @@ export const useDuelAI = (dKey: DuellistKey) => {
     endTurn();
   };
 
-  return makeDecision;
+  useEffect(() => {
+    let decisionMakingTimeout: NodeJS.Timeout;
+    if (isComputer && isMyTurn) {
+      decisionMakingTimeout = setTimeout(() => {
+        makeDecision();
+      }, computerDelayMs);
+    }
+    return () => clearTimeout(decisionMakingTimeout);
+  }, [isComputer, isMyTurn, computerDelayMs, makeDecision]);
 };

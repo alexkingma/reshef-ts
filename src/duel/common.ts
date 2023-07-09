@@ -1,3 +1,8 @@
+export enum PlayerType {
+  Human = "HUMAN",
+  Computer = "COMPUTER",
+}
+
 export enum BattlePosition {
   Attack = "ATTACK_POSITION",
   Defence = "DEFENCE_POSITION",
