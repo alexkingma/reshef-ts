@@ -1,0 +1,4004 @@
+const cardEloMap = {
+  "Change of Heart": {
+    elo: 4895,
+    wins: 741,
+    losses: 131,
+  },
+  "Zombyra the Dark": {
+    elo: 4277,
+    wins: 643,
+    losses: 193,
+  },
+  "Torrential Tribute": {
+    elo: 4254,
+    wins: 666,
+    losses: 183,
+  },
+  "Jirai Gumo": {
+    elo: 4207,
+    wins: 671,
+    losses: 183,
+  },
+  "Dark Elf": {
+    elo: 4158,
+    wins: 669,
+    losses: 224,
+  },
+  "Chiron the Mage": {
+    elo: 4046,
+    wins: 643,
+    losses: 196,
+  },
+  "Boar Soldier": {
+    elo: 3723,
+    wins: 631,
+    losses: 253,
+  },
+  "Panther Warrior": {
+    elo: 3599,
+    wins: 653,
+    losses: 245,
+  },
+  "Gemini Elf": {
+    elo: 3598,
+    wins: 583,
+    losses: 239,
+  },
+  "Thousand-Eyes Restrict": {
+    elo: 3575,
+    wins: 600,
+    losses: 240,
+  },
+  "Acid Trap Hole": {
+    elo: 3574,
+    wins: 607,
+    losses: 245,
+  },
+  "Nuvia the Wicked": {
+    elo: 3570,
+    wins: 612,
+    losses: 214,
+  },
+  "Swords of Revealing Light": {
+    elo: 3555,
+    wins: 607,
+    losses: 228,
+  },
+  "Flash Assailant": {
+    elo: 3543,
+    wins: 642,
+    losses: 249,
+  },
+  "Widespread Ruin": {
+    elo: 3499,
+    wins: 622,
+    losses: 248,
+  },
+  Mechanicalchaser: {
+    elo: 3493,
+    wins: 607,
+    losses: 282,
+  },
+  "Giant Red Seasnake": {
+    elo: 3485,
+    wins: 625,
+    losses: 270,
+  },
+  "Giant Rex": {
+    elo: 3447,
+    wins: 620,
+    losses: 241,
+  },
+  "7 Colored Fish": {
+    elo: 3337,
+    wins: 629,
+    losses: 291,
+  },
+  "Dunames Dark Witch": {
+    elo: 3235,
+    wins: 565,
+    losses: 250,
+  },
+  Relinquished: {
+    elo: 3223,
+    wins: 585,
+    losses: 293,
+  },
+  "Dark Zebra": {
+    elo: 3208,
+    wins: 614,
+    losses: 271,
+  },
+  "La Jinn the Mystical Genie of the Lamp": {
+    elo: 3180,
+    wins: 559,
+    losses: 278,
+  },
+  "Ancient Lamp": {
+    elo: 3147,
+    wins: 571,
+    losses: 289,
+  },
+  "The Bistro Butcher": {
+    elo: 3146,
+    wins: 564,
+    losses: 290,
+  },
+  "Vorse Raider": {
+    elo: 3075,
+    wins: 558,
+    losses: 254,
+  },
+  "Guardian of the Throne Room": {
+    elo: 3071,
+    wins: 550,
+    losses: 316,
+  },
+  "Harpie's Brother": {
+    elo: 3057,
+    wins: 547,
+    losses: 309,
+  },
+  "Dark Hole": {
+    elo: 3049,
+    wins: 572,
+    losses: 311,
+  },
+  "Cyber Harpie": {
+    elo: 3028,
+    wins: 567,
+    losses: 309,
+  },
+  "Kaiser Sea Horse": {
+    elo: 3017,
+    wins: 569,
+    losses: 286,
+  },
+  "Battle Ox": {
+    elo: 3002,
+    wins: 604,
+    losses: 334,
+  },
+  "Gearfried the Iron Knight": {
+    elo: 3000,
+    wins: 534,
+    losses: 285,
+  },
+  "Fairy of the Fountain": {
+    elo: 2981,
+    wins: 585,
+    losses: 343,
+  },
+  "Amazon Archers": {
+    elo: 2960,
+    wins: 565,
+    losses: 329,
+  },
+  Newdoria: {
+    elo: 2940,
+    wins: 552,
+    losses: 301,
+  },
+  "High Tide Gyojin": {
+    elo: 2924,
+    wins: 511,
+    losses: 324,
+  },
+  "X-Head Cannon": {
+    elo: 2916,
+    wins: 578,
+    losses: 313,
+  },
+  "Revival Jam": {
+    elo: 2909,
+    wins: 568,
+    losses: 337,
+  },
+  "Gil Garth": {
+    elo: 2905,
+    wins: 555,
+    losses: 298,
+  },
+  "Axe Raider": {
+    elo: 2834,
+    wins: 538,
+    losses: 335,
+  },
+  Aeris: {
+    elo: 2792,
+    wins: 603,
+    losses: 311,
+  },
+  "Heavy Storm": {
+    elo: 2764,
+    wins: 540,
+    losses: 331,
+  },
+  "Brain Control": {
+    elo: 2754,
+    wins: 583,
+    losses: 342,
+  },
+  "Neo the Magic Swordsman": {
+    elo: 2750,
+    wins: 548,
+    losses: 331,
+  },
+  "Spirit of the Books": {
+    elo: 2748,
+    wins: 565,
+    losses: 330,
+  },
+  "Dark Jeroid": {
+    elo: 2728,
+    wins: 528,
+    losses: 328,
+  },
+  "Monster Reborn": {
+    elo: 2717,
+    wins: 544,
+    losses: 333,
+  },
+  "Dark Flare Knight": {
+    elo: 2714,
+    wins: 560,
+    losses: 344,
+  },
+  "Invisible Wire": {
+    elo: 2709,
+    wins: 523,
+    losses: 330,
+  },
+  "Baron of the Fiend Sword": {
+    elo: 2706,
+    wins: 548,
+    losses: 348,
+  },
+  "Beckon to Darkness": {
+    elo: 2705,
+    wins: 513,
+    losses: 298,
+  },
+  "Asura Priest": {
+    elo: 2689,
+    wins: 522,
+    losses: 349,
+  },
+  "Violent Rain": {
+    elo: 2688,
+    wins: 517,
+    losses: 338,
+  },
+  "Maha Vailo": {
+    elo: 2659,
+    wins: 529,
+    losses: 330,
+  },
+  "Beta The Magnet Warrior": {
+    elo: 2646,
+    wins: 518,
+    losses: 319,
+  },
+  "Man-Eating Treasure Chest": {
+    elo: 2633,
+    wins: 506,
+    losses: 335,
+  },
+  "Crazy Fish": {
+    elo: 2607,
+    wins: 511,
+    losses: 335,
+  },
+  Megamorph: {
+    elo: 2589,
+    wins: 530,
+    losses: 349,
+  },
+  "Executor - Makyura": {
+    elo: 2580,
+    wins: 497,
+    losses: 352,
+  },
+  "Dragon Zombie": {
+    elo: 2554,
+    wins: 518,
+    losses: 346,
+  },
+  "Great White": {
+    elo: 2547,
+    wins: 538,
+    losses: 351,
+  },
+  "Flying Kamakiri #2": {
+    elo: 2542,
+    wins: 502,
+    losses: 373,
+  },
+  "Crush Card": {
+    elo: 2542,
+    wins: 518,
+    losses: 342,
+  },
+  "Des Feral Imp": {
+    elo: 2536,
+    wins: 532,
+    losses: 330,
+  },
+  "Darkfire Soldier #1": {
+    elo: 2533,
+    wins: 540,
+    losses: 363,
+  },
+  "Two-Headed King Rex": {
+    elo: 2527,
+    wins: 508,
+    losses: 345,
+  },
+  "Infinite Dismissal": {
+    elo: 2525,
+    wins: 523,
+    losses: 368,
+  },
+  "Destiny Board": {
+    elo: 2518,
+    wins: 547,
+    losses: 344,
+  },
+  "Whiptail Crow": {
+    elo: 2508,
+    wins: 510,
+    losses: 354,
+  },
+  "Electro-Whip": {
+    elo: 2507,
+    wins: 509,
+    losses: 360,
+  },
+  "Command Angel": {
+    elo: 2492,
+    wins: 497,
+    losses: 336,
+  },
+  "King's Knight": {
+    elo: 2491,
+    wins: 515,
+    losses: 358,
+  },
+  "Horn of the Unicorn": {
+    elo: 2478,
+    wins: 532,
+    losses: 361,
+  },
+  "Trap Master": {
+    elo: 2477,
+    wins: 526,
+    losses: 373,
+  },
+  "Mammoth Graveyard": {
+    elo: 2467,
+    wins: 548,
+    losses: 328,
+  },
+  "Malevolent Nuzzler": {
+    elo: 2467,
+    wins: 513,
+    losses: 363,
+  },
+  "Darkfire Dragon": {
+    elo: 2466,
+    wins: 485,
+    losses: 345,
+  },
+  "Embodiment of Apophis": {
+    elo: 2456,
+    wins: 538,
+    losses: 373,
+  },
+  "Crawling Dragon #2": {
+    elo: 2450,
+    wins: 517,
+    losses: 359,
+  },
+  "Rogue Doll": {
+    elo: 2443,
+    wins: 535,
+    losses: 356,
+  },
+  "Blade Knight": {
+    elo: 2440,
+    wins: 527,
+    losses: 362,
+  },
+  "Grand Tiki Elder": {
+    elo: 2439,
+    wins: 494,
+    losses: 367,
+  },
+  "Gamma The Magnet Warrior": {
+    elo: 2420,
+    wins: 518,
+    losses: 406,
+  },
+  "Queen's Knight": {
+    elo: 2418,
+    wins: 505,
+    losses: 357,
+  },
+  "Shining Abyss": {
+    elo: 2416,
+    wins: 483,
+    losses: 363,
+  },
+  "Gazelle the King of Mythical Beasts": {
+    elo: 2411,
+    wins: 499,
+    losses: 343,
+  },
+  "Darkfire Soldier #2": {
+    elo: 2410,
+    wins: 541,
+    losses: 351,
+  },
+  Takuhee: {
+    elo: 2405,
+    wins: 482,
+    losses: 367,
+  },
+  "Shining Friendship": {
+    elo: 2398,
+    wins: 481,
+    losses: 382,
+  },
+  "Skull Red Bird": {
+    elo: 2391,
+    wins: 463,
+    losses: 362,
+  },
+  "Mystic Clown": {
+    elo: 2368,
+    wins: 526,
+    losses: 368,
+  },
+  Keldo: {
+    elo: 2359,
+    wins: 486,
+    losses: 383,
+  },
+  "Koumori Dragon": {
+    elo: 2353,
+    wins: 508,
+    losses: 368,
+  },
+  "Armored Zombie": {
+    elo: 2341,
+    wins: 498,
+    losses: 402,
+  },
+  "Cyber Falcon": {
+    elo: 2340,
+    wins: 466,
+    losses: 354,
+  },
+  "Ancient Elf": {
+    elo: 2340,
+    wins: 504,
+    losses: 357,
+  },
+  "Giant Rat": {
+    elo: 2325,
+    wins: 517,
+    losses: 404,
+  },
+  "Cyber Raider": {
+    elo: 2322,
+    wins: 503,
+    losses: 385,
+  },
+  "Ryu-Kishin Powered": {
+    elo: 2317,
+    wins: 501,
+    losses: 354,
+  },
+  "Cyber Shield": {
+    elo: 2310,
+    wins: 531,
+    losses: 380,
+  },
+  "Z-Metal Tank": {
+    elo: 2307,
+    wins: 473,
+    losses: 366,
+  },
+  "Thunder Nyan Nyan": {
+    elo: 2304,
+    wins: 456,
+    losses: 355,
+  },
+  "The Judgement Hand": {
+    elo: 2283,
+    wins: 502,
+    losses: 385,
+  },
+  Takriminos: {
+    elo: 2281,
+    wins: 525,
+    losses: 395,
+  },
+  "Melchid the Four-Face Beast": {
+    elo: 2280,
+    wins: 484,
+    losses: 398,
+  },
+  "The Immortal of Thunder": {
+    elo: 2274,
+    wins: 509,
+    losses: 381,
+  },
+  "Blast Sphere": {
+    elo: 2271,
+    wins: 490,
+    losses: 374,
+  },
+  "Faith Bird": {
+    elo: 2268,
+    wins: 521,
+    losses: 394,
+  },
+  "Giant Flea": {
+    elo: 2265,
+    wins: 504,
+    losses: 398,
+  },
+  "Pot of Greed": {
+    elo: 2263,
+    wins: 483,
+    losses: 393,
+  },
+  "Fire Kraken": {
+    elo: 2263,
+    wins: 521,
+    losses: 392,
+  },
+  "Armored Lizard": {
+    elo: 2254,
+    wins: 516,
+    losses: 365,
+  },
+  "Karbonala Warrior": {
+    elo: 2249,
+    wins: 500,
+    losses: 361,
+  },
+  "Toad Master": {
+    elo: 2244,
+    wins: 504,
+    losses: 386,
+  },
+  "Castle of Dark Illusions": {
+    elo: 2243,
+    wins: 532,
+    losses: 352,
+  },
+  "Final Destiny": {
+    elo: 2211,
+    wins: 473,
+    losses: 391,
+  },
+  "Aqua Dragon": {
+    elo: 2209,
+    wins: 471,
+    losses: 374,
+  },
+  "Exarion Universe": {
+    elo: 2206,
+    wins: 500,
+    losses: 416,
+  },
+  "Celtic Guardian": {
+    elo: 2204,
+    wins: 477,
+    losses: 365,
+  },
+  "Toon Mermaid": {
+    elo: 2204,
+    wins: 473,
+    losses: 392,
+  },
+  "The Winged Dragon of Ra (Phoenix Mode)": {
+    elo: 2203,
+    wins: 477,
+    losses: 418,
+  },
+  "Horn of Light": {
+    elo: 2203,
+    wins: 506,
+    losses: 389,
+  },
+  "Kanan the Swordmistress": {
+    elo: 2198,
+    wins: 501,
+    losses: 415,
+  },
+  "Alligator's Sword": {
+    elo: 2192,
+    wins: 486,
+    losses: 342,
+  },
+  "Des Volstgalph": {
+    elo: 2190,
+    wins: 478,
+    losses: 407,
+  },
+  "Giant Soldier of Stone": {
+    elo: 2189,
+    wins: 491,
+    losses: 398,
+  },
+  Golgoil: {
+    elo: 2186,
+    wins: 480,
+    losses: 429,
+  },
+  "Shadow Spell": {
+    elo: 2180,
+    wins: 512,
+    losses: 382,
+  },
+  "Red Archery Girl": {
+    elo: 2178,
+    wins: 435,
+    losses: 391,
+  },
+  "Fiend's Mirror": {
+    elo: 2177,
+    wins: 478,
+    losses: 363,
+  },
+  "Maiden of the Moonlight": {
+    elo: 2175,
+    wins: 489,
+    losses: 386,
+  },
+  "Headless Knight": {
+    elo: 2174,
+    wins: 513,
+    losses: 401,
+  },
+  "Amazon Chain Master": {
+    elo: 2174,
+    wins: 529,
+    losses: 409,
+  },
+  "UFO Turtle": {
+    elo: 2173,
+    wins: 494,
+    losses: 402,
+  },
+  "Crass Clown": {
+    elo: 2170,
+    wins: 480,
+    losses: 403,
+  },
+  "Mystical Beast Serket": {
+    elo: 2170,
+    wins: 456,
+    losses: 390,
+  },
+  "Spirit of the Harp": {
+    elo: 2170,
+    wins: 487,
+    losses: 425,
+  },
+  Uraby: {
+    elo: 2164,
+    wins: 471,
+    losses: 371,
+  },
+  "Rare Fish": {
+    elo: 2163,
+    wins: 465,
+    losses: 380,
+  },
+  "Enchanting Mermaid": {
+    elo: 2156,
+    wins: 462,
+    losses: 369,
+  },
+  "Cocoon of Evolution": {
+    elo: 2154,
+    wins: 471,
+    losses: 358,
+  },
+  "Y-Dragon Head": {
+    elo: 2152,
+    wins: 482,
+    losses: 371,
+  },
+  Kojikocy: {
+    elo: 2144,
+    wins: 471,
+    losses: 349,
+  },
+  "Three-Headed Geedo": {
+    elo: 2143,
+    wins: 498,
+    losses: 422,
+  },
+  Wolf: {
+    elo: 2135,
+    wins: 454,
+    losses: 412,
+  },
+  Doron: {
+    elo: 2118,
+    wins: 468,
+    losses: 389,
+  },
+  "Tao the Chanter": {
+    elo: 2117,
+    wins: 459,
+    losses: 402,
+  },
+  "Little Chimera": {
+    elo: 2116,
+    wins: 447,
+    losses: 375,
+  },
+  "Axe of Despair": {
+    elo: 2111,
+    wins: 489,
+    losses: 357,
+  },
+  "Winged Dragon, Guardian of the Fortress #1": {
+    elo: 2106,
+    wins: 453,
+    losses: 362,
+  },
+  "Amazon Sword Woman": {
+    elo: 2105,
+    wins: 461,
+    losses: 365,
+  },
+  "Water Omotics": {
+    elo: 2103,
+    wins: 495,
+    losses: 407,
+  },
+  "Aqua Serpent": {
+    elo: 2094,
+    wins: 492,
+    losses: 384,
+  },
+  "Warrior Elimination": {
+    elo: 2093,
+    wins: 487,
+    losses: 425,
+  },
+  "Bear Trap": {
+    elo: 2092,
+    wins: 483,
+    losses: 356,
+  },
+  "Senju of the Thousand Hands": {
+    elo: 2077,
+    wins: 463,
+    losses: 404,
+  },
+  "Ground Attacker Bugroth": {
+    elo: 2076,
+    wins: 476,
+    losses: 413,
+  },
+  "Tiger Axe": {
+    elo: 2074,
+    wins: 484,
+    losses: 404,
+  },
+  "Amphibian Beast": {
+    elo: 2072,
+    wins: 447,
+    losses: 407,
+  },
+  "The Stern Mystic": {
+    elo: 2066,
+    wins: 514,
+    losses: 403,
+  },
+  "Fairy's Gift": {
+    elo: 2059,
+    wins: 439,
+    losses: 403,
+  },
+  "King of Yamimakai": {
+    elo: 2057,
+    wins: 482,
+    losses: 421,
+  },
+  "Bracchio-raidus": {
+    elo: 2057,
+    wins: 438,
+    losses: 411,
+  },
+  "Three-Legged Zombies": {
+    elo: 2050,
+    wins: 451,
+    losses: 432,
+  },
+  "Fiend Sword": {
+    elo: 2049,
+    wins: 467,
+    losses: 427,
+  },
+  "Alpha The Magnet Warrior": {
+    elo: 2046,
+    wins: 457,
+    losses: 393,
+  },
+  "Hungry Burger": {
+    elo: 2041,
+    wins: 475,
+    losses: 403,
+  },
+  "Earthbound Spirit": {
+    elo: 2038,
+    wins: 464,
+    losses: 393,
+  },
+  "Two-Mouth Darkruler": {
+    elo: 2037,
+    wins: 445,
+    losses: 426,
+  },
+  "The Snake Hair": {
+    elo: 2036,
+    wins: 471,
+    losses: 393,
+  },
+  "Lesser Dragon": {
+    elo: 2036,
+    wins: 483,
+    losses: 422,
+  },
+  "Saggi the Dark Clown": {
+    elo: 2033,
+    wins: 463,
+    losses: 392,
+  },
+  "Destroyer Golem": {
+    elo: 2026,
+    wins: 496,
+    losses: 392,
+  },
+  "Vishwar Randi": {
+    elo: 2016,
+    wins: 432,
+    losses: 376,
+  },
+  "Amazon Fighter": {
+    elo: 2016,
+    wins: 465,
+    losses: 376,
+  },
+  "Bean Soldier": {
+    elo: 2013,
+    wins: 469,
+    losses: 373,
+  },
+  "Horn Imp": {
+    elo: 2008,
+    wins: 435,
+    losses: 401,
+  },
+  "Sonic Maid": {
+    elo: 2005,
+    wins: 492,
+    losses: 420,
+  },
+  "Kappa Avenger": {
+    elo: 2001,
+    wins: 450,
+    losses: 394,
+  },
+  "Exodia the Forbidden One": {
+    elo: 2001,
+    wins: 440,
+    losses: 432,
+  },
+  "Zombie Warrior": {
+    elo: 1999,
+    wins: 466,
+    losses: 372,
+  },
+  "The Gross Ghost of Fled Dreams": {
+    elo: 1999,
+    wins: 462,
+    losses: 424,
+  },
+  Boneheimer: {
+    elo: 1999,
+    wins: 454,
+    losses: 406,
+  },
+  Mavelus: {
+    elo: 1998,
+    wins: 491,
+    losses: 434,
+  },
+  Lisark: {
+    elo: 1988,
+    wins: 442,
+    losses: 399,
+  },
+  "Flame Cerebrus": {
+    elo: 1983,
+    wins: 480,
+    losses: 448,
+  },
+  "Muse-A": {
+    elo: 1982,
+    wins: 447,
+    losses: 422,
+  },
+  "Frenzied Panda": {
+    elo: 1981,
+    wins: 471,
+    losses: 398,
+  },
+  "Flying Fish": {
+    elo: 1977,
+    wins: 473,
+    losses: 430,
+  },
+  "Pinch Hopper": {
+    elo: 1977,
+    wins: 470,
+    losses: 424,
+  },
+  "Blackland Fire Dragon": {
+    elo: 1975,
+    wins: 471,
+    losses: 386,
+  },
+  Yaranzo: {
+    elo: 1973,
+    wins: 434,
+    losses: 402,
+  },
+  "Sonic Bird": {
+    elo: 1971,
+    wins: 481,
+    losses: 378,
+  },
+  "Legion the Fiend Jester": {
+    elo: 1968,
+    wins: 454,
+    losses: 395,
+  },
+  Gradius: {
+    elo: 1964,
+    wins: 440,
+    losses: 407,
+  },
+  "Hinotama Soul": {
+    elo: 1964,
+    wins: 454,
+    losses: 421,
+  },
+  "Soul Hunter": {
+    elo: 1958,
+    wins: 457,
+    losses: 420,
+  },
+  "Armored Starfish": {
+    elo: 1952,
+    wins: 416,
+    losses: 407,
+  },
+  Gokibore: {
+    elo: 1951,
+    wins: 436,
+    losses: 403,
+  },
+  Dissolverock: {
+    elo: 1951,
+    wins: 411,
+    losses: 387,
+  },
+  "Frog the Jam": {
+    elo: 1951,
+    wins: 454,
+    losses: 434,
+  },
+  "Barrel Rock": {
+    elo: 1951,
+    wins: 466,
+    losses: 440,
+  },
+  "Flying Kamakiri #1": {
+    elo: 1949,
+    wins: 483,
+    losses: 425,
+  },
+  "Fiend's Hand": {
+    elo: 1947,
+    wins: 456,
+    losses: 402,
+  },
+  "Goddess with the Third Eye": {
+    elo: 1947,
+    wins: 479,
+    losses: 407,
+  },
+  "Cannon Soldier": {
+    elo: 1946,
+    wins: 455,
+    losses: 408,
+  },
+  "Dark Assailant": {
+    elo: 1944,
+    wins: 435,
+    losses: 395,
+  },
+  "Summoned Skull": {
+    elo: 1943,
+    wins: 473,
+    losses: 430,
+  },
+  "Machine King": {
+    elo: 1942,
+    wins: 432,
+    losses: 398,
+  },
+  Bat: {
+    elo: 1941,
+    wins: 431,
+    losses: 458,
+  },
+  Holograh: {
+    elo: 1939,
+    wins: 470,
+    losses: 410,
+  },
+  Larvas: {
+    elo: 1937,
+    wins: 451,
+    losses: 415,
+  },
+  "Magical Ghost": {
+    elo: 1934,
+    wins: 445,
+    losses: 425,
+  },
+  "Mask of Shine & Dark": {
+    elo: 1932,
+    wins: 454,
+    losses: 419,
+  },
+  "Humanoid Slime": {
+    elo: 1931,
+    wins: 445,
+    losses: 392,
+  },
+  "Dark Rabbit": {
+    elo: 1930,
+    wins: 457,
+    losses: 411,
+  },
+  Gernia: {
+    elo: 1928,
+    wins: 476,
+    losses: 397,
+  },
+  "Weather Control": {
+    elo: 1927,
+    wins: 426,
+    losses: 427,
+  },
+  "Dancing Elf": {
+    elo: 1925,
+    wins: 417,
+    losses: 435,
+  },
+  "Winged Dragon, Guardian of the Fortress #2": {
+    elo: 1924,
+    wins: 431,
+    losses: 377,
+  },
+  "Dimensional Warrior": {
+    elo: 1914,
+    wins: 462,
+    losses: 425,
+  },
+  "Fiend Reflection #1": {
+    elo: 1913,
+    wins: 424,
+    losses: 421,
+  },
+  Minar: {
+    elo: 1911,
+    wins: 467,
+    losses: 412,
+  },
+  "Harpie Lady": {
+    elo: 1910,
+    wins: 447,
+    losses: 393,
+  },
+  "Fiend Kraken": {
+    elo: 1909,
+    wins: 448,
+    losses: 427,
+  },
+  Jinzo: {
+    elo: 1905,
+    wins: 447,
+    losses: 404,
+  },
+  "Mystic Tomato": {
+    elo: 1901,
+    wins: 466,
+    losses: 383,
+  },
+  "Different Dimension Dragon": {
+    elo: 1899,
+    wins: 462,
+    losses: 413,
+  },
+  Fireyarou: {
+    elo: 1897,
+    wins: 461,
+    losses: 422,
+  },
+  "Roaring Ocean Snake": {
+    elo: 1897,
+    wins: 435,
+    losses: 402,
+  },
+  "Flying Penguin": {
+    elo: 1887,
+    wins: 456,
+    losses: 400,
+  },
+  "Invader from Another Dimension": {
+    elo: 1886,
+    wins: 485,
+    losses: 436,
+  },
+  "XZ-Tank Cannon": {
+    elo: 1886,
+    wins: 440,
+    losses: 416,
+  },
+  "Lucky Trinket": {
+    elo: 1885,
+    wins: 476,
+    losses: 434,
+  },
+  "Minomushi Warrior": {
+    elo: 1885,
+    wins: 429,
+    losses: 422,
+  },
+  "Mega Thunderball": {
+    elo: 1884,
+    wins: 464,
+    losses: 438,
+  },
+  "Fiend Reflection #2": {
+    elo: 1882,
+    wins: 431,
+    losses: 441,
+  },
+  "Prevent Rat": {
+    elo: 1881,
+    wins: 464,
+    losses: 429,
+  },
+  "The Earl of Demise": {
+    elo: 1880,
+    wins: 467,
+    losses: 422,
+  },
+  "Mystical Elf": {
+    elo: 1875,
+    wins: 482,
+    losses: 429,
+  },
+  "Feral Imp": {
+    elo: 1874,
+    wins: 474,
+    losses: 398,
+  },
+  "Mushroom Man #2": {
+    elo: 1874,
+    wins: 457,
+    losses: 385,
+  },
+  Burglar: {
+    elo: 1874,
+    wins: 449,
+    losses: 430,
+  },
+  Kumootoko: {
+    elo: 1870,
+    wins: 435,
+    losses: 410,
+  },
+  "Stone Statue of the Aztecs": {
+    elo: 1869,
+    wins: 497,
+    losses: 429,
+  },
+  Fusionist: {
+    elo: 1868,
+    wins: 489,
+    losses: 434,
+  },
+  "Mother Grizzly": {
+    elo: 1867,
+    wins: 465,
+    losses: 404,
+  },
+  "Toon Summoned Skull": {
+    elo: 1865,
+    wins: 474,
+    losses: 435,
+  },
+  "Beaver Warrior": {
+    elo: 1862,
+    wins: 488,
+    losses: 442,
+  },
+  "The Shadow Who Controls the Dark": {
+    elo: 1862,
+    wins: 454,
+    losses: 445,
+  },
+  Skelengel: {
+    elo: 1861,
+    wins: 452,
+    losses: 412,
+  },
+  "Dragoness the Wicked Knight": {
+    elo: 1860,
+    wins: 484,
+    losses: 437,
+  },
+  "The Wicked Worm Beast": {
+    elo: 1858,
+    wins: 448,
+    losses: 436,
+  },
+  "Mystic Horseman": {
+    elo: 1854,
+    wins: 459,
+    losses: 436,
+  },
+  "Twin-Headed Fire Dragon": {
+    elo: 1854,
+    wins: 451,
+    losses: 440,
+  },
+  "Ryu-Kishin": {
+    elo: 1854,
+    wins: 462,
+    losses: 428,
+  },
+  "Yado Karu": {
+    elo: 1853,
+    wins: 463,
+    losses: 427,
+  },
+  Sangan: {
+    elo: 1853,
+    wins: 453,
+    losses: 450,
+  },
+  "Vampire Lord": {
+    elo: 1850,
+    wins: 446,
+    losses: 386,
+  },
+  Tomozaurus: {
+    elo: 1848,
+    wins: 447,
+    losses: 408,
+  },
+  "Baby Dragon": {
+    elo: 1844,
+    wins: 465,
+    losses: 426,
+  },
+  Wetha: {
+    elo: 1844,
+    wins: 450,
+    losses: 442,
+  },
+  "Hitotsu-Me Giant": {
+    elo: 1836,
+    wins: 431,
+    losses: 410,
+  },
+  "Witch of the Black Forest": {
+    elo: 1834,
+    wins: 456,
+    losses: 422,
+  },
+  "Blue-Eyed Silver Zombie": {
+    elo: 1834,
+    wins: 452,
+    losses: 448,
+  },
+  Kaminarikozou: {
+    elo: 1828,
+    wins: 437,
+    losses: 412,
+  },
+  "Big Shield Gardna": {
+    elo: 1827,
+    wins: 427,
+    losses: 376,
+  },
+  "Electric Snake": {
+    elo: 1825,
+    wins: 441,
+    losses: 401,
+  },
+  "Stuffed Animal": {
+    elo: 1824,
+    wins: 456,
+    losses: 415,
+  },
+  "Curse of Dragon": {
+    elo: 1823,
+    wins: 439,
+    losses: 423,
+  },
+  "Lunar Queen Elzaim": {
+    elo: 1823,
+    wins: 457,
+    losses: 433,
+  },
+  "Karate Man": {
+    elo: 1822,
+    wins: 451,
+    losses: 432,
+  },
+  "Dragon Piper": {
+    elo: 1820,
+    wins: 437,
+    losses: 438,
+  },
+  Eatgaboon: {
+    elo: 1820,
+    wins: 435,
+    losses: 397,
+  },
+  "Ice Water": {
+    elo: 1819,
+    wins: 470,
+    losses: 411,
+  },
+  Ooguchi: {
+    elo: 1815,
+    wins: 456,
+    losses: 419,
+  },
+  "Patrol Robo": {
+    elo: 1815,
+    wins: 442,
+    losses: 435,
+  },
+  "Right Arm of the Forbidden One": {
+    elo: 1814,
+    wins: 449,
+    losses: 418,
+  },
+  "Fairy Dragon": {
+    elo: 1813,
+    wins: 435,
+    losses: 424,
+  },
+  "Princess of Tsurugi": {
+    elo: 1810,
+    wins: 452,
+    losses: 416,
+  },
+  "Aqua Madoor": {
+    elo: 1809,
+    wins: 467,
+    losses: 385,
+  },
+  Trakadon: {
+    elo: 1809,
+    wins: 440,
+    losses: 422,
+  },
+  "Temple of Skulls": {
+    elo: 1807,
+    wins: 478,
+    losses: 455,
+  },
+  "Amazon of the Seas": {
+    elo: 1805,
+    wins: 472,
+    losses: 417,
+  },
+  "Oscillo Hero": {
+    elo: 1803,
+    wins: 465,
+    losses: 409,
+  },
+  "Red Medicine": {
+    elo: 1803,
+    wins: 438,
+    losses: 468,
+  },
+  "Big Eye": {
+    elo: 1800,
+    wins: 434,
+    losses: 420,
+  },
+  "Witty Phantom": {
+    elo: 1789,
+    wins: 470,
+    losses: 411,
+  },
+  "Man-Eating Plant": {
+    elo: 1786,
+    wins: 430,
+    losses: 429,
+  },
+  "The Portrait's Secret": {
+    elo: 1785,
+    wins: 466,
+    losses: 434,
+  },
+  Kanikabuto: {
+    elo: 1783,
+    wins: 465,
+    losses: 423,
+  },
+  "Megirus Light": {
+    elo: 1782,
+    wins: 460,
+    losses: 454,
+  },
+  "Messenger of Peace": {
+    elo: 1782,
+    wins: 489,
+    losses: 414,
+  },
+  "Muka Muka": {
+    elo: 1781,
+    wins: 422,
+    losses: 446,
+  },
+  "Wow Warrior": {
+    elo: 1779,
+    wins: 444,
+    losses: 429,
+  },
+  "Candle of Fate": {
+    elo: 1777,
+    wins: 466,
+    losses: 424,
+  },
+  "B. Dragon Jungle King": {
+    elo: 1776,
+    wins: 420,
+    losses: 426,
+  },
+  "Spellbinding Circle": {
+    elo: 1774,
+    wins: 482,
+    losses: 443,
+  },
+  "Wall of Illusion": {
+    elo: 1772,
+    wins: 442,
+    losses: 449,
+  },
+  "Mystical Sheep #1": {
+    elo: 1771,
+    wins: 418,
+    losses: 410,
+  },
+  "Electric Lizard": {
+    elo: 1770,
+    wins: 397,
+    losses: 422,
+  },
+  "B. Skull Dragon": {
+    elo: 1769,
+    wins: 418,
+    losses: 452,
+  },
+  "Shovel Crusher": {
+    elo: 1768,
+    wins: 436,
+    losses: 419,
+  },
+  Arlownay: {
+    elo: 1767,
+    wins: 446,
+    losses: 439,
+  },
+  "Cyber-Tech Alligator": {
+    elo: 1766,
+    wins: 425,
+    losses: 443,
+  },
+  "Mysterious Puppeteer": {
+    elo: 1764,
+    wins: 417,
+    losses: 409,
+  },
+  "Dark Plant": {
+    elo: 1763,
+    wins: 417,
+    losses: 412,
+  },
+  "Sea King Dragon": {
+    elo: 1763,
+    wins: 441,
+    losses: 432,
+  },
+  "Dokuroizo the Grim Reaper": {
+    elo: 1760,
+    wins: 448,
+    losses: 445,
+  },
+  "Key Mace": {
+    elo: 1759,
+    wins: 421,
+    losses: 428,
+  },
+  "Giant Scorpion of the Tundra": {
+    elo: 1758,
+    wins: 408,
+    losses: 414,
+  },
+  "Charubin the Fire Knight": {
+    elo: 1757,
+    wins: 445,
+    losses: 414,
+  },
+  "Mystical Sheep #2": {
+    elo: 1757,
+    wins: 419,
+    losses: 390,
+  },
+  "Blast Juggler": {
+    elo: 1757,
+    wins: 454,
+    losses: 404,
+  },
+  Korogashi: {
+    elo: 1757,
+    wins: 412,
+    losses: 436,
+  },
+  "Nekogal #1": {
+    elo: 1756,
+    wins: 435,
+    losses: 406,
+  },
+  "Monster Egg": {
+    elo: 1756,
+    wins: 486,
+    losses: 459,
+  },
+  Blocker: {
+    elo: 1752,
+    wins: 436,
+    losses: 435,
+  },
+  "Insect Soldiers of the Sky": {
+    elo: 1752,
+    wins: 440,
+    losses: 403,
+  },
+  "Steel Ogre Grotto #2": {
+    elo: 1750,
+    wins: 436,
+    losses: 462,
+  },
+  "Harpie's Feather Duster": {
+    elo: 1750,
+    wins: 448,
+    losses: 428,
+  },
+  Hoshiningen: {
+    elo: 1749,
+    wins: 437,
+    losses: 391,
+  },
+  "Mooyan Curry": {
+    elo: 1748,
+    wins: 426,
+    losses: 435,
+  },
+  "Turu-Purun": {
+    elo: 1746,
+    wins: 432,
+    losses: 455,
+  },
+  "Banisher of the Light": {
+    elo: 1741,
+    wins: 442,
+    losses: 398,
+  },
+  "Rabid Horseman": {
+    elo: 1740,
+    wins: 425,
+    losses: 465,
+  },
+  Peacock: {
+    elo: 1739,
+    wins: 404,
+    losses: 401,
+  },
+  "Larvae Moth": {
+    elo: 1739,
+    wins: 441,
+    losses: 452,
+  },
+  Sparks: {
+    elo: 1735,
+    wins: 438,
+    losses: 483,
+  },
+  "Kuwagata A": {
+    elo: 1734,
+    wins: 436,
+    losses: 417,
+  },
+  "Dark Chimera": {
+    elo: 1733,
+    wins: 463,
+    losses: 412,
+  },
+  "Cockroach Knight": {
+    elo: 1733,
+    wins: 412,
+    losses: 440,
+  },
+  "Winged Trumpeter": {
+    elo: 1732,
+    wins: 425,
+    losses: 452,
+  },
+  "Swamp Battleguard": {
+    elo: 1732,
+    wins: 452,
+    losses: 431,
+  },
+  Meotoko: {
+    elo: 1730,
+    wins: 424,
+    losses: 491,
+  },
+  "Nekogal #2": {
+    elo: 1729,
+    wins: 402,
+    losses: 423,
+  },
+  "Dark Magician Girl": {
+    elo: 1728,
+    wins: 438,
+    losses: 397,
+  },
+  "Ray & Temperature": {
+    elo: 1728,
+    wins: 446,
+    losses: 435,
+  },
+  "The Bewitching Phantom Thief": {
+    elo: 1724,
+    wins: 445,
+    losses: 436,
+  },
+  Snakeyashi: {
+    elo: 1723,
+    wins: 453,
+    losses: 441,
+  },
+  Raigeki: {
+    elo: 1723,
+    wins: 443,
+    losses: 445,
+  },
+  "Killer Needle": {
+    elo: 1722,
+    wins: 416,
+    losses: 417,
+  },
+  "Dian Keto the Cure Master": {
+    elo: 1722,
+    wins: 450,
+    losses: 454,
+  },
+  "Bright Castle": {
+    elo: 1722,
+    wins: 396,
+    losses: 401,
+  },
+  "Legendary Sword": {
+    elo: 1721,
+    wins: 414,
+    losses: 406,
+  },
+  "Nimble Momonga": {
+    elo: 1719,
+    wins: 469,
+    losses: 448,
+  },
+  Niwatori: {
+    elo: 1719,
+    wins: 446,
+    losses: 404,
+  },
+  "Machine Conversion Factory": {
+    elo: 1718,
+    wins: 417,
+    losses: 434,
+  },
+  "Water Element": {
+    elo: 1716,
+    wins: 451,
+    losses: 420,
+  },
+  Megazowler: {
+    elo: 1716,
+    wins: 406,
+    losses: 457,
+  },
+  "Ancient Jar": {
+    elo: 1716,
+    wins: 436,
+    losses: 449,
+  },
+  "Dream Clown": {
+    elo: 1716,
+    wins: 445,
+    losses: 435,
+  },
+  "Time Wizard": {
+    elo: 1715,
+    wins: 417,
+    losses: 437,
+  },
+  "Eternal Drought": {
+    elo: 1713,
+    wins: 418,
+    losses: 466,
+  },
+  "Warrior of Tradition": {
+    elo: 1712,
+    wins: 410,
+    losses: 416,
+  },
+  "Viser Des": {
+    elo: 1710,
+    wins: 441,
+    losses: 438,
+  },
+  "Tentacle Plant": {
+    elo: 1708,
+    wins: 429,
+    losses: 418,
+  },
+  "XY-Dragon Cannon": {
+    elo: 1708,
+    wins: 422,
+    losses: 478,
+  },
+  "Giant Germ": {
+    elo: 1707,
+    wins: 475,
+    losses: 425,
+  },
+  "Anti Raigeki": {
+    elo: 1705,
+    wins: 414,
+    losses: 441,
+  },
+  Leghul: {
+    elo: 1704,
+    wins: 431,
+    losses: 445,
+  },
+  "YZ-Tank Dragon": {
+    elo: 1703,
+    wins: 475,
+    losses: 435,
+  },
+  "Zone Eater": {
+    elo: 1702,
+    wins: 455,
+    losses: 475,
+  },
+  "Oscillo Hero #2": {
+    elo: 1701,
+    wins: 406,
+    losses: 396,
+  },
+  "Little D": {
+    elo: 1701,
+    wins: 451,
+    losses: 425,
+  },
+  "Witch's Apprentice": {
+    elo: 1694,
+    wins: 441,
+    losses: 427,
+  },
+  "Last Tusk Mammoth": {
+    elo: 1694,
+    wins: 424,
+    losses: 437,
+  },
+  Mechaleon: {
+    elo: 1693,
+    wins: 481,
+    losses: 507,
+  },
+  Genin: {
+    elo: 1693,
+    wins: 424,
+    losses: 424,
+  },
+  "Javelin Beetle": {
+    elo: 1692,
+    wins: 428,
+    losses: 431,
+  },
+  "Star Boy": {
+    elo: 1691,
+    wins: 456,
+    losses: 434,
+  },
+  "Phantom Ghost": {
+    elo: 1690,
+    wins: 438,
+    losses: 425,
+  },
+  "Gaia The Fierce Knight": {
+    elo: 1689,
+    wins: 407,
+    losses: 458,
+  },
+  "Change Slime": {
+    elo: 1688,
+    wins: 410,
+    losses: 447,
+  },
+  "Steel Scorpion": {
+    elo: 1688,
+    wins: 447,
+    losses: 412,
+  },
+  "Bone Mouse": {
+    elo: 1687,
+    wins: 430,
+    losses: 426,
+  },
+  "Turtle Raccoon": {
+    elo: 1683,
+    wins: 443,
+    losses: 443,
+  },
+  "The Fiend Megacyber": {
+    elo: 1683,
+    wins: 414,
+    losses: 423,
+  },
+  Sengenjin: {
+    elo: 1683,
+    wins: 438,
+    losses: 443,
+  },
+  "Man-Eater Bug": {
+    elo: 1682,
+    wins: 430,
+    losses: 473,
+  },
+  "White Magical Hat": {
+    elo: 1682,
+    wins: 455,
+    losses: 427,
+  },
+  Jellyfish: {
+    elo: 1682,
+    wins: 427,
+    losses: 438,
+  },
+  "Hard Armor": {
+    elo: 1681,
+    wins: 423,
+    losses: 414,
+  },
+  "Dragon Capture Jar": {
+    elo: 1680,
+    wins: 452,
+    losses: 414,
+  },
+  "Leopard Girl": {
+    elo: 1679,
+    wins: 440,
+    losses: 428,
+  },
+  "Blue-Eyes Ultimate Dragon": {
+    elo: 1679,
+    wins: 432,
+    losses: 462,
+  },
+  "Flame Ghost": {
+    elo: 1678,
+    wins: 433,
+    losses: 444,
+  },
+  "Big Insect": {
+    elo: 1677,
+    wins: 425,
+    losses: 392,
+  },
+  "Mr. Volcano": {
+    elo: 1677,
+    wins: 421,
+    losses: 418,
+  },
+  "Petit Moth": {
+    elo: 1676,
+    wins: 439,
+    losses: 442,
+  },
+  "Wood Remains": {
+    elo: 1673,
+    wins: 433,
+    losses: 426,
+  },
+  "Worm Drake": {
+    elo: 1671,
+    wins: 435,
+    losses: 420,
+  },
+  "Wodan the Resident of the Forest": {
+    elo: 1670,
+    wins: 423,
+    losses: 407,
+  },
+  "Jigen Bakudan": {
+    elo: 1670,
+    wins: 438,
+    losses: 418,
+  },
+  "Darkworld Thorns": {
+    elo: 1670,
+    wins: 431,
+    losses: 450,
+  },
+  Leogun: {
+    elo: 1669,
+    wins: 421,
+    losses: 436,
+  },
+  "Follow Wind": {
+    elo: 1667,
+    wins: 447,
+    losses: 434,
+  },
+  "One-Eyed Shield Dragon": {
+    elo: 1662,
+    wins: 448,
+    losses: 456,
+  },
+  Garvas: {
+    elo: 1660,
+    wins: 441,
+    losses: 423,
+  },
+  "Silver Bow and Arrow": {
+    elo: 1659,
+    wins: 458,
+    losses: 463,
+  },
+  "Lava Battleguard": {
+    elo: 1659,
+    wins: 445,
+    losses: 423,
+  },
+  "Versago the Destroyer": {
+    elo: 1653,
+    wins: 457,
+    losses: 440,
+  },
+  Kurama: {
+    elo: 1652,
+    wins: 415,
+    losses: 424,
+  },
+  "Clown Zombie": {
+    elo: 1652,
+    wins: 422,
+    losses: 403,
+  },
+  Griggle: {
+    elo: 1649,
+    wins: 419,
+    losses: 449,
+  },
+  Yormungarde: {
+    elo: 1649,
+    wins: 445,
+    losses: 408,
+  },
+  Ameba: {
+    elo: 1647,
+    wins: 422,
+    losses: 438,
+  },
+  "Kwagar Hercules": {
+    elo: 1647,
+    wins: 427,
+    losses: 416,
+  },
+  "Rainbow Flower": {
+    elo: 1647,
+    wins: 419,
+    losses: 452,
+  },
+  "Morphing Jar": {
+    elo: 1647,
+    wins: 422,
+    losses: 480,
+  },
+  "Rose Spectre of Dunn": {
+    elo: 1644,
+    wins: 429,
+    losses: 427,
+  },
+  "Dragon Treasure": {
+    elo: 1644,
+    wins: 426,
+    losses: 444,
+  },
+  "Wing Egg Elf": {
+    elo: 1644,
+    wins: 425,
+    losses: 461,
+  },
+  "Serpent Marauder": {
+    elo: 1641,
+    wins: 454,
+    losses: 429,
+  },
+  "Flame Champion": {
+    elo: 1641,
+    wins: 419,
+    losses: 472,
+  },
+  "Catapult Turtle": {
+    elo: 1639,
+    wins: 416,
+    losses: 453,
+  },
+  "Gravedigger Ghoul": {
+    elo: 1639,
+    wins: 419,
+    losses: 459,
+  },
+  "Darkness Approaches": {
+    elo: 1639,
+    wins: 409,
+    losses: 442,
+  },
+  "Zera The Mant": {
+    elo: 1638,
+    wins: 430,
+    losses: 472,
+  },
+  "Dungeon Worm": {
+    elo: 1637,
+    wins: 427,
+    losses: 465,
+  },
+  "Barrel Lily": {
+    elo: 1635,
+    wins: 413,
+    losses: 426,
+  },
+  "F.G.D.": {
+    elo: 1635,
+    wins: 417,
+    losses: 470,
+  },
+  "Parrot Dragon": {
+    elo: 1635,
+    wins: 435,
+    losses: 475,
+  },
+  "Black Pendant": {
+    elo: 1634,
+    wins: 422,
+    losses: 469,
+  },
+  "Illusionist Faceless Mage": {
+    elo: 1633,
+    wins: 432,
+    losses: 481,
+  },
+  "Cyber-Stein": {
+    elo: 1632,
+    wins: 422,
+    losses: 476,
+  },
+  "30,000-Year White Turtle": {
+    elo: 1630,
+    wins: 413,
+    losses: 455,
+  },
+  "Penguin Knight": {
+    elo: 1630,
+    wins: 441,
+    losses: 427,
+  },
+  "Gate Sword": {
+    elo: 1628,
+    wins: 413,
+    losses: 437,
+  },
+  "Air Marmot of Nefariousness": {
+    elo: 1628,
+    wins: 412,
+    losses: 431,
+  },
+  Alinsection: {
+    elo: 1628,
+    wins: 426,
+    losses: 395,
+  },
+  "Queen's Double": {
+    elo: 1628,
+    wins: 459,
+    losses: 483,
+  },
+  "Flame Manipulator": {
+    elo: 1627,
+    wins: 458,
+    losses: 397,
+  },
+  "The Statue of Easter Island": {
+    elo: 1623,
+    wins: 451,
+    losses: 432,
+  },
+  "One Who Hunts Souls": {
+    elo: 1623,
+    wins: 432,
+    losses: 438,
+  },
+  Cursebreaker: {
+    elo: 1622,
+    wins: 438,
+    losses: 475,
+  },
+  "Ogre of the Black Shadow": {
+    elo: 1622,
+    wins: 461,
+    losses: 446,
+  },
+  Helpoemer: {
+    elo: 1621,
+    wins: 422,
+    losses: 434,
+  },
+  Chakra: {
+    elo: 1621,
+    wins: 403,
+    losses: 450,
+  },
+  "Living Vase": {
+    elo: 1620,
+    wins: 433,
+    losses: 445,
+  },
+  Griffore: {
+    elo: 1620,
+    wins: 453,
+    losses: 424,
+  },
+  "Fortress Whale": {
+    elo: 1619,
+    wins: 424,
+    losses: 453,
+  },
+  "Deepsea Shark": {
+    elo: 1619,
+    wins: 447,
+    losses: 452,
+  },
+  "Mask of Darkness": {
+    elo: 1618,
+    wins: 430,
+    losses: 444,
+  },
+  "Rock Ogre Grotto #2": {
+    elo: 1617,
+    wins: 418,
+    losses: 462,
+  },
+  "The Inexperienced Spy": {
+    elo: 1617,
+    wins: 422,
+    losses: 419,
+  },
+  "Dark Energy": {
+    elo: 1616,
+    wins: 432,
+    losses: 453,
+  },
+  "Kagemusha of the Blue Flame": {
+    elo: 1616,
+    wins: 444,
+    losses: 429,
+  },
+  "Yamatano Dragon Scroll": {
+    elo: 1616,
+    wins: 418,
+    losses: 428,
+  },
+  "Cyber Jar": {
+    elo: 1616,
+    wins: 424,
+    losses: 411,
+  },
+  "Winged Cleaver": {
+    elo: 1616,
+    wins: 442,
+    losses: 461,
+  },
+  "7 Completed": {
+    elo: 1615,
+    wins: 407,
+    losses: 431,
+  },
+  "Masaki the Legendary Swordsman": {
+    elo: 1614,
+    wins: 408,
+    losses: 409,
+  },
+  "Humanoid Worm Drake": {
+    elo: 1611,
+    wins: 427,
+    losses: 436,
+  },
+  "Tripwire Beast": {
+    elo: 1609,
+    wins: 456,
+    losses: 427,
+  },
+  "Jack's Knight": {
+    elo: 1608,
+    wins: 423,
+    losses: 434,
+  },
+  "Spike Seadra": {
+    elo: 1608,
+    wins: 424,
+    losses: 427,
+  },
+  "Vile Germs": {
+    elo: 1608,
+    wins: 412,
+    losses: 425,
+  },
+  "Performance of Sword": {
+    elo: 1607,
+    wins: 425,
+    losses: 431,
+  },
+  "Abyss Flower": {
+    elo: 1607,
+    wins: 450,
+    losses: 451,
+  },
+  Dokurorider: {
+    elo: 1605,
+    wins: 408,
+    losses: 428,
+  },
+  "The Last Warrior from Another Planet": {
+    elo: 1603,
+    wins: 416,
+    losses: 453,
+  },
+  "Yamata Dragon": {
+    elo: 1603,
+    wins: 386,
+    losses: 458,
+  },
+  Zarigun: {
+    elo: 1603,
+    wins: 437,
+    losses: 423,
+  },
+  "Needle Ball": {
+    elo: 1602,
+    wins: 420,
+    losses: 445,
+  },
+  "Cyber Saurus": {
+    elo: 1602,
+    wins: 438,
+    losses: 462,
+  },
+  "Book of Secret Arts": {
+    elo: 1602,
+    wins: 421,
+    losses: 438,
+  },
+  "Dark Magician": {
+    elo: 1601,
+    wins: 392,
+    losses: 454,
+  },
+  "Green Phantom King": {
+    elo: 1601,
+    wins: 433,
+    losses: 425,
+  },
+  "Dark King of the Abyss": {
+    elo: 1600,
+    wins: 441,
+    losses: 440,
+  },
+  "Insect Queen": {
+    elo: 1600,
+    wins: 413,
+    losses: 471,
+  },
+  "Machine Attacker": {
+    elo: 1598,
+    wins: 420,
+    losses: 469,
+  },
+  "Petit Dragon": {
+    elo: 1598,
+    wins: 407,
+    losses: 430,
+  },
+  "Ushi Oni": {
+    elo: 1598,
+    wins: 444,
+    losses: 421,
+  },
+  "Exile of the Wicked": {
+    elo: 1597,
+    wins: 425,
+    losses: 440,
+  },
+  "Bolt Penguin": {
+    elo: 1596,
+    wins: 456,
+    losses: 445,
+  },
+  "Soul of the Pure": {
+    elo: 1596,
+    wins: 411,
+    losses: 429,
+  },
+  "Dark Magician Knight": {
+    elo: 1596,
+    wins: 381,
+    losses: 418,
+  },
+  "The Unhappy Maiden": {
+    elo: 1594,
+    wins: 451,
+    losses: 459,
+  },
+  "Rude Kaiser": {
+    elo: 1594,
+    wins: 421,
+    losses: 476,
+  },
+  "Boo Koo": {
+    elo: 1592,
+    wins: 411,
+    losses: 444,
+  },
+  Kotodama: {
+    elo: 1591,
+    wins: 468,
+    losses: 436,
+  },
+  "Claw Reacher": {
+    elo: 1590,
+    wins: 403,
+    losses: 397,
+  },
+  "Fire Eye": {
+    elo: 1589,
+    wins: 422,
+    losses: 443,
+  },
+  "Armed Ninja": {
+    elo: 1589,
+    wins: 429,
+    losses: 445,
+  },
+  "Stain Storm": {
+    elo: 1588,
+    wins: 436,
+    losses: 476,
+  },
+  Grappler: {
+    elo: 1587,
+    wins: 442,
+    losses: 401,
+  },
+  "Happy Lover": {
+    elo: 1586,
+    wins: 428,
+    losses: 465,
+  },
+  "Meteor Dragon": {
+    elo: 1586,
+    wins: 399,
+    losses: 447,
+  },
+  "Djinn the Watcher of the Wind": {
+    elo: 1585,
+    wins: 436,
+    losses: 451,
+  },
+  "Queen of Autumn Leaves": {
+    elo: 1584,
+    wins: 489,
+    losses: 450,
+  },
+  "Masked Sorcerer": {
+    elo: 1584,
+    wins: 449,
+    losses: 450,
+  },
+  Yamadron: {
+    elo: 1583,
+    wins: 434,
+    losses: 472,
+  },
+  Armaill: {
+    elo: 1583,
+    wins: 442,
+    losses: 461,
+  },
+  "Moon Envoy": {
+    elo: 1580,
+    wins: 457,
+    losses: 431,
+  },
+  "Amphibious Bugroth": {
+    elo: 1579,
+    wins: 465,
+    losses: 435,
+  },
+  "Hourglass of Life": {
+    elo: 1577,
+    wins: 431,
+    losses: 427,
+  },
+  "Sinister Serpent": {
+    elo: 1577,
+    wins: 446,
+    losses: 444,
+  },
+  Hinotama: {
+    elo: 1576,
+    wins: 413,
+    losses: 438,
+  },
+  'Spirit Message "I"': {
+    elo: 1573,
+    wins: 421,
+    losses: 429,
+  },
+  Seiyaryu: {
+    elo: 1572,
+    wins: 388,
+    losses: 449,
+  },
+  "Aqua Snake": {
+    elo: 1572,
+    wins: 448,
+    losses: 430,
+  },
+  "Spiked Snail": {
+    elo: 1570,
+    wins: 417,
+    losses: 427,
+  },
+  "Laughing Flower": {
+    elo: 1570,
+    wins: 448,
+    losses: 450,
+  },
+  Krokodilus: {
+    elo: 1570,
+    wins: 438,
+    losses: 425,
+  },
+  "The Legendary Fisherman": {
+    elo: 1569,
+    wins: 437,
+    losses: 446,
+  },
+  "Eternal Rest": {
+    elo: 1567,
+    wins: 422,
+    losses: 466,
+  },
+  "XYZ-Dragon Cannon": {
+    elo: 1567,
+    wins: 382,
+    losses: 426,
+  },
+  "Labyrinth Tank": {
+    elo: 1567,
+    wins: 397,
+    losses: 425,
+  },
+  "Sleeping Lion": {
+    elo: 1565,
+    wins: 436,
+    losses: 462,
+  },
+  "Pumpking the King of Ghosts": {
+    elo: 1565,
+    wins: 421,
+    losses: 489,
+  },
+  "Slifer the Sky Dragon": {
+    elo: 1564,
+    wins: 389,
+    losses: 423,
+  },
+  "Petit Angel": {
+    elo: 1564,
+    wins: 401,
+    losses: 419,
+  },
+  Spikebot: {
+    elo: 1564,
+    wins: 393,
+    losses: 449,
+  },
+  "Stone Ogre Grotto": {
+    elo: 1563,
+    wins: 419,
+    losses: 454,
+  },
+  "Cyber Commander": {
+    elo: 1562,
+    wins: 447,
+    losses: 469,
+  },
+  "Necrolancer the Timelord": {
+    elo: 1562,
+    wins: 415,
+    losses: 414,
+  },
+  "Hane-Hane": {
+    elo: 1562,
+    wins: 418,
+    losses: 433,
+  },
+  "Lightning Conger": {
+    elo: 1561,
+    wins: 488,
+    losses: 518,
+  },
+  "Tremendous Fire": {
+    elo: 1558,
+    wins: 451,
+    losses: 465,
+  },
+  "Sanga of the Thunder": {
+    elo: 1557,
+    wins: 418,
+    losses: 447,
+  },
+  "Jinzo #7": {
+    elo: 1555,
+    wins: 408,
+    losses: 429,
+  },
+  "Skull-Mark Lady Bug": {
+    elo: 1555,
+    wins: 435,
+    losses: 490,
+  },
+  "Succubus Knight": {
+    elo: 1554,
+    wins: 393,
+    losses: 433,
+  },
+  "Right Leg of the Forbidden One": {
+    elo: 1553,
+    wins: 424,
+    losses: 441,
+  },
+  Sogen: {
+    elo: 1552,
+    wins: 395,
+    losses: 431,
+  },
+  "Stop Defense": {
+    elo: 1552,
+    wins: 400,
+    losses: 447,
+  },
+  "Dig Beak": {
+    elo: 1552,
+    wins: 430,
+    losses: 428,
+  },
+  "Serpent Night Dragon": {
+    elo: 1550,
+    wins: 437,
+    losses: 462,
+  },
+  Mikazukinoyaiba: {
+    elo: 1550,
+    wins: 415,
+    losses: 483,
+  },
+  "Goddess of Whim": {
+    elo: 1549,
+    wins: 441,
+    losses: 471,
+  },
+  "Hercules Beetle": {
+    elo: 1548,
+    wins: 408,
+    losses: 423,
+  },
+  "Saber Slasher": {
+    elo: 1548,
+    wins: 424,
+    losses: 436,
+  },
+  Wasteland: {
+    elo: 1547,
+    wins: 399,
+    losses: 433,
+  },
+  Wilmee: {
+    elo: 1547,
+    wins: 440,
+    losses: 443,
+  },
+  "The Furious Sea King": {
+    elo: 1546,
+    wins: 428,
+    losses: 391,
+  },
+  "Penguin Soldier": {
+    elo: 1545,
+    wins: 422,
+    losses: 422,
+  },
+  "Rock Ogre Grotto #1": {
+    elo: 1544,
+    wins: 409,
+    losses: 438,
+  },
+  Nemuriko: {
+    elo: 1543,
+    wins: 419,
+    losses: 428,
+  },
+  "Insect Armor with Laser Cannon": {
+    elo: 1543,
+    wins: 429,
+    losses: 472,
+  },
+  "Orgoth the Relentless": {
+    elo: 1541,
+    wins: 396,
+    losses: 444,
+  },
+  Umi: {
+    elo: 1539,
+    wins: 425,
+    losses: 455,
+  },
+  "Mountain Warrior": {
+    elo: 1539,
+    wins: 423,
+    losses: 449,
+  },
+  "Droll Bird": {
+    elo: 1536,
+    wins: 404,
+    losses: 446,
+  },
+  "Kunai with Chain": {
+    elo: 1536,
+    wins: 423,
+    losses: 428,
+  },
+  Monsturtle: {
+    elo: 1535,
+    wins: 393,
+    losses: 428,
+  },
+  "Manga Ryu-Ran": {
+    elo: 1535,
+    wins: 388,
+    losses: 423,
+  },
+  Yami: {
+    elo: 1535,
+    wins: 440,
+    losses: 437,
+  },
+  "Punished Eagle": {
+    elo: 1532,
+    wins: 416,
+    losses: 445,
+  },
+  "Mech Bass": {
+    elo: 1532,
+    wins: 415,
+    losses: 458,
+  },
+  "Mystical Sand": {
+    elo: 1531,
+    wins: 439,
+    losses: 452,
+  },
+  Barox: {
+    elo: 1527,
+    wins: 424,
+    losses: 450,
+  },
+  "Turtle Bird": {
+    elo: 1525,
+    wins: 431,
+    losses: 457,
+  },
+  "Judge Man": {
+    elo: 1525,
+    wins: 427,
+    losses: 427,
+  },
+  "Wicked Mirror": {
+    elo: 1524,
+    wins: 419,
+    losses: 457,
+  },
+  "The Winged Dragon of Ra (Battle Mode)": {
+    elo: 1523,
+    wins: 380,
+    losses: 463,
+  },
+  "Beast Fangs": {
+    elo: 1523,
+    wins: 409,
+    losses: 441,
+  },
+  "Garma Sword": {
+    elo: 1522,
+    wins: 429,
+    losses: 470,
+  },
+  "Injection Fairy Lily": {
+    elo: 1522,
+    wins: 436,
+    losses: 442,
+  },
+  Salamandra: {
+    elo: 1521,
+    wins: 448,
+    losses: 445,
+  },
+  "Wing Eagle": {
+    elo: 1519,
+    wins: 389,
+    losses: 450,
+  },
+  "Morphing Jar #2": {
+    elo: 1518,
+    wins: 434,
+    losses: 434,
+  },
+  "Basic Insect": {
+    elo: 1517,
+    wins: 421,
+    losses: 465,
+  },
+  Multiply: {
+    elo: 1517,
+    wins: 405,
+    losses: 492,
+  },
+  "Dark Paladin": {
+    elo: 1516,
+    wins: 388,
+    losses: 440,
+  },
+  "Empress Judge": {
+    elo: 1514,
+    wins: 412,
+    losses: 445,
+  },
+  "Monster Eye": {
+    elo: 1512,
+    wins: 433,
+    losses: 461,
+  },
+  "Garnecia Elefantis": {
+    elo: 1512,
+    wins: 403,
+    losses: 470,
+  },
+  "Lord of D.": {
+    elo: 1510,
+    wins: 454,
+    losses: 421,
+  },
+  "Mechanical Spider": {
+    elo: 1509,
+    wins: 427,
+    losses: 438,
+  },
+  Torike: {
+    elo: 1509,
+    wins: 400,
+    losses: 404,
+  },
+  "Thunder Dragon": {
+    elo: 1508,
+    wins: 437,
+    losses: 461,
+  },
+  "Curtain of the Dark Ones": {
+    elo: 1505,
+    wins: 403,
+    losses: 420,
+  },
+  "Mirage Knight": {
+    elo: 1505,
+    wins: 379,
+    losses: 447,
+  },
+  "Battle Warrior": {
+    elo: 1504,
+    wins: 410,
+    losses: 419,
+  },
+  "Kairyu-Shin": {
+    elo: 1504,
+    wins: 430,
+    losses: 433,
+  },
+  "Parasite Paracide": {
+    elo: 1504,
+    wins: 404,
+    losses: 461,
+  },
+  Haniwa: {
+    elo: 1502,
+    wins: 396,
+    losses: 448,
+  },
+  "Phantom Dewan": {
+    elo: 1501,
+    wins: 397,
+    losses: 415,
+  },
+  "Crow Goblin": {
+    elo: 1500,
+    wins: 389,
+    losses: 481,
+  },
+  "Last Day of Witch": {
+    elo: 1498,
+    wins: 425,
+    losses: 456,
+  },
+  Skelgon: {
+    elo: 1497,
+    wins: 405,
+    losses: 419,
+  },
+  "House of Adhesive Tape": {
+    elo: 1497,
+    wins: 420,
+    losses: 440,
+  },
+  "Queen Bird": {
+    elo: 1496,
+    wins: 384,
+    losses: 422,
+  },
+  "Buster Blader": {
+    elo: 1495,
+    wins: 420,
+    losses: 437,
+  },
+  "Sea Kamen": {
+    elo: 1495,
+    wins: 413,
+    losses: 458,
+  },
+  "Gale Dogra": {
+    elo: 1494,
+    wins: 402,
+    losses: 452,
+  },
+  "Fire Reaper": {
+    elo: 1494,
+    wins: 415,
+    losses: 458,
+  },
+  "Steel Shell": {
+    elo: 1494,
+    wins: 395,
+    losses: 438,
+  },
+  "Doll of Demise": {
+    elo: 1493,
+    wins: 450,
+    losses: 469,
+  },
+  "Dark Sage": {
+    elo: 1493,
+    wins: 427,
+    losses: 461,
+  },
+  "Wall Shadow": {
+    elo: 1491,
+    wins: 385,
+    losses: 452,
+  },
+  "Chimera the Flying Mythical Beast": {
+    elo: 1491,
+    wins: 402,
+    losses: 433,
+  },
+  "Hunter Spider": {
+    elo: 1491,
+    wins: 427,
+    losses: 443,
+  },
+  "Gate Deeg": {
+    elo: 1490,
+    wins: 414,
+    losses: 450,
+  },
+  "Kaminari Attack": {
+    elo: 1490,
+    wins: 444,
+    losses: 455,
+  },
+  "Soldier Ari": {
+    elo: 1489,
+    wins: 423,
+    losses: 431,
+  },
+  "Pot the Trick": {
+    elo: 1488,
+    wins: 426,
+    losses: 462,
+  },
+  "Perfectly Ultimate Great Moth": {
+    elo: 1486,
+    wins: 435,
+    losses: 451,
+  },
+  "The Little Swordsman of Aile": {
+    elo: 1485,
+    wins: 441,
+    losses: 467,
+  },
+  "Monstrous Bird": {
+    elo: 1485,
+    wins: 417,
+    losses: 441,
+  },
+  Berfomet: {
+    elo: 1484,
+    wins: 392,
+    losses: 439,
+  },
+  "Root Water": {
+    elo: 1483,
+    wins: 432,
+    losses: 453,
+  },
+  Solitude: {
+    elo: 1479,
+    wins: 448,
+    losses: 487,
+  },
+  "Shinato, King of a Higher Plane": {
+    elo: 1475,
+    wins: 398,
+    losses: 478,
+  },
+  "Crimson Sunbird": {
+    elo: 1474,
+    wins: 403,
+    losses: 441,
+  },
+  "Great Mammoth of Goldfine": {
+    elo: 1473,
+    wins: 420,
+    losses: 461,
+  },
+  "Pendulum Machine": {
+    elo: 1472,
+    wins: 380,
+    losses: 467,
+  },
+  "Twin-Headed Thunder Dragon": {
+    elo: 1472,
+    wins: 402,
+    losses: 447,
+  },
+  Firegrass: {
+    elo: 1470,
+    wins: 391,
+    losses: 441,
+  },
+  "Marine Beast": {
+    elo: 1469,
+    wins: 409,
+    losses: 429,
+  },
+  Garoozis: {
+    elo: 1469,
+    wins: 414,
+    losses: 445,
+  },
+  "Black Luster Soldier": {
+    elo: 1469,
+    wins: 432,
+    losses: 482,
+  },
+  "Swordsman of Landstar": {
+    elo: 1468,
+    wins: 410,
+    losses: 466,
+  },
+  Metalmorph: {
+    elo: 1468,
+    wins: 400,
+    losses: 458,
+  },
+  Swordstalker: {
+    elo: 1466,
+    wins: 432,
+    losses: 456,
+  },
+  "Spirit of the Winds": {
+    elo: 1465,
+    wins: 407,
+    losses: 450,
+  },
+  "Toon Dark Magician Girl": {
+    elo: 1464,
+    wins: 439,
+    losses: 410,
+  },
+  "Flower Wolf": {
+    elo: 1463,
+    wins: 382,
+    losses: 459,
+  },
+  "Mystical Moon": {
+    elo: 1462,
+    wins: 391,
+    losses: 441,
+  },
+  "Talons of Shurilane": {
+    elo: 1460,
+    wins: 435,
+    losses: 442,
+  },
+  "Penguin Torpedo": {
+    elo: 1459,
+    wins: 391,
+    losses: 435,
+  },
+  "Red-Eyes Black Metal Dragon": {
+    elo: 1459,
+    wins: 390,
+    losses: 468,
+  },
+  "Reflect Bounder": {
+    elo: 1459,
+    wins: 400,
+    losses: 444,
+  },
+  "Rainbow Marine Mermaid": {
+    elo: 1455,
+    wins: 401,
+    losses: 446,
+  },
+  "The Masked Beast": {
+    elo: 1455,
+    wins: 401,
+    losses: 427,
+  },
+  "Monster Tamer": {
+    elo: 1453,
+    wins: 402,
+    losses: 451,
+  },
+  "Violet Crystal": {
+    elo: 1451,
+    wins: 417,
+    losses: 451,
+  },
+  "Legendary Fiend": {
+    elo: 1451,
+    wins: 408,
+    losses: 448,
+  },
+  "Flame Swordsman": {
+    elo: 1451,
+    wins: 385,
+    losses: 452,
+  },
+  "Toon Alligator": {
+    elo: 1449,
+    wins: 416,
+    losses: 411,
+  },
+  'Spirit Message "N"': {
+    elo: 1447,
+    wins: 448,
+    losses: 497,
+  },
+  "The Melting Red Shadow": {
+    elo: 1444,
+    wins: 418,
+    losses: 442,
+  },
+  "Twin Long Rods #1": {
+    elo: 1443,
+    wins: 414,
+    losses: 438,
+  },
+  "Laser Cannon Armor": {
+    elo: 1443,
+    wins: 398,
+    losses: 443,
+  },
+  "Ancient Tree of Enlightenment": {
+    elo: 1442,
+    wins: 412,
+    losses: 435,
+  },
+  "Lady of Faith": {
+    elo: 1442,
+    wins: 462,
+    losses: 461,
+  },
+  "Nightmare Scorpion": {
+    elo: 1441,
+    wins: 425,
+    losses: 462,
+  },
+  "Wings of Wicked Flame": {
+    elo: 1441,
+    wins: 444,
+    losses: 463,
+  },
+  "Harpie Lady Sisters": {
+    elo: 1437,
+    wins: 426,
+    losses: 468,
+  },
+  "White Dolphin": {
+    elo: 1435,
+    wins: 382,
+    losses: 410,
+  },
+  "Battle Steer": {
+    elo: 1435,
+    wins: 400,
+    losses: 445,
+  },
+  Skullbird: {
+    elo: 1434,
+    wins: 428,
+    losses: 486,
+  },
+  "Master of Dragon Soldier": {
+    elo: 1434,
+    wins: 382,
+    losses: 446,
+  },
+  "Millennium Shield": {
+    elo: 1433,
+    wins: 406,
+    losses: 466,
+  },
+  "Deepsea Warrior": {
+    elo: 1433,
+    wins: 424,
+    losses: 469,
+  },
+  "Thousand-Eyes Idol": {
+    elo: 1430,
+    wins: 415,
+    losses: 437,
+  },
+  "Drill Bug": {
+    elo: 1429,
+    wins: 426,
+    losses: 463,
+  },
+  "Ceremonial Bell": {
+    elo: 1428,
+    wins: 426,
+    losses: 418,
+  },
+  "Stone D.": {
+    elo: 1428,
+    wins: 418,
+    losses: 463,
+  },
+  "Magician of Faith": {
+    elo: 1427,
+    wins: 428,
+    losses: 445,
+  },
+  Kuriboh: {
+    elo: 1425,
+    wins: 394,
+    losses: 427,
+  },
+  "Bite Shoes": {
+    elo: 1423,
+    wins: 384,
+    losses: 441,
+  },
+  "Shadow Ghoul": {
+    elo: 1422,
+    wins: 415,
+    losses: 469,
+  },
+  "Sky Dragon": {
+    elo: 1416,
+    wins: 408,
+    losses: 417,
+  },
+  Invigoration: {
+    elo: 1415,
+    wins: 409,
+    losses: 435,
+  },
+  Prisman: {
+    elo: 1413,
+    wins: 415,
+    losses: 444,
+  },
+  "Musician King": {
+    elo: 1411,
+    wins: 384,
+    losses: 440,
+  },
+  "Dragon Seeker": {
+    elo: 1411,
+    wins: 408,
+    losses: 437,
+  },
+  "Milus Radiant": {
+    elo: 1410,
+    wins: 408,
+    losses: 454,
+  },
+  "M-Warrior #1": {
+    elo: 1407,
+    wins: 407,
+    losses: 449,
+  },
+  "LaLa Li-oon": {
+    elo: 1407,
+    wins: 403,
+    losses: 449,
+  },
+  "Silver Fang": {
+    elo: 1407,
+    wins: 446,
+    losses: 465,
+  },
+  "Slot Machine": {
+    elo: 1405,
+    wins: 409,
+    losses: 483,
+  },
+  "Giant Mech-Soldier": {
+    elo: 1405,
+    wins: 387,
+    losses: 494,
+  },
+  "Magical Labyrinth": {
+    elo: 1404,
+    wins: 420,
+    losses: 465,
+  },
+  "Satellite Cannon": {
+    elo: 1403,
+    wins: 407,
+    losses: 463,
+  },
+  Octoberser: {
+    elo: 1401,
+    wins: 416,
+    losses: 471,
+  },
+  "Goblin's Secret Remedy": {
+    elo: 1400,
+    wins: 399,
+    losses: 441,
+  },
+  "Power of Kaishin": {
+    elo: 1400,
+    wins: 449,
+    losses: 417,
+  },
+  "Crawling Dragon": {
+    elo: 1399,
+    wins: 405,
+    losses: 465,
+  },
+  "Waterdragon Fairy": {
+    elo: 1398,
+    wins: 425,
+    losses: 460,
+  },
+  Forest: {
+    elo: 1397,
+    wins: 424,
+    losses: 439,
+  },
+  Ganigumo: {
+    elo: 1396,
+    wins: 427,
+    losses: 464,
+  },
+  "Needle Worm": {
+    elo: 1396,
+    wins: 423,
+    losses: 450,
+  },
+  "Puppet Master": {
+    elo: 1396,
+    wins: 384,
+    losses: 427,
+  },
+  "Tri-Horned Dragon": {
+    elo: 1396,
+    wins: 391,
+    losses: 472,
+  },
+  "Eradicating Aerosol": {
+    elo: 1395,
+    wins: 378,
+    losses: 453,
+  },
+  "Nightmare Penguin": {
+    elo: 1390,
+    wins: 435,
+    losses: 454,
+  },
+  "Breath of Light": {
+    elo: 1389,
+    wins: 413,
+    losses: 433,
+  },
+  "Skull Knight": {
+    elo: 1387,
+    wins: 400,
+    losses: 467,
+  },
+  Ansatsu: {
+    elo: 1387,
+    wins: 386,
+    losses: 467,
+  },
+  "Masked Beast Des Gardius": {
+    elo: 1385,
+    wins: 424,
+    losses: 477,
+  },
+  "Restructer Revolution": {
+    elo: 1382,
+    wins: 418,
+    losses: 465,
+  },
+  Morinphen: {
+    elo: 1376,
+    wins: 412,
+    losses: 451,
+  },
+  "Fake Trap": {
+    elo: 1376,
+    wins: 400,
+    losses: 482,
+  },
+  Akihiron: {
+    elo: 1375,
+    wins: 370,
+    losses: 433,
+  },
+  "Orion the Battle King": {
+    elo: 1373,
+    wins: 373,
+    losses: 421,
+  },
+  "Blue-Eyes Toon Dragon": {
+    elo: 1371,
+    wins: 386,
+    losses: 448,
+  },
+  "Left Arm of the Forbidden One": {
+    elo: 1370,
+    wins: 437,
+    losses: 466,
+  },
+  "Dharma Cannon": {
+    elo: 1369,
+    wins: 395,
+    losses: 437,
+  },
+  "Elegant Egotist": {
+    elo: 1368,
+    wins: 381,
+    losses: 422,
+  },
+  "Flame Dancer": {
+    elo: 1367,
+    wins: 406,
+    losses: 459,
+  },
+  "Emperor of the Land and Sea": {
+    elo: 1364,
+    wins: 385,
+    losses: 430,
+  },
+  "Cyber Soldier": {
+    elo: 1359,
+    wins: 408,
+    losses: 460,
+  },
+  "M-Warrior #2": {
+    elo: 1356,
+    wins: 379,
+    losses: 450,
+  },
+  Pragtical: {
+    elo: 1352,
+    wins: 392,
+    losses: 423,
+  },
+  "Mushroom Man": {
+    elo: 1351,
+    wins: 389,
+    losses: 461,
+  },
+  "Elf's Light": {
+    elo: 1348,
+    wins: 403,
+    losses: 474,
+  },
+  "Wood Clown": {
+    elo: 1347,
+    wins: 418,
+    losses: 433,
+  },
+  "Reaper of the Cards": {
+    elo: 1347,
+    wins: 407,
+    losses: 492,
+  },
+  "Ruklamba the Spirit King": {
+    elo: 1346,
+    wins: 415,
+    losses: 464,
+  },
+  Ocubeam: {
+    elo: 1346,
+    wins: 397,
+    losses: 465,
+  },
+  "Metal Guardian": {
+    elo: 1342,
+    wins: 400,
+    losses: 446,
+  },
+  Kiseitai: {
+    elo: 1341,
+    wins: 406,
+    losses: 469,
+  },
+  "Valkyrion the Magna Warrior": {
+    elo: 1340,
+    wins: 377,
+    losses: 480,
+  },
+  Ookazi: {
+    elo: 1336,
+    wins: 416,
+    losses: 463,
+  },
+  Tatsunootoshigo: {
+    elo: 1336,
+    wins: 422,
+    losses: 485,
+  },
+  "Gear Golem the Moving Fortress": {
+    elo: 1331,
+    wins: 392,
+    losses: 422,
+  },
+  "Dark Necrofear": {
+    elo: 1329,
+    wins: 391,
+    losses: 440,
+  },
+  "The Winged Dragon of Ra (Sphere Mode)": {
+    elo: 1329,
+    wins: 409,
+    losses: 493,
+  },
+  "Millennium Golem": {
+    elo: 1329,
+    wins: 412,
+    losses: 433,
+  },
+  "Spirit of the Mountain": {
+    elo: 1327,
+    wins: 432,
+    losses: 454,
+  },
+  "Cyclon Laser": {
+    elo: 1326,
+    wins: 394,
+    losses: 446,
+  },
+  "Byser Shock": {
+    elo: 1326,
+    wins: 382,
+    losses: 443,
+  },
+  "Total Defense Shogun": {
+    elo: 1325,
+    wins: 402,
+    losses: 473,
+  },
+  "Bolt Escargot": {
+    elo: 1325,
+    wins: 361,
+    losses: 436,
+  },
+  "Boulder Tortoise": {
+    elo: 1324,
+    wins: 406,
+    losses: 452,
+  },
+  "Metal Dragon": {
+    elo: 1319,
+    wins: 395,
+    losses: 472,
+  },
+  Misairuzame: {
+    elo: 1319,
+    wins: 421,
+    losses: 483,
+  },
+  "Mystic Lamp": {
+    elo: 1315,
+    wins: 395,
+    losses: 455,
+  },
+  "Metal Fish": {
+    elo: 1315,
+    wins: 402,
+    losses: 490,
+  },
+  "Obelisk the Tormentor": {
+    elo: 1305,
+    wins: 374,
+    losses: 481,
+  },
+  "Goblin Fan": {
+    elo: 1304,
+    wins: 396,
+    losses: 475,
+  },
+  "Megasonic Eye": {
+    elo: 1304,
+    wins: 388,
+    losses: 483,
+  },
+  "Firewing Pegasus": {
+    elo: 1303,
+    wins: 402,
+    losses: 453,
+  },
+  "Raise Body Heat": {
+    elo: 1299,
+    wins: 421,
+    losses: 482,
+  },
+  Bickuribox: {
+    elo: 1298,
+    wins: 401,
+    losses: 491,
+  },
+  "Kaiser Dragon": {
+    elo: 1296,
+    wins: 400,
+    losses: 453,
+  },
+  "Bad Reaction to Simochi": {
+    elo: 1294,
+    wins: 407,
+    losses: 462,
+  },
+  Hyozanryu: {
+    elo: 1294,
+    wins: 368,
+    losses: 450,
+  },
+  "Gyakutenno Megami": {
+    elo: 1293,
+    wins: 382,
+    losses: 446,
+  },
+  Zanki: {
+    elo: 1290,
+    wins: 405,
+    losses: 442,
+  },
+  "Sword of Dark Destruction": {
+    elo: 1290,
+    wins: 387,
+    losses: 457,
+  },
+  "Berserk Dragon": {
+    elo: 1289,
+    wins: 394,
+    losses: 450,
+  },
+  "Dark-Eyes Illusionist": {
+    elo: 1288,
+    wins: 420,
+    losses: 458,
+  },
+  "Shadow Specter": {
+    elo: 1284,
+    wins: 395,
+    losses: 451,
+  },
+  "Dark Witch": {
+    elo: 1279,
+    wins: 442,
+    losses: 468,
+  },
+  "Gadget Soldier": {
+    elo: 1279,
+    wins: 417,
+    losses: 448,
+  },
+  Togex: {
+    elo: 1275,
+    wins: 389,
+    losses: 460,
+  },
+  "Tiny Guardian": {
+    elo: 1275,
+    wins: 404,
+    losses: 472,
+  },
+  "Launcher Spider": {
+    elo: 1275,
+    wins: 390,
+    losses: 490,
+  },
+  "Dice Armadillo": {
+    elo: 1273,
+    wins: 426,
+    losses: 481,
+  },
+  "Space Megatron": {
+    elo: 1272,
+    wins: 393,
+    losses: 475,
+  },
+  "Black Luster Ritual": {
+    elo: 1270,
+    wins: 404,
+    losses: 479,
+  },
+  "Sword Arm of Dragon": {
+    elo: 1265,
+    wins: 401,
+    losses: 503,
+  },
+  Suijin: {
+    elo: 1265,
+    wins: 407,
+    losses: 462,
+  },
+  Mountain: {
+    elo: 1264,
+    wins: 427,
+    losses: 463,
+  },
+  "Crab Turtle": {
+    elo: 1257,
+    wins: 376,
+    losses: 448,
+  },
+  "Steel Fan Fighter": {
+    elo: 1255,
+    wins: 385,
+    losses: 444,
+  },
+  "Hiro's Shadow Scout": {
+    elo: 1247,
+    wins: 409,
+    losses: 458,
+  },
+  "Skull Guardian": {
+    elo: 1246,
+    wins: 401,
+    losses: 498,
+  },
+  "Red-Eyes B. Dragon": {
+    elo: 1240,
+    wins: 375,
+    losses: 441,
+  },
+  "Skull Servant": {
+    elo: 1238,
+    wins: 419,
+    losses: 488,
+  },
+  "Ill Witch": {
+    elo: 1237,
+    wins: 411,
+    losses: 453,
+  },
+  "Great Moth": {
+    elo: 1237,
+    wins: 392,
+    losses: 495,
+  },
+  "Left Leg of the Forbidden One": {
+    elo: 1235,
+    wins: 425,
+    losses: 460,
+  },
+  'Spirit Message "A"': {
+    elo: 1233,
+    wins: 376,
+    losses: 473,
+  },
+  "Super War-Lion": {
+    elo: 1232,
+    wins: 395,
+    losses: 472,
+  },
+  "Psycho-Puppet": {
+    elo: 1222,
+    wins: 373,
+    losses: 482,
+  },
+  "Cosmo Queen": {
+    elo: 1222,
+    wins: 410,
+    losses: 456,
+  },
+  "Vermillion Sparrow": {
+    elo: 1216,
+    wins: 401,
+    losses: 480,
+  },
+  "Rocket Warrior": {
+    elo: 1214,
+    wins: 369,
+    losses: 451,
+  },
+  "Black Illusion Ritual": {
+    elo: 1213,
+    wins: 408,
+    losses: 488,
+  },
+  "Labyrinth Wall": {
+    elo: 1212,
+    wins: 397,
+    losses: 490,
+  },
+  Zoa: {
+    elo: 1209,
+    wins: 403,
+    losses: 499,
+  },
+  "Blue-Eyes White Dragon": {
+    elo: 1206,
+    wins: 398,
+    losses: 505,
+  },
+  "Wicked Dragon with the Ersatz Head": {
+    elo: 1202,
+    wins: 419,
+    losses: 448,
+  },
+  "Final Flame": {
+    elo: 1194,
+    wins: 380,
+    losses: 492,
+  },
+  "Lava Golem": {
+    elo: 1190,
+    wins: 359,
+    losses: 502,
+  },
+  "Meteor B. Dragon": {
+    elo: 1183,
+    wins: 397,
+    losses: 493,
+  },
+  'Spirit Message "L"': {
+    elo: 1175,
+    wins: 402,
+    losses: 481,
+  },
+  "Perfect Machine King": {
+    elo: 1175,
+    wins: 371,
+    losses: 490,
+  },
+  "Hannibal Necromancer": {
+    elo: 1170,
+    wins: 375,
+    losses: 464,
+  },
+  "Beastking of the Swamps": {
+    elo: 1166,
+    wins: 390,
+    losses: 445,
+  },
+  "Doma The Angel of Silence": {
+    elo: 1162,
+    wins: 400,
+    losses: 447,
+  },
+  "Thousand Dragon": {
+    elo: 1153,
+    wins: 373,
+    losses: 481,
+  },
+  "Barrel Dragon": {
+    elo: 1153,
+    wins: 387,
+    losses: 502,
+  },
+  "Magician of Black Chaos": {
+    elo: 1152,
+    wins: 367,
+    losses: 467,
+  },
+  "Dark-Piercing Light": {
+    elo: 1152,
+    wins: 408,
+    losses: 486,
+  },
+  Kazejin: {
+    elo: 1151,
+    wins: 387,
+    losses: 496,
+  },
+  "Dark Magic Ritual": {
+    elo: 1148,
+    wins: 395,
+    losses: 472,
+  },
+  "Alligator's Sword Dragon": {
+    elo: 1146,
+    wins: 388,
+    losses: 465,
+  },
+  "Giltia the D. Knight": {
+    elo: 1143,
+    wins: 390,
+    losses: 471,
+  },
+  "Beast of Talwar": {
+    elo: 1143,
+    wins: 364,
+    losses: 497,
+  },
+  "Sword Hunter": {
+    elo: 1129,
+    wins: 405,
+    losses: 495,
+  },
+  Trent: {
+    elo: 1113,
+    wins: 392,
+    losses: 498,
+  },
+  "Harpie's Pet Dragon": {
+    elo: 1095,
+    wins: 388,
+    losses: 460,
+  },
+  "Gaia the Dragon Champion": {
+    elo: 1082,
+    wins: 367,
+    losses: 456,
+  },
+  "Gate Guardian": {
+    elo: 1078,
+    wins: 398,
+    losses: 441,
+  },
+  Metalzoa: {
+    elo: 1065,
+    wins: 372,
+    losses: 487,
+  },
+  LaMoon: {
+    elo: 1063,
+    wins: 362,
+    losses: 472,
+  },
+  "Exodia Necross": {
+    elo: 1046,
+    wins: 359,
+    losses: 512,
+  },
+  "Ryu-Ran": {
+    elo: 1029,
+    wins: 386,
+    losses: 492,
+  },
+  "Reverse Trap": {
+    elo: 986,
+    wins: 360,
+    losses: 486,
+  },
+  "Invitation to a Dark Sleep": {
+    elo: 984,
+    wins: 376,
+    losses: 484,
+  },
+  "Gilford the Lightning": {
+    elo: 866,
+    wins: 350,
+    losses: 517,
+  },
+  "Jam Breeding Machine": {
+    elo: -284,
+    wins: 256,
+    losses: 590,
+  },
+  "Beast of Gilfer": {
+    elo: -386,
+    wins: 252,
+    losses: 661,
+  },
+};
+
+export default cardEloMap;

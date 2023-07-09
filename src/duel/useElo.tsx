@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks";
-import cardEloMap from "../assets/card_elo.json";
+import cardEloMap from "../assets/cardElo";
 import { selectDuel } from "./duelSlice";
 import { getVictorKey } from "./util/duelUtil";
 
