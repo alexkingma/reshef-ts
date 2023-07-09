@@ -10,8 +10,8 @@ import { useDuelActions } from "../useDuelActions";
 import { useElo } from "../useElo";
 import { getTempCardQuantMap } from "../util/deckUtil";
 import { getNewDuel } from "../util/duelUtil";
-import { Duel as Duel2D } from "./2d/Duel";
 import { DuelConfig } from "./config/DuelConfig";
+import { Duel } from "./duel/Duel";
 
 export enum GameMode {
   Idle = "IDLE",
@@ -104,7 +104,7 @@ export const DuelContainer = () => {
             <button onClick={onStartClicked}>Start Duel</button>
           </>
         ) : (
-          <Duel2D />
+          <Duel />
         )}
       </div>
     </div>
