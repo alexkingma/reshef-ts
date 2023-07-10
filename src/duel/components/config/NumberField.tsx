@@ -1,34 +1,26 @@
 import { useDuelActions } from "@/duel/useDuelActions";
 import React, { ChangeEvent } from "react";
 
-type NumberFields = "totalDuelsToPlay" | "cpuDelayMs";
-
-interface Props {
-  name: NumberFields;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  name: string;
   title: string;
-  val: number;
+  value: number;
 }
 
-export const NumberSelect = ({ name, val, title }: Props) => {
+export const NumberField = ({ title, ...props }: Props) => {
   const { updateConfig } = useDuelActions();
 
   const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     let val = Number(e.target.value);
     if (Number.isNaN(val)) val = 0;
-    const key = e.target.name as NumberFields;
+    const key = e.target.name as keyof DuelConfig;
     updateConfig({ [key]: val });
   };
 
   return (
     <div>
       <label>
-        {title}:{" "}
-        <input
-          type="number"
-          name={name}
-          value={val}
-          onChange={onNumberChange}
-        />
+        {title}: <input type="number" onChange={onNumberChange} {...props} />
       </label>
     </div>
   );

@@ -1,9 +1,21 @@
 import { PlayerType } from "@/duel/common";
 import { selectConfig } from "@/duel/duelSlice";
 import { useDuelActions } from "@/duel/useDuelActions";
+import { getDuellables } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";
 import React, { ChangeEvent } from "react";
-import { NumberSelect } from "./NumberSelect";
+import { NumberField } from "./NumberField";
+import { SelectField } from "./SelectField";
+
+const PLAYER_TYPE_OPTIONS = [
+  { label: "Human", value: PlayerType.Human },
+  { label: "CPU", value: PlayerType.CPU },
+];
+
+const DUELLABLE_OPTIONS = getDuellables().map((d) => ({
+  label: d.name,
+  value: d.name,
+}));
 
 export const DuelConfig = () => {
   const {
@@ -17,54 +29,43 @@ export const DuelConfig = () => {
   } = useAppSelector(selectConfig);
   const { updateConfig } = useDuelActions();
 
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value as PlayerType;
-    const key = e.target.name as "p1Type" | "p2Type";
-    updateConfig({ [key]: val });
-  };
-
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.checked as boolean;
-    const key = e.target.name as "showDuelUI";
+    const key = e.target.name as keyof DuelConfig;
     updateConfig({ [key]: val });
   };
 
   return (
     <div style={{ color: "white" }}>
-      <h3>Config</h3>
+      <h2 style={{ display: "flex", justifyContent: "center" }}>Config</h2>
 
-      <NumberSelect
+      <NumberField
         title="Delay (ms)"
         name="cpuDelayMs"
-        val={cpuDelayMs}
-        // TODO: min 0, max 10,000
+        value={cpuDelayMs}
+        min={0}
+        max={10000}
       />
 
-      <div>
-        <label>
-          P1:{" "}
-          <select name="p1Type" onChange={onSelectChange} value={p1Type}>
-            <option value={PlayerType.Human}>Human</option>
-            <option value={PlayerType.CPU}>CPU</option>
-          </select>
-        </label>
-      </div>
+      <SelectField
+        title="P1"
+        name="p1Type"
+        value={p1Type}
+        options={PLAYER_TYPE_OPTIONS}
+      />
 
-      <div>
-        <label>
-          P2:{" "}
-          <select name="p2Type" onChange={onSelectChange} value={p2Type}>
-            <option value={PlayerType.Human}>Human</option>
-            <option value={PlayerType.CPU}>CPU</option>
-          </select>
-        </label>
-      </div>
+      <SelectField
+        title="P2"
+        name="p2Type"
+        value={p2Type}
+        options={PLAYER_TYPE_OPTIONS}
+      />
 
-      <NumberSelect
+      <NumberField
         title="Duels to play"
         name="totalDuelsToPlay"
-        val={totalDuelsToPlay}
-        // TODO: min val of 1
+        value={totalDuelsToPlay}
+        min={1}
       />
 
       <div>
@@ -79,8 +80,19 @@ export const DuelConfig = () => {
         </label>
       </div>
 
-      <div>Deck 1: {p1Name}</div>
-      <div>Deck 2: {p2Name}</div>
+      <SelectField
+        title="Deck 1"
+        name="p1Name"
+        value={p1Name}
+        options={DUELLABLE_OPTIONS}
+      />
+
+      <SelectField
+        title="Deck 2"
+        name="p2Name"
+        value={p2Name}
+        options={DUELLABLE_OPTIONS}
+      />
     </div>
   );
 };

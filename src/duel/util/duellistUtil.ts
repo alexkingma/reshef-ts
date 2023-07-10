@@ -183,6 +183,10 @@ export const getDuellable = (name: DuellableName): Duellable => {
   return duellist;
 };
 
+export const getDuellables = (): Duellable[] => {
+  return duellists;
+};
+
 export const isDuellable = (name: string) => {
   try {
     getDuellable(name as DuellableName);

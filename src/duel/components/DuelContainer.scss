@@ -1,0 +1,17 @@
+.duelContainer {
+  .overlay {
+    position: absolute;
+  }
+
+  .configContainer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    .config {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+  }
+}

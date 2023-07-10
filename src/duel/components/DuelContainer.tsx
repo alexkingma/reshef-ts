@@ -11,6 +11,7 @@ import { useDuelActions } from "../useDuelActions";
 import { useElo } from "../useElo";
 import { getNewDuel } from "../util/duelUtil";
 import { getRandomDuellable } from "../util/duellistUtil";
+import "./DuelContainer.scss";
 import { DuelConfig } from "./config/DuelConfig";
 import { Duel } from "./duel/Duel";
 
@@ -84,9 +85,9 @@ export const DuelContainer = () => {
   }, [isStartOfTurn, startTurn]);
 
   return (
-    <div>
+    <div className="duelContainer">
       {mode === GameMode.Duel && (
-        <div style={{ position: "absolute" }}>
+        <div className="overlay">
           <>
             {numDuelsFinished}/{totalDuelsToPlay} (
             {Math.round((numDuelsFinished / totalDuelsToPlay) * 100)}%)
@@ -100,18 +101,14 @@ export const DuelContainer = () => {
           }
         </div>
       )}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}
-      >
+
+      <div className="configContainer">
         {mode === GameMode.Idle || !showDuelUI ? (
-          <>
+          <div className="config">
             <DuelConfig />
+            <br />
             <button onClick={onStartClicked}>Start Duel</button>
-          </>
+          </div>
         ) : (
           <Duel />
         )}
