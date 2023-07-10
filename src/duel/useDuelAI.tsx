@@ -16,7 +16,7 @@ import {
   selectIsDuelOver,
   selectIsMyTurn,
 } from "./duelSlice";
-import { useDuellistActions, useInteractionActions } from "./useDuelActions";
+import { useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";
 import {
@@ -63,18 +63,11 @@ export const useDuelAI = () => {
     endTurn: endTurnAction,
     aiNormalSummon: aiNormalSummonAction,
   } = actions;
-  const { duellistKey: dKey, isStartOfTurn } = useAppSelector(selectActiveTurn);
-  const { startTurn } = useDuellistActions(dKey);
+  const { duellistKey: dKey } = useAppSelector(selectActiveTurn);
   const { setOriginZone, setTargetZone, resetInteractions } =
     useInteractionActions();
   const { ownHand, ownMonsters, ownSpellTrap, otherMonsters } =
     getDuellistCoordsMap(dKey);
-
-  useEffect(() => {
-    if (isStartOfTurn) {
-      startTurn();
-    }
-  }, [isStartOfTurn, startTurn]);
 
   const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
   const { computerDelayMs } = useAppSelector(selectConfig);

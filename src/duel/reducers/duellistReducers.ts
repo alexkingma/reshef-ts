@@ -1,9 +1,7 @@
 import { BattlePosition, Orientation, RowKey } from "../common";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
-import { checkAutoEffects } from "../util/autoEffectUtil";
 import { getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
-import { draw } from "../util/deckUtil";
 import { getActiveEffects } from "../util/duellistUtil";
 import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
@@ -56,17 +54,6 @@ export const duellistReducers = {
       hasNormalSummoned: false,
       numTributedMonsters: 0,
     };
-  },
-  startTurn: (state: Duel, { dKey }: DuellistCoordsMap) => {
-    // start-of-turn effects execute here
-    checkAutoEffects(state);
-
-    const { activeTurn } = state;
-    activeTurn.isStartOfTurn = false;
-
-    // displaying dialogue prompts and Draw Phase (in spirit)
-    // takes place AFTER start-of-turn field checks
-    draw(state, dKey);
   },
   aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {
     // originCoords refers to the mon in hand to summon to the field.

@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/hooks";
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  selectActiveTurn,
   selectConfig,
   selectIsDuelOver,
   selectIsSimulation,
@@ -22,8 +23,9 @@ export const DuelContainer = () => {
   const [mode, setMode] = useState(GameMode.Idle);
   const isSimulation = useAppSelector(selectIsSimulation);
   const { totalDuelsToPlay, showDuelUI } = useAppSelector(selectConfig);
+  const { isStartOfTurn } = useAppSelector(selectActiveTurn);
   const isDuelOver = useAppSelector(selectIsDuelOver);
-  const { setDuel, updateConfig } = useDuelActions();
+  const { setDuel, updateConfig, startTurn } = useDuelActions();
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
   const [p1Deck, setP1Deck] = useState(getTempCardQuantMap());
   const [p2Deck, setP2Deck] = useState(getTempCardQuantMap());
@@ -73,6 +75,12 @@ export const DuelContainer = () => {
     updateConfig,
     updateEloMap,
   ]);
+
+  useEffect(() => {
+    if (isStartOfTurn) {
+      startTurn();
+    }
+  }, [isStartOfTurn, startTurn]);
 
   return (
     <div>
