@@ -80,7 +80,7 @@ interface DuelConfig {
   p2Type: PlayerType;
   p1Name: DuellableName; // TODO: need a way to also enable random cards/decks?
   p2Name: DuellableName;
-  computerDelayMs: number;
+  cpuDelayMs: number;
   totalDuelsToPlay: number;
   showDuelUI: boolean;
 }
@@ -114,4 +114,4 @@ type DuellistStatus =
   | "EXODIA"
   | "DESTINY_BOARD";
 
-type PlayerType = "HUMAN" | "COMPUTER";
+type PlayerType = "HUMAN" | "CPU";

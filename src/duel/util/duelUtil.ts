@@ -36,11 +36,11 @@ export const getNewDuel = (
 
 export const getDefaultConfig = (): DuelConfig => {
   return {
-    p1Type: PlayerType.Computer,
-    p2Type: PlayerType.Computer,
+    p1Type: PlayerType.CPU,
+    p2Type: PlayerType.CPU,
     p1Name: getRandomDuellable().name,
     p2Name: getRandomDuellable().name,
-    computerDelayMs: 0,
+    cpuDelayMs: 0,
     totalDuelsToPlay: 100,
     showDuelUI: false,
   };

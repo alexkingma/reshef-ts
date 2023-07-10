@@ -1,7 +1,7 @@
 import { useDuelActions } from "@/duel/useDuelActions";
 import React, { ChangeEvent } from "react";
 
-type NumberFields = "totalDuelsToPlay" | "computerDelayMs";
+type NumberFields = "totalDuelsToPlay" | "cpuDelayMs";
 
 interface Props {
   name: NumberFields;

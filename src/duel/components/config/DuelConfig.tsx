@@ -7,7 +7,7 @@ import { NumberSelect } from "./NumberSelect";
 
 export const DuelConfig = () => {
   const {
-    computerDelayMs,
+    cpuDelayMs,
     p1Name,
     p1Type,
     p2Name,
@@ -35,8 +35,8 @@ export const DuelConfig = () => {
 
       <NumberSelect
         title="Delay (ms)"
-        name="computerDelayMs"
-        val={computerDelayMs}
+        name="cpuDelayMs"
+        val={cpuDelayMs}
         // TODO: min 0, max 10,000
       />
 
@@ -45,7 +45,7 @@ export const DuelConfig = () => {
           P1:{" "}
           <select name="p1Type" onChange={onSelectChange} value={p1Type}>
             <option value={PlayerType.Human}>Human</option>
-            <option value={PlayerType.Computer}>Computer</option>
+            <option value={PlayerType.CPU}>CPU</option>
           </select>
         </label>
       </div>
@@ -55,7 +55,7 @@ export const DuelConfig = () => {
           P2:{" "}
           <select name="p2Type" onChange={onSelectChange} value={p2Type}>
             <option value={PlayerType.Human}>Human</option>
-            <option value={PlayerType.Computer}>Computer</option>
+            <option value={PlayerType.CPU}>CPU</option>
           </select>
         </label>
       </div>

@@ -53,7 +53,7 @@ export const DuelContainer = () => {
     setNumDuelsFinished((val) => val + 1);
 
     if (isSimulation) {
-      // two computers are playing, so we can use the result of this duel
+      // two CPUs are playing, so we can use the result of this duel
       // to update the Elo records of each card/deck
       updateEloMap();
     }

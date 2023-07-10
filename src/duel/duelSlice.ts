@@ -124,12 +124,12 @@ export const selectActiveField =
 export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 export const selectConfig = ({ duel }: RootState) => duel.config;
-export const selectIsComputer =
+export const selectIsCPU =
   (key: DuellistKey) =>
   ({ duel }: RootState) =>
     key === "p1"
-      ? duel.config.p1Type === PlayerType.Computer
-      : duel.config.p2Type === PlayerType.Computer;
+      ? duel.config.p1Type === PlayerType.CPU
+      : duel.config.p2Type === PlayerType.CPU;
 export const selectIsDuelOver = ({ duel }: RootState) => {
   // determine if either side has fulfilled a win/lose condition
   return (
@@ -139,8 +139,8 @@ export const selectIsDuelOver = ({ duel }: RootState) => {
 };
 export const selectIsSimulation = ({ duel }: RootState) => {
   return (
-    duel.config.p1Type === PlayerType.Computer &&
-    duel.config.p2Type === PlayerType.Computer
+    duel.config.p1Type === PlayerType.CPU &&
+    duel.config.p2Type === PlayerType.CPU
   );
 };
 

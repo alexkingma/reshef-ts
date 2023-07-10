@@ -1,6 +1,6 @@
 export enum PlayerType {
   Human = "HUMAN",
-  Computer = "COMPUTER",
+  CPU = "CPU",
 }
 
 export enum BattlePosition {

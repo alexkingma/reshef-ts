@@ -12,7 +12,7 @@ import {
   selectActiveTurn,
   selectConfig,
   selectDuel,
-  selectIsComputer,
+  selectIsCPU,
   selectIsDuelOver,
   selectIsMyTurn,
 } from "./duelSlice";
@@ -70,8 +70,8 @@ export const useDuelAI = () => {
     getDuellistCoordsMap(dKey);
 
   const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
-  const { computerDelayMs } = useAppSelector(selectConfig);
-  const isComputer = useAppSelector(selectIsComputer(dKey));
+  const { cpuDelayMs } = useAppSelector(selectConfig);
+  const isCPU = useAppSelector(selectIsCPU(dKey));
 
   const executeLethal = (): boolean => {
     // Attempt to end the duel in a single attack, to save time.
@@ -302,6 +302,7 @@ export const useDuelAI = () => {
     if (hasEmptyZone(state, ownHand)) return false;
 
     // TODO: how does the AI determine which card to discard?
+    // TODO: don't ever discard god cards
     dispatch(discardAction(getZoneCoordsMap([...ownHand, 0] as ZoneCoords)));
     return true;
   };
@@ -336,11 +337,11 @@ export const useDuelAI = () => {
 
   useEffect(() => {
     let decisionMakingTimeout: NodeJS.Timeout;
-    if (isComputer && isMyTurn) {
+    if (isCPU && isMyTurn) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();
-      }, computerDelayMs);
+      }, cpuDelayMs);
     }
     return () => clearTimeout(decisionMakingTimeout);
-  }, [isComputer, isMyTurn, computerDelayMs, makeDecision]);
+  }, [isCPU, isMyTurn, cpuDelayMs, makeDecision]);
 };
