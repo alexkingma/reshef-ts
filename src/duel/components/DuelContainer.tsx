@@ -9,8 +9,8 @@ import {
 import { useDuelAI } from "../useDuelAI";
 import { useDuelActions } from "../useDuelActions";
 import { useElo } from "../useElo";
-import { getTempCardQuantMap } from "../util/deckUtil";
 import { getNewDuel } from "../util/duelUtil";
+import { getRandomDuellable } from "../util/duellistUtil";
 import { DuelConfig } from "./config/DuelConfig";
 import { Duel } from "./duel/Duel";
 
@@ -27,16 +27,18 @@ export const DuelContainer = () => {
   const isDuelOver = useAppSelector(selectIsDuelOver);
   const { setDuel, updateConfig, startTurn } = useDuelActions();
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
-  const [p1Deck, setP1Deck] = useState(getTempCardQuantMap());
-  const [p2Deck, setP2Deck] = useState(getTempCardQuantMap());
   const { updateEloMap } = useElo();
   useDuelAI();
 
   const startNewDuel = useCallback(() => {
-    setP1Deck(getTempCardQuantMap());
-    setP2Deck(getTempCardQuantMap());
-    setDuel(getNewDuel(p1Deck, p2Deck));
-  }, [p1Deck, p2Deck, setDuel]);
+    const d1 = getRandomDuellable().name;
+    let d2: DuellableName;
+    do {
+      // don't let a duellist play themselves, rating will never change
+      d2 = getRandomDuellable().name;
+    } while (d2 === d1);
+    setDuel(getNewDuel(d1, d2));
+  }, [setDuel]);
 
   const onStartClicked = useCallback(() => {
     setNumDuelsFinished(0);
@@ -72,7 +74,6 @@ export const DuelContainer = () => {
     totalDuelsToPlay,
     numDuelsFinished,
     startNewDuel,
-    updateConfig,
     updateEloMap,
   ]);
 

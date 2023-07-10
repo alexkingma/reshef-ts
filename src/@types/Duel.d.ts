@@ -35,6 +35,7 @@ interface Duellist {
   name: string;
   lp: number;
   hand: HandZone[];
+  deckTemplate: CardQuantityMap;
   deck: DeckZone[];
   graveyard: GraveyardZone[];
   monsterZones: MonsterZone[];
@@ -77,8 +78,8 @@ interface Duel {
 interface DuelConfig {
   p1Type: PlayerType;
   p2Type: PlayerType;
-  p1Deck: CardQuantityMap;
-  p2Deck: CardQuantityMap;
+  p1Name: DuellableName; // TODO: need a way to also enable random cards/decks?
+  p2Name: DuellableName;
   computerDelayMs: number;
   totalDuelsToPlay: number;
   showDuelUI: boolean;

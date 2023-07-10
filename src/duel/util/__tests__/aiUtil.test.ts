@@ -1,6 +1,5 @@
 import { DuellistKey, Monster, RowKey } from "../../common";
 import { canAISummonMonster, getFaceUpTarget } from "../aiUtil";
-import { getTempCardQuantMap } from "../deckUtil";
 import { getNewDuel } from "../duelUtil";
 import { generateOccupiedMonsterZone } from "../zoneUtil";
 
@@ -9,7 +8,7 @@ describe("canAISummonMonster", () => {
     hand: (Monster | null)[],
     ownMonsters: (Monster | null)[]
   ) => {
-    let state: Duel = getNewDuel(getTempCardQuantMap(), getTempCardQuantMap());
+    const state = getNewDuel();
     state.p1.hand.forEach((z, i, zones) => {
       const c = hand[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
@@ -94,7 +93,7 @@ describe("getFaceUpTarget", () => {
     ownMonsters: (Monster | null)[],
     otherMonsters: (Monster | null)[]
   ) => {
-    let state: Duel = getNewDuel(getTempCardQuantMap(), getTempCardQuantMap());
+    const state: Duel = getNewDuel();
     state.p1.monsterZones.forEach((z, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };

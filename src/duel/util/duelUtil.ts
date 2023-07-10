@@ -5,43 +5,41 @@ import {
   PlayerType,
   RowKey,
 } from "../common";
-import { getTempCardQuantMap } from "./deckUtil";
-import { getDuellistState, getFreshDuellistState } from "./duellistUtil";
+import {
+  getFreshDuellistState,
+  getRandomDuellable,
+  getRandomDuellistState,
+} from "./duellistUtil";
 
 export const getRandomDuel = (): Duel => {
-  const cardQuantMap1 = getTempCardQuantMap();
-  const cardQuantMap2 = getTempCardQuantMap();
   return {
-    config: getDefaultConfig(cardQuantMap1, cardQuantMap2),
-    p1: getDuellistState(cardQuantMap1),
-    p2: getDuellistState(cardQuantMap2),
+    config: getDefaultConfig(),
+    p1: getRandomDuellistState(),
+    p2: getRandomDuellistState(),
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   };
 };
 
 export const getNewDuel = (
-  cardQuantMap1: CardQuantityMap,
-  cardQuantMap2: CardQuantityMap
+  name1?: DuellableName,
+  name2?: DuellableName
 ): Duel => {
   return {
-    config: getDefaultConfig(cardQuantMap1, cardQuantMap2),
-    p1: getFreshDuellistState("Player", cardQuantMap1),
-    p2: getFreshDuellistState("Opponent", cardQuantMap2),
+    config: getDefaultConfig(),
+    p1: getFreshDuellistState(name1),
+    p2: getFreshDuellistState(name2),
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   };
 };
 
-export const getDefaultConfig = (
-  cardQuantMap1: CardQuantityMap,
-  cardQuantMap2: CardQuantityMap
-): DuelConfig => {
+export const getDefaultConfig = (): DuelConfig => {
   return {
     p1Type: PlayerType.Computer,
     p2Type: PlayerType.Computer,
-    p1Deck: cardQuantMap1,
-    p2Deck: cardQuantMap2,
+    p1Name: getRandomDuellable().name,
+    p2Name: getRandomDuellable().name,
     computerDelayMs: 0,
     totalDuelsToPlay: 100,
     showDuelUI: false,

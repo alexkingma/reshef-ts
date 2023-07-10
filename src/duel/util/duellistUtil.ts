@@ -1,15 +1,18 @@
+import { duellists } from "../../assets/duellists";
 import { BattlePosition, DuellistStatus, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardName } from "./cardUtil";
-import { initialiseDeck } from "./deckUtil";
+import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getRandomFieldCard } from "./fieldUtil";
 import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
-export const getDuellistState = (cardQuantMap: CardQuantityMap): Duellist => {
+export const getRandomDuellistState = (): Duellist => {
   const rand = () => Math.random() > 0.5;
+  const cardQuantMap = getTempCardQuantMap();
   const deck = initialiseDeck(cardQuantMap);
   return {
-    name: (Math.random() + 1).toString(36).substring(7),
+    name: "Random Cards",
     lp: Math.ceil(Math.random() * 8) * 1000,
+    deckTemplate: cardQuantMap,
     hand: deck
       .splice(0, 5)
       .map((card) => (rand() ? { isOccupied: false } : card)),
@@ -59,14 +62,16 @@ export const getDuellistState = (cardQuantMap: CardQuantityMap): Duellist => {
   };
 };
 
-export const getFreshDuellistState = (
-  name: string,
-  cardQuantMap: CardQuantityMap
-): Duellist => {
+export const getFreshDuellistState = (name?: DuellableName): Duellist => {
+  const isDuellable = !!name;
+  const cardQuantMap = isDuellable
+    ? getDuellable(name).deck
+    : getTempCardQuantMap();
   const deck = initialiseDeck(cardQuantMap);
   return {
-    name,
-    lp: 8000,
+    name: isDuellable ? name : "Random Cards",
+    lp: isDuellable ? getDuellable(name).lp : 8000,
+    deckTemplate: cardQuantMap,
     hand: deck.splice(0, 5).map((card) => card),
     deck: deck,
     graveyard: [{ isOccupied: false }],
@@ -78,7 +83,15 @@ export const getFreshDuellistState = (
       sorlTurnsRemaining: 0,
       brainControlZones: [],
     },
-    fieldZone: [{ isOccupied: false }],
+    fieldZone: [
+      isDuellable && getDuellable(name).field !== "Arena"
+        ? {
+            isOccupied: true,
+            card: getCard(getDuellable(name).field as FieldName),
+            orientation: Orientation.FaceUp,
+          }
+        : { isOccupied: false },
+    ],
     status: DuellistStatus.HEALTHY,
   };
 };
@@ -156,4 +169,25 @@ export const winByExodia = (state: Duel, dKey: DuellistKey) => {
 
 export const winByFINAL = (state: Duel, dKey: DuellistKey) => {
   state[dKey].status = DuellistStatus.DESTINY_BOARD;
+};
+
+export const getRandomDuellable = () => {
+  return duellists[Math.floor(Math.random() * duellists.length)];
+};
+
+export const getDuellable = (name: DuellableName): Duellable => {
+  const duellist = duellists.find((d) => d.name === name);
+  if (!duellist) {
+    throw new Error(`Could not find duellist with name: ${name}`);
+  }
+  return duellist;
+};
+
+export const isDuellable = (name: string) => {
+  try {
+    getDuellable(name as DuellableName);
+    return true;
+  } catch {
+    return false;
+  }
 };

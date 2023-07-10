@@ -1,7 +1,13 @@
 import { useAppSelector } from "@/hooks";
 import cardEloMap from "../assets/cardElo";
+import duellistEloMap from "../assets/duellistElo.json";
 import { selectDuel } from "./duelSlice";
 import { getVictorKey } from "./util/duelUtil";
+import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
+
+interface EloMap {
+  [key: string]: { elo: number };
+}
 
 const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
   return Object.entries(cardQuantMap).reduce((deck, [card, quant]) => {
@@ -36,7 +42,7 @@ const getAvgCardElo = (deck: CardName[]) => {
   return totalDeckElo / deck.length;
 };
 
-const sortEloMap = (unsortedMap: typeof cardEloMap) => {
+const sortEloMap = (unsortedMap: EloMap) => {
   return Object.entries(unsortedMap)
     .map(([card, data]) => {
       return {
@@ -46,41 +52,47 @@ const sortEloMap = (unsortedMap: typeof cardEloMap) => {
     })
     .sort((a, b) => b.elo - a.elo)
     .reduce((map, { name, ...data }) => {
-      map[name as CardName] = data;
+      map[name] = data;
       return map;
-    }, {} as typeof cardEloMap);
+    }, {} as EloMap);
+};
+
+const getRatingDelta = (winnerElo: number, loserElo: number) => {
+  // calculate the expected odds of each deck winning, based on existing Elo
+  const winningOddsOfWinner =
+    1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
+  const winningOddsOfLoser =
+    1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
+
+  // calculate how much rating will be won and lost
+  // by comparing the real outcome to the expected odds
+  const K_FACTOR = 32; // determines the magnitude of rating adjustments across the board
+  return {
+    ratingGain: Math.round(K_FACTOR * (1 - winningOddsOfWinner)),
+    ratingLoss: Math.round(K_FACTOR * (0 - winningOddsOfLoser)),
+  };
 };
 
 export const useElo = () => {
   // count total card elo of both decks
   // apply new elo changes to every card in each deck
   const state = useAppSelector(selectDuel);
-  const p1IsWinner = getVictorKey(state) === "p1";
-  const winnerCardMap = p1IsWinner ? state.config.p1Deck : state.config.p2Deck;
-  const loserCardMap = p1IsWinner ? state.config.p2Deck : state.config.p1Deck;
+  const winnerKey = getVictorKey(state);
+  const loserKey = getOtherDuellistKey(winnerKey);
   const winnerDeck = removeUnusedCards(
-    cardQuantMapToDeck(winnerCardMap),
-    (p1IsWinner ? state.p1 : state.p2).deck.map((z) => z.card.name)
+    cardQuantMapToDeck(state[winnerKey].deckTemplate),
+    state[winnerKey].deck.map((z) => z.card.name)
   );
   const loserDeck = removeUnusedCards(
-    cardQuantMapToDeck(loserCardMap),
-    (p1IsWinner ? state.p2 : state.p1).deck.map((z) => z.card.name)
+    cardQuantMapToDeck(state[loserKey].deckTemplate),
+    state[loserKey].deck.map((z) => z.card.name)
   );
 
-  const calculateNewEloMap = () => {
-    const winnerDeckElo = getAvgCardElo(winnerDeck);
-    const loserDeckElo = getAvgCardElo(loserDeck);
-    // calculate the expected odds of each deck winning, based on existing Elo
-    const winningOddsOfWinner =
-      1 / (1 + Math.pow(10, (loserDeckElo - winnerDeckElo) / 400));
-    const winningOddsOfLoser =
-      1 / (1 + Math.pow(10, (winnerDeckElo - loserDeckElo) / 400));
-
-    // calculate how much rating will be won and lost
-    // by comparing the real outcome to the expected odds
-    const K_FACTOR = 32; // determines the magnitude of rating adjustments across the board
-    const ratingGain = Math.round(K_FACTOR * (1 - winningOddsOfWinner));
-    const ratingLoss = Math.round(K_FACTOR * (0 - winningOddsOfLoser));
+  const calculateCardEloMap = () => {
+    const { ratingGain, ratingLoss } = getRatingDelta(
+      getAvgCardElo(winnerDeck),
+      getAvgCardElo(loserDeck)
+    );
 
     for (const card of winnerDeck) {
       cardEloMap[card].wins++;
@@ -92,12 +104,36 @@ export const useElo = () => {
       cardEloMap[card].elo += ratingLoss;
     }
 
-    const sortedMap = sortEloMap(cardEloMap);
-    console.log(sortedMap);
+    return sortEloMap(cardEloMap);
+  };
+
+  const calculateDuellistEloMap = () => {
+    const winnerName = state[winnerKey].name as DuellableName;
+    const loserName = state[loserKey].name as DuellableName;
+    const winnerElo = duellistEloMap[winnerName].elo;
+    const loserElo = duellistEloMap[loserName].elo;
+
+    const { ratingGain, ratingLoss } = getRatingDelta(winnerElo, loserElo);
+
+    duellistEloMap[winnerName].wins++;
+    duellistEloMap[winnerName].elo += ratingGain;
+
+    duellistEloMap[loserName].losses++;
+    duellistEloMap[loserName].elo += ratingLoss;
+
+    return sortEloMap(duellistEloMap);
   };
 
   const updateEloMap = () => {
-    calculateNewEloMap();
+    if ([state.p1.name, state.p2.name].every((n) => !isDuellable(n))) {
+      // two unnamed cardQuantMaps measures individual card Elo
+      const newCardEloMap = calculateCardEloMap();
+      console.log(newCardEloMap); // TODO: write to file
+    } else if ([state.p1.name, state.p2.name].every((n) => isDuellable(n))) {
+      // two dedicated duellist decks measures duellist Elo
+      const newDuellistEloMap = calculateDuellistEloMap();
+      console.log(newDuellistEloMap); // TODO: write to file
+    }
   };
 
   return { updateEloMap };

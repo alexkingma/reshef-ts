@@ -8,9 +8,9 @@ import { NumberSelect } from "./NumberSelect";
 export const DuelConfig = () => {
   const {
     computerDelayMs,
-    p1Deck,
+    p1Name,
     p1Type,
-    p2Deck,
+    p2Name,
     p2Type,
     totalDuelsToPlay,
     showDuelUI,
@@ -79,8 +79,8 @@ export const DuelConfig = () => {
         </label>
       </div>
 
-      <div>Deck 1: {String(p1Deck)}</div>
-      <div>Deck 2: {String(p2Deck)}</div>
+      <div>Deck 1: {p1Name}</div>
+      <div>Deck 2: {p2Name}</div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { BattlePosition, RowKey } from "../../common";
-import { getTempCardQuantMap } from "../deckUtil";
 import { getNewDuel } from "../duelUtil";
 import { calculateAttack, generateOccupiedMonsterZone } from "../zoneUtil";
 
@@ -15,7 +14,7 @@ const getState = (
   ownMonsters: OccupiedMonsterZone,
   otherMonsters: OccupiedMonsterZone
 ) => {
-  let state: Duel = getNewDuel(getTempCardQuantMap(), getTempCardQuantMap());
+  const state = getNewDuel();
   state.p1.monsterZones[0] = ownMonsters;
   state.p2.monsterZones[0] = otherMonsters;
   return state;

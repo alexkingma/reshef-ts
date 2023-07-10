@@ -4,12 +4,10 @@ import { getRandomDuel } from "../util/duelUtil";
 
 export const duelReducers = {
   setDuel: (state: Duel, newDuel: Duel) => {
-    // TODO: these props aren't part of a duel and need to be moved.
+    // TODO: config props aren't part of a duel and need to be moved.
     // This is a cheap workaround to prevent it being overwritten
     // every time a new duel is instantiated as part of a simulation loop.
-    newDuel.config.showDuelUI = state.config.showDuelUI;
-    newDuel.config.totalDuelsToPlay = state.config.totalDuelsToPlay;
-    newDuel.config.computerDelayMs = state.config.computerDelayMs;
+    newDuel.config = { ...state.config };
 
     Object.entries(newDuel).forEach(([key, val]) => {
       state[key as keyof Duel] = val;
