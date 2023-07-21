@@ -131,7 +131,7 @@ export const getIdealBattlePos = (
 
   // a faceup opponent mon exists, determine best pos based on
   // if it's stronger or weaker than origin card
-  return targetZone.card.effDef > originZone.card.effAtk
+  return targetZone.card.effAtk > originZone.card.effAtk
     ? BattlePosition.Defence
     : BattlePosition.Attack;
 };
