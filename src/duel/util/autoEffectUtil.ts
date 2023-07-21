@@ -29,12 +29,16 @@ const recalcCombatStats = (state: Duel) => {
   checkRowEffects(state, [dKey, RowKey.Monster], tempReducers);
   checkRowEffects(state, [otherDKey, RowKey.Monster], tempReducers);
 
-  calcRowCombatStats(state, dKey);
-  calcRowCombatStats(state, otherDKey);
+  calcRowCombatStats(state, [dKey, RowKey.Monster]);
+  calcRowCombatStats(state, [otherDKey, RowKey.Monster]);
+
+  // Update the hand monster effAtk/effDef in case field has changed.
+  // No "reset" call is needed since we never power up or down hand monsters.
+  calcRowCombatStats(state, [dKey, RowKey.Hand]);
+  calcRowCombatStats(state, [otherDKey, RowKey.Hand]);
 };
 
-const calcRowCombatStats = (state: Duel, dKey: DuellistKey) => {
-  const rowCoords: RowCoords = [dKey, RowKey.Monster];
+const calcRowCombatStats = (state: Duel, rowCoords: RowCoords) => {
   updateMonsters(state, rowCoords, (_, i) => {
     calcZoneCombatStats(state, [...rowCoords, i]);
   });

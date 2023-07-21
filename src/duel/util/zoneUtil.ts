@@ -232,7 +232,7 @@ export const calculateAttack = (
 export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
   const activeField = getActiveField(state);
   const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-  const { card, permPowerUpLevel: perm, tempPowerUpLevel: temp } = zone;
+  const { card, permPowerUpLevel: perm = 0, tempPowerUpLevel: temp = 0 } = zone;
   const fieldMultiplier = getFieldMultiplier(activeField, card.type);
   const { atk: baseAtk, def: baseDef } = zone.card;
 
