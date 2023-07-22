@@ -105,7 +105,7 @@ export const duellistReducers = {
 
     // summon monster to field
     specialSummon(state, dKey, originZone.card.name, {
-      orientation: Orientation.FaceDown,
+      orientation: originZone.orientation,
     });
 
     // remove summoned mon from hand
