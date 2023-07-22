@@ -26,26 +26,29 @@ export const DuelContainer = () => {
   const { totalDuelsToPlay, showDuelUI } = useAppSelector(selectConfig);
   const { isStartOfTurn } = useAppSelector(selectActiveTurn);
   const isDuelOver = useAppSelector(selectIsDuelOver);
+  const { p1Name, p2Name } = useAppSelector(selectConfig);
   const { setDuel, updateConfig, startTurn } = useDuelActions();
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
   const { updateEloMap } = useElo();
   useDuelAI();
 
-  const startNewDuel = useCallback(() => {
+  const randomiseDuellists = useCallback(() => {
     const d1 = getRandomDuellable().name;
     let d2: DuellableName;
     do {
       // don't let a duellist play themselves, rating will never change
       d2 = getRandomDuellable().name;
     } while (d2 === d1);
+    updateConfig({ p1Name: d1, p2Name: d2 });
     setDuel(getNewDuel(d1, d2));
-  }, [setDuel]);
+  }, [updateConfig, setDuel]);
 
   const onStartClicked = useCallback(() => {
+    // scrap the background duel, start a new duel with the duellists from config
     setNumDuelsFinished(0);
-    startNewDuel();
+    setDuel(getNewDuel(p1Name, p2Name));
     setMode(GameMode.Duel);
-  }, [startNewDuel]);
+  }, [setDuel, p1Name, p2Name]);
 
   useEffect(() => {
     if (!isDuelOver || mode !== GameMode.Duel) return;
@@ -63,7 +66,7 @@ export const DuelContainer = () => {
     if (remainingDuels > 0) {
       // at least one more duel is needed, start it now
       console.log(`${remainingDuels} duels remaining.`);
-      startNewDuel();
+      randomiseDuellists();
     } else {
       // all duels/simulations complete, quit duel view
       setMode(GameMode.Idle);
@@ -74,7 +77,7 @@ export const DuelContainer = () => {
     isSimulation,
     totalDuelsToPlay,
     numDuelsFinished,
-    startNewDuel,
+    randomiseDuellists,
     updateEloMap,
   ]);
 
