@@ -1,5 +1,6 @@
-import { DuellistKey, InteractionMode, RowKey } from "@/duel/common";
+import { InteractionMode, RowKey } from "@/duel/common";
 import { selectDuel, selectInteraction, selectZone } from "@/duel/duelSlice";
+import { isPlayer } from "@/duel/util/duellistUtil";
 import { isValidSpellTarget } from "@/duel/util/targetedSpellUtil";
 import { getZone } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
@@ -10,7 +11,7 @@ export const useIsViableTargetZone = (zoneCoords: ZoneCoords) => {
   const targetZone = useAppSelector(selectZone(zoneCoords));
   const hasCard = targetZone.isOccupied;
   const [dKey, rKey] = zoneCoords;
-  const isOwn = dKey === DuellistKey.Player;
+  const isOwn = isPlayer(dKey);
   const isMonsterZone = rKey === RowKey.Monster;
   const isSpellTrap = rKey === RowKey.SpellTrap;
 

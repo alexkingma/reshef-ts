@@ -1,4 +1,5 @@
 import { DuellistKey, RowKey } from "@/duel/common";
+import { isPlayer } from "@/duel/util/duellistUtil";
 import classNames from "classnames";
 import React from "react";
 import { Counterweight } from "../zone/Counterweight";
@@ -10,27 +11,27 @@ import { DuellistStatus } from "./DuellistStatus";
 import { Row } from "./Row";
 
 interface Props {
-  duellistKey: DuellistKey;
+  dKey: DuellistKey;
 }
 
-export const Duellist = ({ duellistKey }: Props) => {
-  const isPlayerSideOfField = duellistKey === DuellistKey.Player;
+export const Duellist = ({ dKey }: Props) => {
+  const isPlayerSideOfField = isPlayer(dKey);
 
   return (
     <div className={classNames(!isPlayerSideOfField && "opponent")}>
       <div className="rowContainer">
-        <Field duellistKey={duellistKey} />
-        <Row rowCoords={[duellistKey, RowKey.Monster]} />
-        <Graveyard duellistKey={duellistKey} />
+        <Field duellistKey={dKey} />
+        <Row rowCoords={[dKey, RowKey.Monster]} />
+        <Graveyard duellistKey={dKey} />
       </div>
       <div className="rowContainer">
         <Counterweight />
-        <Row rowCoords={[duellistKey, RowKey.SpellTrap]} />
-        <Deck duellistKey={duellistKey} />
+        <Row rowCoords={[dKey, RowKey.SpellTrap]} />
+        <Deck duellistKey={dKey} />
       </div>
       <div className="rowContainer">
-        <DuellistStatus duellistKey={duellistKey} />
-        <Row rowCoords={[duellistKey, RowKey.Hand]} />
+        <DuellistStatus dKey={dKey} />
+        <Row rowCoords={[dKey, RowKey.Hand]} />
         <Counterweight />
       </div>
     </div>

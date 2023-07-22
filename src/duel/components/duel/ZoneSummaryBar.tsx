@@ -2,7 +2,10 @@ import levelIcon from "@/assets/images/level.png";
 import spellIcon from "@/assets/images/spell.png";
 import trapIcon from "@/assets/images/trap.png";
 import { getAlignmentImage, getTypeImage } from "@/common/image";
-import { selectCursorZone } from "@/duel/duelSlice";
+import {
+  selectCursorZone,
+  selectShouldHighlightCursorZone,
+} from "@/duel/duelSlice";
 import { getFinalPowerUpLevel, isTrap } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
@@ -11,9 +14,13 @@ import "./ZoneSummaryBar.scss";
 
 export const ZoneSummaryBar = () => {
   const z = useAppSelector(selectCursorZone);
+  const isHoverAllowed = useAppSelector(selectShouldHighlightCursorZone);
 
-  // TODO: block viewing of opponent facedown cards
-  if (!z.isOccupied) return <div className="zoneSummaryBar" />;
+  // render empty bar for empty zones and opponent facedowns
+  if (!z.isOccupied || !isHoverAllowed) {
+    return <div className="zoneSummaryBar" />;
+  }
+
   const { name, category } = z.card;
 
   return (

@@ -7,9 +7,9 @@ import { Duellist } from "./duellist/Duellist";
 export const Duel = () => {
   return (
     <div className="duel">
-      <Duellist duellistKey={DuellistKey.Opponent} />
+      <Duellist dKey={DuellistKey.Opponent} />
       <hr style={{ width: "100px" }} />
-      <Duellist duellistKey={DuellistKey.Player} />
+      <Duellist dKey={DuellistKey.Player} />
       <ZoneSummaryBar />
     </div>
   );

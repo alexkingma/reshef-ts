@@ -1,24 +1,27 @@
 import { DuellistKey } from "@/duel/common";
 import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
 import { useDuellistActions } from "@/duel/useDuelActions";
+import { isPlayer } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
 import "./DuellistStatus.scss";
 
 interface Props {
-  duellistKey: DuellistKey;
+  dKey: DuellistKey;
 }
 
-export const DuellistStatus = ({ duellistKey }: Props) => {
-  const isPlayer = duellistKey === DuellistKey.Player;
-  const { endTurn } = useDuellistActions(duellistKey);
-  const { name, lp } = useAppSelector(selectDuellist(duellistKey));
-  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+export const DuellistStatus = ({ dKey }: Props) => {
+  const { endTurn } = useDuellistActions(dKey);
+  const { name, lp } = useAppSelector(selectDuellist(dKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
 
   return (
     <div
-      className={classNames("statusContainer", !isPlayer && "opponentStatus")}
+      className={classNames(
+        "statusContainer",
+        !isPlayer(dKey) && "opponentStatus"
+      )}
     >
       <button onClick={endTurn} disabled={!isMyTurn} className="endTurnButton">
         End Turn

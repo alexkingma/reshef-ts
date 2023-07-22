@@ -1,6 +1,7 @@
-import { DuellistKey, Orientation, RowKey } from "@/duel/common";
+import { RowKey } from "@/duel/common";
 import { selectZone } from "@/duel/duelSlice";
-import { isDefMode, isMonster } from "@/duel/util/zoneUtil";
+import { isPlayer } from "@/duel/util/duellistUtil";
+import { isDefMode, isFaceUp, isMonster } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React from "react";
@@ -20,9 +21,8 @@ export const Card = ({ zoneCoords }: Props) => {
 
   if (!z.isOccupied) return null;
 
-  const isPlayerZone = dKey === DuellistKey.Player;
-  const isFaceUp = z.orientation === Orientation.FaceUp;
-  const alwaysVisible = isFaceUp || (rKey === RowKey.Hand && isPlayerZone);
+  const isPlayerZone = isPlayer(dKey);
+  const alwaysVisible = isFaceUp(z) || (rKey === RowKey.Hand && isPlayerZone);
   const customClasses = classNames(
     alwaysVisible && "alwaysVisible",
     isPlayerZone && "showOnHover"

@@ -124,8 +124,8 @@ export const isStartOfTurn = (state: Duel, dKey: DuellistKey) => {
   return state.activeTurn.isStartOfTurn && isOwnTurn(state, dKey);
 };
 
-export const getOtherDuellistKey = (key: DuellistKey) => {
-  return key === "p1" ? "p2" : "p1";
+export const getOtherDuellistKey = (dKey: DuellistKey) => {
+  return isPlayer(dKey) ? "p2" : "p1";
 };
 
 export const burn = (state: Duel, dKey: DuellistKey, amt: number) => {
@@ -194,4 +194,8 @@ export const isDuellable = (name: string) => {
   } catch {
     return false;
   }
+};
+
+export const isPlayer = (dKey: DuellistKey) => {
+  return dKey === "p1";
 };

@@ -1,15 +1,16 @@
-import { DuellistKey, InteractionMode, RowKey } from "@/duel/common";
+import { InteractionMode, RowKey } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
 import { useInteractionActions } from "@/duel/useDuelActions";
 import { InteractionKey, useDuelInteraction } from "@/duel/useDuelInteraction";
 import { useZoneButtons } from "@/duel/useZoneButtons";
+import { isPlayer } from "@/duel/util/duellistUtil";
 import { isCoordMatch } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
-import { useIsViableTargetZone } from "./useIsViableTargetZone";
 import { Zone } from "./Zone";
 import "./ZoneButtons.scss";
+import { useIsViableTargetZone } from "./useIsViableTargetZone";
 
 interface Props {
   children?: ReactNode;
@@ -38,7 +39,7 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   const zone = useAppSelector(selectZone(zoneCoords));
   const hasCard = zone.isOccupied;
   const [dKey, rKey] = zoneCoords;
-  const isOwn = dKey === DuellistKey.Player;
+  const isOwn = isPlayer(dKey);
 
   const handleMouseEnter = () => {
     if (mode === InteractionMode.Locked) return;

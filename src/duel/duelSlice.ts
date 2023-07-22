@@ -8,10 +8,10 @@ import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
 import { getRandomDuel } from "./util/duelUtil";
-import { getOtherDuellistKey } from "./util/duellistUtil";
+import { getOtherDuellistKey, isPlayer } from "./util/duellistUtil";
 import { getFieldZone } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
-import { getZone } from "./util/zoneUtil";
+import { getZone, isFaceUp } from "./util/zoneUtil";
 
 export type CardActionKey = keyof typeof cardReducers;
 export type DuellistActionKey = keyof typeof duellistReducers;
@@ -106,28 +106,28 @@ export const selectOpponentHasMonster =
   ({ duel }: RootState) =>
     hasMatchInRow(duel, [getOtherDuellistKey(dKey), RowKey.Monster]);
 export const selectIsMyTurn =
-  (key: DuellistKey) =>
+  (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    duel.activeTurn.duellistKey === key;
+    duel.activeTurn.duellistKey === dKey;
 export const selectDuellist =
-  (key: DuellistKey) =>
+  (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    duel[key];
+    duel[dKey];
 export const selectGraveyardZone =
-  (key: DuellistKey) =>
+  (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    duel[key].graveyard[0];
+    duel[dKey].graveyard[0];
 export const selectActiveField =
-  (key: DuellistKey) =>
+  (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    getFieldZone(duel, key);
+    getFieldZone(duel, dKey);
 export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 export const selectConfig = ({ duel }: RootState) => duel.config;
 export const selectIsCPU =
-  (key: DuellistKey) =>
+  (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    key === "p1"
+    isPlayer(dKey)
       ? duel.config.p1Type === PlayerType.CPU
       : duel.config.p2Type === PlayerType.CPU;
 export const selectIsDuelOver = ({ duel }: RootState) => {
@@ -142,6 +142,15 @@ export const selectIsSimulation = ({ duel }: RootState) => {
     duel.config.p1Type === PlayerType.CPU &&
     duel.config.p2Type === PlayerType.CPU
   );
+};
+export const selectShouldHighlightCursorZone = ({ duel }: RootState) => {
+  // Determine if the ZoneSummaryBar should highlight the hovered card.
+  // Note that this is NOT the same as if a card is rendered as faceup or facedown.
+  const { cursorCoords } = duel.interaction;
+  const [dKey] = cursorCoords;
+  const z = getZone(duel, cursorCoords);
+  if (!z.isOccupied) return false;
+  return isFaceUp(z) || isPlayer(dKey);
 };
 
 export default duelSlice.reducer;
