@@ -1,7 +1,8 @@
 import { default as fieldMultiplierMap } from "@/assets/fields.json";
-import { Field, Orientation } from "../common";
+import { Field, Orientation, RowKey } from "../common";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
+import { clearZone, getZone } from "./zoneUtil";
 
 export const getRandomFieldCard = () => {
   const fields = [
@@ -21,13 +22,12 @@ export const setActiveField = (
   field: Field
 ) => {
   // always clear the opponent's field slot on principle
-  const otherDKey = getOtherDuellistKey(dKey);
-  state[otherDKey].fieldZone[0] = { isOccupied: false };
+  clearActiveField(state, getOtherDuellistKey(dKey));
 
   if (field === Field.Arena) {
     // setting the field to "Arena" actually means removing
     // any active field cards, rather than setting one
-    state[dKey].fieldZone[0] = { isOccupied: false };
+    clearActiveField(state, dKey);
   } else {
     state[dKey].fieldZone[0] = {
       isOccupied: true,
@@ -57,4 +57,13 @@ export const getFieldMultiplier = (field: Field, type: CardType) => {
 
 export const isBuffedByField = (type: CardType, field: Field): boolean => {
   return getFieldMultiplier(field, type) > 1;
+};
+
+export const hasActiveField = (state: Duel, dKey: DuellistKey) => {
+  const z = getZone(state, [dKey, RowKey.Field, 0]);
+  return z.isOccupied;
+};
+
+export const clearActiveField = (state: Duel, dKey: DuellistKey) => {
+  clearZone(state, [dKey, RowKey.Field, 0]);
 };

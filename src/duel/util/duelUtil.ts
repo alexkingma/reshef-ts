@@ -10,28 +10,29 @@ import {
   getRandomDuellable,
   getRandomDuellistState,
 } from "./duellistUtil";
+import { clearActiveField, hasActiveField } from "./fieldUtil";
 
 export const getRandomDuel = (): Duel => {
-  return {
+  return removeSecondFieldSpell({
     config: getDefaultConfig(),
     p1: getRandomDuellistState(),
     p2: getRandomDuellistState(),
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
-  };
+  });
 };
 
 export const getNewDuel = (
   name1?: DuellableName,
   name2?: DuellableName
 ): Duel => {
-  return {
+  return removeSecondFieldSpell({
     config: getDefaultConfig(),
     p1: getFreshDuellistState(name1),
     p2: getFreshDuellistState(name2),
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
-  };
+  });
 };
 
 export const getDefaultConfig = (): DuelConfig => {
@@ -77,4 +78,18 @@ export const getVictorKey = (state: Duel): DuellistKey => {
     state.p2.status === DuellistStatus.DESTINY_BOARD
     ? DuellistKey.Opponent
     : DuellistKey.Player;
+};
+
+export const removeSecondFieldSpell = (state: Duel): Duel => {
+  // RoD can only have one field active at a time, so if a duel spawns
+  // with each duellist having a field spell active, remove p2's card.
+  if (
+    hasActiveField(state, DuellistKey.Player) &&
+    hasActiveField(state, DuellistKey.Opponent)
+  ) {
+    clearActiveField(state, DuellistKey.Opponent);
+  }
+
+  // return for chaining purposes
+  return state;
 };
