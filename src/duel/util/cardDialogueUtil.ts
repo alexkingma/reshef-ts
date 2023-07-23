@@ -236,9 +236,11 @@ export const graveyardDialogueMap: DialogueMap<GraveyardEffectMonster> = {
 export const permAutoMonsterDialogueMap: DialogueMap<PermAutoEffectMonster> = {
   [Monster.ThunderNyanNyan]:
     "It was sent to the graveyard because a non-light monster appeared on the own field.",
+  
   // death text
-  [Monster.ExodiaNecross]:
-    "It was sent to the graveyard because there were no Exodia parts in the own graveyard.",
+  // [Monster.ExodiaNecross]:
+  //   "It was sent to the graveyard because there were no Exodia parts in the own graveyard.",
+
   // powerup text
   [Monster.ExodiaNecross]: "Powered up one level.",
   [Monster.Jinzo]: "Destroyed all enemy traps.",
@@ -450,8 +452,10 @@ export const spellDialogueMap: DialogueMap<DirectSpell> = {
 export const perpetualSpellTrapDialogueMap: DialogueMap<PerpetualSpellTrap> = {
   [Spell.MessengerOfPeace]:
     "Immobilised all monsters with 1,500 ATK or higher.", // as soon as a 1500+ card is present
-  [Spell.MessengerOfPeace]: "Infliced 1,000LP damage on the player.", // start of own turn
-  [Spell.JamBreedingMachine]: "Summoned a Change Slime to the own field.", // start of all own turns after first
+  
+  // [Spell.MessengerOfPeace]: "Infliced 1,000LP damage on the player.", // start of own turn
+  // [Spell.JamBreedingMachine]: "Summoned a Change Slime to the own field.", // start of all own turns after first
+
   [Spell.JamBreedingMachine]: "No monsters can be summoned from the own deck.", // on initial set only
   [Trap.DragonCaptureJar]: "All dragons are immobilised on the foe's field.",
   [Trap.DestinyBoard]: "Added a letter to the Spirit Message on the own field.",
