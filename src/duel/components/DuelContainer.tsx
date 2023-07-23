@@ -106,15 +106,14 @@ export const DuelContainer = () => {
       )}
 
       <div className="configContainer">
-        {mode === GameMode.Idle || !showDuelUI ? (
+        {mode === GameMode.Idle && (
           <div className="config">
             <DuelConfig />
             <br />
             <button onClick={onStartClicked}>Start Duel</button>
           </div>
-        ) : (
-          <Duel />
         )}
+        {mode === GameMode.Duel && showDuelUI && <Duel />}
       </div>
     </div>
   );
