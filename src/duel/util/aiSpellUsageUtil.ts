@@ -206,5 +206,5 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
   [Spell.PotOfGreed]: (state, { ownHand }) =>
     countMatchesInRow(state, ownHand) <= 3,
   [Spell.TheInexperiencedSpy]: (state, { otherHand }) =>
-    hasMatchInRow(state, otherHand),
+    hasMatchInRow(state, otherHand, isFaceDown),
 };
