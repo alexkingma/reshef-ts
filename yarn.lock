@@ -467,10 +467,22 @@
   resolved "https://registry.yarnpkg.com/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz#b6725d5f4af24ace33b36fafd295136e75509f43"
   integrity sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==
 
+"@types/w3c-image-capture@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/w3c-image-capture/-/w3c-image-capture-1.0.7.tgz#8dafdc517508b2d1038bd969e0468314df442eb5"
+  integrity sha512-BNmjJT+yjwVzB6N5kf1/m9YZMF//e3JAcII+TIuhRkALn7UD9xZX0R1azVGqqyYuQKbQ6UskC+zSQctnsk9zHg==
+  dependencies:
+    "@types/webrtc" "*"
+
 "@types/webpack-env@^1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.18.1.tgz#49699bb508961e14a3bfb68c78cd87b296889d1d"
   integrity sha512-D0HJET2/UY6k9L6y3f5BL+IDxZmPkYmPT4+qBrRdmRLYRuV0qNKizMgTvYxXZYn+36zjPeoDZAEYBCM6XB+gww==
+
+"@types/webrtc@*":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@types/webrtc/-/webrtc-0.0.36.tgz#a0d0b8e7633c3cad8949e69ba449a3b864cda287"
+  integrity sha512-tYFarc92EluXU7XyRmWbkQXSbZIOHTdDOudFPal9u/TNTQuouWpIHV/2o9bNAdqvTJFjLJh/zflCOLWbL30tEQ==
 
 "@types/ws@^8.5.5":
   version "8.5.5"
