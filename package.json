@@ -37,10 +37,12 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/tesseract.js": "^2.0.0",
     "@types/w3c-image-capture": "^1.0.7",
     "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.1.1"
+    "react-redux": "^8.1.1",
+    "tesseract.js": "^4.1.1"
   }
 }

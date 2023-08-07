@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { getPixelRGBA, ocr, useScreenshot } from "./useScreenshot";
 
 enum Scene {
+  None = "NONE",
   Overworld = "OVERWORLD", // Kaiba's duel room
   Menu = "MENU", // precursor for trunk
   Trunk = "TRUNK",
@@ -31,45 +33,7 @@ const SCENE_LIST = [
   },
 ];
 
-const useScreenshot = () => {
-  const [loading, setLoading] = useState(false);
-  const [capture, setCapture] = useState<ImageCapture>();
-
-  useEffect(() => {
-    if (!capture && !loading) {
-      setLoading(true);
-      navigator.mediaDevices.getDisplayMedia().then((stream) => {
-        const [track] = stream.getVideoTracks();
-        setCapture(new ImageCapture(track));
-      });
-    }
-  }, [capture, loading]);
-
-  const takeScreenshot = useCallback(async () => {
-    if (!capture) return;
-    const bitmap = await capture.grabFrame();
-    return bitmap;
-  }, [capture]);
-
-  return { takeScreenshot };
-};
-
-const getPixelRGBA = (bitmap: ImageBitmap, x: number, y: number) => {
-  const offscreenCanvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-  const offscreenCtx = offscreenCanvas.getContext("2d")!;
-  offscreenCtx.drawImage(bitmap, 0, 0);
-  const rgba = offscreenCtx.getImageData(
-    x,
-    y,
-    bitmap.width,
-    bitmap.height
-  ).data;
-  console.log(x, y, `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})`);
-
-  return `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3] / 255})`;
-};
-
-const isSceneMatch = (ctx: CanvasRenderingContext2D) => {
+const getSceneMatch = (ctx: CanvasRenderingContext2D) => {
   // check all coord/rgba combos to find out which scene we're in
   const isRgbaMatch = (rgba1: number[], rgba2: number[]) => {
     const [r1, g1, b1, a1] = rgba1;
@@ -82,8 +46,12 @@ const isSceneMatch = (ctx: CanvasRenderingContext2D) => {
     const isMatch = isRgbaMatch([...ctx.getImageData(x, y, 1, 1).data], rgba);
     if (isMatch) {
       console.log(isMatch, scene);
+      return scene;
     }
   }
+
+  console.log("No scene found!");
+  return Scene.None;
 };
 
 const useBot = () => {
@@ -93,6 +61,7 @@ const useBot = () => {
   const [rgba, setRgba] = useState("");
   const [x, setX] = useState(100);
   const [y, setY] = useState(100);
+  const [loading, setLoading] = useState(false);
 
   const sendDataToServer = async () => {
     await fetch("http://127.0.0.1:8080/keypress", {
@@ -125,15 +94,22 @@ const useBot = () => {
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(bitmap, 0, 0);
 
-      // TODO:
-      isSceneMatch(ctx);
+      if (!loading) {
+        (async () => {
+          setLoading(true);
+          console.time();
+          await ocr(canvas.toDataURL());
+          console.timeEnd();
+          setLoading(false);
+        })();
+      }
 
       // draw red box around selected pixel, for visual assistance
       const boxSize = 50;
       ctx.strokeStyle = "red";
       ctx.strokeRect(x - boxSize / 2, y - boxSize / 2, boxSize, boxSize);
     }
-  }, [canvasRef, bitmap, x, y]);
+  }, [loading, canvasRef, bitmap, x, y]);
 
   const handleMouseMove = (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
