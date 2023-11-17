@@ -129,7 +129,7 @@ export const useElo = () => {
       // two unnamed cardQuantMaps measures individual card Elo
       const newCardEloMap = calculateCardEloMap();
       console.log(newCardEloMap); // TODO: write to file
-    } else if ([state.p1.name, state.p2.name].every((n) => isDuellable(n))) {
+    } else if ([state.p1.name, state.p2.name].every(isDuellable)) {
       // two dedicated duellist decks measures duellist Elo
       const newDuellistEloMap = calculateDuellistEloMap();
       console.log(newDuellistEloMap); // TODO: write to file

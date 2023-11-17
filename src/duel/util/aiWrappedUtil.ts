@@ -36,6 +36,12 @@ export const opponentHasSpellTrap =
   (state: Duel, { otherSpellTrap }: ZoneCoordsMap) =>
     hasMatchInRow(state, otherSpellTrap, condition);
 
+export const onlyOpponentHasMonster =
+  (condition?: (z: OccupiedZone) => boolean) =>
+  (state: Duel, { ownMonsters, otherMonsters }: ZoneCoordsMap) =>
+    hasMatchInRow(state, otherMonsters, condition) &&
+    !hasMatchInRow(state, ownMonsters, condition);
+
 export const opponentHasMonster =
   (condition?: (z: OccupiedZone<MonsterName>) => boolean) =>
   (state: Duel, { otherMonsters }: ZoneCoordsMap) =>
