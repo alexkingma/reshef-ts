@@ -7,7 +7,7 @@ import {
   destroyHighestAtk,
   hasEmptyZone,
 } from "../util/rowUtil";
-import { specialSummon } from "../util/zoneUtil";
+import { isNotGodCard, specialSummon } from "../util/zoneUtil";
 
 type GraveyardEffectReducer = (
   state: Duel,
@@ -65,7 +65,7 @@ export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
           );
         },
         effect: (state, { dKey, otherDKey }) => {
-          destroyHighestAtk(state, otherDKey);
+          destroyHighestAtk(state, otherDKey, isNotGodCard);
           clearGraveyard(state, dKey);
         },
       },

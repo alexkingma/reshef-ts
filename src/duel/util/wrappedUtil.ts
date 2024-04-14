@@ -15,6 +15,7 @@ import {
   clearZone,
   destroyAtCoords,
   getOriginZone,
+  isNotGodCard,
   permPowerUp as permPowerUpDirect,
   tempPowerUp as tempPowerUpDirect,
 } from "./zoneUtil";
@@ -50,14 +51,14 @@ export const destroyHighestAtk =
   () =>
   (state: Duel, { otherMonsters }: CoordsMap) => {
     const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
-    if (!monsterZones.some((z) => z.isOccupied)) {
-      // no monsters exist, destroy nothing
+    if (!monsterZones.some(isNotGodCard)) {
+      // no destroyable monsters exist, destroy nothing
       return;
     }
 
     const coords = [
       ...otherMonsters,
-      getHighestAtkZoneIdx(state, otherMonsters),
+      getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard),
     ] as ZoneCoords;
     destroyAtCoords(state, coords);
   };

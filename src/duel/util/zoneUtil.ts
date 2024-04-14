@@ -86,6 +86,19 @@ export const isUnlocked = (z: Zone): z is OccupiedMonsterZone =>
 export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && z.isLocked;
 
+export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
+  const godCards: MonsterName[] = [
+    Monster.SliferTheSkyDragon,
+    Monster.ObeliskTheTormentor,
+    Monster.TheWingedDragonOfRaBattleMode,
+    Monster.TheWingedDragonOfRaSphereMode,
+    Monster.TheWingedDragonOfRaPhoenixMode,
+  ];
+  return isMonster(z) && godCards.includes(z.card.name);
+};
+
+export const isNotGodCard = (z: Zone) => !isGodCard(z);
+
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
   z.card.effect &&
   !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];
@@ -478,16 +491,3 @@ export const getFinalPowerUpLevel = (z: OccupiedMonsterZone) => {
   const { tempPowerUpLevel = 0, permPowerUpLevel = 0 } = z;
   return tempPowerUpLevel + permPowerUpLevel;
 };
-
-export const isGodCard = (z: Zone) => {
-  const godCards: MonsterName[] = [
-    Monster.SliferTheSkyDragon,
-    Monster.ObeliskTheTormentor,
-    Monster.TheWingedDragonOfRaBattleMode,
-    Monster.TheWingedDragonOfRaSphereMode,
-    Monster.TheWingedDragonOfRaPhoenixMode,
-  ];
-  return isMonster(z) && godCards.includes(z.card.name);
-};
-
-export const isNotGodCard = (z: Zone) => !isGodCard(z);

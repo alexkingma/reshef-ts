@@ -46,6 +46,7 @@ import {
   immobiliseCard,
   isFaceDown,
   isFaceUp,
+  isNotGodCard,
   isSpecificMonster,
   isSpell,
   isType,
@@ -98,7 +99,7 @@ export const monsterFlipEffectReducers: CardReducerMap<
     [DuellistKey.Opponent, RowKey.Monster],
   ]),
   [Monster.MysticalBeastSerket]: (state, { otherMonsters, zoneCoords }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
     if (targetIdx === -1) return;
     destroyAtCoords(state, [...otherMonsters, targetIdx]);
     permPowerUp(state, zoneCoords);
@@ -319,20 +320,20 @@ export const monsterFlipEffectReducers: CardReducerMap<
     convertMonster(state, dKey);
   },
   [Monster.Relinquished]: (state, { zoneCoords, otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
     if (targetIdx === -1) return; // no monsters to consume
 
     subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
   },
   [Monster.ThousandEyesRestrict]: (state, { zoneCoords, otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
     if (targetIdx === -1) return; // no monsters to consume
 
     subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
     permPowerUp(state, zoneCoords, 2);
   },
   [Monster.ParasiteParacide]: (state, { zoneCoords, otherMonsters }) => {
-    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+    const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
     if (targetIdx === -1) return;
 
     subsumeMonster(state, [...otherMonsters, targetIdx], zoneCoords);

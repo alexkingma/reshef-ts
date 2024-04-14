@@ -14,6 +14,7 @@ import {
   isAlignment,
   isFaceDown,
   isFaceUp,
+  isNotGodCard,
   isSpell,
   isType,
   isUnlocked,
@@ -26,7 +27,9 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
       Monster.BabyDragon,
       Monster.DarkMagician
     ),
-    [Monster.BattleOx]: opponentHasMonster((z) => isAlignment(z, "Fire")),
+    [Monster.BattleOx]: opponentHasMonster(
+      (z) => isAlignment(z, "Fire") && isNotGodCard(z)
+    ),
     [Monster.CurseOfDragon]: shouldUseField(Field.Wasteland),
     [Monster.IllusionistFacelessMage]: opponentHasMonster(),
     [Monster.KairyuShin]: shouldUseField(Field.Umi),
@@ -43,8 +46,8 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.SpiritOfTheBooks]: hasEmptyMonsterZones(),
     [Monster.Nemuriko]: opponentHasMonster(),
     [Monster.RevivalJam]: hasEmptyMonsterZones(),
-    [Monster.FiendsHand]: opponentHasMonster(),
-    [Monster.DarkNecrofear]: opponentHasMonster(),
+    [Monster.FiendsHand]: opponentHasMonster(isNotGodCard),
+    [Monster.DarkNecrofear]: opponentHasMonster(isNotGodCard),
     [Monster.ToadMaster]: hasEmptyMonsterZones(),
     [Monster.FireReaper]: always,
     [Monster.Doron]: hasEmptyMonsterZones(),
@@ -55,7 +58,7 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) =>
       state[dKey].lp > state[otherDKey].lp,
     [Monster.RocketWarrior]: opponentHasMonster(),
-    [Monster.BeastkingOfTheSwamps]: opponentHasMonster(),
+    [Monster.BeastkingOfTheSwamps]: opponentHasMonster(isNotGodCard),
     [Monster.FairysGift]: always,
     [Monster.MysticLamp]: always,
     [Monster.Leghul]: always,
@@ -71,9 +74,11 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     ) => state[dKey].lp > 1000 && hasMatchInRow(state, otherMonsters),
     [Monster.GoddessOfWhim]: (state, { ownHand }) =>
       hasEmptyZone(state, ownHand),
-    [Monster.DragonSeeker]: opponentHasMonster((z) => isType(z, "Dragon")),
+    [Monster.DragonSeeker]: opponentHasMonster(
+      (z) => isType(z, "Dragon") && isNotGodCard(z)
+    ),
     [Monster.PenguinTorpedo]: always,
-    [Monster.ZombyraTheDark]: opponentHasMonster(),
+    [Monster.ZombyraTheDark]: opponentHasMonster(isNotGodCard),
     [Monster.SpiritOfTheMountain]: shouldUseField(Field.Mountain),
     [Monster.AncientLamp]: hasEmptyMonsterZones(),
     [Monster.Skelengel]: (state, { ownHand }) => hasEmptyZone(state, ownHand),
@@ -92,8 +97,10 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     ),
     [Monster.XYDragonCannon]: opponentHasSpellTrap(isFaceUp),
     [Monster.XZTankCannon]: opponentHasSpellTrap(isFaceDown),
-    [Monster.YZTankDragon]: opponentHasMonster(isFaceDown),
-    [Monster.XYZDragonCannon]: opponentHasMonster(),
+    [Monster.YZTankDragon]: opponentHasMonster(
+      (z) => isFaceDown(z) && isNotGodCard(z)
+    ),
+    [Monster.XYZDragonCannon]: opponentHasMonster(isNotGodCard),
     [Monster.ElectricLizard]: opponentHasMonster(),
     [Monster.LadyOfFaith]: always,
     [Monster.ByserShock]: opponentHasMonster(),
@@ -105,30 +112,30 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     ),
     [Monster.Trent]: shouldUseField(Field.Forest),
     [Monster.BerserkDragon]: opponentHasMonster(),
-    [Monster.DesVolstgalph]: opponentHasMonster(),
-    [Monster.GilfordTheLightning]: opponentHasMonster(),
-    [Monster.MysticalBeastSerket]: opponentHasMonster(),
+    [Monster.DesVolstgalph]: opponentHasMonster(isNotGodCard),
+    [Monster.GilfordTheLightning]: opponentHasMonster(isNotGodCard),
+    [Monster.MysticalBeastSerket]: opponentHasMonster(isNotGodCard),
     [Monster.ExarionUniverse]: opponentHasMonster(),
     [Monster.LegendaryFiend]: always,
     [Monster.ValkyrionTheMagnaWarrior]: hasEmptyMonsterZones(2),
     [Monster.FGD]: (state, { otherMonsters, otherSpellTrap }) =>
-      hasMatchInRow(state, otherMonsters) ||
+      hasMatchInRow(state, otherMonsters, isNotGodCard) ||
       hasMatchInRow(state, otherSpellTrap),
     [Monster.RedArcheryGirl]: opponentHasMonster(),
-    [Monster.Relinquished]: opponentHasMonster(),
-    [Monster.ThousandEyesRestrict]: opponentHasMonster(),
+    [Monster.Relinquished]: opponentHasMonster(isNotGodCard),
+    [Monster.ThousandEyesRestrict]: opponentHasMonster(isNotGodCard),
     [Monster.AlphaTheMagnetWarrior]: selfHasAllSpecificMonsters(
       Monster.BetaTheMagnetWarrior,
       Monster.GammaTheMagnetWarrior
     ),
     [Monster.InvitationToADarkSleep]: opponentHasMonster(),
-    [Monster.BarrelDragon]: opponentHasMonster(),
+    [Monster.BarrelDragon]: opponentHasMonster(isNotGodCard),
     [Monster.ReflectBounder]: opponentHasMonster(),
     [Monster.BetaTheMagnetWarrior]: selfHasAllSpecificMonsters(
       Monster.AlphaTheMagnetWarrior,
       Monster.GammaTheMagnetWarrior
     ),
-    [Monster.ParasiteParacide]: opponentHasMonster(),
+    [Monster.ParasiteParacide]: opponentHasMonster(isNotGodCard),
     [Monster.SkullMarkLadyBug]: always,
     [Monster.PinchHopper]: (state, { ownHand }) =>
       hasMatchInRow(
@@ -136,6 +143,6 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
         ownHand,
         (z) => (z as OccupiedMonsterZone).card.type === "Insect"
       ),
-    [Monster.ChironTheMage]: opponentHasMonster(),
+    [Monster.ChironTheMage]: opponentHasMonster(isNotGodCard),
     [Monster.BeastOfGilfer]: opponentHasMonster(),
   };

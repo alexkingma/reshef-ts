@@ -65,7 +65,7 @@ export const monsterPermAutoEffectReducers: CardReducerMap<
     return [
       {
         condition: () => {
-          return hasMatchInRow(state, otherMonsters, (z) => isTrap(z));
+          return hasMatchInRow(state, otherMonsters, isTrap);
         },
         effect: (state) => {
           clearAllTraps(state, otherDKey);

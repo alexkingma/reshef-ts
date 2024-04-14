@@ -167,7 +167,7 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
       (z) =>
         isFaceUp(z) &&
         hasManualEffect(z as OccupiedMonsterZone) &&
-        !isUnlocked(z)
+        isUnlocked(z)
     ),
   [Spell.BrainControl]: (state, { ownMonsters, otherMonsters }) =>
     hasEmptyZone(state, ownMonsters) &&

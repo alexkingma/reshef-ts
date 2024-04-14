@@ -6,7 +6,7 @@ import {
   destroyFirstFound,
   hasFullExodia,
 } from "../util/rowUtil";
-import { clearZone, specialSummon } from "../util/zoneUtil";
+import { clearZone, isNotGodCard, specialSummon } from "../util/zoneUtil";
 
 export const monsterHandEffectReducers: CardReducerMap<
   HandEffectMonster,
@@ -18,14 +18,14 @@ export const monsterHandEffectReducers: CardReducerMap<
         condition: () => {
           return (
             isStartOfEitherTurn(state) &&
-            countMatchesInRow(state, otherMonsters) >= 2
+            countMatchesInRow(state, otherMonsters, isNotGodCard) >= 2
           );
         },
         effect: (state, { zoneCoords, otherDKey, otherMonsters }) => {
           // If this is in the own hand, it can be made to appear on
           // the enemy's field for two enemy monsters as tributes.
-          destroyFirstFound(state, otherMonsters);
-          destroyFirstFound(state, otherMonsters);
+          destroyFirstFound(state, otherMonsters, isNotGodCard);
+          destroyFirstFound(state, otherMonsters, isNotGodCard);
           specialSummon(state, otherDKey, Monster.LavaGolem);
           clearZone(state, zoneCoords);
         },
