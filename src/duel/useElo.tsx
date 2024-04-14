@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks";
-import cardEloMap from "../assets/cardElo";
+import cardEloMap from "../assets/cardElo.json";
 import duellistEloMap from "../assets/duellistElo.json";
 import { selectDuel } from "./duelSlice";
 import { getVictorKey } from "./util/duelUtil";
@@ -18,9 +18,12 @@ const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
   }, [] as CardName[]);
 };
 
-const removeUnusedCards = (entireDeck: CardName[], unusedCards: CardName[]) => {
-  // remove cards that never made it out of the deck pile, since those didn't
-  // contribute to the outcome of the duel one way or another
+const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
+  // remove cards that never made it out of the deck pile, since those
+  // didn't contribute to the outcome of the duel one way or another
+  const unusedCards: CardName[] = deck.map((z) => z.card.name);
+  const entireDeck = cardQuantMapToDeck(deckTemplate);
+
   unusedCards.forEach((c) => {
     const idx = entireDeck.findIndex((card) => card === c);
     if (idx === -1) {
@@ -79,14 +82,8 @@ export const useElo = () => {
   const state = useAppSelector(selectDuel);
   const winnerKey = getVictorKey(state);
   const loserKey = getOtherDuellistKey(winnerKey);
-  const winnerDeck = removeUnusedCards(
-    cardQuantMapToDeck(state[winnerKey].deckTemplate),
-    state[winnerKey].deck.map((z) => z.card.name)
-  );
-  const loserDeck = removeUnusedCards(
-    cardQuantMapToDeck(state[loserKey].deckTemplate),
-    state[loserKey].deck.map((z) => z.card.name)
-  );
+  const winnerDeck = getUsedCards(state[winnerKey]);
+  const loserDeck = getUsedCards(state[loserKey]);
 
   const calculateCardEloMap = () => {
     const { ratingGain, ratingLoss } = getRatingDelta(

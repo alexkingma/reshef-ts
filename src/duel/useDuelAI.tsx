@@ -278,9 +278,9 @@ export const useDuelAI = () => {
     // They should defend if they are stronger in DEF mode, or if an opponent
     // monster exists with higher atk than them.
     const originIdx = getFirstOccupiedZoneIdx(state, ownMonsters, isUnlocked);
-    const originCoords: ZoneCoords = [...ownMonsters, originIdx];
     if (originIdx === -1) return false;
 
+    const originCoords: ZoneCoords = [...ownMonsters, originIdx];
     const coordsMap: ZoneCoordsMap = getZoneCoordsMap(originCoords);
     setOriginZone(originCoords);
     if (getIdealBattlePos(state, originCoords) === BattlePosition.Attack) {

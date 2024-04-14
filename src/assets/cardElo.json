@@ -1,0 +1,4002 @@
+{
+  "Change of Heart": {
+    "elo": 5627,
+    "wins": 1486,
+    "losses": 272
+  },
+  "Torrential Tribute": {
+    "elo": 5387,
+    "wins": 1352,
+    "losses": 344
+  },
+  "Zombyra the Dark": {
+    "elo": 4700,
+    "wins": 1277,
+    "losses": 406
+  },
+  "Jirai Gumo": {
+    "elo": 4494,
+    "wins": 1333,
+    "losses": 391
+  },
+  "Chiron the Mage": {
+    "elo": 4449,
+    "wins": 1239,
+    "losses": 419
+  },
+  "Thousand-Eyes Restrict": {
+    "elo": 4320,
+    "wins": 1211,
+    "losses": 488
+  },
+  "Flash Assailant": {
+    "elo": 4286,
+    "wins": 1269,
+    "losses": 497
+  },
+  "Dark Elf": {
+    "elo": 4269,
+    "wins": 1296,
+    "losses": 468
+  },
+  "Nuvia the Wicked": {
+    "elo": 4206,
+    "wins": 1210,
+    "losses": 445
+  },
+  "Panther Warrior": {
+    "elo": 4185,
+    "wins": 1247,
+    "losses": 474
+  },
+  "Giant Rex": {
+    "elo": 4131,
+    "wins": 1244,
+    "losses": 469
+  },
+  "Acid Trap Hole": {
+    "elo": 4064,
+    "wins": 1225,
+    "losses": 505
+  },
+  "Swords of Revealing Light": {
+    "elo": 3971,
+    "wins": 1181,
+    "losses": 513
+  },
+  "Widespread Ruin": {
+    "elo": 3969,
+    "wins": 1212,
+    "losses": 493
+  },
+  "Boar Soldier": {
+    "elo": 3882,
+    "wins": 1256,
+    "losses": 523
+  },
+  "Giant Red Seasnake": {
+    "elo": 3868,
+    "wins": 1167,
+    "losses": 535
+  },
+  "Gemini Elf": {
+    "elo": 3809,
+    "wins": 1157,
+    "losses": 493
+  },
+  "Dark Zebra": {
+    "elo": 3777,
+    "wins": 1194,
+    "losses": 537
+  },
+  "Vorse Raider": {
+    "elo": 3708,
+    "wins": 1133,
+    "losses": 528
+  },
+  "Relinquished": {
+    "elo": 3671,
+    "wins": 1126,
+    "losses": 571
+  },
+  "Battle Ox": {
+    "elo": 3503,
+    "wins": 1188,
+    "losses": 636
+  },
+  "Gearfried the Iron Knight": {
+    "elo": 3476,
+    "wins": 1061,
+    "losses": 581
+  },
+  "Amazon Archers": {
+    "elo": 3441,
+    "wins": 1140,
+    "losses": 639
+  },
+  "Heavy Storm": {
+    "elo": 3420,
+    "wins": 1081,
+    "losses": 615
+  },
+  "La Jinn the Mystical Genie of the Lamp": {
+    "elo": 3408,
+    "wins": 1133,
+    "losses": 570
+  },
+  "Beta The Magnet Warrior": {
+    "elo": 3408,
+    "wins": 1089,
+    "losses": 620
+  },
+  "Aeris": {
+    "elo": 3399,
+    "wins": 1157,
+    "losses": 600
+  },
+  "Gil Garth": {
+    "elo": 3397,
+    "wins": 1122,
+    "losses": 629
+  },
+  "Newdoria": {
+    "elo": 3389,
+    "wins": 1107,
+    "losses": 625
+  },
+  "Darkfire Soldier #1": {
+    "elo": 3364,
+    "wins": 1073,
+    "losses": 682
+  },
+  "The Bistro Butcher": {
+    "elo": 3359,
+    "wins": 1119,
+    "losses": 600
+  },
+  "Castle of Dark Illusions": {
+    "elo": 3359,
+    "wins": 1058,
+    "losses": 651
+  },
+  "Dunames Dark Witch": {
+    "elo": 3338,
+    "wins": 1099,
+    "losses": 544
+  },
+  "Fairy of the Fountain": {
+    "elo": 3323,
+    "wins": 1140,
+    "losses": 664
+  },
+  "Mammoth Graveyard": {
+    "elo": 3267,
+    "wins": 1037,
+    "losses": 610
+  },
+  "Axe Raider": {
+    "elo": 3260,
+    "wins": 1059,
+    "losses": 633
+  },
+  "7 Colored Fish": {
+    "elo": 3260,
+    "wins": 1178,
+    "losses": 621
+  },
+  "Kaiser Sea Horse": {
+    "elo": 3243,
+    "wins": 1107,
+    "losses": 618
+  },
+  "Monster Reborn": {
+    "elo": 3241,
+    "wins": 1043,
+    "losses": 637
+  },
+  "Cyber Harpie": {
+    "elo": 3239,
+    "wins": 1138,
+    "losses": 621
+  },
+  "Harpie's Brother": {
+    "elo": 3237,
+    "wins": 1066,
+    "losses": 614
+  },
+  "Ancient Lamp": {
+    "elo": 3196,
+    "wins": 1130,
+    "losses": 610
+  },
+  "Mechanicalchaser": {
+    "elo": 3196,
+    "wins": 1133,
+    "losses": 564
+  },
+  "X-Head Cannon": {
+    "elo": 3196,
+    "wins": 1112,
+    "losses": 626
+  },
+  "Guardian of the Throne Room": {
+    "elo": 3193,
+    "wins": 1063,
+    "losses": 624
+  },
+  "Shining Abyss": {
+    "elo": 3169,
+    "wins": 1025,
+    "losses": 685
+  },
+  "Dark Jeroid": {
+    "elo": 3156,
+    "wins": 1066,
+    "losses": 642
+  },
+  "Violent Rain": {
+    "elo": 3125,
+    "wins": 1036,
+    "losses": 643
+  },
+  "Darkfire Soldier #2": {
+    "elo": 3104,
+    "wins": 1068,
+    "losses": 684
+  },
+  "Command Angel": {
+    "elo": 3095,
+    "wins": 1054,
+    "losses": 682
+  },
+  "Dark Hole": {
+    "elo": 3085,
+    "wins": 1101,
+    "losses": 624
+  },
+  "Invisible Wire": {
+    "elo": 3066,
+    "wins": 1070,
+    "losses": 671
+  },
+  "Infinite Dismissal": {
+    "elo": 3054,
+    "wins": 1020,
+    "losses": 695
+  },
+  "Des Feral Imp": {
+    "elo": 3052,
+    "wins": 1060,
+    "losses": 668
+  },
+  "High Tide Gyojin": {
+    "elo": 3026,
+    "wins": 1001,
+    "losses": 646
+  },
+  "Beckon to Darkness": {
+    "elo": 3016,
+    "wins": 1034,
+    "losses": 624
+  },
+  "Blade Knight": {
+    "elo": 3010,
+    "wins": 1043,
+    "losses": 702
+  },
+  "Trap Master": {
+    "elo": 3005,
+    "wins": 1086,
+    "losses": 741
+  },
+  "King's Knight": {
+    "elo": 2978,
+    "wins": 1010,
+    "losses": 700
+  },
+  "Flying Kamakiri #2": {
+    "elo": 2951,
+    "wins": 1030,
+    "losses": 710
+  },
+  "Crazy Fish": {
+    "elo": 2951,
+    "wins": 1053,
+    "losses": 667
+  },
+  "Cocoon of Evolution": {
+    "elo": 2951,
+    "wins": 944,
+    "losses": 700
+  },
+  "Great White": {
+    "elo": 2949,
+    "wins": 1045,
+    "losses": 711
+  },
+  "Faith Bird": {
+    "elo": 2947,
+    "wins": 1049,
+    "losses": 750
+  },
+  "Revival Jam": {
+    "elo": 2939,
+    "wins": 1104,
+    "losses": 687
+  },
+  "Executor - Makyura": {
+    "elo": 2935,
+    "wins": 1010,
+    "losses": 703
+  },
+  "Des Volstgalph": {
+    "elo": 2935,
+    "wins": 989,
+    "losses": 750
+  },
+  "Dragon Zombie": {
+    "elo": 2926,
+    "wins": 1017,
+    "losses": 714
+  },
+  "Toon Mermaid": {
+    "elo": 2921,
+    "wins": 974,
+    "losses": 727
+  },
+  "Crawling Dragon #2": {
+    "elo": 2917,
+    "wins": 1011,
+    "losses": 702
+  },
+  "Whiptail Crow": {
+    "elo": 2908,
+    "wins": 1035,
+    "losses": 677
+  },
+  "Mystic Tomato": {
+    "elo": 2891,
+    "wins": 964,
+    "losses": 732
+  },
+  "Rogue Doll": {
+    "elo": 2875,
+    "wins": 1021,
+    "losses": 675
+  },
+  "Spirit of the Books": {
+    "elo": 2860,
+    "wins": 1100,
+    "losses": 661
+  },
+  "Cyber Raider": {
+    "elo": 2860,
+    "wins": 960,
+    "losses": 732
+  },
+  "Fire Kraken": {
+    "elo": 2855,
+    "wins": 1024,
+    "losses": 744
+  },
+  "Skull Red Bird": {
+    "elo": 2854,
+    "wins": 946,
+    "losses": 696
+  },
+  "Destiny Board": {
+    "elo": 2849,
+    "wins": 1100,
+    "losses": 680
+  },
+  "Man-Eating Treasure Chest": {
+    "elo": 2834,
+    "wins": 1023,
+    "losses": 728
+  },
+  "Z-Metal Tank": {
+    "elo": 2830,
+    "wins": 946,
+    "losses": 698
+  },
+  "Amazon Chain Master": {
+    "elo": 2827,
+    "wins": 1026,
+    "losses": 792
+  },
+  "Asura Priest": {
+    "elo": 2824,
+    "wins": 1010,
+    "losses": 678
+  },
+  "Gamma The Magnet Warrior": {
+    "elo": 2808,
+    "wins": 1044,
+    "losses": 770
+  },
+  "Horn of Light": {
+    "elo": 2805,
+    "wins": 1008,
+    "losses": 745
+  },
+  "Baron of the Fiend Sword": {
+    "elo": 2771,
+    "wins": 1020,
+    "losses": 703
+  },
+  "Malevolent Nuzzler": {
+    "elo": 2755,
+    "wins": 1022,
+    "losses": 734
+  },
+  "Queen's Knight": {
+    "elo": 2730,
+    "wins": 992,
+    "losses": 676
+  },
+  "Gazelle the King of Mythical Beasts": {
+    "elo": 2726,
+    "wins": 997,
+    "losses": 710
+  },
+  "Mystic Clown": {
+    "elo": 2706,
+    "wins": 1006,
+    "losses": 728
+  },
+  "Neo the Magic Swordsman": {
+    "elo": 2703,
+    "wins": 1055,
+    "losses": 662
+  },
+  "The Judgement Hand": {
+    "elo": 2687,
+    "wins": 930,
+    "losses": 733
+  },
+  "Dark Flare Knight": {
+    "elo": 2685,
+    "wins": 1045,
+    "losses": 697
+  },
+  "Horn of the Unicorn": {
+    "elo": 2665,
+    "wins": 1048,
+    "losses": 765
+  },
+  "Aqua Serpent": {
+    "elo": 2663,
+    "wins": 1022,
+    "losses": 763
+  },
+  "Maha Vailo": {
+    "elo": 2655,
+    "wins": 1021,
+    "losses": 690
+  },
+  "Takriminos": {
+    "elo": 2654,
+    "wins": 1022,
+    "losses": 752
+  },
+  "Celtic Guardian": {
+    "elo": 2642,
+    "wins": 932,
+    "losses": 701
+  },
+  "Axe of Despair": {
+    "elo": 2638,
+    "wins": 973,
+    "losses": 686
+  },
+  "Takuhee": {
+    "elo": 2619,
+    "wins": 947,
+    "losses": 701
+  },
+  "Two-Headed King Rex": {
+    "elo": 2618,
+    "wins": 1004,
+    "losses": 681
+  },
+  "Senju of the Thousand Hands": {
+    "elo": 2609,
+    "wins": 959,
+    "losses": 759
+  },
+  "Kojikocy": {
+    "elo": 2605,
+    "wins": 936,
+    "losses": 708
+  },
+  "Embodiment of Apophis": {
+    "elo": 2603,
+    "wins": 1046,
+    "losses": 728
+  },
+  "Cyber Shield": {
+    "elo": 2603,
+    "wins": 1015,
+    "losses": 752
+  },
+  "Kappa Avenger": {
+    "elo": 2591,
+    "wins": 916,
+    "losses": 781
+  },
+  "Amphibian Beast": {
+    "elo": 2587,
+    "wins": 918,
+    "losses": 788
+  },
+  "Headless Knight": {
+    "elo": 2586,
+    "wins": 954,
+    "losses": 768
+  },
+  "Mystical Beast Serket": {
+    "elo": 2579,
+    "wins": 928,
+    "losses": 774
+  },
+  "Masaki the Legendary Swordsman": {
+    "elo": 2575,
+    "wins": 900,
+    "losses": 813
+  },
+  "UFO Turtle": {
+    "elo": 2562,
+    "wins": 943,
+    "losses": 761
+  },
+  "Amazon Fighter": {
+    "elo": 2561,
+    "wins": 928,
+    "losses": 754
+  },
+  "Alligator's Sword": {
+    "elo": 2554,
+    "wins": 1001,
+    "losses": 716
+  },
+  "Ryu-Kishin Powered": {
+    "elo": 2531,
+    "wins": 973,
+    "losses": 711
+  },
+  "The Immortal of Thunder": {
+    "elo": 2516,
+    "wins": 975,
+    "losses": 706
+  },
+  "Winged Dragon, Guardian of the Fortress #1": {
+    "elo": 2515,
+    "wins": 938,
+    "losses": 756
+  },
+  "Uraby": {
+    "elo": 2499,
+    "wins": 933,
+    "losses": 722
+  },
+  "Grand Tiki Elder": {
+    "elo": 2494,
+    "wins": 926,
+    "losses": 726
+  },
+  "Toad Master": {
+    "elo": 2482,
+    "wins": 993,
+    "losses": 744
+  },
+  "Clown Zombie": {
+    "elo": 2481,
+    "wins": 865,
+    "losses": 794
+  },
+  "The Gross Ghost of Fled Dreams": {
+    "elo": 2480,
+    "wins": 973,
+    "losses": 812
+  },
+  "Giant Flea": {
+    "elo": 2472,
+    "wins": 1013,
+    "losses": 779
+  },
+  "Thunder Nyan Nyan": {
+    "elo": 2471,
+    "wins": 914,
+    "losses": 698
+  },
+  "Maiden of the Moonlight": {
+    "elo": 2468,
+    "wins": 985,
+    "losses": 779
+  },
+  "Amazon of the Seas": {
+    "elo": 2457,
+    "wins": 941,
+    "losses": 827
+  },
+  "The Stern Mystic": {
+    "elo": 2453,
+    "wins": 1023,
+    "losses": 769
+  },
+  "The Snake Hair": {
+    "elo": 2449,
+    "wins": 923,
+    "losses": 787
+  },
+  "Pot of Greed": {
+    "elo": 2447,
+    "wins": 926,
+    "losses": 780
+  },
+  "Giant Soldier of Stone": {
+    "elo": 2444,
+    "wins": 947,
+    "losses": 770
+  },
+  "Destroyer Golem": {
+    "elo": 2440,
+    "wins": 942,
+    "losses": 764
+  },
+  "Aqua Dragon": {
+    "elo": 2431,
+    "wins": 922,
+    "losses": 797
+  },
+  "Sonic Bird": {
+    "elo": 2426,
+    "wins": 928,
+    "losses": 768
+  },
+  "Worm Drake": {
+    "elo": 2425,
+    "wins": 936,
+    "losses": 821
+  },
+  "Wetha": {
+    "elo": 2425,
+    "wins": 899,
+    "losses": 824
+  },
+  "Humanoid Slime": {
+    "elo": 2424,
+    "wins": 908,
+    "losses": 764
+  },
+  "Final Destiny": {
+    "elo": 2421,
+    "wins": 934,
+    "losses": 785
+  },
+  "Doron": {
+    "elo": 2419,
+    "wins": 934,
+    "losses": 804
+  },
+  "Alpha The Magnet Warrior": {
+    "elo": 2419,
+    "wins": 889,
+    "losses": 782
+  },
+  "Goddess with the Third Eye": {
+    "elo": 2408,
+    "wins": 945,
+    "losses": 811
+  },
+  "Keldo": {
+    "elo": 2405,
+    "wins": 926,
+    "losses": 765
+  },
+  "Crass Clown": {
+    "elo": 2404,
+    "wins": 946,
+    "losses": 749
+  },
+  "Cannon Soldier": {
+    "elo": 2404,
+    "wins": 937,
+    "losses": 807
+  },
+  "Amazon Sword Woman": {
+    "elo": 2404,
+    "wins": 951,
+    "losses": 763
+  },
+  "Harpie Lady": {
+    "elo": 2403,
+    "wins": 923,
+    "losses": 766
+  },
+  "Water Omotics": {
+    "elo": 2401,
+    "wins": 939,
+    "losses": 792
+  },
+  "Grappler": {
+    "elo": 2400,
+    "wins": 894,
+    "losses": 772
+  },
+  "Moon Envoy": {
+    "elo": 2400,
+    "wins": 927,
+    "losses": 825
+  },
+  "Charubin the Fire Knight": {
+    "elo": 2399,
+    "wins": 924,
+    "losses": 798
+  },
+  "Electro-Whip": {
+    "elo": 2395,
+    "wins": 942,
+    "losses": 724
+  },
+  "Vampire Lord": {
+    "elo": 2393,
+    "wins": 931,
+    "losses": 781
+  },
+  "Rare Fish": {
+    "elo": 2392,
+    "wins": 978,
+    "losses": 772
+  },
+  "Mother Grizzly": {
+    "elo": 2392,
+    "wins": 927,
+    "losses": 759
+  },
+  "Tiger Axe": {
+    "elo": 2392,
+    "wins": 932,
+    "losses": 810
+  },
+  "Ground Attacker Bugroth": {
+    "elo": 2391,
+    "wins": 921,
+    "losses": 792
+  },
+  "Brain Control": {
+    "elo": 2386,
+    "wins": 1055,
+    "losses": 697
+  },
+  "Megamorph": {
+    "elo": 2386,
+    "wins": 994,
+    "losses": 732
+  },
+  "Darkfire Dragon": {
+    "elo": 2386,
+    "wins": 975,
+    "losses": 746
+  },
+  "Shadow Spell": {
+    "elo": 2385,
+    "wins": 978,
+    "losses": 768
+  },
+  "Fiend Sword": {
+    "elo": 2369,
+    "wins": 917,
+    "losses": 795
+  },
+  "Wall of Illusion": {
+    "elo": 2357,
+    "wins": 860,
+    "losses": 838
+  },
+  "Mystic Horseman": {
+    "elo": 2357,
+    "wins": 908,
+    "losses": 819
+  },
+  "Enchanting Mermaid": {
+    "elo": 2356,
+    "wins": 913,
+    "losses": 763
+  },
+  "Mavelus": {
+    "elo": 2352,
+    "wins": 962,
+    "losses": 817
+  },
+  "Fiend's Mirror": {
+    "elo": 2347,
+    "wins": 931,
+    "losses": 749
+  },
+  "Witty Phantom": {
+    "elo": 2347,
+    "wins": 949,
+    "losses": 806
+  },
+  "Exarion Universe": {
+    "elo": 2346,
+    "wins": 955,
+    "losses": 810
+  },
+  "Armored Lizard": {
+    "elo": 2340,
+    "wins": 982,
+    "losses": 779
+  },
+  "Empress Judge": {
+    "elo": 2340,
+    "wins": 820,
+    "losses": 820
+  },
+  "Flying Kamakiri #1": {
+    "elo": 2326,
+    "wins": 939,
+    "losses": 818
+  },
+  "Drill Bug": {
+    "elo": 2324,
+    "wins": 873,
+    "losses": 878
+  },
+  "Mystical Elf": {
+    "elo": 2320,
+    "wins": 937,
+    "losses": 798
+  },
+  "Fiend Reflection #1": {
+    "elo": 2320,
+    "wins": 897,
+    "losses": 816
+  },
+  "Mushroom Man #2": {
+    "elo": 2317,
+    "wins": 918,
+    "losses": 764
+  },
+  "Muse-A": {
+    "elo": 2313,
+    "wins": 861,
+    "losses": 796
+  },
+  "The Wicked Worm Beast": {
+    "elo": 2312,
+    "wins": 919,
+    "losses": 807
+  },
+  "Trakadon": {
+    "elo": 2308,
+    "wins": 867,
+    "losses": 818
+  },
+  "Beastking of the Swamps": {
+    "elo": 2305,
+    "wins": 834,
+    "losses": 844
+  },
+  "Dragon Piper": {
+    "elo": 2296,
+    "wins": 899,
+    "losses": 844
+  },
+  "Great Mammoth of Goldfine": {
+    "elo": 2293,
+    "wins": 863,
+    "losses": 871
+  },
+  "Witch of the Black Forest": {
+    "elo": 2290,
+    "wins": 915,
+    "losses": 800
+  },
+  "Ceremonial Bell": {
+    "elo": 2288,
+    "wins": 856,
+    "losses": 803
+  },
+  "Turtle Bird": {
+    "elo": 2283,
+    "wins": 883,
+    "losses": 891
+  },
+  "Oscillo Hero #2": {
+    "elo": 2282,
+    "wins": 849,
+    "losses": 793
+  },
+  "Giant Rat": {
+    "elo": 2281,
+    "wins": 949,
+    "losses": 750
+  },
+  "Blackland Fire Dragon": {
+    "elo": 2276,
+    "wins": 919,
+    "losses": 756
+  },
+  "Sea Kamen": {
+    "elo": 2268,
+    "wins": 898,
+    "losses": 878
+  },
+  "Gradius": {
+    "elo": 2267,
+    "wins": 908,
+    "losses": 839
+  },
+  "Winged Dragon, Guardian of the Fortress #2": {
+    "elo": 2263,
+    "wins": 868,
+    "losses": 760
+  },
+  "Performance of Sword": {
+    "elo": 2262,
+    "wins": 858,
+    "losses": 838
+  },
+  "Kanan the Swordmistress": {
+    "elo": 2259,
+    "wins": 969,
+    "losses": 809
+  },
+  "Koumori Dragon": {
+    "elo": 2259,
+    "wins": 971,
+    "losses": 760
+  },
+  "Lisark": {
+    "elo": 2252,
+    "wins": 900,
+    "losses": 778
+  },
+  "Warrior Elimination": {
+    "elo": 2251,
+    "wins": 939,
+    "losses": 835
+  },
+  "Yado Karu": {
+    "elo": 2251,
+    "wins": 893,
+    "losses": 825
+  },
+  "King of Yamimakai": {
+    "elo": 2249,
+    "wins": 925,
+    "losses": 813
+  },
+  "Fiend's Hand": {
+    "elo": 2245,
+    "wins": 915,
+    "losses": 805
+  },
+  "Karbonala Warrior": {
+    "elo": 2244,
+    "wins": 928,
+    "losses": 746
+  },
+  "Crush Card": {
+    "elo": 2239,
+    "wins": 977,
+    "losses": 739
+  },
+  "Dragoness the Wicked Knight": {
+    "elo": 2239,
+    "wins": 902,
+    "losses": 826
+  },
+  "Petit Angel": {
+    "elo": 2237,
+    "wins": 844,
+    "losses": 809
+  },
+  "Yamatano Dragon Scroll": {
+    "elo": 2237,
+    "wins": 857,
+    "losses": 854
+  },
+  "XZ-Tank Cannon": {
+    "elo": 2229,
+    "wins": 894,
+    "losses": 844
+  },
+  "Mysterious Puppeteer": {
+    "elo": 2228,
+    "wins": 861,
+    "losses": 791
+  },
+  "Earthbound Spirit": {
+    "elo": 2226,
+    "wins": 913,
+    "losses": 774
+  },
+  "Beaver Warrior": {
+    "elo": 2226,
+    "wins": 942,
+    "losses": 821
+  },
+  "Ray & Temperature": {
+    "elo": 2225,
+    "wins": 899,
+    "losses": 836
+  },
+  "Judge Man": {
+    "elo": 2223,
+    "wins": 882,
+    "losses": 837
+  },
+  "Minomushi Warrior": {
+    "elo": 2219,
+    "wins": 874,
+    "losses": 810
+  },
+  "Horn Imp": {
+    "elo": 2216,
+    "wins": 855,
+    "losses": 779
+  },
+  "Melchid the Four-Face Beast": {
+    "elo": 2215,
+    "wins": 915,
+    "losses": 800
+  },
+  "Krokodilus": {
+    "elo": 2214,
+    "wins": 878,
+    "losses": 828
+  },
+  "Green Phantom King": {
+    "elo": 2212,
+    "wins": 844,
+    "losses": 796
+  },
+  "Weather Control": {
+    "elo": 2212,
+    "wins": 848,
+    "losses": 835
+  },
+  "Waterdragon Fairy": {
+    "elo": 2211,
+    "wins": 874,
+    "losses": 867
+  },
+  "XY-Dragon Cannon": {
+    "elo": 2207,
+    "wins": 835,
+    "losses": 892
+  },
+  "The Legendary Fisherman": {
+    "elo": 2204,
+    "wins": 866,
+    "losses": 843
+  },
+  "Dark Chimera": {
+    "elo": 2201,
+    "wins": 892,
+    "losses": 826
+  },
+  "Armored Zombie": {
+    "elo": 2196,
+    "wins": 929,
+    "losses": 790
+  },
+  "Fairy's Gift": {
+    "elo": 2195,
+    "wins": 879,
+    "losses": 813
+  },
+  "Hitotsu-Me Giant": {
+    "elo": 2194,
+    "wins": 873,
+    "losses": 817
+  },
+  "Fairy Dragon": {
+    "elo": 2193,
+    "wins": 879,
+    "losses": 816
+  },
+  "Yaranzo": {
+    "elo": 2193,
+    "wins": 885,
+    "losses": 819
+  },
+  "Sleeping Lion": {
+    "elo": 2191,
+    "wins": 870,
+    "losses": 863
+  },
+  "Bear Trap": {
+    "elo": 2188,
+    "wins": 953,
+    "losses": 761
+  },
+  "Big Eye": {
+    "elo": 2186,
+    "wins": 848,
+    "losses": 843
+  },
+  "Fiend Kraken": {
+    "elo": 2184,
+    "wins": 894,
+    "losses": 822
+  },
+  "Spellbinding Circle": {
+    "elo": 2178,
+    "wins": 918,
+    "losses": 841
+  },
+  "Cyber Falcon": {
+    "elo": 2176,
+    "wins": 911,
+    "losses": 765
+  },
+  "Power of Kaishin": {
+    "elo": 2171,
+    "wins": 913,
+    "losses": 862
+  },
+  "Leopard Girl": {
+    "elo": 2167,
+    "wins": 899,
+    "losses": 851
+  },
+  "Toon Dark Magician Girl": {
+    "elo": 2165,
+    "wins": 883,
+    "losses": 822
+  },
+  "Aqua Madoor": {
+    "elo": 2164,
+    "wins": 903,
+    "losses": 793
+  },
+  "Saggi the Dark Clown": {
+    "elo": 2162,
+    "wins": 916,
+    "losses": 825
+  },
+  "Ancient Elf": {
+    "elo": 2161,
+    "wins": 964,
+    "losses": 766
+  },
+  "Y-Dragon Head": {
+    "elo": 2160,
+    "wins": 939,
+    "losses": 751
+  },
+  "Lord of D.": {
+    "elo": 2160,
+    "wins": 892,
+    "losses": 796
+  },
+  "Blast Juggler": {
+    "elo": 2155,
+    "wins": 891,
+    "losses": 806
+  },
+  "Shovel Crusher": {
+    "elo": 2152,
+    "wins": 883,
+    "losses": 829
+  },
+  "Oscillo Hero": {
+    "elo": 2152,
+    "wins": 905,
+    "losses": 809
+  },
+  "Barrel Lily": {
+    "elo": 2147,
+    "wins": 848,
+    "losses": 827
+  },
+  "Darkworld Thorns": {
+    "elo": 2147,
+    "wins": 856,
+    "losses": 868
+  },
+  "Toon Summoned Skull": {
+    "elo": 2146,
+    "wins": 898,
+    "losses": 825
+  },
+  "Laughing Flower": {
+    "elo": 2145,
+    "wins": 863,
+    "losses": 897
+  },
+  "Cockroach Knight": {
+    "elo": 2144,
+    "wins": 857,
+    "losses": 870
+  },
+  "Mask of Shine & Dark": {
+    "elo": 2138,
+    "wins": 889,
+    "losses": 832
+  },
+  "Frenzied Panda": {
+    "elo": 2137,
+    "wins": 901,
+    "losses": 813
+  },
+  "Silver Fang": {
+    "elo": 2137,
+    "wins": 889,
+    "losses": 865
+  },
+  "Princess of Tsurugi": {
+    "elo": 2136,
+    "wins": 886,
+    "losses": 830
+  },
+  "Dimensional Warrior": {
+    "elo": 2134,
+    "wins": 913,
+    "losses": 805
+  },
+  "Happy Lover": {
+    "elo": 2133,
+    "wins": 897,
+    "losses": 860
+  },
+  "Killer Needle": {
+    "elo": 2129,
+    "wins": 843,
+    "losses": 815
+  },
+  "Firegrass": {
+    "elo": 2129,
+    "wins": 811,
+    "losses": 842
+  },
+  "Swordsman of Landstar": {
+    "elo": 2126,
+    "wins": 851,
+    "losses": 911
+  },
+  "Dark Rabbit": {
+    "elo": 2125,
+    "wins": 898,
+    "losses": 812
+  },
+  "Burglar": {
+    "elo": 2125,
+    "wins": 874,
+    "losses": 828
+  },
+  "Versago the Destroyer": {
+    "elo": 2116,
+    "wins": 896,
+    "losses": 833
+  },
+  "Tao the Chanter": {
+    "elo": 2114,
+    "wins": 874,
+    "losses": 797
+  },
+  "Dark Assailant": {
+    "elo": 2108,
+    "wins": 886,
+    "losses": 799
+  },
+  "Karate Man": {
+    "elo": 2106,
+    "wins": 864,
+    "losses": 840
+  },
+  "Man-Eating Plant": {
+    "elo": 2104,
+    "wins": 841,
+    "losses": 811
+  },
+  "Boo Koo": {
+    "elo": 2101,
+    "wins": 831,
+    "losses": 870
+  },
+  "Banisher of the Light": {
+    "elo": 2096,
+    "wins": 874,
+    "losses": 777
+  },
+  "Vishwar Randi": {
+    "elo": 2095,
+    "wins": 883,
+    "losses": 789
+  },
+  "Black Pendant": {
+    "elo": 2095,
+    "wins": 862,
+    "losses": 908
+  },
+  "Punished Eagle": {
+    "elo": 2094,
+    "wins": 837,
+    "losses": 861
+  },
+  "Soul Hunter": {
+    "elo": 2087,
+    "wins": 924,
+    "losses": 846
+  },
+  "Flame Cerebrus": {
+    "elo": 2086,
+    "wins": 935,
+    "losses": 841
+  },
+  "Blast Sphere": {
+    "elo": 2086,
+    "wins": 922,
+    "losses": 778
+  },
+  "White Dolphin": {
+    "elo": 2085,
+    "wins": 831,
+    "losses": 803
+  },
+  "Gale Dogra": {
+    "elo": 2084,
+    "wins": 834,
+    "losses": 853
+  },
+  "Djinn the Watcher of the Wind": {
+    "elo": 2084,
+    "wins": 878,
+    "losses": 850
+  },
+  "Bracchio-raidus": {
+    "elo": 2082,
+    "wins": 859,
+    "losses": 803
+  },
+  "Dian Keto the Cure Master": {
+    "elo": 2082,
+    "wins": 874,
+    "losses": 888
+  },
+  "Bean Soldier": {
+    "elo": 2081,
+    "wins": 927,
+    "losses": 783
+  },
+  "Spirit of the Harp": {
+    "elo": 2081,
+    "wins": 915,
+    "losses": 805
+  },
+  "Griffore": {
+    "elo": 2080,
+    "wins": 908,
+    "losses": 810
+  },
+  "Masked Sorcerer": {
+    "elo": 2076,
+    "wins": 901,
+    "losses": 854
+  },
+  "Big Shield Gardna": {
+    "elo": 2073,
+    "wins": 880,
+    "losses": 797
+  },
+  "Dream Clown": {
+    "elo": 2072,
+    "wins": 893,
+    "losses": 851
+  },
+  "Soldier Ari": {
+    "elo": 2072,
+    "wins": 854,
+    "losses": 860
+  },
+  "Dark-Eyes Illusionist": {
+    "elo": 2070,
+    "wins": 843,
+    "losses": 867
+  },
+  "Tripwire Beast": {
+    "elo": 2068,
+    "wins": 919,
+    "losses": 850
+  },
+  "Turtle Raccoon": {
+    "elo": 2067,
+    "wins": 896,
+    "losses": 878
+  },
+  "Wolf": {
+    "elo": 2063,
+    "wins": 891,
+    "losses": 823
+  },
+  "Time Wizard": {
+    "elo": 2063,
+    "wins": 847,
+    "losses": 866
+  },
+  "Kuwagata A": {
+    "elo": 2061,
+    "wins": 866,
+    "losses": 807
+  },
+  "Fake Trap": {
+    "elo": 2059,
+    "wins": 821,
+    "losses": 899
+  },
+  "Holograh": {
+    "elo": 2054,
+    "wins": 915,
+    "losses": 825
+  },
+  "Roaring Ocean Snake": {
+    "elo": 2052,
+    "wins": 876,
+    "losses": 821
+  },
+  "Fireyarou": {
+    "elo": 2051,
+    "wins": 897,
+    "losses": 813
+  },
+  "Witch's Apprentice": {
+    "elo": 2051,
+    "wins": 870,
+    "losses": 826
+  },
+  "Hourglass of Life": {
+    "elo": 2051,
+    "wins": 856,
+    "losses": 836
+  },
+  "Armed Ninja": {
+    "elo": 2047,
+    "wins": 873,
+    "losses": 857
+  },
+  "Cosmo Queen": {
+    "elo": 2047,
+    "wins": 837,
+    "losses": 880
+  },
+  "Blocker": {
+    "elo": 2046,
+    "wins": 866,
+    "losses": 856
+  },
+  "Deepsea Shark": {
+    "elo": 2043,
+    "wins": 871,
+    "losses": 846
+  },
+  "Swamp Battleguard": {
+    "elo": 2040,
+    "wins": 885,
+    "losses": 815
+  },
+  "Monster Tamer": {
+    "elo": 2039,
+    "wins": 839,
+    "losses": 880
+  },
+  "Dark King of the Abyss": {
+    "elo": 2037,
+    "wins": 852,
+    "losses": 825
+  },
+  "Kanikabuto": {
+    "elo": 2035,
+    "wins": 899,
+    "losses": 830
+  },
+  "Barrel Rock": {
+    "elo": 2034,
+    "wins": 915,
+    "losses": 864
+  },
+  "One Who Hunts Souls": {
+    "elo": 2034,
+    "wins": 904,
+    "losses": 869
+  },
+  "Last Day of Witch": {
+    "elo": 2031,
+    "wins": 874,
+    "losses": 886
+  },
+  "Sangan": {
+    "elo": 2031,
+    "wins": 882,
+    "losses": 902
+  },
+  "Wicked Mirror": {
+    "elo": 2030,
+    "wins": 881,
+    "losses": 889
+  },
+  "Genin": {
+    "elo": 2028,
+    "wins": 831,
+    "losses": 827
+  },
+  "Mask of Darkness": {
+    "elo": 2028,
+    "wins": 834,
+    "losses": 861
+  },
+  "Stone Statue of the Aztecs": {
+    "elo": 2025,
+    "wins": 952,
+    "losses": 865
+  },
+  "Phantom Ghost": {
+    "elo": 2024,
+    "wins": 896,
+    "losses": 843
+  },
+  "Tri-Horned Dragon": {
+    "elo": 2023,
+    "wins": 810,
+    "losses": 896
+  },
+  "White Magical Hat": {
+    "elo": 2019,
+    "wins": 888,
+    "losses": 821
+  },
+  "The Unhappy Maiden": {
+    "elo": 2019,
+    "wins": 871,
+    "losses": 913
+  },
+  "Kairyu-Shin": {
+    "elo": 2017,
+    "wins": 857,
+    "losses": 863
+  },
+  "Fusionist": {
+    "elo": 2017,
+    "wins": 933,
+    "losses": 868
+  },
+  "Insect Soldiers of the Sky": {
+    "elo": 2016,
+    "wins": 883,
+    "losses": 816
+  },
+  "Wodan the Resident of the Forest": {
+    "elo": 2016,
+    "wins": 896,
+    "losses": 828
+  },
+  "Mechanical Spider": {
+    "elo": 2016,
+    "wins": 849,
+    "losses": 840
+  },
+  "Little Chimera": {
+    "elo": 2016,
+    "wins": 863,
+    "losses": 786
+  },
+  "Last Tusk Mammoth": {
+    "elo": 2015,
+    "wins": 883,
+    "losses": 868
+  },
+  "Hoshiningen": {
+    "elo": 2014,
+    "wins": 851,
+    "losses": 763
+  },
+  "Spiked Snail": {
+    "elo": 2014,
+    "wins": 845,
+    "losses": 841
+  },
+  "Boulder Tortoise": {
+    "elo": 2014,
+    "wins": 823,
+    "losses": 905
+  },
+  "Wing Egg Elf": {
+    "elo": 2011,
+    "wins": 848,
+    "losses": 916
+  },
+  "Jellyfish": {
+    "elo": 2010,
+    "wins": 872,
+    "losses": 857
+  },
+  "Hinotama Soul": {
+    "elo": 2008,
+    "wins": 883,
+    "losses": 843
+  },
+  "Summoned Skull": {
+    "elo": 2005,
+    "wins": 897,
+    "losses": 852
+  },
+  "Machine King": {
+    "elo": 2003,
+    "wins": 871,
+    "losses": 837
+  },
+  "Milus Radiant": {
+    "elo": 2003,
+    "wins": 812,
+    "losses": 890
+  },
+  "Prisman": {
+    "elo": 2002,
+    "wins": 846,
+    "losses": 882
+  },
+  "Electric Snake": {
+    "elo": 1999,
+    "wins": 886,
+    "losses": 834
+  },
+  "Penguin Soldier": {
+    "elo": 1993,
+    "wins": 856,
+    "losses": 841
+  },
+  "Stop Defense": {
+    "elo": 1992,
+    "wins": 811,
+    "losses": 856
+  },
+  "Megazowler": {
+    "elo": 1988,
+    "wins": 853,
+    "losses": 891
+  },
+  "Exodia the Forbidden One": {
+    "elo": 1987,
+    "wins": 872,
+    "losses": 829
+  },
+  "Needle Worm": {
+    "elo": 1986,
+    "wins": 852,
+    "losses": 887
+  },
+  "Pinch Hopper": {
+    "elo": 1986,
+    "wins": 886,
+    "losses": 836
+  },
+  "Yami": {
+    "elo": 1984,
+    "wins": 884,
+    "losses": 893
+  },
+  "Minar": {
+    "elo": 1979,
+    "wins": 897,
+    "losses": 848
+  },
+  "Marine Beast": {
+    "elo": 1975,
+    "wins": 819,
+    "losses": 820
+  },
+  "Meotoko": {
+    "elo": 1974,
+    "wins": 886,
+    "losses": 922
+  },
+  "Peacock": {
+    "elo": 1972,
+    "wins": 809,
+    "losses": 839
+  },
+  "Rabid Horseman": {
+    "elo": 1971,
+    "wins": 832,
+    "losses": 853
+  },
+  "Right Arm of the Forbidden One": {
+    "elo": 1969,
+    "wins": 868,
+    "losses": 845
+  },
+  "Dark Energy": {
+    "elo": 1969,
+    "wins": 850,
+    "losses": 870
+  },
+  "Zera The Mant": {
+    "elo": 1969,
+    "wins": 847,
+    "losses": 923
+  },
+  "Change Slime": {
+    "elo": 1969,
+    "wins": 832,
+    "losses": 833
+  },
+  "Dark Plant": {
+    "elo": 1967,
+    "wins": 822,
+    "losses": 832
+  },
+  "Messenger of Peace": {
+    "elo": 1965,
+    "wins": 901,
+    "losses": 778
+  },
+  "Stuffed Animal": {
+    "elo": 1962,
+    "wins": 879,
+    "losses": 829
+  },
+  "Red Archery Girl": {
+    "elo": 1961,
+    "wins": 884,
+    "losses": 771
+  },
+  "Larvae Moth": {
+    "elo": 1959,
+    "wins": 878,
+    "losses": 862
+  },
+  "Pragtical": {
+    "elo": 1959,
+    "wins": 801,
+    "losses": 821
+  },
+  "Nekogal #2": {
+    "elo": 1958,
+    "wins": 835,
+    "losses": 866
+  },
+  "Living Vase": {
+    "elo": 1956,
+    "wins": 852,
+    "losses": 829
+  },
+  "Nimble Momonga": {
+    "elo": 1955,
+    "wins": 908,
+    "losses": 872
+  },
+  "Sonic Maid": {
+    "elo": 1955,
+    "wins": 921,
+    "losses": 833
+  },
+  "Dokurorider": {
+    "elo": 1955,
+    "wins": 825,
+    "losses": 863
+  },
+  "Big Insect": {
+    "elo": 1954,
+    "wins": 871,
+    "losses": 800
+  },
+  "One-Eyed Shield Dragon": {
+    "elo": 1954,
+    "wins": 862,
+    "losses": 856
+  },
+  "Giant Scorpion of the Tundra": {
+    "elo": 1953,
+    "wins": 830,
+    "losses": 825
+  },
+  "Nightmare Scorpion": {
+    "elo": 1947,
+    "wins": 861,
+    "losses": 888
+  },
+  "The Statue of Easter Island": {
+    "elo": 1945,
+    "wins": 877,
+    "losses": 849
+  },
+  "Twin-Headed Fire Dragon": {
+    "elo": 1944,
+    "wins": 887,
+    "losses": 849
+  },
+  "Metal Dragon": {
+    "elo": 1943,
+    "wins": 803,
+    "losses": 902
+  },
+  "Feral Imp": {
+    "elo": 1940,
+    "wins": 904,
+    "losses": 795
+  },
+  "Lucky Trinket": {
+    "elo": 1938,
+    "wins": 891,
+    "losses": 865
+  },
+  "Wow Warrior": {
+    "elo": 1938,
+    "wins": 879,
+    "losses": 888
+  },
+  "Kaminarikozou": {
+    "elo": 1938,
+    "wins": 861,
+    "losses": 849
+  },
+  "Invigoration": {
+    "elo": 1937,
+    "wins": 849,
+    "losses": 883
+  },
+  "Blue-Eyed Silver Zombie": {
+    "elo": 1937,
+    "wins": 859,
+    "losses": 891
+  },
+  "Garvas": {
+    "elo": 1936,
+    "wins": 855,
+    "losses": 844
+  },
+  "Ogre of the Black Shadow": {
+    "elo": 1935,
+    "wins": 873,
+    "losses": 873
+  },
+  "Petit Dragon": {
+    "elo": 1933,
+    "wins": 832,
+    "losses": 862
+  },
+  "The Winged Dragon of Ra (Phoenix Mode)": {
+    "elo": 1931,
+    "wins": 915,
+    "losses": 842
+  },
+  "Arlownay": {
+    "elo": 1930,
+    "wins": 863,
+    "losses": 862
+  },
+  "Lesser Dragon": {
+    "elo": 1928,
+    "wins": 919,
+    "losses": 866
+  },
+  "Dark Magician Girl": {
+    "elo": 1928,
+    "wins": 846,
+    "losses": 822
+  },
+  "Fiend Reflection #2": {
+    "elo": 1927,
+    "wins": 850,
+    "losses": 829
+  },
+  "B. Dragon Jungle King": {
+    "elo": 1926,
+    "wins": 800,
+    "losses": 823
+  },
+  "Zombie Warrior": {
+    "elo": 1924,
+    "wins": 895,
+    "losses": 809
+  },
+  "Emperor of the Land and Sea": {
+    "elo": 1924,
+    "wins": 765,
+    "losses": 877
+  },
+  "Exile of the Wicked": {
+    "elo": 1923,
+    "wins": 849,
+    "losses": 847
+  },
+  "Nekogal #1": {
+    "elo": 1923,
+    "wins": 875,
+    "losses": 831
+  },
+  "Amphibious Bugroth": {
+    "elo": 1922,
+    "wins": 877,
+    "losses": 876
+  },
+  "Goblin's Secret Remedy": {
+    "elo": 1921,
+    "wins": 833,
+    "losses": 865
+  },
+  "Battle Warrior": {
+    "elo": 1918,
+    "wins": 855,
+    "losses": 842
+  },
+  "Sinister Serpent": {
+    "elo": 1918,
+    "wins": 853,
+    "losses": 854
+  },
+  "Megirus Light": {
+    "elo": 1917,
+    "wins": 892,
+    "losses": 897
+  },
+  "Hane-Hane": {
+    "elo": 1915,
+    "wins": 823,
+    "losses": 864
+  },
+  "The Fiend Megacyber": {
+    "elo": 1914,
+    "wins": 834,
+    "losses": 831
+  },
+  "Baby Dragon": {
+    "elo": 1914,
+    "wins": 876,
+    "losses": 849
+  },
+  "Rainbow Flower": {
+    "elo": 1914,
+    "wins": 816,
+    "losses": 866
+  },
+  "Red Medicine": {
+    "elo": 1910,
+    "wins": 874,
+    "losses": 931
+  },
+  "Magical Ghost": {
+    "elo": 1908,
+    "wins": 864,
+    "losses": 837
+  },
+  "Twin Long Rods #1": {
+    "elo": 1908,
+    "wins": 880,
+    "losses": 871
+  },
+  "Garma Sword": {
+    "elo": 1908,
+    "wins": 842,
+    "losses": 874
+  },
+  "Flying Fish": {
+    "elo": 1907,
+    "wins": 868,
+    "losses": 838
+  },
+  "Gyakutenno Megami": {
+    "elo": 1907,
+    "wins": 807,
+    "losses": 882
+  },
+  "Shining Friendship": {
+    "elo": 1906,
+    "wins": 935,
+    "losses": 808
+  },
+  "Turu-Purun": {
+    "elo": 1906,
+    "wins": 864,
+    "losses": 892
+  },
+  "Sea King Dragon": {
+    "elo": 1905,
+    "wins": 882,
+    "losses": 859
+  },
+  "Curtain of the Dark Ones": {
+    "elo": 1905,
+    "wins": 843,
+    "losses": 865
+  },
+  "Tentacle Plant": {
+    "elo": 1904,
+    "wins": 856,
+    "losses": 861
+  },
+  "Fortress Whale": {
+    "elo": 1902,
+    "wins": 823,
+    "losses": 905
+  },
+  "Pumpking the King of Ghosts": {
+    "elo": 1901,
+    "wins": 850,
+    "losses": 930
+  },
+  "Violet Crystal": {
+    "elo": 1899,
+    "wins": 861,
+    "losses": 868
+  },
+  "Gernia": {
+    "elo": 1896,
+    "wins": 910,
+    "losses": 820
+  },
+  "Tremendous Fire": {
+    "elo": 1895,
+    "wins": 886,
+    "losses": 906
+  },
+  "Talons of Shurilane": {
+    "elo": 1894,
+    "wins": 829,
+    "losses": 828
+  },
+  "Torike": {
+    "elo": 1893,
+    "wins": 804,
+    "losses": 818
+  },
+  "Three-Headed Geedo": {
+    "elo": 1892,
+    "wins": 927,
+    "losses": 845
+  },
+  "Barrel Dragon": {
+    "elo": 1892,
+    "wins": 797,
+    "losses": 939
+  },
+  "Legendary Sword": {
+    "elo": 1891,
+    "wins": 890,
+    "losses": 821
+  },
+  "Left Arm of the Forbidden One": {
+    "elo": 1891,
+    "wins": 837,
+    "losses": 876
+  },
+  "Queen of Autumn Leaves": {
+    "elo": 1890,
+    "wins": 917,
+    "losses": 897
+  },
+  "Parrot Dragon": {
+    "elo": 1889,
+    "wins": 850,
+    "losses": 912
+  },
+  "Niwatori": {
+    "elo": 1889,
+    "wins": 888,
+    "losses": 835
+  },
+  "Barox": {
+    "elo": 1888,
+    "wins": 840,
+    "losses": 885
+  },
+  "Kumootoko": {
+    "elo": 1886,
+    "wins": 855,
+    "losses": 830
+  },
+  "Monsturtle": {
+    "elo": 1885,
+    "wins": 809,
+    "losses": 827
+  },
+  "Hard Armor": {
+    "elo": 1884,
+    "wins": 841,
+    "losses": 823
+  },
+  "Frog the Jam": {
+    "elo": 1882,
+    "wins": 878,
+    "losses": 842
+  },
+  "Pendulum Machine": {
+    "elo": 1882,
+    "wins": 794,
+    "losses": 892
+  },
+  "Machine Conversion Factory": {
+    "elo": 1881,
+    "wins": 856,
+    "losses": 891
+  },
+  "Curse of Dragon": {
+    "elo": 1880,
+    "wins": 834,
+    "losses": 872
+  },
+  "Ushi Oni": {
+    "elo": 1879,
+    "wins": 867,
+    "losses": 844
+  },
+  "Cyber Saurus": {
+    "elo": 1879,
+    "wins": 850,
+    "losses": 897
+  },
+  "Zarigun": {
+    "elo": 1878,
+    "wins": 873,
+    "losses": 821
+  },
+  "Key Mace": {
+    "elo": 1878,
+    "wins": 825,
+    "losses": 859
+  },
+  "Needle Ball": {
+    "elo": 1877,
+    "wins": 859,
+    "losses": 894
+  },
+  "Chimera the Flying Mythical Beast": {
+    "elo": 1877,
+    "wins": 817,
+    "losses": 875
+  },
+  "Dice Armadillo": {
+    "elo": 1875,
+    "wins": 823,
+    "losses": 908
+  },
+  "Wood Remains": {
+    "elo": 1874,
+    "wins": 861,
+    "losses": 835
+  },
+  "Rock Ogre Grotto #2": {
+    "elo": 1874,
+    "wins": 833,
+    "losses": 904
+  },
+  "Rose Spectre of Dunn": {
+    "elo": 1873,
+    "wins": 869,
+    "losses": 846
+  },
+  "30,000-Year White Turtle": {
+    "elo": 1873,
+    "wins": 831,
+    "losses": 876
+  },
+  "Firewing Pegasus": {
+    "elo": 1873,
+    "wins": 816,
+    "losses": 870
+  },
+  "Insect Armor with Laser Cannon": {
+    "elo": 1871,
+    "wins": 824,
+    "losses": 903
+  },
+  "Wicked Dragon with the Ersatz Head": {
+    "elo": 1868,
+    "wins": 874,
+    "losses": 873
+  },
+  "Snakeyashi": {
+    "elo": 1868,
+    "wins": 877,
+    "losses": 864
+  },
+  "Star Boy": {
+    "elo": 1867,
+    "wins": 882,
+    "losses": 858
+  },
+  "Spikebot": {
+    "elo": 1867,
+    "wins": 841,
+    "losses": 884
+  },
+  "Harpie's Feather Duster": {
+    "elo": 1866,
+    "wins": 846,
+    "losses": 881
+  },
+  "The Earl of Demise": {
+    "elo": 1865,
+    "wins": 900,
+    "losses": 847
+  },
+  "Golgoil": {
+    "elo": 1864,
+    "wins": 902,
+    "losses": 851
+  },
+  "Warrior of Tradition": {
+    "elo": 1862,
+    "wins": 822,
+    "losses": 873
+  },
+  "Skelengel": {
+    "elo": 1861,
+    "wins": 884,
+    "losses": 826
+  },
+  "Chakra": {
+    "elo": 1860,
+    "wins": 813,
+    "losses": 870
+  },
+  "Flower Wolf": {
+    "elo": 1860,
+    "wins": 798,
+    "losses": 885
+  },
+  "Ancient Tree of Enlightenment": {
+    "elo": 1859,
+    "wins": 853,
+    "losses": 851
+  },
+  "Eatgaboon": {
+    "elo": 1859,
+    "wins": 887,
+    "losses": 832
+  },
+  "Reflect Bounder": {
+    "elo": 1859,
+    "wins": 807,
+    "losses": 875
+  },
+  "Metal Guardian": {
+    "elo": 1859,
+    "wins": 801,
+    "losses": 882
+  },
+  "Mooyan Curry": {
+    "elo": 1858,
+    "wins": 849,
+    "losses": 828
+  },
+  "Mystical Sand": {
+    "elo": 1857,
+    "wins": 835,
+    "losses": 833
+  },
+  "Electric Lizard": {
+    "elo": 1857,
+    "wins": 786,
+    "losses": 847
+  },
+  "Kunai with Chain": {
+    "elo": 1856,
+    "wins": 864,
+    "losses": 874
+  },
+  "Armored Starfish": {
+    "elo": 1853,
+    "wins": 830,
+    "losses": 825
+  },
+  "Millennium Golem": {
+    "elo": 1853,
+    "wins": 845,
+    "losses": 873
+  },
+  "Wood Clown": {
+    "elo": 1853,
+    "wins": 852,
+    "losses": 843
+  },
+  "LaLa Li-oon": {
+    "elo": 1850,
+    "wins": 805,
+    "losses": 861
+  },
+  "Hungry Burger": {
+    "elo": 1848,
+    "wins": 894,
+    "losses": 811
+  },
+  "Necrolancer the Timelord": {
+    "elo": 1848,
+    "wins": 833,
+    "losses": 832
+  },
+  "Droll Bird": {
+    "elo": 1848,
+    "wins": 842,
+    "losses": 901
+  },
+  "Pot the Trick": {
+    "elo": 1844,
+    "wins": 842,
+    "losses": 908
+  },
+  "Mega Thunderball": {
+    "elo": 1842,
+    "wins": 857,
+    "losses": 865
+  },
+  "Beast Fangs": {
+    "elo": 1841,
+    "wins": 843,
+    "losses": 877
+  },
+  "Forest": {
+    "elo": 1839,
+    "wins": 856,
+    "losses": 866
+  },
+  "Dragon Capture Jar": {
+    "elo": 1839,
+    "wins": 880,
+    "losses": 832
+  },
+  "Mystical Sheep #2": {
+    "elo": 1839,
+    "wins": 861,
+    "losses": 839
+  },
+  "Flame Champion": {
+    "elo": 1839,
+    "wins": 837,
+    "losses": 929
+  },
+  "Magician of Faith": {
+    "elo": 1838,
+    "wins": 873,
+    "losses": 905
+  },
+  "Abyss Flower": {
+    "elo": 1837,
+    "wins": 891,
+    "losses": 890
+  },
+  "Phantom Dewan": {
+    "elo": 1837,
+    "wins": 827,
+    "losses": 834
+  },
+  "Prevent Rat": {
+    "elo": 1836,
+    "wins": 874,
+    "losses": 851
+  },
+  "Millennium Shield": {
+    "elo": 1835,
+    "wins": 836,
+    "losses": 903
+  },
+  "Toon Alligator": {
+    "elo": 1834,
+    "wins": 803,
+    "losses": 811
+  },
+  "The Bewitching Phantom Thief": {
+    "elo": 1833,
+    "wins": 876,
+    "losses": 888
+  },
+  "Book of Secret Arts": {
+    "elo": 1833,
+    "wins": 837,
+    "losses": 877
+  },
+  "Mystical Sheep #1": {
+    "elo": 1831,
+    "wins": 858,
+    "losses": 844
+  },
+  "Sparks": {
+    "elo": 1831,
+    "wins": 834,
+    "losses": 935
+  },
+  "Yormungarde": {
+    "elo": 1830,
+    "wins": 866,
+    "losses": 795
+  },
+  "The Portrait's Secret": {
+    "elo": 1828,
+    "wins": 875,
+    "losses": 849
+  },
+  "Master of Dragon Soldier": {
+    "elo": 1827,
+    "wins": 782,
+    "losses": 891
+  },
+  "Armaill": {
+    "elo": 1826,
+    "wins": 842,
+    "losses": 884
+  },
+  "Soul of the Pure": {
+    "elo": 1824,
+    "wins": 827,
+    "losses": 839
+  },
+  "Patrol Robo": {
+    "elo": 1823,
+    "wins": 855,
+    "losses": 847
+  },
+  "Total Defense Shogun": {
+    "elo": 1822,
+    "wins": 818,
+    "losses": 933
+  },
+  "Man-Eater Bug": {
+    "elo": 1821,
+    "wins": 862,
+    "losses": 904
+  },
+  "Stain Storm": {
+    "elo": 1819,
+    "wins": 871,
+    "losses": 935
+  },
+  "Kagemusha of the Blue Flame": {
+    "elo": 1819,
+    "wins": 848,
+    "losses": 848
+  },
+  "Flame Ghost": {
+    "elo": 1818,
+    "wins": 869,
+    "losses": 875
+  },
+  "Aqua Snake": {
+    "elo": 1817,
+    "wins": 858,
+    "losses": 855
+  },
+  "Super War-Lion": {
+    "elo": 1814,
+    "wins": 771,
+    "losses": 911
+  },
+  "Final Flame": {
+    "elo": 1813,
+    "wins": 799,
+    "losses": 891
+  },
+  "Boneheimer": {
+    "elo": 1812,
+    "wins": 860,
+    "losses": 849
+  },
+  "The Melting Red Shadow": {
+    "elo": 1811,
+    "wins": 842,
+    "losses": 898
+  },
+  "Dancing Elf": {
+    "elo": 1811,
+    "wins": 839,
+    "losses": 866
+  },
+  "The Furious Sea King": {
+    "elo": 1805,
+    "wins": 829,
+    "losses": 852
+  },
+  "Serpent Marauder": {
+    "elo": 1804,
+    "wins": 863,
+    "losses": 865
+  },
+  "Temple of Skulls": {
+    "elo": 1803,
+    "wins": 910,
+    "losses": 868
+  },
+  "Gokibore": {
+    "elo": 1803,
+    "wins": 862,
+    "losses": 807
+  },
+  "Battle Steer": {
+    "elo": 1802,
+    "wins": 840,
+    "losses": 883
+  },
+  "Kotodama": {
+    "elo": 1801,
+    "wins": 889,
+    "losses": 869
+  },
+  "Spirit Message \"N\"": {
+    "elo": 1801,
+    "wins": 842,
+    "losses": 918
+  },
+  "Mushroom Man": {
+    "elo": 1801,
+    "wins": 782,
+    "losses": 886
+  },
+  "Gear Golem the Moving Fortress": {
+    "elo": 1801,
+    "wins": 761,
+    "losses": 882
+  },
+  "Different Dimension Dragon": {
+    "elo": 1800,
+    "wins": 887,
+    "losses": 865
+  },
+  "Gate Sword": {
+    "elo": 1800,
+    "wins": 806,
+    "losses": 851
+  },
+  "Giltia the D. Knight": {
+    "elo": 1797,
+    "wins": 820,
+    "losses": 905
+  },
+  "Invader from Another Dimension": {
+    "elo": 1797,
+    "wins": 877,
+    "losses": 866
+  },
+  "Doll of Demise": {
+    "elo": 1792,
+    "wins": 866,
+    "losses": 899
+  },
+  "Three-Legged Zombies": {
+    "elo": 1790,
+    "wins": 874,
+    "losses": 835
+  },
+  "Flying Penguin": {
+    "elo": 1790,
+    "wins": 868,
+    "losses": 831
+  },
+  "Eradicating Aerosol": {
+    "elo": 1790,
+    "wins": 768,
+    "losses": 889
+  },
+  "Bolt Escargot": {
+    "elo": 1789,
+    "wins": 769,
+    "losses": 895
+  },
+  "Slifer the Sky Dragon": {
+    "elo": 1789,
+    "wins": 790,
+    "losses": 885
+  },
+  "Kiseitai": {
+    "elo": 1789,
+    "wins": 812,
+    "losses": 909
+  },
+  "Bolt Penguin": {
+    "elo": 1787,
+    "wins": 884,
+    "losses": 854
+  },
+  "Silver Bow and Arrow": {
+    "elo": 1786,
+    "wins": 894,
+    "losses": 907
+  },
+  "Mechaleon": {
+    "elo": 1784,
+    "wins": 919,
+    "losses": 950
+  },
+  "Alligator's Sword Dragon": {
+    "elo": 1784,
+    "wins": 785,
+    "losses": 927
+  },
+  "Dharma Cannon": {
+    "elo": 1784,
+    "wins": 799,
+    "losses": 877
+  },
+  "Perfectly Ultimate Great Moth": {
+    "elo": 1782,
+    "wins": 832,
+    "losses": 884
+  },
+  "Cyber Jar": {
+    "elo": 1781,
+    "wins": 831,
+    "losses": 818
+  },
+  "Laser Cannon Armor": {
+    "elo": 1781,
+    "wins": 805,
+    "losses": 881
+  },
+  "Musician King": {
+    "elo": 1780,
+    "wins": 817,
+    "losses": 898
+  },
+  "Sword Arm of Dragon": {
+    "elo": 1779,
+    "wins": 807,
+    "losses": 892
+  },
+  "Mech Bass": {
+    "elo": 1778,
+    "wins": 816,
+    "losses": 888
+  },
+  "Dig Beak": {
+    "elo": 1776,
+    "wins": 822,
+    "losses": 864
+  },
+  "Gadget Soldier": {
+    "elo": 1776,
+    "wins": 833,
+    "losses": 882
+  },
+  "Fire Eye": {
+    "elo": 1774,
+    "wins": 820,
+    "losses": 882
+  },
+  "Sword Hunter": {
+    "elo": 1773,
+    "wins": 835,
+    "losses": 971
+  },
+  "Eternal Drought": {
+    "elo": 1772,
+    "wins": 815,
+    "losses": 887
+  },
+  "The Winged Dragon of Ra (Sphere Mode)": {
+    "elo": 1772,
+    "wins": 816,
+    "losses": 926
+  },
+  "Serpent Night Dragon": {
+    "elo": 1771,
+    "wins": 838,
+    "losses": 913
+  },
+  "Shadow Ghoul": {
+    "elo": 1771,
+    "wins": 828,
+    "losses": 905
+  },
+  "Nemuriko": {
+    "elo": 1770,
+    "wins": 841,
+    "losses": 874
+  },
+  "Lunar Queen Elzaim": {
+    "elo": 1770,
+    "wins": 843,
+    "losses": 882
+  },
+  "The Last Warrior from Another Planet": {
+    "elo": 1769,
+    "wins": 817,
+    "losses": 907
+  },
+  "Garoozis": {
+    "elo": 1768,
+    "wins": 798,
+    "losses": 858
+  },
+  "Cyber Commander": {
+    "elo": 1767,
+    "wins": 880,
+    "losses": 924
+  },
+  "Satellite Cannon": {
+    "elo": 1766,
+    "wins": 787,
+    "losses": 931
+  },
+  "Magical Labyrinth": {
+    "elo": 1765,
+    "wins": 843,
+    "losses": 930
+  },
+  "The Shadow Who Controls the Dark": {
+    "elo": 1763,
+    "wins": 917,
+    "losses": 882
+  },
+  "Flame Manipulator": {
+    "elo": 1759,
+    "wins": 890,
+    "losses": 839
+  },
+  "Wilmee": {
+    "elo": 1754,
+    "wins": 861,
+    "losses": 855
+  },
+  "Ice Water": {
+    "elo": 1753,
+    "wins": 895,
+    "losses": 828
+  },
+  "Sengenjin": {
+    "elo": 1753,
+    "wins": 841,
+    "losses": 879
+  },
+  "Monstrous Bird": {
+    "elo": 1752,
+    "wins": 827,
+    "losses": 860
+  },
+  "Labyrinth Wall": {
+    "elo": 1752,
+    "wins": 798,
+    "losses": 954
+  },
+  "House of Adhesive Tape": {
+    "elo": 1749,
+    "wins": 836,
+    "losses": 893
+  },
+  "Root Water": {
+    "elo": 1749,
+    "wins": 843,
+    "losses": 863
+  },
+  "Ookazi": {
+    "elo": 1747,
+    "wins": 810,
+    "losses": 915
+  },
+  "Ganigumo": {
+    "elo": 1747,
+    "wins": 823,
+    "losses": 869
+  },
+  "Thunder Dragon": {
+    "elo": 1746,
+    "wins": 835,
+    "losses": 905
+  },
+  "YZ-Tank Dragon": {
+    "elo": 1745,
+    "wins": 881,
+    "losses": 872
+  },
+  "Tomozaurus": {
+    "elo": 1744,
+    "wins": 857,
+    "losses": 816
+  },
+  "Salamandra": {
+    "elo": 1744,
+    "wins": 843,
+    "losses": 881
+  },
+  "Nightmare Penguin": {
+    "elo": 1742,
+    "wins": 840,
+    "losses": 879
+  },
+  "Mountain Warrior": {
+    "elo": 1737,
+    "wins": 812,
+    "losses": 917
+  },
+  "Raigeki": {
+    "elo": 1736,
+    "wins": 866,
+    "losses": 857
+  },
+  "Lightning Conger": {
+    "elo": 1735,
+    "wins": 898,
+    "losses": 982
+  },
+  "Skull Guardian": {
+    "elo": 1733,
+    "wins": 820,
+    "losses": 933
+  },
+  "Garnecia Elefantis": {
+    "elo": 1732,
+    "wins": 783,
+    "losses": 906
+  },
+  "Water Element": {
+    "elo": 1731,
+    "wins": 901,
+    "losses": 844
+  },
+  "Giant Germ": {
+    "elo": 1731,
+    "wins": 886,
+    "losses": 877
+  },
+  "Ansatsu": {
+    "elo": 1730,
+    "wins": 802,
+    "losses": 881
+  },
+  "Anti Raigeki": {
+    "elo": 1730,
+    "wins": 800,
+    "losses": 890
+  },
+  "Dokuroizo the Grim Reaper": {
+    "elo": 1730,
+    "wins": 887,
+    "losses": 901
+  },
+  "Sky Dragon": {
+    "elo": 1730,
+    "wins": 832,
+    "losses": 865
+  },
+  "Leogun": {
+    "elo": 1727,
+    "wins": 808,
+    "losses": 907
+  },
+  "Solitude": {
+    "elo": 1726,
+    "wins": 827,
+    "losses": 892
+  },
+  "Cyber-Stein": {
+    "elo": 1725,
+    "wins": 852,
+    "losses": 916
+  },
+  "Sanga of the Thunder": {
+    "elo": 1725,
+    "wins": 809,
+    "losses": 905
+  },
+  "Orion the Battle King": {
+    "elo": 1724,
+    "wins": 764,
+    "losses": 864
+  },
+  "Spirit of the Mountain": {
+    "elo": 1722,
+    "wins": 852,
+    "losses": 894
+  },
+  "Dissolverock": {
+    "elo": 1719,
+    "wins": 851,
+    "losses": 818
+  },
+  "Mystical Moon": {
+    "elo": 1717,
+    "wins": 803,
+    "losses": 852
+  },
+  "Spirit of the Winds": {
+    "elo": 1717,
+    "wins": 795,
+    "losses": 901
+  },
+  "Rock Ogre Grotto #1": {
+    "elo": 1716,
+    "wins": 835,
+    "losses": 878
+  },
+  "Crow Goblin": {
+    "elo": 1715,
+    "wins": 812,
+    "losses": 961
+  },
+  "Two-Mouth Darkruler": {
+    "elo": 1713,
+    "wins": 848,
+    "losses": 842
+  },
+  "Crawling Dragon": {
+    "elo": 1713,
+    "wins": 763,
+    "losses": 853
+  },
+  "Bat": {
+    "elo": 1711,
+    "wins": 849,
+    "losses": 906
+  },
+  "Black Illusion Ritual": {
+    "elo": 1711,
+    "wins": 802,
+    "losses": 955
+  },
+  "Jinzo #7": {
+    "elo": 1709,
+    "wins": 830,
+    "losses": 884
+  },
+  "Candle of Fate": {
+    "elo": 1708,
+    "wins": 897,
+    "losses": 847
+  },
+  "Rude Kaiser": {
+    "elo": 1708,
+    "wins": 837,
+    "losses": 923
+  },
+  "Leghul": {
+    "elo": 1707,
+    "wins": 825,
+    "losses": 888
+  },
+  "Lady of Faith": {
+    "elo": 1705,
+    "wins": 886,
+    "losses": 902
+  },
+  "Skullbird": {
+    "elo": 1705,
+    "wins": 820,
+    "losses": 926
+  },
+  "Goblin Fan": {
+    "elo": 1704,
+    "wins": 805,
+    "losses": 900
+  },
+  "Basic Insect": {
+    "elo": 1704,
+    "wins": 850,
+    "losses": 936
+  },
+  "Ryu-Ran": {
+    "elo": 1703,
+    "wins": 792,
+    "losses": 950
+  },
+  "Lava Battleguard": {
+    "elo": 1701,
+    "wins": 843,
+    "losses": 852
+  },
+  "Monster Eye": {
+    "elo": 1697,
+    "wins": 868,
+    "losses": 886
+  },
+  "Misairuzame": {
+    "elo": 1696,
+    "wins": 847,
+    "losses": 949
+  },
+  "Bite Shoes": {
+    "elo": 1695,
+    "wins": 786,
+    "losses": 886
+  },
+  "Ooguchi": {
+    "elo": 1694,
+    "wins": 872,
+    "losses": 842
+  },
+  "Steel Ogre Grotto #2": {
+    "elo": 1693,
+    "wins": 837,
+    "losses": 918
+  },
+  "Crab Turtle": {
+    "elo": 1693,
+    "wins": 785,
+    "losses": 909
+  },
+  "Ryu-Kishin": {
+    "elo": 1692,
+    "wins": 858,
+    "losses": 870
+  },
+  "Gate Deeg": {
+    "elo": 1691,
+    "wins": 808,
+    "losses": 890
+  },
+  "Cyber Soldier": {
+    "elo": 1688,
+    "wins": 837,
+    "losses": 924
+  },
+  "Viser Des": {
+    "elo": 1686,
+    "wins": 835,
+    "losses": 869
+  },
+  "Gravedigger Ghoul": {
+    "elo": 1684,
+    "wins": 795,
+    "losses": 886
+  },
+  "Flame Dancer": {
+    "elo": 1677,
+    "wins": 841,
+    "losses": 866
+  },
+  "Skelgon": {
+    "elo": 1677,
+    "wins": 786,
+    "losses": 869
+  },
+  "Larvas": {
+    "elo": 1675,
+    "wins": 860,
+    "losses": 829
+  },
+  "Magician of Black Chaos": {
+    "elo": 1675,
+    "wins": 755,
+    "losses": 898
+  },
+  "Vile Germs": {
+    "elo": 1675,
+    "wins": 841,
+    "losses": 872
+  },
+  "Megasonic Eye": {
+    "elo": 1675,
+    "wins": 789,
+    "losses": 917
+  },
+  "Cyber-Tech Alligator": {
+    "elo": 1675,
+    "wins": 828,
+    "losses": 868
+  },
+  "Black Luster Ritual": {
+    "elo": 1674,
+    "wins": 813,
+    "losses": 926
+  },
+  "Spirit Message \"I\"": {
+    "elo": 1667,
+    "wins": 817,
+    "losses": 857
+  },
+  "Thousand-Eyes Idol": {
+    "elo": 1665,
+    "wins": 806,
+    "losses": 878
+  },
+  "Wings of Wicked Flame": {
+    "elo": 1665,
+    "wins": 848,
+    "losses": 921
+  },
+  "Breath of Light": {
+    "elo": 1665,
+    "wins": 783,
+    "losses": 866
+  },
+  "Elf's Light": {
+    "elo": 1662,
+    "wins": 833,
+    "losses": 915
+  },
+  "Hyozanryu": {
+    "elo": 1662,
+    "wins": 753,
+    "losses": 916
+  },
+  "Octoberser": {
+    "elo": 1661,
+    "wins": 871,
+    "losses": 917
+  },
+  "Dark Witch": {
+    "elo": 1660,
+    "wins": 825,
+    "losses": 893
+  },
+  "The Winged Dragon of Ra (Battle Mode)": {
+    "elo": 1658,
+    "wins": 792,
+    "losses": 913
+  },
+  "Jack's Knight": {
+    "elo": 1658,
+    "wins": 798,
+    "losses": 863
+  },
+  "Rocket Warrior": {
+    "elo": 1656,
+    "wins": 763,
+    "losses": 893
+  },
+  "Black Luster Soldier": {
+    "elo": 1653,
+    "wins": 830,
+    "losses": 937
+  },
+  "Bright Castle": {
+    "elo": 1652,
+    "wins": 785,
+    "losses": 822
+  },
+  "Akihiron": {
+    "elo": 1651,
+    "wins": 760,
+    "losses": 893
+  },
+  "Sogen": {
+    "elo": 1651,
+    "wins": 810,
+    "losses": 883
+  },
+  "Spirit Message \"A\"": {
+    "elo": 1651,
+    "wins": 783,
+    "losses": 925
+  },
+  "Hannibal Necromancer": {
+    "elo": 1651,
+    "wins": 758,
+    "losses": 902
+  },
+  "Legion the Fiend Jester": {
+    "elo": 1650,
+    "wins": 876,
+    "losses": 844
+  },
+  "Blue-Eyes Ultimate Dragon": {
+    "elo": 1648,
+    "wins": 838,
+    "losses": 912
+  },
+  "Bone Mouse": {
+    "elo": 1645,
+    "wins": 850,
+    "losses": 876
+  },
+  "Cursebreaker": {
+    "elo": 1644,
+    "wins": 829,
+    "losses": 913
+  },
+  "Jigen Bakudan": {
+    "elo": 1643,
+    "wins": 850,
+    "losses": 862
+  },
+  "Giant Mech-Soldier": {
+    "elo": 1643,
+    "wins": 782,
+    "losses": 937
+  },
+  "Kuriboh": {
+    "elo": 1643,
+    "wins": 797,
+    "losses": 891
+  },
+  "Deepsea Warrior": {
+    "elo": 1642,
+    "wins": 857,
+    "losses": 909
+  },
+  "Penguin Torpedo": {
+    "elo": 1641,
+    "wins": 775,
+    "losses": 886
+  },
+  "Dark Necrofear": {
+    "elo": 1641,
+    "wins": 806,
+    "losses": 882
+  },
+  "Tiny Guardian": {
+    "elo": 1640,
+    "wins": 800,
+    "losses": 940
+  },
+  "Jinzo": {
+    "elo": 1637,
+    "wins": 870,
+    "losses": 832
+  },
+  "LaMoon": {
+    "elo": 1632,
+    "wins": 778,
+    "losses": 921
+  },
+  "Claw Reacher": {
+    "elo": 1631,
+    "wins": 806,
+    "losses": 820
+  },
+  "Fire Reaper": {
+    "elo": 1631,
+    "wins": 804,
+    "losses": 877
+  },
+  "Raise Body Heat": {
+    "elo": 1627,
+    "wins": 808,
+    "losses": 897
+  },
+  "Spirit Message \"L\"": {
+    "elo": 1627,
+    "wins": 791,
+    "losses": 955
+  },
+  "The Little Swordsman of Aile": {
+    "elo": 1626,
+    "wins": 824,
+    "losses": 913
+  },
+  "Hunter Spider": {
+    "elo": 1618,
+    "wins": 838,
+    "losses": 881
+  },
+  "Little D": {
+    "elo": 1618,
+    "wins": 857,
+    "losses": 870
+  },
+  "Mikazukinoyaiba": {
+    "elo": 1616,
+    "wins": 824,
+    "losses": 939
+  },
+  "Kurama": {
+    "elo": 1616,
+    "wins": 846,
+    "losses": 876
+  },
+  "Great Moth": {
+    "elo": 1616,
+    "wins": 801,
+    "losses": 925
+  },
+  "Petit Moth": {
+    "elo": 1612,
+    "wins": 850,
+    "losses": 886
+  },
+  "Javelin Beetle": {
+    "elo": 1612,
+    "wins": 834,
+    "losses": 889
+  },
+  "Ancient Jar": {
+    "elo": 1612,
+    "wins": 837,
+    "losses": 889
+  },
+  "Skull Knight": {
+    "elo": 1612,
+    "wins": 817,
+    "losses": 948
+  },
+  "Morphing Jar #2": {
+    "elo": 1611,
+    "wins": 817,
+    "losses": 872
+  },
+  "Ameba": {
+    "elo": 1611,
+    "wins": 814,
+    "losses": 864
+  },
+  "Hinotama": {
+    "elo": 1609,
+    "wins": 830,
+    "losses": 910
+  },
+  "Steel Shell": {
+    "elo": 1609,
+    "wins": 768,
+    "losses": 902
+  },
+  "M-Warrior #1": {
+    "elo": 1608,
+    "wins": 787,
+    "losses": 848
+  },
+  "Kwagar Hercules": {
+    "elo": 1607,
+    "wins": 846,
+    "losses": 878
+  },
+  "Gaia The Fierce Knight": {
+    "elo": 1606,
+    "wins": 810,
+    "losses": 921
+  },
+  "Berfomet": {
+    "elo": 1606,
+    "wins": 790,
+    "losses": 890
+  },
+  "Dragon Treasure": {
+    "elo": 1602,
+    "wins": 797,
+    "losses": 871
+  },
+  "Griggle": {
+    "elo": 1600,
+    "wins": 814,
+    "losses": 879
+  },
+  "Swordstalker": {
+    "elo": 1598,
+    "wins": 843,
+    "losses": 894
+  },
+  "Parasite Paracide": {
+    "elo": 1597,
+    "wins": 798,
+    "losses": 890
+  },
+  "Darkness Approaches": {
+    "elo": 1595,
+    "wins": 813,
+    "losses": 923
+  },
+  "Sword of Dark Destruction": {
+    "elo": 1594,
+    "wins": 766,
+    "losses": 892
+  },
+  "Ocubeam": {
+    "elo": 1589,
+    "wins": 780,
+    "losses": 916
+  },
+  "Doma The Angel of Silence": {
+    "elo": 1589,
+    "wins": 784,
+    "losses": 912
+  },
+  "Morphing Jar": {
+    "elo": 1587,
+    "wins": 784,
+    "losses": 916
+  },
+  "Air Marmot of Nefariousness": {
+    "elo": 1586,
+    "wins": 792,
+    "losses": 864
+  },
+  "Dungeon Worm": {
+    "elo": 1582,
+    "wins": 848,
+    "losses": 954
+  },
+  "Puppet Master": {
+    "elo": 1581,
+    "wins": 789,
+    "losses": 888
+  },
+  "Ill Witch": {
+    "elo": 1580,
+    "wins": 812,
+    "losses": 957
+  },
+  "Lava Golem": {
+    "elo": 1578,
+    "wins": 779,
+    "losses": 960
+  },
+  "Byser Shock": {
+    "elo": 1578,
+    "wins": 813,
+    "losses": 914
+  },
+  "Helpoemer": {
+    "elo": 1573,
+    "wins": 828,
+    "losses": 895
+  },
+  "Twin-Headed Thunder Dragon": {
+    "elo": 1572,
+    "wins": 821,
+    "losses": 913
+  },
+  "Catapult Turtle": {
+    "elo": 1570,
+    "wins": 796,
+    "losses": 923
+  },
+  "Mystic Lamp": {
+    "elo": 1570,
+    "wins": 800,
+    "losses": 912
+  },
+  "Spike Seadra": {
+    "elo": 1569,
+    "wins": 807,
+    "losses": 856
+  },
+  "Korogashi": {
+    "elo": 1569,
+    "wins": 784,
+    "losses": 863
+  },
+  "Alinsection": {
+    "elo": 1566,
+    "wins": 826,
+    "losses": 839
+  },
+  "Zanki": {
+    "elo": 1563,
+    "wins": 823,
+    "losses": 889
+  },
+  "Cyclon Laser": {
+    "elo": 1563,
+    "wins": 771,
+    "losses": 868
+  },
+  "Flame Swordsman": {
+    "elo": 1562,
+    "wins": 780,
+    "losses": 935
+  },
+  "Wall Shadow": {
+    "elo": 1562,
+    "wins": 783,
+    "losses": 913
+  },
+  "Obelisk the Tormentor": {
+    "elo": 1558,
+    "wins": 763,
+    "losses": 947
+  },
+  "Right Leg of the Forbidden One": {
+    "elo": 1557,
+    "wins": 842,
+    "losses": 897
+  },
+  "Muka Muka": {
+    "elo": 1555,
+    "wins": 827,
+    "losses": 910
+  },
+  "Harpie Lady Sisters": {
+    "elo": 1553,
+    "wins": 834,
+    "losses": 898
+  },
+  "Mountain": {
+    "elo": 1549,
+    "wins": 829,
+    "losses": 886
+  },
+  "Reverse Trap": {
+    "elo": 1549,
+    "wins": 748,
+    "losses": 931
+  },
+  "Togex": {
+    "elo": 1548,
+    "wins": 779,
+    "losses": 898
+  },
+  "Left Leg of the Forbidden One": {
+    "elo": 1547,
+    "wins": 825,
+    "losses": 901
+  },
+  "Winged Trumpeter": {
+    "elo": 1547,
+    "wins": 811,
+    "losses": 893
+  },
+  "Steel Scorpion": {
+    "elo": 1546,
+    "wins": 866,
+    "losses": 863
+  },
+  "Masked Beast Des Gardius": {
+    "elo": 1545,
+    "wins": 791,
+    "losses": 923
+  },
+  "M-Warrior #2": {
+    "elo": 1543,
+    "wins": 780,
+    "losses": 914
+  },
+  "Dark Magic Ritual": {
+    "elo": 1541,
+    "wins": 811,
+    "losses": 930
+  },
+  "Bad Reaction to Simochi": {
+    "elo": 1540,
+    "wins": 815,
+    "losses": 930
+  },
+  "Vermillion Sparrow": {
+    "elo": 1540,
+    "wins": 764,
+    "losses": 942
+  },
+  "Meteor B. Dragon": {
+    "elo": 1540,
+    "wins": 775,
+    "losses": 948
+  },
+  "Dark Magician Knight": {
+    "elo": 1535,
+    "wins": 778,
+    "losses": 918
+  },
+  "Yamadron": {
+    "elo": 1534,
+    "wins": 827,
+    "losses": 904
+  },
+  "Dark Sage": {
+    "elo": 1529,
+    "wins": 826,
+    "losses": 909
+  },
+  "Steel Fan Fighter": {
+    "elo": 1529,
+    "wins": 771,
+    "losses": 884
+  },
+  "Multiply": {
+    "elo": 1526,
+    "wins": 816,
+    "losses": 958
+  },
+  "Kaiser Dragon": {
+    "elo": 1526,
+    "wins": 787,
+    "losses": 865
+  },
+  "Kazejin": {
+    "elo": 1524,
+    "wins": 784,
+    "losses": 939
+  },
+  "Suijin": {
+    "elo": 1522,
+    "wins": 834,
+    "losses": 937
+  },
+  "Winged Cleaver": {
+    "elo": 1521,
+    "wins": 846,
+    "losses": 923
+  },
+  "Mr. Volcano": {
+    "elo": 1520,
+    "wins": 804,
+    "losses": 880
+  },
+  "Thousand Dragon": {
+    "elo": 1520,
+    "wins": 754,
+    "losses": 928
+  },
+  "The Inexperienced Spy": {
+    "elo": 1517,
+    "wins": 806,
+    "losses": 866
+  },
+  "Metalzoa": {
+    "elo": 1516,
+    "wins": 779,
+    "losses": 973
+  },
+  "Goddess of Whim": {
+    "elo": 1516,
+    "wins": 834,
+    "losses": 946
+  },
+  "Dark Paladin": {
+    "elo": 1516,
+    "wins": 772,
+    "losses": 892
+  },
+  "Red-Eyes Black Metal Dragon": {
+    "elo": 1514,
+    "wins": 786,
+    "losses": 899
+  },
+  "Umi": {
+    "elo": 1512,
+    "wins": 832,
+    "losses": 894
+  },
+  "Haniwa": {
+    "elo": 1512,
+    "wins": 749,
+    "losses": 908
+  },
+  "Kaminari Attack": {
+    "elo": 1509,
+    "wins": 803,
+    "losses": 877
+  },
+  "F.G.D.": {
+    "elo": 1509,
+    "wins": 793,
+    "losses": 938
+  },
+  "Buster Blader": {
+    "elo": 1508,
+    "wins": 813,
+    "losses": 901
+  },
+  "Rainbow Marine Mermaid": {
+    "elo": 1507,
+    "wins": 763,
+    "losses": 879
+  },
+  "Wasteland": {
+    "elo": 1503,
+    "wins": 797,
+    "losses": 878
+  },
+  "Eternal Rest": {
+    "elo": 1503,
+    "wins": 811,
+    "losses": 942
+  },
+  "Shinato, King of a Higher Plane": {
+    "elo": 1498,
+    "wins": 773,
+    "losses": 962
+  },
+  "Legendary Fiend": {
+    "elo": 1484,
+    "wins": 792,
+    "losses": 907
+  },
+  "Beast of Talwar": {
+    "elo": 1481,
+    "wins": 722,
+    "losses": 934
+  },
+  "Meteor Dragon": {
+    "elo": 1479,
+    "wins": 799,
+    "losses": 905
+  },
+  "Queen's Double": {
+    "elo": 1477,
+    "wins": 879,
+    "losses": 916
+  },
+  "Saber Slasher": {
+    "elo": 1477,
+    "wins": 780,
+    "losses": 838
+  },
+  "Wing Eagle": {
+    "elo": 1475,
+    "wins": 782,
+    "losses": 902
+  },
+  "Shadow Specter": {
+    "elo": 1471,
+    "wins": 801,
+    "losses": 883
+  },
+  "Perfect Machine King": {
+    "elo": 1471,
+    "wins": 730,
+    "losses": 947
+  },
+  "Monster Egg": {
+    "elo": 1471,
+    "wins": 840,
+    "losses": 910
+  },
+  "Ruklamba the Spirit King": {
+    "elo": 1470,
+    "wins": 779,
+    "losses": 904
+  },
+  "Injection Fairy Lily": {
+    "elo": 1468,
+    "wins": 849,
+    "losses": 893
+  },
+  "Zoa": {
+    "elo": 1464,
+    "wins": 779,
+    "losses": 942
+  },
+  "Morinphen": {
+    "elo": 1461,
+    "wins": 835,
+    "losses": 906
+  },
+  "Illusionist Faceless Mage": {
+    "elo": 1461,
+    "wins": 816,
+    "losses": 946
+  },
+  "Harpie's Pet Dragon": {
+    "elo": 1458,
+    "wins": 758,
+    "losses": 906
+  },
+  "Bickuribox": {
+    "elo": 1455,
+    "wins": 764,
+    "losses": 947
+  },
+  "Slot Machine": {
+    "elo": 1455,
+    "wins": 757,
+    "losses": 927
+  },
+  "Labyrinth Tank": {
+    "elo": 1449,
+    "wins": 778,
+    "losses": 885
+  },
+  "Restructer Revolution": {
+    "elo": 1449,
+    "wins": 800,
+    "losses": 927
+  },
+  "Metal Fish": {
+    "elo": 1447,
+    "wins": 820,
+    "losses": 986
+  },
+  "Penguin Knight": {
+    "elo": 1446,
+    "wins": 859,
+    "losses": 880
+  },
+  "Skull Servant": {
+    "elo": 1441,
+    "wins": 836,
+    "losses": 949
+  },
+  "Manga Ryu-Ran": {
+    "elo": 1438,
+    "wins": 774,
+    "losses": 887
+  },
+  "Crimson Sunbird": {
+    "elo": 1429,
+    "wins": 769,
+    "losses": 862
+  },
+  "Hiro's Shadow Scout": {
+    "elo": 1427,
+    "wins": 781,
+    "losses": 894
+  },
+  "Elegant Egotist": {
+    "elo": 1421,
+    "wins": 748,
+    "losses": 865
+  },
+  "Stone D.": {
+    "elo": 1421,
+    "wins": 807,
+    "losses": 936
+  },
+  "Humanoid Worm Drake": {
+    "elo": 1420,
+    "wins": 818,
+    "losses": 896
+  },
+  "Follow Wind": {
+    "elo": 1418,
+    "wins": 832,
+    "losses": 862
+  },
+  "Zone Eater": {
+    "elo": 1414,
+    "wins": 862,
+    "losses": 937
+  },
+  "Orgoth the Relentless": {
+    "elo": 1413,
+    "wins": 797,
+    "losses": 902
+  },
+  "Metalmorph": {
+    "elo": 1413,
+    "wins": 784,
+    "losses": 922
+  },
+  "Succubus Knight": {
+    "elo": 1406,
+    "wins": 779,
+    "losses": 874
+  },
+  "Dark-Piercing Light": {
+    "elo": 1399,
+    "wins": 797,
+    "losses": 946
+  },
+  "The Masked Beast": {
+    "elo": 1398,
+    "wins": 791,
+    "losses": 885
+  },
+  "Insect Queen": {
+    "elo": 1387,
+    "wins": 785,
+    "losses": 937
+  },
+  "Skull-Mark Lady Bug": {
+    "elo": 1382,
+    "wins": 831,
+    "losses": 946
+  },
+  "Machine Attacker": {
+    "elo": 1379,
+    "wins": 805,
+    "losses": 910
+  },
+  "Stone Ogre Grotto": {
+    "elo": 1369,
+    "wins": 830,
+    "losses": 935
+  },
+  "Red-Eyes B. Dragon": {
+    "elo": 1369,
+    "wins": 740,
+    "losses": 873
+  },
+  "Dragon Seeker": {
+    "elo": 1367,
+    "wins": 794,
+    "losses": 910
+  },
+  "Blue-Eyes White Dragon": {
+    "elo": 1364,
+    "wins": 779,
+    "losses": 952
+  },
+  "Trent": {
+    "elo": 1361,
+    "wins": 778,
+    "losses": 953
+  },
+  "Invitation to a Dark Sleep": {
+    "elo": 1361,
+    "wins": 762,
+    "losses": 951
+  },
+  "Psycho-Puppet": {
+    "elo": 1346,
+    "wins": 716,
+    "losses": 921
+  },
+  "B. Skull Dragon": {
+    "elo": 1328,
+    "wins": 814,
+    "losses": 942
+  },
+  "Gate Guardian": {
+    "elo": 1310,
+    "wins": 792,
+    "losses": 917
+  },
+  "Gaia the Dragon Champion": {
+    "elo": 1303,
+    "wins": 731,
+    "losses": 930
+  },
+  "7 Completed": {
+    "elo": 1295,
+    "wins": 787,
+    "losses": 924
+  },
+  "Queen Bird": {
+    "elo": 1290,
+    "wins": 749,
+    "losses": 862
+  },
+  "Hercules Beetle": {
+    "elo": 1284,
+    "wins": 778,
+    "losses": 868
+  },
+  "Mirage Knight": {
+    "elo": 1275,
+    "wins": 746,
+    "losses": 935
+  },
+  "Tatsunootoshigo": {
+    "elo": 1271,
+    "wins": 809,
+    "losses": 954
+  },
+  "Space Megatron": {
+    "elo": 1260,
+    "wins": 765,
+    "losses": 971
+  },
+  "Blue-Eyes Toon Dragon": {
+    "elo": 1247,
+    "wins": 783,
+    "losses": 949
+  },
+  "Seiyaryu": {
+    "elo": 1244,
+    "wins": 765,
+    "losses": 905
+  },
+  "Dark Magician": {
+    "elo": 1230,
+    "wins": 782,
+    "losses": 908
+  },
+  "Reaper of the Cards": {
+    "elo": 1215,
+    "wins": 751,
+    "losses": 965
+  },
+  "Yamata Dragon": {
+    "elo": 1196,
+    "wins": 758,
+    "losses": 918
+  },
+  "Valkyrion the Magna Warrior": {
+    "elo": 1146,
+    "wins": 730,
+    "losses": 973
+  },
+  "XYZ-Dragon Cannon": {
+    "elo": 1133,
+    "wins": 773,
+    "losses": 926
+  },
+  "Launcher Spider": {
+    "elo": 1100,
+    "wins": 761,
+    "losses": 980
+  },
+  "Exodia Necross": {
+    "elo": 936,
+    "wins": 712,
+    "losses": 1026
+  },
+  "Gilford the Lightning": {
+    "elo": 868,
+    "wins": 672,
+    "losses": 1024
+  },
+  "Berserk Dragon": {
+    "elo": 831,
+    "wins": 745,
+    "losses": 941
+  },
+  "Beast of Gilfer": {
+    "elo": -45,
+    "wins": 533,
+    "losses": 1258
+  },
+  "Jam Breeding Machine": {
+    "elo": -565,
+    "wins": 481,
+    "losses": 1194
+  }
+}

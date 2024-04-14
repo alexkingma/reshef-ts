@@ -38,6 +38,10 @@ export const getOriginZone = (state: Duel) => {
   return getZone(state, state.interaction.originCoords);
 };
 
+export const isOccupied = (z: Zone): z is OccupiedZone => {
+  return z.isOccupied;
+};
+
 export const isTrap = (z: Zone): z is OccupiedSpellTrapZone => {
   return z.isOccupied && z.card.category === "Trap";
 };
@@ -67,14 +71,14 @@ export const isSpecificMonster = (
   cardName: CardName
 ): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
 
-export const isOrientation = (
-  z: Zone,
-  o: Orientation
-): z is OccupiedMonsterZone => z.isOccupied && z.orientation === o;
+export const isOrientation = (z: Zone, o: Orientation): z is OccupiedZone =>
+  z.isOccupied && z.orientation === o;
 
-export const isFaceDown = (z: Zone) => isOrientation(z, Orientation.FaceDown);
+export const isFaceDown = (z: Zone): z is OccupiedZone =>
+  isOrientation(z, Orientation.FaceDown);
 
-export const isFaceUp = (z: Zone) => isOrientation(z, Orientation.FaceUp);
+export const isFaceUp = (z: Zone): z is OccupiedZone =>
+  isOrientation(z, Orientation.FaceUp);
 
 export const isUnlocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && !z.isLocked;
