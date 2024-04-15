@@ -9,7 +9,7 @@ import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
 import { getRandomDuel } from "./util/duelUtil";
 import { getOtherDuellistKey, isPlayer } from "./util/duellistUtil";
-import { getFieldZone } from "./util/fieldUtil";
+import { getActiveField, getFieldCard } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
 import { getZone, isFaceUp } from "./util/zoneUtil";
 
@@ -29,9 +29,9 @@ type CustomDuelReducers = {
     coordsMap: K extends CardActionKey
       ? ZoneCoordsMap
       : K extends InteractionActionKey
-      ? ExtractSecondArg<typeof interactionReducers[K]>
+      ? ExtractSecondArg<(typeof interactionReducers)[K]>
       : K extends DuelActionKey
-      ? ExtractSecondArg<typeof duelReducers[K]>
+      ? ExtractSecondArg<(typeof duelReducers)[K]>
       : DuellistCoordsMap
   ) => void;
 };
@@ -43,9 +43,9 @@ type DuelReducers = {
       K extends CardActionKey
         ? ZoneCoordsMap
         : K extends InteractionActionKey
-        ? ExtractSecondArg<typeof interactionReducers[K]>
+        ? ExtractSecondArg<(typeof interactionReducers)[K]>
         : K extends DuelActionKey
-        ? ExtractSecondArg<typeof duelReducers[K]>
+        ? ExtractSecondArg<(typeof duelReducers)[K]>
         : DuellistCoordsMap
     >
   ) => void;
@@ -117,10 +117,11 @@ export const selectGraveyardZone =
   (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
     duel[dKey].graveyard[0];
-export const selectActiveField =
+export const selectFieldCard =
   (dKey: DuellistKey) =>
   ({ duel }: RootState) =>
-    getFieldZone(duel, dKey);
+    getFieldCard(duel, dKey);
+export const selectActiveField = ({ duel }: RootState) => getActiveField(duel);
 export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 export const selectConfig = ({ duel }: RootState) => duel.config;

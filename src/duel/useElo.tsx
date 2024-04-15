@@ -69,7 +69,7 @@ const getRatingDelta = (winnerElo: number, loserElo: number) => {
 
   // calculate how much rating will be won and lost
   // by comparing the real outcome to the expected odds
-  const K_FACTOR = 32; // determines the magnitude of rating adjustments across the board
+  const K_FACTOR = 20; // determines the magnitude of rating adjustments across the board
   return {
     ratingGain: Math.round(K_FACTOR * (1 - winningOddsOfWinner)),
     ratingLoss: Math.round(K_FACTOR * (0 - winningOddsOfLoser)),

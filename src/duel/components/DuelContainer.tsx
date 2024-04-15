@@ -8,6 +8,7 @@ import {
 } from "../duelSlice";
 import { useDuelAI } from "../useDuelAI";
 import { useDuelActions } from "../useDuelActions";
+import { useDuelStats } from "../useDuelStats";
 import { useElo } from "../useElo";
 import { getNewDuel } from "../util/duelUtil";
 import { getRandomDuellable } from "../util/duellistUtil";
@@ -29,6 +30,7 @@ export const DuelContainer = () => {
   const { p1Name, p2Name } = useAppSelector(selectConfig);
   const { setDuel, updateConfig, startTurn } = useDuelActions();
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
+  const { updateStatsMap } = useDuelStats();
   const { updateEloMap } = useElo();
   useDuelAI();
 
@@ -60,6 +62,7 @@ export const DuelContainer = () => {
       // two CPUs are playing, so we can use the result of this duel
       // to update the Elo records of each card/deck
       updateEloMap();
+      updateStatsMap();
     }
 
     const remainingDuels = totalDuelsToPlay - numDuelsFinished;
@@ -79,6 +82,7 @@ export const DuelContainer = () => {
     numDuelsFinished,
     randomiseDuellists,
     updateEloMap,
+    updateStatsMap,
   ]);
 
   useEffect(() => {

@@ -45,8 +45,8 @@ export const getActiveField = (state: Duel): Field => {
   return pField === Field.Arena ? oField : pField;
 };
 
-export const getFieldZone = (state: Duel, dKey: DuellistKey): Field | null => {
-  const z = state[dKey].fieldZone[0];
+export const getFieldCard = (state: Duel, dKey: DuellistKey): Field | null => {
+  const [z] = state[dKey].fieldZone;
   return z.isOccupied ? (z.card.name as Field) : null;
 };
 
