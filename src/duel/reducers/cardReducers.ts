@@ -1,3 +1,6 @@
+import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
+import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
+import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
 import {
   BattlePosition,
   DirectSpell,
@@ -16,10 +19,7 @@ import {
   setSpellTrapAtCoords,
   specialSummonAtCoords,
 } from "../util/zoneUtil";
-import { counterAttackTrapReducers } from "./counterAttackTrapReducers";
-import { counterSpellTrapReducers } from "./counterSpellTrapReducers";
 import { spellEffectReducers as spellReducers } from "./directSpellReducers";
-import { monsterFlipEffectReducers as flipReducers } from "./monsterFlipEffectReducers";
 
 export const cardReducers = {
   normalSummon: (state: Duel) => {
@@ -60,7 +60,7 @@ export const cardReducers = {
 
     // a trap triggering cancels the attack attempt and
     // carries out the trap's effect instead
-    if (checkTriggeredTraps(state, coordsMap, counterAttackTrapReducers)) {
+    if (checkTriggeredTraps(state, coordsMap, counterAttackReducers)) {
       return;
     }
 
@@ -106,7 +106,7 @@ export const cardReducers = {
 
     // a trap triggering cancels the spell activation attempt
     // and carries out the trap's effect instead
-    if (checkTriggeredTraps(state, coordsMap, counterSpellTrapReducers)) {
+    if (checkTriggeredTraps(state, coordsMap, counterSpellReducers)) {
       return;
     }
 

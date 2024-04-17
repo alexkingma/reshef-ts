@@ -33,7 +33,7 @@ export const canAISummonMonster = (
     handZone.card.effAtk
   ).length;
 
-  // If AI has no space to summon, must have >= one mon weaker than it
+  // If AI has no space to summon, must have >= 1 mon weaker than it
   // to summon on top of. This is only really relevant when evaluating
   // monsters that require no actual tributes can be summoned.
   // e.g. can't summon Kuriboh on a board of 5 Slifers, even though it

@@ -1,11 +1,11 @@
-import { CounterSpellTrap, Spell, Trap } from "../common";
+import { CounterSpellCard, Spell, Trap } from "../common";
 import { burn } from "../util/duellistUtil";
 import { countMatchesInRow, destroyRow } from "../util/rowUtil";
 import { isReflectablePowerUp } from "../util/targetedSpellUtil";
 import { getOriginZone, permPowerDown } from "../util/zoneUtil";
 
-export const counterSpellTrapReducers: CardReducerMap<
-  CounterSpellTrap,
+export const counterSpellReducers: CardReducerMap<
+  CounterSpellCard,
   EffConReducer
 > = {
   [Trap.GoblinFan]: (state, { otherHand, dKey }) => {

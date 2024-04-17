@@ -762,7 +762,7 @@ export type GraveyardEffectMonster = Extract<
   | Monster.DarkFlareKnight
 >;
 
-export type HandEffectMonster = Extract<
+export type HandEffectCard = Extract<
   Monster,
   Monster.LavaGolem | Monster.ExodiaTheForbiddenOne
 >;
@@ -843,7 +843,7 @@ export type FlipEffectMonster = Extract<
   | Monster.BeastOfGilfer
 >;
 
-export type PermAutoEffectMonster = Extract<
+export type AutoEffectMonster = Extract<
   Monster,
   | Monster.CastleOfDarkIllusions
   | Monster.SatelliteCannon
@@ -860,7 +860,7 @@ export type PermAutoEffectMonster = Extract<
   | Monster.GreatMoth
 >;
 
-export type TempPowerUpMonster = Extract<
+export type TempEffectMonster = Extract<
   Monster,
   | Monster.MysticalElf
   | Monster.HarpieLady
@@ -1018,9 +1018,9 @@ export enum Trap {
   AntiRaigeki = "Anti Raigeki",
 }
 
-export type DirectSpell = Exclude<Spell, PerpetualSpellTrap>;
+export type DirectSpell = Exclude<Spell, AutoSpellTrap>;
 
-export type CounterSpellTrap = Extract<
+export type CounterSpellCard = Extract<
   Trap,
   | Trap.GoblinFan
   | Trap.BadReactionToSimochi
@@ -1029,7 +1029,7 @@ export type CounterSpellTrap = Extract<
   | Trap.AntiRaigeki
 >;
 
-export type CounterAttackTrap = Extract<
+export type CounterAttackCard = Extract<
   Trap,
   | Trap.AmazonArchers
   | Trap.HouseOfAdhesiveTape
@@ -1042,7 +1042,7 @@ export type CounterAttackTrap = Extract<
   | Trap.InfiniteDismissal
 >;
 
-export type PerpetualSpellTrap =
+export type AutoSpellTrap =
   | Extract<
       Trap,
       | Trap.DragonCaptureJar

@@ -14,7 +14,7 @@ type GraveyardEffectReducer = (
   coordsMap: DuellistCoordsMap
 ) => void;
 
-type MonsterGraveyardEffectReducers = {
+type GraveyardEffectReducers = {
   [key in GraveyardEffectMonster]: (
     state: Duel,
     coordsMap: DuellistCoordsMap
@@ -24,7 +24,7 @@ type MonsterGraveyardEffectReducers = {
   }[];
 };
 
-export const monsterGraveyardEffectReducers: MonsterGraveyardEffectReducers = {
+export const graveyardEffects: GraveyardEffectReducers = {
   [Monster.TheWingedDragonOfRaPhoenixMode]: (state, { ownMonsters }) => {
     return [
       {

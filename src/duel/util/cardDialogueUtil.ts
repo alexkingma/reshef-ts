@@ -1,15 +1,15 @@
 import {
-  CounterAttackTrap,
-  CounterSpellTrap,
+  AutoEffectMonster,
+  AutoSpellTrap,
+  CounterAttackCard,
+  CounterSpellCard,
   DirectSpell,
   FlipEffectMonster,
   GraveyardEffectMonster,
-  HandEffectMonster,
+  HandEffectCard,
   Monster,
-  PermAutoEffectMonster,
-  PerpetualSpellTrap,
   Spell,
-  TempPowerUpMonster,
+  TempEffectMonster,
   Trap,
 } from "../common";
 
@@ -233,10 +233,10 @@ export const graveyardDialogueMap: DialogueMap<GraveyardEffectMonster> = {
     "The Dark Flare Knight in the graveyard summoned a Mirage Knight to the own field.",
 };
 
-export const permAutoMonsterDialogueMap: DialogueMap<PermAutoEffectMonster> = {
+export const permAutoMonsterDialogueMap: DialogueMap<AutoEffectMonster> = {
   [Monster.ThunderNyanNyan]:
     "It was sent to the graveyard because a non-light monster appeared on the own field.",
-  
+
   // death text
   // [Monster.ExodiaNecross]:
   //   "It was sent to the graveyard because there were no Exodia parts in the own graveyard.",
@@ -261,7 +261,7 @@ export const permAutoMonsterDialogueMap: DialogueMap<PermAutoEffectMonster> = {
     "Great Moth transformed into Perfectly Ultimate Great Moth!",
 };
 
-export const tempAutoMonsterDialogueMap: DialogueMap<TempPowerUpMonster> = {
+export const tempAutoMonsterDialogueMap: DialogueMap<TempEffectMonster> = {
   [Monster.MammothGraveyard]: "Powered down every monster on the foe's field.",
   [Monster.DarkJeroid]: "Weakened the enemy monster with the highest ATK.",
   [Monster.Hoshiningen]:
@@ -305,7 +305,7 @@ export const tempAutoMonsterDialogueMap: DialogueMap<TempPowerUpMonster> = {
   [Monster.BladeKnight]: "Powered up for having one or no cards in the hand.",
 };
 
-export const handDialogueMap: DialogueMap<HandEffectMonster> = {
+export const handDialogueMap: DialogueMap<HandEffectCard> = {
   [Monster.LavaGolem]:
     "Emerged on the foe's field in exchange for two enemy tributes.",
   [Monster.ExodiaTheForbiddenOne]:
@@ -449,10 +449,10 @@ export const spellDialogueMap: DialogueMap<DirectSpell> = {
 //                   TRAPS                   //
 // ----------------------------------------- //
 
-export const perpetualSpellTrapDialogueMap: DialogueMap<PerpetualSpellTrap> = {
+export const perpetualSpellTrapDialogueMap: DialogueMap<AutoSpellTrap> = {
   [Spell.MessengerOfPeace]:
     "Immobilised all monsters with 1,500 ATK or higher.", // as soon as a 1500+ card is present
-  
+
   // [Spell.MessengerOfPeace]: "Infliced 1,000LP damage on the player.", // start of own turn
   // [Spell.JamBreedingMachine]: "Summoned a Change Slime to the own field.", // start of all own turns after first
 
@@ -465,7 +465,7 @@ export const perpetualSpellTrapDialogueMap: DialogueMap<PerpetualSpellTrap> = {
   [Trap.SpiritMessageL]: spiritMessageFail,
 };
 
-export const attackTrapDialogueMap: DialogueMap<CounterAttackTrap> = {
+export const attackTrapDialogueMap: DialogueMap<CounterAttackCard> = {
   [Trap.AmazonArchers]: "The monster is powered down.",
   [Trap.HouseOfAdhesiveTape]: destroyAttackerTrap,
   [Trap.Eatgaboon]: destroyAttackerTrap,
@@ -478,7 +478,7 @@ export const attackTrapDialogueMap: DialogueMap<CounterAttackTrap> = {
   [Trap.InfiniteDismissal]: "[X] will be unable to move for one turn.",
 };
 
-export const spellTrapDialogueMap: DialogueMap<CounterSpellTrap> = {
+export const spellTrapDialogueMap: DialogueMap<CounterSpellCard> = {
   // TODO
   [Trap.GoblinFan]: "",
   [Trap.BadReactionToSimochi]: "",

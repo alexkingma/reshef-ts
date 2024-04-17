@@ -1,10 +1,4 @@
-import {
-  Monster,
-  Orientation,
-  PerpetualSpellTrap,
-  Spell,
-  Trap,
-} from "../common";
+import { AutoSpellTrap, Monster, Orientation, Spell, Trap } from "../common";
 import { getFinalCards } from "../util/cardUtil";
 import { burn, isStartOfTurn, winByFINAL } from "../util/duellistUtil";
 import {
@@ -21,8 +15,8 @@ import {
   specialSummon,
 } from "../util/zoneUtil";
 
-export const perpetualSpellTrapReducers: CardReducerMap<
-  PerpetualSpellTrap,
+export const autoSpellTrapEffects: CardReducerMap<
+  AutoSpellTrap,
   MultiEffConReducer
 > = {
   [Spell.MessengerOfPeace]: (state, { dKey, ownMonsters, otherMonsters }) => {

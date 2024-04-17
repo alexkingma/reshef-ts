@@ -1,4 +1,4 @@
-import { HandEffectMonster, Monster } from "../common";
+import { HandEffectCard, Monster } from "../common";
 import { isStartOfEitherTurn } from "../util/duelUtil";
 import { winByExodia } from "../util/duellistUtil";
 import {
@@ -8,10 +8,7 @@ import {
 } from "../util/rowUtil";
 import { clearZone, isNotGodCard, specialSummon } from "../util/zoneUtil";
 
-export const monsterHandEffectReducers: CardReducerMap<
-  HandEffectMonster,
-  MultiEffConReducer
-> = {
+export const handEffects: CardReducerMap<HandEffectCard, MultiEffConReducer> = {
   [Monster.LavaGolem]: (state, { otherMonsters }) => {
     return [
       {

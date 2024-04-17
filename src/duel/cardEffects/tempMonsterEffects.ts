@@ -1,4 +1,4 @@
-import { Monster, TempPowerUpMonster } from "../common";
+import { Monster, TempEffectMonster } from "../common";
 import {
   countMatchesInRow,
   getHighestAtkZoneIdx,
@@ -16,8 +16,8 @@ import {
   tempPowerUp,
 } from "../util/zoneUtil";
 
-export const monsterTempPowerUpReducers: CardReducerMap<
-  TempPowerUpMonster,
+export const tempMonsterEffects: CardReducerMap<
+  TempEffectMonster,
   MultiEffConReducer
 > = {
   // power down enemies

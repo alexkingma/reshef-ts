@@ -1,6 +1,6 @@
 import {
-  CounterAttackTrap,
-  CounterSpellTrap,
+  CounterAttackCard,
+  CounterSpellCard,
   Orientation,
   RowKey,
 } from "../common";
@@ -299,7 +299,7 @@ export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
 };
 
 export const checkTriggeredTraps = <
-  T extends CounterAttackTrap | CounterSpellTrap
+  T extends CounterAttackCard | CounterSpellCard,
 >(
   state: Duel,
   coordsMap: ZoneCoordsMap,

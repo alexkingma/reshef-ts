@@ -1,7 +1,7 @@
-import { Field, Monster, PermAutoEffectMonster } from "../common";
+import { AutoEffectMonster, Field, Monster } from "../common";
 import { getExodiaCards } from "../util/cardUtil";
-import { burn, isStartOfTurn } from "../util/duellistUtil";
 import { isStartOfEitherTurn } from "../util/duelUtil";
+import { burn, isStartOfTurn } from "../util/duellistUtil";
 import { setActiveField } from "../util/fieldUtil";
 import { graveyardContainsCards } from "../util/graveyardUtil";
 import {
@@ -21,8 +21,8 @@ import {
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
-export const monsterPermAutoEffectReducers: CardReducerMap<
-  PermAutoEffectMonster,
+export const autoMonsterEffects: CardReducerMap<
+  AutoEffectMonster,
   MultiEffConReducer
 > = {
   [Monster.ThunderNyanNyan]: (state, { zoneCoords, ownMonsters }) => {

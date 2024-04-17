@@ -1,15 +1,15 @@
+import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
+import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
+import { flipEffectReducers } from "../cardEffects/flipEffects";
 import {
   BattlePosition,
-  CounterAttackTrap,
-  CounterSpellTrap,
+  CounterAttackCard,
+  CounterSpellCard,
   FlipEffectMonster,
   Monster,
   Orientation,
   RowKey,
 } from "../common";
-import { counterAttackTrapReducers } from "../reducers/counterAttackTrapReducers";
-import { counterSpellTrapReducers } from "../reducers/counterSpellTrapReducers";
-import { monsterFlipEffectReducers } from "../reducers/monsterFlipEffectReducers";
 import { getAlignmentResult, getCard } from "./cardUtil";
 import {
   burn,
@@ -100,14 +100,13 @@ export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
 export const isNotGodCard = (z: Zone) => !isGodCard(z);
 
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
-  z.card.effect &&
-  !!monsterFlipEffectReducers[z.card.name as FlipEffectMonster];
+  z.card.effect && !!flipEffectReducers[z.card.name as FlipEffectMonster];
 
 export const hasTrapCounterAttackEffect = (z: OccupiedMonsterZone) =>
-  !!counterAttackTrapReducers[z.card.name as CounterAttackTrap];
+  !!counterAttackReducers[z.card.name as CounterAttackCard];
 
 export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
-  !!counterSpellTrapReducers[z.card.name as CounterSpellTrap];
+  !!counterSpellReducers[z.card.name as CounterSpellCard];
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;

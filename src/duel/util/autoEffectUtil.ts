@@ -1,9 +1,9 @@
+import { graveyardEffects } from "../cardEffects/autoGraveyardEffects";
+import { handEffects } from "../cardEffects/autoHandEffects";
+import { autoMonsterEffects } from "../cardEffects/autoMonsterEffects";
+import { autoSpellTrapEffects } from "../cardEffects/autoSpellTrapEffects";
+import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
 import { Orientation, RowKey } from "../common";
-import { monsterGraveyardEffectReducers as graveyardReducers } from "../reducers/monsterGraveyardEffectReducers";
-import { monsterHandEffectReducers as handReducers } from "../reducers/monsterHandEffectReducers";
-import { monsterPermAutoEffectReducers as permReducers } from "../reducers/monsterPermAutoEffectReducers";
-import { monsterTempPowerUpReducers as tempReducers } from "../reducers/monsterTempPowerUpReducers";
-import { perpetualSpellTrapReducers as spellReducers } from "../reducers/perpetualSpellTrapReducers";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { getRow, updateMonsters } from "./rowUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
@@ -26,8 +26,8 @@ const recalcCombatStats = (state: Duel) => {
   resetRowCombatStats(state, dKey);
   resetRowCombatStats(state, otherDKey);
 
-  checkRowEffects(state, [dKey, RowKey.Monster], tempReducers);
-  checkRowEffects(state, [otherDKey, RowKey.Monster], tempReducers);
+  checkRowEffects(state, [dKey, RowKey.Monster], tempMonsterEffects);
+  checkRowEffects(state, [otherDKey, RowKey.Monster], tempMonsterEffects);
 
   calcRowCombatStats(state, [dKey, RowKey.Monster]);
   calcRowCombatStats(state, [otherDKey, RowKey.Monster]);
@@ -61,26 +61,24 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 };
 
 const checkPermAutoEffects = (state: Duel) => {
-  const { activeTurn } = state;
-
-  const dKey = activeTurn.duellistKey;
+  const dKey = state.activeTurn.duellistKey;
   const otherDKey = getOtherDuellistKey(dKey);
 
   // graveyard effects
-  checkRowEffects(state, [dKey, RowKey.Graveyard], graveyardReducers);
-  checkRowEffects(state, [otherDKey, RowKey.Graveyard], graveyardReducers);
+  checkRowEffects(state, [dKey, RowKey.Graveyard], graveyardEffects);
+  checkRowEffects(state, [otherDKey, RowKey.Graveyard], graveyardEffects);
 
   // monster (perm) effects
-  checkRowEffects(state, [dKey, RowKey.Monster], permReducers);
-  checkRowEffects(state, [otherDKey, RowKey.Monster], permReducers);
+  checkRowEffects(state, [dKey, RowKey.Monster], autoMonsterEffects);
+  checkRowEffects(state, [otherDKey, RowKey.Monster], autoMonsterEffects);
 
   // spell/trap effects
-  checkRowEffects(state, [dKey, RowKey.SpellTrap], spellReducers);
-  checkRowEffects(state, [otherDKey, RowKey.SpellTrap], spellReducers);
+  checkRowEffects(state, [dKey, RowKey.SpellTrap], autoSpellTrapEffects);
+  checkRowEffects(state, [otherDKey, RowKey.SpellTrap], autoSpellTrapEffects);
 
   // hand effects
-  checkRowEffects(state, [dKey, RowKey.Hand], handReducers);
-  checkRowEffects(state, [otherDKey, RowKey.Hand], handReducers);
+  checkRowEffects(state, [dKey, RowKey.Hand], handEffects);
+  checkRowEffects(state, [otherDKey, RowKey.Hand], handEffects);
 };
 
 const checkRowEffects = <T extends CardName>(

@@ -1,10 +1,10 @@
-import { CounterAttackTrap, Trap } from "../common";
+import { CounterAttackCard, Trap } from "../common";
 import { destroyRow } from "../util/rowUtil";
 import { trapDestroyAttacker } from "../util/wrappedUtil";
 import { immobiliseCard, permPowerDown } from "../util/zoneUtil";
 
-export const counterAttackTrapReducers: CardReducerMap<
-  CounterAttackTrap,
+export const counterAttackReducers: CardReducerMap<
+  CounterAttackCard,
   EffConReducer
 > = {
   [Trap.AmazonArchers]: (state) => {

@@ -60,7 +60,7 @@ import {
   xyzMergeAttempt,
 } from "../util/zoneUtil";
 
-export const monsterFlipEffectReducers: CardReducerMap<
+export const flipEffectReducers: CardReducerMap<
   FlipEffectMonster,
   DirectEffectReducer
 > = {
