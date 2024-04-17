@@ -29,10 +29,10 @@ type CustomDuelReducers = {
     coordsMap: K extends CardActionKey
       ? ZoneCoordsMap
       : K extends InteractionActionKey
-      ? ExtractSecondArg<(typeof interactionReducers)[K]>
-      : K extends DuelActionKey
-      ? ExtractSecondArg<(typeof duelReducers)[K]>
-      : DuellistCoordsMap
+        ? ExtractSecondArg<(typeof interactionReducers)[K]>
+        : K extends DuelActionKey
+          ? ExtractSecondArg<(typeof duelReducers)[K]>
+          : DuellistCoordsMap
   ) => void;
 };
 
@@ -43,10 +43,10 @@ type DuelReducers = {
       K extends CardActionKey
         ? ZoneCoordsMap
         : K extends InteractionActionKey
-        ? ExtractSecondArg<(typeof interactionReducers)[K]>
-        : K extends DuelActionKey
-        ? ExtractSecondArg<(typeof duelReducers)[K]>
-        : DuellistCoordsMap
+          ? ExtractSecondArg<(typeof interactionReducers)[K]>
+          : K extends DuelActionKey
+            ? ExtractSecondArg<(typeof duelReducers)[K]>
+            : DuellistCoordsMap
     >
   ) => void;
 };

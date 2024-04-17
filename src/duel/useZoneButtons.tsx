@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppSelector } from "../hooks";
 import { selectZone } from "./duelSlice";
 import { useDuelInteraction } from "./useDuelInteraction";

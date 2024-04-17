@@ -334,7 +334,7 @@ export const useDuelAI = () => {
   };
 
   useEffect(() => {
-    let decisionMakingTimeout: NodeJS.Timeout;
+    let decisionMakingTimeout: number;
     if (isCPU && isMyTurn) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();

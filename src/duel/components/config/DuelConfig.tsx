@@ -3,7 +3,7 @@ import { selectConfig } from "@/duel/duelSlice";
 import { useDuelActions } from "@/duel/useDuelActions";
 import { getDuellables } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { NumberField } from "./NumberField";
 import { SelectField } from "./SelectField";
 

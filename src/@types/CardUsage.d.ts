@@ -19,7 +19,7 @@ type CardReducerMap<
     | EffConReducer
     | MultiEffConReducer
     | DirectEffectReducer
-    | CardCondition
+    | CardCondition,
 > = {
   [key in K]: V;
 };

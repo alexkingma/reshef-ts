@@ -1,6 +1,5 @@
 import { getCardImage } from "@/common/image";
 import classNames from "classnames";
-import React from "react";
 import { MonsterStats } from "./MonsterStats";
 import { NumTributesIndicator } from "./NumTributesIndicator";
 

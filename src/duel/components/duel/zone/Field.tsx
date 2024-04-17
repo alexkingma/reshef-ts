@@ -2,7 +2,6 @@ import { RowKey } from "@/duel/common";
 import { selectFieldCard } from "@/duel/duelSlice";
 import { getCard } from "@/duel/util/cardUtil";
 import { useAppSelector } from "@/hooks";
-import React from "react";
 import { FaceUpCard } from "../card/FaceUpCard";
 import { InteractiveZone } from "./InteractiveZone";
 import { ZoneBackground } from "./ZoneBackground";

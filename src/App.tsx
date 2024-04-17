@@ -1,4 +1,3 @@
-import React from "react";
 import { Provider } from "react-redux";
 import "./App.scss";
 import { DuelContainer } from "./duel/components/DuelContainer";

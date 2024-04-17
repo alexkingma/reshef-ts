@@ -56,7 +56,7 @@ export const useDuellistActions = (dKey: DuellistKey) => {
 
 type InteractionActions = {
   [K in keyof typeof interactionReducers]: OmitFirstArg<
-    typeof interactionReducers[K]
+    (typeof interactionReducers)[K]
   >;
 };
 
@@ -78,7 +78,7 @@ export const useInteractionActions = () => {
 //  ----------------------------------------------------------------------- //
 
 type DuelActions = {
-  [K in keyof typeof duelReducers]: OmitFirstArg<typeof duelReducers[K]>;
+  [K in keyof typeof duelReducers]: OmitFirstArg<(typeof duelReducers)[K]>;
 };
 
 export const useDuelActions = () => {

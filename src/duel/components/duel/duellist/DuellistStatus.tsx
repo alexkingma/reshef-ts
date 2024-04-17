@@ -4,7 +4,6 @@ import { useDuellistActions } from "@/duel/useDuelActions";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
-import React from "react";
 import "./DuellistStatus.scss";
 
 interface Props {

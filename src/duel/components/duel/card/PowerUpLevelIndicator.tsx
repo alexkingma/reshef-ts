@@ -2,7 +2,6 @@ import { selectZone } from "@/duel/duelSlice";
 import { getFinalPowerUpLevel } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
-import React from "react";
 import "./CardIndicator.scss";
 
 interface Props {

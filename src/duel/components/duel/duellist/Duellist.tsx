@@ -1,7 +1,6 @@
 import { DuellistKey, RowKey } from "@/duel/common";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import classNames from "classnames";
-import React from "react";
 import { Counterweight } from "../zone/Counterweight";
 import { Deck } from "../zone/Deck";
 import { Field } from "../zone/Field";

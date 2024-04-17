@@ -1,5 +1,4 @@
 import { DuellistKey } from "@/duel/common";
-import React from "react";
 import "./Duel.scss";
 import { ZoneSummaryBar } from "./ZoneSummaryBar";
 import { Duellist } from "./duellist/Duellist";

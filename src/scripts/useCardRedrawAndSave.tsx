@@ -11,8 +11,7 @@ import spellImgSrc from "@/assets/images/spell.png";
 import trapImgSrc from "@/assets/images/trap.png";
 import { Monster } from "@/duel/common";
 import { getCard } from "@/duel/util/cardUtil";
-import JSZip from "jszip";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   getAlignmentImage,
   getOverrideImage,
@@ -65,7 +64,6 @@ const getCardBaseImgSrc = (card: Card) => {
 // "dual-panel" type that are visible in the Detail view,
 // NOT card-only images (no description/title, etc.).
 const useCardRedrawAndSave = () => {
-  const zip = new JSZip();
   const [data, setData] = useState([""]);
 
   const loadImage = async (imgSrc: string): Promise<HTMLImageElement> => {
@@ -92,10 +90,14 @@ const useCardRedrawAndSave = () => {
       cardPortrait = await loadImage(
         getReferenceAnimeImage(getCard(cardName).code)
       );
-    } catch {}
+    } catch {
+      /* empty */
+    }
     try {
       overridePortrait = await loadImage(getOverrideImage(card.name));
-    } catch {}
+    } catch {
+      /* empty */
+    }
     let alignmentIcon: HTMLImageElement;
     if (card.category === "Monster") {
       alignmentIcon = await loadImage(getAlignmentImage(card.alignment));
@@ -114,7 +116,7 @@ const useCardRedrawAndSave = () => {
       if (card.category === "Monster") {
         ctx.drawImage(alignmentIcon, 342, 436, 42, 42);
 
-        let { level } = card as MonsterCard;
+        const { level } = card as MonsterCard;
         const starSpacing = level === 12 ? 27 : 28;
         const offset = level >= 6 ? (level / 12) * 38 : 0;
         for (let i = 0; i < level; i++) {
@@ -154,6 +156,7 @@ const useCardRedrawAndSave = () => {
     });
   };
 
+  // const zip = new JSZip();
   // useEffect(() => {
   //   (async () => {
   //     await Promise.all(

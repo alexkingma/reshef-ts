@@ -6,12 +6,15 @@ import { Monster, Spell, Trap } from "../common";
 // every time card data needs to be fetched (100s of times per duel).
 // Measured to be on average 6-10x faster than array lookup, and
 // will scale better as new cards are added.
-const CARD_MAP = cards.reduce((map, dbCard) => {
-  return {
-    ...map,
-    [dbCard.name]: dbCard,
-  };
-}, {} as { [key in CardName]: DBCard });
+const CARD_MAP = cards.reduce(
+  (map, dbCard) => {
+    return {
+      ...map,
+      [dbCard.name]: dbCard,
+    };
+  },
+  {} as { [key in CardName]: DBCard }
+);
 
 export const getCard = <T extends CardName>(cardName: T): Card<T> => {
   const dbCard = CARD_MAP[cardName];

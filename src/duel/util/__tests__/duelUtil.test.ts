@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { DuellistKey, Monster, RowKey } from "../../common";
 import { getNewDuel } from "../duelUtil";
 import { getHighestAtkZoneIdx } from "../rowUtil";
@@ -6,7 +7,7 @@ import { generateOccupiedMonsterZone } from "../zoneUtil";
 describe("getHighestAtkZoneIdx", () => {
   const getState = (ownMonsters: (Monster | null)[]) => {
     const state = getNewDuel();
-    state.p1.monsterZones.forEach((z, i, zones) => {
+    state.p1.monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
     });

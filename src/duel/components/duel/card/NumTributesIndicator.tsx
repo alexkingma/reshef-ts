@@ -1,6 +1,5 @@
 import { getNumTributesRequired } from "@/duel/util/cardUtil";
 import classNames from "classnames";
-import React from "react";
 import "./CardIndicator.scss";
 
 interface Props {

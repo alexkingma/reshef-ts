@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { DuellistKey, Monster, RowKey } from "../../common";
 import { canAISummonMonster, getFaceUpTarget } from "../aiUtil";
 import { getNewDuel } from "../duelUtil";
@@ -9,11 +10,11 @@ describe("canAISummonMonster", () => {
     ownMonsters: (Monster | null)[]
   ) => {
     const state = getNewDuel();
-    state.p1.hand.forEach((z, i, zones) => {
+    state.p1.hand.forEach((_, i, zones) => {
       const c = hand[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
     });
-    state.p1.monsterZones.forEach((z, i, zones) => {
+    state.p1.monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
     });
@@ -94,11 +95,11 @@ describe("getFaceUpTarget", () => {
     otherMonsters: (Monster | null)[]
   ) => {
     const state: Duel = getNewDuel();
-    state.p1.monsterZones.forEach((z, i, zones) => {
+    state.p1.monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
     });
-    state.p2.monsterZones.forEach((z, i, zones) => {
+    state.p2.monsterZones.forEach((_, i, zones) => {
       const c = otherMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
     });

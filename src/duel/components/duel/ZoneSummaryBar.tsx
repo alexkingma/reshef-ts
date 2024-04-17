@@ -9,7 +9,6 @@ import {
 import { getFinalPowerUpLevel, isTrap } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
-import React from "react";
 import "./ZoneSummaryBar.scss";
 
 export const ZoneSummaryBar = () => {

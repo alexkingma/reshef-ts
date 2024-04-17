@@ -1,39 +1,12 @@
 {
+  "name": "reshef-ts",
+  "private": true,
   "scripts": {
-    "test": "jest --watch",
-    "build": "webpack",
-    "build:watch": "webpack --watch",
-    "start": "webpack serve"
-  },
-  "devDependencies": {
-    "@types/file-saver": "^2.0.7",
-    "@types/jest": "^29.5.12",
-    "@types/jszip": "^3.4.1",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
-    "@types/react-redux": "^7.1.33",
-    "@types/webpack-env": "^1.18.4",
-    "@typescript-eslint/eslint-plugin": "^7.7.0",
-    "@typescript-eslint/parser": "^7.7.0",
-    "css-loader": "^7.1.1",
-    "eslint": "^9.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "file-loader": "^6.2.0",
-    "file-saver": "^2.0.5",
-    "html-webpack-plugin": "^5.6.0",
-    "jszip": "^3.10.1",
-    "prettier": "^3.2.5",
-    "sass": "^1.75.0",
-    "sass-loader": "^14.2.1",
-    "style-loader": "^4.0.0",
-    "ts-jest": "^29.1.2",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
@@ -41,5 +14,26 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "@types/react-redux": "^7.1.33",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "prettier": "^3.2.5",
+    "sass": "^1.75.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.9",
+    "vitest": "^1.5.0"
   }
 }

@@ -15,7 +15,7 @@ export const initialiseDeck = (cardQuantMap: CardQuantityMap) => {
             isOccupied: true,
             card,
             orientation: Orientation.FaceDown,
-          } as OccupiedZone)
+          }) as OccupiedZone
       )
     );
     return deck;

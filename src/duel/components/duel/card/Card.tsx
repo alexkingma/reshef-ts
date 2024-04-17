@@ -4,7 +4,6 @@ import { isPlayer } from "@/duel/util/duellistUtil";
 import { isDefMode, isFaceUp, isMonster } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
-import React from "react";
 import "./Card.scss";
 import { FaceDownCard } from "./FaceDownCard";
 import { FaceUpCard } from "./FaceUpCard";

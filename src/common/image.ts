@@ -1,48 +1,35 @@
-const cardImageReqContext = require.context(
-  "@/assets/images/cards/",
-  false,
-  /\.(jpg|png)$/
+const cardImageGlob = import.meta.glob("@/assets/images/cards/*.{png,jpg}");
+const referenceCardImageGlob = import.meta.glob(
+  "@/assets/images/cards-all/*.{png,jpg}"
 );
-const referenceCardImageReqContext = require.context(
-  "@/assets/images/cards-all/",
-  false,
-  /\.(jpg|png)$/
+const alignmentImageGlob = import.meta.glob(
+  "@/assets/images/alignments/*.{png,jpg}"
 );
-const alignmentImageReqContext = require.context(
-  "@/assets/images/alignments/",
-  false,
-  /\.(jpg|png)$/
-);
-const typeImageReqContext = require.context(
-  "@/assets/images/type/",
-  false,
-  /\.(jpg|png)$/
-);
-const overrideImageReqContext = require.context(
-  "@/assets/images/cards-override/",
-  false,
-  /\.(jpg|png)$/
+const typeImageGlob = import.meta.glob("@/assets/images/type/*.{png,jpg}");
+const overrideImageGlob = import.meta.glob(
+  "@/assets/images/cards-override/*.{png,jpg}"
 );
 
-const buildImageMap = (reqContext: __WebpackModuleApi.RequireContext) => {
+const buildImageMap = (glob: Record<string, () => Promise<unknown>>) => {
   const map = {} as { [key: string]: string };
-  reqContext.keys().forEach((item) => {
+  for (const path in glob) {
+    const filename = path.split("/").pop()!;
     map[
-      item
+      filename
         .replace("./", "")
         .replace(".png", "")
         .replace(".jpg", "")
         .replace("-OW", "")
-    ] = reqContext(item).default;
-  });
+    ] = new URL(path, import.meta.url).href;
+  }
   return map;
 };
 
-const animeImageMap = buildImageMap(cardImageReqContext);
-const alignmentImageMap = buildImageMap(alignmentImageReqContext);
-const typeImageMap = buildImageMap(typeImageReqContext);
-const overrideImageMap = buildImageMap(overrideImageReqContext);
-const referenceAnimeImageMap = buildImageMap(referenceCardImageReqContext);
+const animeImageMap = buildImageMap(cardImageGlob);
+const alignmentImageMap = buildImageMap(alignmentImageGlob);
+const typeImageMap = buildImageMap(typeImageGlob);
+const overrideImageMap = buildImageMap(overrideImageGlob);
+const referenceAnimeImageMap = buildImageMap(referenceCardImageGlob);
 
 export const cardNameToFilename = (cardName: string) =>
   cardName.replaceAll(/(\s|-|#|\.|'|,|&|\"|\(|\))/g, "");
