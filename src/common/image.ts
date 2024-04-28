@@ -31,11 +31,11 @@ const typeImageMap = buildImageMap(typeImageGlob);
 const overrideImageMap = buildImageMap(overrideImageGlob);
 const referenceAnimeImageMap = buildImageMap(referenceCardImageGlob);
 
+// filenames have no spaces or special characters
 export const cardNameToFilename = (cardName: string) =>
   cardName.replaceAll(/(\s|-|#|\.|'|,|&|\"|\(|\))/g, "");
 
-export const getCardImage = (cardName: CardName) => {
-  // filenames have no spaces or special characters
+export const getCardImage = (cardName: string) => {
   const condensedKey = cardNameToFilename(cardName);
   if (!animeImageMap[condensedKey]) {
     throw new Error(`Could not find image with key: ${cardName}`);
@@ -44,7 +44,6 @@ export const getCardImage = (cardName: CardName) => {
 };
 
 export const getAlignmentImage = (alignment: Alignment) => {
-  // filenames have no spaces or special characters
   if (!alignmentImageMap[alignment]) {
     throw new Error(`Could not find image of alignment: ${alignment}`);
   }
@@ -52,15 +51,13 @@ export const getAlignmentImage = (alignment: Alignment) => {
 };
 
 export const getTypeImage = (type: CardType) => {
-  // filenames have no spaces or special characters
   if (!typeImageMap[type]) {
     throw new Error(`Could not find image of type: ${type}`);
   }
   return typeImageMap[type];
 };
 
-export const getOverrideImage = (cardName: CardName) => {
-  // filenames have no spaces or special characters
+export const getOverrideImage = (cardName: string) => {
   const condensedKey = cardNameToFilename(cardName);
   if (!overrideImageMap[condensedKey]) {
     throw new Error(`Could not find image with key: ${condensedKey}`);
@@ -69,7 +66,6 @@ export const getOverrideImage = (cardName: CardName) => {
 };
 
 export const getReferenceAnimeImage = (code: number) => {
-  // filenames have no spaces or special characters
   if (!referenceAnimeImageMap[code]) {
     throw new Error(`Could not find image with code: ${code}`);
   }

@@ -27,7 +27,7 @@ export const duellistReducers = {
         state,
         zoneCoords
       ) as OccupiedMonsterZone;
-      specialSummon(state, otherDKey, card.name, { permPowerUpLevel });
+      specialSummon(state, otherDKey, card.id, { permPowerUpLevel });
       clearZone(state, zoneCoords);
     });
     ownActiveEffects.brainControlZones = [];
@@ -104,7 +104,7 @@ export const duellistReducers = {
     }
 
     // summon monster to field
-    specialSummon(state, dKey, originZone.card.name, {
+    specialSummon(state, dKey, originZone.card.id, {
       orientation: originZone.orientation,
     });
 

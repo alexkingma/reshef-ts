@@ -126,7 +126,7 @@ export const useDuelInteraction = (
       condition: (z: Zone) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
       effect: () => {
         setOriginZone(zoneCoords);
-        if (spellHasTarget(zone.card.name)) {
+        if (spellHasTarget(zone.card.id)) {
           setPendingAction(activateSpellEffectAction);
           setInteractionMode(InteractionMode.ChoosingOwnMonster);
           // TODO: set cursor to be on first monster

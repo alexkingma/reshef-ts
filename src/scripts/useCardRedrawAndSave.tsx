@@ -30,12 +30,12 @@ const getCardBaseImgSrc = (card: Card) => {
       Monster.BlackLusterSoldier,
       Monster.MagicianOfBlackChaos,
       Monster.Relinquished,
-    ].includes(card.name as Monster)
+    ].includes(card.id)
   ) {
     img = frame_ritual;
-  } else if (card.name === Monster.ObeliskTheTormentor) {
+  } else if (card.id === Monster.ObeliskTheTormentor) {
     img = frame_obelisk;
-  } else if (card.name === Monster.SliferTheSkyDragon) {
+  } else if (card.id === Monster.SliferTheSkyDragon) {
     img = frame_slifer;
   } else if (card.name.includes("The Winged Dragon of Ra")) {
     img = frame_ra;
@@ -47,7 +47,7 @@ const getCardBaseImgSrc = (card: Card) => {
       Monster.LeftLegOfTheForbiddenOne,
       Monster.RightArmOfTheForbiddenOne,
       Monster.RightLegOfTheForbiddenOne,
-    ].includes(card.name as Monster)
+    ].includes(card.id)
   ) {
     img = frame_effectMonster;
   } else {
@@ -76,25 +76,23 @@ const useCardRedrawAndSave = () => {
     });
   };
 
-  const generateImgData = async (cardName: CardName): Promise<string> => {
+  const generateImgData = async (id: CardId): Promise<string> => {
     const canvas = document.createElement("canvas");
     canvas.width = 421;
     canvas.height = 574;
     const ctx = canvas.getContext("2d")!;
 
-    const card = getCard(cardName);
+    const card = getCard(id);
     const cardBase = await loadImage(getCardBaseImgSrc(card));
     let cardPortrait: HTMLImageElement;
     let overridePortrait: HTMLImageElement;
     try {
-      cardPortrait = await loadImage(
-        getReferenceAnimeImage(getCard(cardName).code)
-      );
+      cardPortrait = await loadImage(getReferenceAnimeImage(getCard(id).code));
     } catch {
       /* empty */
     }
     try {
-      overridePortrait = await loadImage(getOverrideImage(card.name));
+      overridePortrait = await loadImage(getOverrideImage(card.id));
     } catch {
       /* empty */
     }

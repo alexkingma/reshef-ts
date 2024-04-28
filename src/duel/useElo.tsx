@@ -2,26 +2,31 @@ import { useAppSelector } from "@/hooks";
 import cardEloMap from "../assets/cardElo.json";
 import duellistEloMap from "../assets/duellistElo.json";
 import { selectDuel } from "./duelSlice";
+import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";
 import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
 
 interface EloMap {
-  [key: string]: { elo: number };
+  [key: string]: {
+    wins: number;
+    losses: number;
+    elo: number;
+  };
 }
 
 const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
   return Object.entries(cardQuantMap).reduce((deck, [card, quant]) => {
     for (let i = 0; i < quant; i++) {
-      deck.push(card as CardName);
+      deck.push(parseInt(card) as CardId);
     }
     return deck;
-  }, [] as CardName[]);
+  }, [] as CardId[]);
 };
 
 const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   // remove cards that never made it out of the deck pile, since those
   // didn't contribute to the outcome of the duel one way or another
-  const unusedCards: CardName[] = deck.map((z) => z.card.name);
+  const unusedCards: CardId[] = deck.map((z) => z.card.id);
   const entireDeck = cardQuantMapToDeck(deckTemplate);
 
   unusedCards.forEach((c) => {
@@ -38,9 +43,10 @@ const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   return entireDeck;
 };
 
-const getAvgCardElo = (deck: CardName[]) => {
+const getAvgCardElo = (deck: CardId[]) => {
   const totalDeckElo = deck.reduce((total, card) => {
-    return total + cardEloMap[card].elo;
+    const { name } = getCard(card);
+    return total + (cardEloMap as EloMap)[name].elo;
   }, 0);
   return totalDeckElo / deck.length;
 };
@@ -92,13 +98,15 @@ export const useElo = () => {
     );
 
     for (const card of winnerDeck) {
-      cardEloMap[card].wins++;
-      cardEloMap[card].elo += ratingGain;
+      const { name } = getCard(card);
+      (cardEloMap as EloMap)[name].wins++;
+      (cardEloMap as EloMap)[name].elo += ratingGain;
     }
 
     for (const card of loserDeck) {
-      cardEloMap[card].losses++;
-      cardEloMap[card].elo += ratingLoss;
+      const { name } = getCard(card);
+      (cardEloMap as EloMap)[name].losses++;
+      (cardEloMap as EloMap)[name].elo += ratingLoss;
     }
 
     return sortEloMap(cardEloMap);

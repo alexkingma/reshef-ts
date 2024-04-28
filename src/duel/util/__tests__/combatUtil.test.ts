@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from "vitest";
-import { BattlePosition, RowKey } from "../../common";
+import { BattlePosition, Monster, RowKey } from "../../common";
 import { getNewDuel } from "../duelUtil";
 import { calculateAttack, generateOccupiedMonsterZone } from "../zoneUtil";
 
@@ -21,7 +21,7 @@ const getState = (
   return state;
 };
 
-const createZone = (cardName: CardName): OccupiedMonsterZone => ({
+const createZone = (cardName: CardId): OccupiedMonsterZone => ({
   ...generateOccupiedMonsterZone(cardName),
 });
 
@@ -29,13 +29,13 @@ const originCoords: ZoneCoords = ["p1", RowKey.Monster, 0];
 const targetCoords: ZoneCoords = ["p2", RowKey.Monster, 0];
 
 beforeEach(() => {
-  dark_700_600 = createZone("Phantom Dewan");
-  dark_800_700 = createZone("Nemuriko");
-  dark_2500_2100 = createZone("Dark Magician");
-  dreams_700_700 = createZone("The Bewitching Phantom Thief");
-  dreams_2800_2000 = createZone("Mirage Knight");
-  light_700_600 = createZone("Hourglass of Life");
-  light_3000_2500 = createZone("Blue-Eyes White Dragon");
+  dark_700_600 = createZone(Monster.PhantomDewan);
+  dark_800_700 = createZone(Monster.Nemuriko);
+  dark_2500_2100 = createZone(Monster.DarkMagician);
+  dreams_700_700 = createZone(Monster.TheBewitchingPhantomThief);
+  dreams_2800_2000 = createZone(Monster.MirageKnight);
+  light_700_600 = createZone(Monster.HourglassOfLife);
+  light_3000_2500 = createZone(Monster.BlueEyesWhiteDragon);
 });
 
 describe("neutral alignment", () => {

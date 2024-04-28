@@ -120,7 +120,7 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.PumpkingTheKingOfGhosts]: (state, { ownMonsters }) => {
-    const cards: CardName[] = [
+    const cards: CardId[] = [
       Monster.ArmoredZombie,
       Monster.DragonZombie,
       Monster.ClownZombie,
@@ -129,7 +129,7 @@ export const tempMonsterEffects: CardReducerMap<
       state,
       ownMonsters,
       (z) => z.tempPowerUpLevel++,
-      (z) => cards.includes(z.card.name)
+      (z) => cards.includes(z.card.id)
     );
     return [effCon];
   },
@@ -138,7 +138,7 @@ export const tempMonsterEffects: CardReducerMap<
       state,
       ownMonsters,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
-      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior2
+      (z: OccupiedMonsterZone) => z.card.id === Monster.MWarrior2
     );
     return [effCon];
   },
@@ -147,7 +147,7 @@ export const tempMonsterEffects: CardReducerMap<
       state,
       ownMonsters,
       (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
-      (z: OccupiedMonsterZone) => z.card.name === Monster.MWarrior1
+      (z: OccupiedMonsterZone) => z.card.id === Monster.MWarrior1
     );
     return [effCon];
   },
@@ -241,7 +241,7 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.DarkMagicianGirl]: (state, { dKey }) => {
-    const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
+    const isDarkMagician = (c: MonsterCard) => c.id === Monster.DarkMagician;
     const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[state, dKey, isDarkMagician]]
@@ -249,7 +249,7 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.ToonDarkMagicianGirl]: (state, { dKey }) => {
-    const isDarkMagician = (c: MonsterCard) => c.name === Monster.DarkMagician;
+    const isDarkMagician = (c: MonsterCard) => c.id === Monster.DarkMagician;
     const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[state, dKey, isDarkMagician]]

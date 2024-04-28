@@ -216,7 +216,7 @@ export const flipEffectReducers: CardReducerMap<
     );
     if (handIdx === -1) return; // no insect to summon
     const { card } = state[dKey].hand[handIdx] as OccupiedZone;
-    specialSummon(state, dKey, card.name);
+    specialSummon(state, dKey, card.id);
 
     clearZone(state, [...ownHand, handIdx]);
   },

@@ -1,6 +1,7 @@
 import { RowKey } from "@/duel/common";
 import { selectFieldCard } from "@/duel/duelSlice";
 import { getCard } from "@/duel/util/cardUtil";
+import { getFieldCardId } from "@/duel/util/fieldUtil";
 import { useAppSelector } from "@/hooks";
 import { FaceUpCard } from "../card/FaceUpCard";
 import { InteractiveZone } from "./InteractiveZone";
@@ -18,7 +19,7 @@ export const Field = ({ duellistKey }: Props) => {
       {fieldCardName ? (
         <div className="cardContainer">
           <FaceUpCard
-            card={getCard(fieldCardName as FieldName)}
+            card={getCard(getFieldCardId(fieldCardName))}
             customClasses="alwaysVisible"
           />
         </div>

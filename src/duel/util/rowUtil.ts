@@ -103,30 +103,30 @@ export const getLowestAtkZoneIdx = (
 export const getFirstSpecficCardIdx = (
   state: Duel,
   [dKey, rKey]: RowCoords,
-  cardName: CardName
+  id: CardId
 ) => {
   const row = state[dKey][rKey];
-  return row.findIndex((z) => z.isOccupied && z.card.name === cardName);
+  return row.findIndex((z) => z.isOccupied && z.card.id === id);
 };
 
 export const rowContainsAnyCards = (
   state: Duel,
   rowCoords: RowCoords,
-  ...cardNames: CardName[]
+  ...ids: CardId[]
 ) => {
-  return cardNames.some((c) =>
-    hasMatchInRow(state, rowCoords, (z) => z.card.name === c)
+  return ids.some((c) =>
+    hasMatchInRow(state, rowCoords, (z) => z.card.id === c)
   );
 };
 
 export const rowContainsAllCards = (
   state: Duel,
   rowCoords: RowCoords,
-  ...cardNames: CardName[]
+  ...ids: CardId[]
 ) => {
   // all provided cards must be present in the given row
   // alternatively: none of the provided cards may NOT be present
-  return cardNames.every((c) => rowContainsAnyCards(state, rowCoords, c));
+  return ids.every((c) => rowContainsAnyCards(state, rowCoords, c));
 };
 
 export const hasMatchInRow = (
@@ -309,7 +309,7 @@ export const checkTriggeredTraps = <
   for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
     if (!z.isOccupied) continue;
     if (isTrap(z)) {
-      const reducer = trapReducers[z.card.name as T];
+      const reducer = trapReducers[z.card.id as T];
       if (!reducer) continue;
 
       const { condition, effect } = reducer(state, coordsMap);

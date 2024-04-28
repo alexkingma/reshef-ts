@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   selectActiveTurn,
   selectConfig,

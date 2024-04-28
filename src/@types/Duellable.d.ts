@@ -6,12 +6,12 @@ interface Duellable {
   payout: number;
   dc: 0 | 1 | 3 | 10 | 20;
   field: Field;
-  ante: CardName[];
+  ante: CardId[];
   inRoute: boolean;
 }
 
 type CardQuantityMap = {
-  [card in CardName]?: number;
+  [id in CardId]?: number;
 };
 
 type DuellableName =

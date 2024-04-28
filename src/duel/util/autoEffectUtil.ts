@@ -81,7 +81,7 @@ const checkPermAutoEffects = (state: Duel) => {
   checkRowEffects(state, [otherDKey, RowKey.Hand], handEffects);
 };
 
-const checkRowEffects = <T extends CardName>(
+const checkRowEffects = <T extends CardId>(
   state: Duel,
   rowCoords: RowCoords,
   reducerMap: CardReducerMap<T, MultiEffConReducer>
@@ -93,7 +93,7 @@ const checkRowEffects = <T extends CardName>(
     const zone = getZone(state, zoneCoords);
     if (!zone.isOccupied) return;
 
-    const reducer = reducerMap[zone.card.name as T];
+    const reducer = reducerMap[zone.card.id as T];
     if (!reducer) return;
 
     const conEffectPairs = reducer(state, coordsMap);

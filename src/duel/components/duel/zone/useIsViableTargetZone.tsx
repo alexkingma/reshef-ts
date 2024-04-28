@@ -29,7 +29,7 @@ export const useIsViableTargetZone = (zoneCoords: ZoneCoords) => {
         isOwn &&
         isMonsterZone &&
         hasCard &&
-        isValidSpellTarget(originZone.card.name, targetZone.card.name)
+        isValidSpellTarget(originZone.card.id, targetZone.card.id)
       );
     case InteractionMode.ChoosingOwnMonsterZone:
       // origin is own monster normal summon

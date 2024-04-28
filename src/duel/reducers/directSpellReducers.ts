@@ -156,15 +156,15 @@ export const spellEffectReducers: CardReducerMap<
     const { targetCoords } = state.interaction;
     const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
     // TODO: should it special summon in same orientation as original card?
-    if (z.card.name === Monster.Zoa) {
+    if (z.card.id === Monster.Zoa) {
       specialSummonAtCoords(state, targetCoords!, Monster.Metalzoa);
       return;
     }
-    if (z.card.name === Monster.JiraiGumo) {
+    if (z.card.id === Monster.JiraiGumo) {
       specialSummonAtCoords(state, targetCoords!, Monster.LauncherSpider);
       return;
     }
-    if (z.card.name === Monster.RedEyesBDragon) {
+    if (z.card.id === Monster.RedEyesBDragon) {
       specialSummonAtCoords(
         state,
         targetCoords!,

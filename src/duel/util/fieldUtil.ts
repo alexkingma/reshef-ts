@@ -1,8 +1,27 @@
 import { default as fieldMultiplierMap } from "@/assets/fields.json";
-import { Field, Orientation, RowKey } from "../common";
+import { Field, Orientation, RowKey, Spell } from "../common";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { clearZone, getZone } from "./zoneUtil";
+
+export const getFieldCardId = (field: Field): FieldId => {
+  switch (field) {
+    case Field.Yami:
+      return Spell.Yami;
+    case Field.Wasteland:
+      return Spell.Wasteland;
+    case Field.Mountain:
+      return Spell.Mountain;
+    case Field.Sogen:
+      return Spell.Sogen;
+    case Field.Umi:
+      return Spell.Umi;
+    case Field.Forest:
+      return Spell.Forest;
+    default:
+      throw new Error(`Unknown field: ${field}`);
+  }
+};
 
 export const getRandomFieldCard = () => {
   const fields = [
@@ -31,7 +50,7 @@ export const setActiveField = (
   } else {
     state[dKey].fieldZone[0] = {
       isOccupied: true,
-      card: getCard(field as FieldName) as Card<FieldName>,
+      card: getCard(getFieldCardId(field)),
       orientation: Orientation.FaceUp,
     };
   }

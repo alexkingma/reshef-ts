@@ -68,8 +68,8 @@ export const isAlignment = (
 
 export const isSpecificMonster = (
   z: Zone,
-  cardName: CardName
-): z is OccupiedMonsterZone => isMonster(z) && z.card.name === cardName;
+  id: CardId
+): z is OccupiedMonsterZone => isMonster(z) && z.card.id === id;
 
 export const isOrientation = (z: Zone, o: Orientation): z is OccupiedZone =>
   z.isOccupied && z.orientation === o;
@@ -87,26 +87,26 @@ export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && z.isLocked;
 
 export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
-  const godCards: MonsterName[] = [
+  const godCards: CardId[] = [
     Monster.SliferTheSkyDragon,
     Monster.ObeliskTheTormentor,
     Monster.TheWingedDragonOfRaBattleMode,
     Monster.TheWingedDragonOfRaSphereMode,
     Monster.TheWingedDragonOfRaPhoenixMode,
   ];
-  return isMonster(z) && godCards.includes(z.card.name);
+  return isMonster(z) && godCards.includes(z.card.id);
 };
 
 export const isNotGodCard = (z: Zone) => !isGodCard(z);
 
 export const hasManualEffect = (z: OccupiedMonsterZone) =>
-  z.card.effect && !!flipEffectReducers[z.card.name as FlipEffectMonster];
+  z.card.effect && !!flipEffectReducers[z.card.id as FlipEffectMonster];
 
 export const hasTrapCounterAttackEffect = (z: OccupiedMonsterZone) =>
-  !!counterAttackReducers[z.card.name as CounterAttackCard];
+  !!counterAttackReducers[z.card.id as CounterAttackCard];
 
 export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
-  !!counterSpellReducers[z.card.name as CounterSpellCard];
+  !!counterSpellReducers[z.card.id as CounterSpellCard];
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
@@ -154,7 +154,7 @@ export const destroyAtCoords = (
   const z = getZone(state, coords);
   if (!z.isOccupied || (!allowGodDestruction && isGodCard(z))) return;
   if (isMonster(z)) {
-    addToGraveyard(state, dKey, z.card.name);
+    addToGraveyard(state, dKey, z.card.id);
   }
   clearZone(state, coords);
 };
@@ -266,13 +266,13 @@ export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 export const specialSummon = (
   state: Duel,
   dKey: DuellistKey,
-  cardName: CardName,
+  id: CardId,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
   try {
     const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
     const destCoords: ZoneCoords = [dKey, RowKey.Monster, zoneIdx];
-    specialSummonAtCoords(state, destCoords, cardName, customProps);
+    specialSummonAtCoords(state, destCoords, id, customProps);
 
     // sometimes we need to know which zone was just auto-summoned to
     return destCoords;
@@ -284,12 +284,12 @@ export const specialSummon = (
 export const specialSummonAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  cardName: CardName,
+  id: CardId,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
   const zone = getZone(state, zoneCoords) as MonsterZone;
   Object.assign(zone, {
-    ...generateOccupiedMonsterZone(cardName),
+    ...generateOccupiedMonsterZone(id),
     ...customProps,
   });
 };
@@ -297,7 +297,7 @@ export const specialSummonAtCoords = (
 export const setSpellTrap = (
   state: Duel,
   dKey: DuellistKey,
-  cardName: CardName,
+  id: CardId,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
   try {
@@ -305,7 +305,7 @@ export const setSpellTrap = (
     setSpellTrapAtCoords(
       state,
       [dKey, RowKey.SpellTrap, zoneIdx],
-      cardName,
+      id,
       customProps
     );
   } catch (e) {
@@ -316,13 +316,13 @@ export const setSpellTrap = (
 export const setSpellTrapAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  cardName: CardName,
+  id: CardId,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
   const zone = getZone(state, zoneCoords) as SpellTrapZone;
   Object.assign(zone, {
     isOccupied: true,
-    card: getCard(cardName),
+    card: getCard(id),
     orientation: Orientation.FaceDown,
     ...customProps,
   });
@@ -415,7 +415,7 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
   const conversionCoords = specialSummon(
     state,
     originatorKey,
-    targetZone.card.name,
+    targetZone.card.id,
     { permPowerUpLevel: targetZone.permPowerUpLevel }
   )!;
   clearZone(state, targetCoords);
@@ -431,7 +431,7 @@ export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
     const targetZone = getZone(state, coords) as OccupiedZone;
     state[dKey].hand[handIdx] = {
       isOccupied: true,
-      card: getCard(targetZone.card.name),
+      card: getCard(targetZone.card.id),
       orientation: Orientation.FaceDown,
     };
     clearZone(state, coords);
@@ -441,11 +441,11 @@ export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
 };
 
 export const generateOccupiedMonsterZone = (
-  cardName: CardName
+  id: CardId
 ): OccupiedMonsterZone => ({
   // use this to avoid boilerplate elsewhere
   isOccupied: true,
-  card: getCard(cardName) as MonsterCard,
+  card: getCard(id) as MonsterCard,
   battlePosition: BattlePosition.Attack,
   orientation: Orientation.FaceUp,
   isLocked: false,
@@ -456,7 +456,7 @@ export const generateOccupiedMonsterZone = (
 export const postDirectMonsterAction = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  originalCardName: CardName
+  originalCardId: CardId
 ) => {
   // After attacking or manually activating an effect,
   // that monster should be flipped/locked, etc.
@@ -464,7 +464,7 @@ export const postDirectMonsterAction = (
   // The exception is if the monster has destroyed/replaced itself
   // (e.g. special summoning another monster in its place).
   const zonePostAction = getZone(state, zoneCoords);
-  if (!isSpecificMonster(zonePostAction, originalCardName)) return;
+  if (!isSpecificMonster(zonePostAction, originalCardId)) return;
 
   zonePostAction.battlePosition = BattlePosition.Attack;
   zonePostAction.orientation = Orientation.FaceUp;

@@ -5,7 +5,6 @@ import {
   DirectSpell,
   FlipEffectMonster,
   RowKey,
-  Spell,
 } from "./common";
 import {
   actions,
@@ -118,19 +117,16 @@ export const useDuelAI = () => {
 
       const originCoords: ZoneCoords = [dKey, RowKey.SpellTrap, i];
       const coordsMap = getZoneCoordsMap(originCoords);
-      const condition = spellUsageMap[originZone.card.name as DirectSpell];
+      const condition = spellUsageMap[originZone.card.id as DirectSpell];
       if (!condition || !condition(state, coordsMap)) continue;
 
       setOriginZone(originCoords);
-      if (spellHasTarget(originZone.card.name)) {
+      if (spellHasTarget(originZone.card.id)) {
         const targetIdx = getFirstOccupiedZoneIdx(
           state,
           ownMonsters,
           (targetZone) =>
-            isValidSpellTarget(
-              originZone.card.name as Spell,
-              targetZone.card.name
-            )
+            isValidSpellTarget(originZone.card.id, targetZone.card.id)
         );
         if (targetIdx === -1) continue;
         setTargetZone([dKey, RowKey.Monster, targetIdx]);
@@ -187,7 +183,7 @@ export const useDuelAI = () => {
       const originCoords: ZoneCoords = [dKey, RowKey.Monster, i];
       const coordsMap = getZoneCoordsMap(originCoords);
       const condition =
-        monsterUsageMap[originZone.card.name as FlipEffectMonster];
+        monsterUsageMap[originZone.card.id as FlipEffectMonster];
       if (!condition || !condition(state, coordsMap)) continue;
 
       setOriginZone(originCoords);
@@ -334,7 +330,7 @@ export const useDuelAI = () => {
   };
 
   useEffect(() => {
-    let decisionMakingTimeout: number;
+    let decisionMakingTimeout: NodeJS.Timeout;
     if (isCPU && isMyTurn) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();

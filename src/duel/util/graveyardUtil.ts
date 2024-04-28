@@ -13,17 +13,13 @@ export const isGraveyardEmpty = (state: Duel, dKey: DuellistKey) => {
 
 export const getGraveyardCard = (state: Duel, dKey: DuellistKey) => {
   const gy = state[dKey].graveyard[0] as OccupiedMonsterZone;
-  return gy.card.name;
+  return gy.card.id;
 };
 
-export const addToGraveyard = (
-  state: Duel,
-  dKey: DuellistKey,
-  cardName: CardName
-) => {
+export const addToGraveyard = (state: Duel, dKey: DuellistKey, id: CardId) => {
   state[dKey].graveyard[0] = {
     isOccupied: true,
-    card: getCard(cardName),
+    card: getCard(id),
     orientation: Orientation.FaceUp,
   };
 };
@@ -31,10 +27,10 @@ export const addToGraveyard = (
 export const graveyardContainsCards = (
   state: Duel,
   dKey: DuellistKey,
-  ...cardNames: CardName[]
+  ...ids: CardId[]
 ) => {
   if (isGraveyardEmpty(state, dKey)) return false;
-  return cardNames.some((c) => c === getGraveyardCard(state, dKey));
+  return ids.some((c) => c === getGraveyardCard(state, dKey));
 };
 
 export const resurrectOwn = (state: Duel, dKey: DuellistKey) => {

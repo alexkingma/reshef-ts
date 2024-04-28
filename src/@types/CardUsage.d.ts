@@ -14,7 +14,7 @@ type MultiEffConReducer = (
 type DirectEffectReducer = CardEffect;
 
 type CardReducerMap<
-  K extends CardName,
+  K extends CardId,
   V extends
     | EffConReducer
     | MultiEffConReducer

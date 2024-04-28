@@ -1,8 +1,8 @@
 import { duellists } from "../../assets/duellists";
 import { BattlePosition, DuellistStatus, Orientation, RowKey } from "../common";
-import { getCard, getRandomCardName } from "./cardUtil";
+import { getCard, getRandomCardId } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
-import { getRandomFieldCard } from "./fieldUtil";
+import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";
 import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
 export const getRandomDuellistState = (): Duellist => {
@@ -20,7 +20,7 @@ export const getRandomDuellistState = (): Duellist => {
     graveyard: [
       {
         isOccupied: true,
-        card: getCard(getRandomCardName({ category: "Monster" })),
+        card: getCard(getRandomCardId({ category: "Monster" })),
         orientation: Orientation.FaceUp,
       },
     ],
@@ -28,7 +28,7 @@ export const getRandomDuellistState = (): Duellist => {
       rand()
         ? { isOccupied: false }
         : {
-            ...generateOccupiedMonsterZone(getRandomCardName({ effect: true })),
+            ...generateOccupiedMonsterZone(getRandomCardId({ effect: true })),
             battlePosition: rand()
               ? BattlePosition.Attack
               : BattlePosition.Defence,
@@ -43,7 +43,7 @@ export const getRandomDuellistState = (): Duellist => {
             isOccupied: true,
             orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
             card: getCard(
-              getRandomCardName({ category: rand() ? "Trap" : "Magic" })
+              getRandomCardId({ category: rand() ? "Trap" : "Magic" })
             ) as SpellOrTrapOrRitualCard,
           }
     ),
@@ -54,7 +54,7 @@ export const getRandomDuellistState = (): Duellist => {
     fieldZone: [
       {
         isOccupied: true,
-        card: getCard(getRandomFieldCard() as FieldName),
+        card: getCard(getFieldCardId(getRandomFieldCard())),
         orientation: Orientation.FaceUp,
       },
     ],
@@ -87,7 +87,7 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
       isDuellable && getDuellable(name).field !== "Arena"
         ? {
             isOccupied: true,
-            card: getCard(getDuellable(name).field as FieldName),
+            card: getCard(getFieldCardId(getDuellable(name).field)),
             orientation: Orientation.FaceUp,
           }
         : { isOccupied: false },

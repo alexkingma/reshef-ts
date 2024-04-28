@@ -1,11 +1,11 @@
 import { DuellistStatus, Orientation, RowKey } from "../common";
-import { getCard, getRandomCardName } from "./cardUtil";
+import { getCard, getRandomCardId } from "./cardUtil";
 import { shuffle } from "./common";
 import { getFirstEmptyZoneIdx } from "./rowUtil";
 
 export const initialiseDeck = (cardQuantMap: CardQuantityMap) => {
-  const deck = Object.entries(cardQuantMap).reduce((deck, [cardName, qty]) => {
-    const card = getCard(cardName as CardName);
+  const deck = Object.entries(cardQuantMap).reduce((deck, [id, qty]) => {
+    const card = getCard(parseInt(id) as CardId);
     const cards: Card[] = Array.from({ length: qty });
     cards.fill(card);
     deck.push(
@@ -31,12 +31,12 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
     numCardsRemaining -= quant;
 
     // don't overwrite existing cards in the map
-    let cardName;
+    let id;
     do {
-      cardName = getRandomCardName();
-    } while (cardName in map);
+      id = getRandomCardId();
+    } while (id in map);
 
-    map[cardName] = quant;
+    map[id] = quant;
   }
 
   return map;

@@ -13,7 +13,7 @@ import {
   Trap,
 } from "../common";
 
-type DialogueMap<K extends CardName> = {
+type DialogueMap<K extends CardId> = {
   [key in K]: string;
 };
 

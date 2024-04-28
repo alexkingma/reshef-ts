@@ -28,7 +28,7 @@ export const spellHasValidTarget =
   (spell: Spell) =>
   (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
     hasMatchInRow(state, ownMonsters, (z) =>
-      isValidSpellTarget(spell, z.card.name)
+      isValidSpellTarget(spell, z.card.id)
     );
 
 export const opponentHasSpellTrap =
@@ -43,20 +43,20 @@ export const onlyOpponentHasMonster =
     !hasMatchInRow(state, ownMonsters, condition);
 
 export const opponentHasMonster =
-  (condition?: (z: OccupiedZone<MonsterName>) => boolean) =>
+  (condition?: (z: OccupiedZone<MonsterId>) => boolean) =>
   (state: Duel, { otherMonsters }: ZoneCoordsMap) =>
     hasMatchInRow(state, otherMonsters, condition);
 
 export const selfHasMonster =
-  (condition?: (z: OccupiedZone<MonsterName>) => boolean) =>
+  (condition?: (z: OccupiedZone<MonsterId>) => boolean) =>
   (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
     hasMatchInRow(state, ownMonsters, condition);
 
 export const selfHasSpecificMonster = (...monsters: Monster[]) =>
-  selfHasMonster((z) => monsters.includes(z.card.name as Monster));
+  selfHasMonster((z) => monsters.includes(z.card.id));
 
 export const selfHasAllSpecificMonsters = (...monsters: Monster[]) =>
-  selfHasMonster((z) => monsters.every((m) => m === (z.card.name as Monster)));
+  selfHasMonster((z) => monsters.every((m) => m === z.card.id));
 
 export const hasEmptyMonsterZones =
   (numFreeZones: number = 1) =>

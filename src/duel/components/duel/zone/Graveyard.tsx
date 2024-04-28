@@ -17,10 +17,7 @@ export const Graveyard = ({ duellistKey }: Props) => {
     <InteractiveZone zoneCoords={[duellistKey, RowKey.Graveyard, 0]}>
       {z.isOccupied ? (
         <div className="cardContainer">
-          <FaceUpCard
-            card={getCard(z.card.name)}
-            customClasses="alwaysVisible"
-          />
+          <FaceUpCard card={getCard(z.card.id)} customClasses="alwaysVisible" />
         </div>
       ) : (
         <ZoneBackground customClasses="graveyardBackground" />

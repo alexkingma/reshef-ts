@@ -10,14 +10,17 @@ const CARD_MAP = cards.reduce(
   (map, dbCard) => {
     return {
       ...map,
-      [dbCard.name]: dbCard,
+      [dbCard.id]: dbCard,
     };
   },
-  {} as { [key in CardName]: DBCard }
+  {} as { [key in CardId]: DBCard }
 );
 
-export const getCard = <T extends CardName>(cardName: T): Card<T> => {
-  const dbCard = CARD_MAP[cardName];
+export const getCard = <T extends CardId>(id: T): Card<T> => {
+  const dbCard = CARD_MAP[id];
+  if (!dbCard) {
+    throw new Error(`Unknown card id: ${id}`);
+  }
   if (dbCard.category !== "Monster") {
     return dbCard;
   }
@@ -35,12 +38,12 @@ export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {
   );
 };
 
-export const getRandomCardName = (cardRules: Partial<Card> = {}): CardName => {
+export const getRandomCardId = (cardRules: Partial<Card> = {}): CardId => {
   let dbCard;
   do {
     dbCard = cards[Math.floor(Math.random() * cards.length)];
-  } while (!isCardMatch(getCard(dbCard.name), cardRules));
-  return dbCard.name;
+  } while (!isCardMatch(getCard(dbCard.id), cardRules));
+  return dbCard.id;
 };
 
 export const getExodiaCards = () => {

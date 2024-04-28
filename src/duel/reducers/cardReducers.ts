@@ -35,14 +35,14 @@ export const cardReducers = {
     // "unconverted" come turn end and wind up in the opponent's hands
     removeBrainControlZone(state, targetCoords!);
 
-    specialSummonAtCoords(state, targetCoords!, card.name, { orientation });
+    specialSummonAtCoords(state, targetCoords!, card.id, { orientation });
     state.activeTurn.hasNormalSummoned = true;
   },
   setSpellTrap: (state: Duel) => {
     const { originCoords, targetCoords } = state.interaction;
     const { card, orientation } = getZone(state, originCoords!) as OccupiedZone;
     clearZone(state, originCoords!);
-    setSpellTrapAtCoords(state, targetCoords!, card.name, { orientation });
+    setSpellTrapAtCoords(state, targetCoords!, card.id, { orientation });
   },
   attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { otherDKey } = coordsMap;
@@ -98,7 +98,7 @@ export const cardReducers = {
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
     const { card } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
-    const spellReducer = spellReducers[card.name as DirectSpell];
+    const spellReducer = spellReducers[card.id as DirectSpell];
     if (!spellReducer) {
       console.log(`Spell effect not implemented for card: ${card.name}`);
       return;
@@ -120,20 +120,20 @@ export const cardReducers = {
   activateMonsterFlipEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
     const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    const originalCardName = originalZone.card.name as FlipEffectMonster;
-    const flipReducer = flipReducers[originalCardName];
+    const originalCard = originalZone.card;
+    const flipReducer = flipReducers[originalCard.id as FlipEffectMonster];
 
     if (!flipReducer) {
-      console.log(`Flip effect not implemented for card: ${originalCardName}`);
+      console.log(`Flip effect not implemented for card: ${originalCard}`);
       return;
     }
 
     if (flipReducer) {
-      console.log(`%c${originalCardName}`, "color: #D45420;");
+      console.log(`%c${originalCard.name}`, "color: #D45420;");
       flipReducer(state, coordsMap);
 
       // lock/flip/etc.
-      postDirectMonsterAction(state, zoneCoords, originalCardName);
+      postDirectMonsterAction(state, zoneCoords, originalCard.id);
     }
   },
 };
