@@ -1,5 +1,5 @@
 {
-  "ChangeOfHeart": {
+  "Change of Heart": {
     "elo": 6376,
     "wins": 3611,
     "losses": 683
@@ -19,7 +19,7 @@
     "wins": 3183,
     "losses": 1047
   },
-  "SwordsOfRevealing Light": {
+  "Swords of Revealing Light": {
     "elo": 5176,
     "wins": 3035,
     "losses": 1210
@@ -129,7 +129,7 @@
     "wins": 2692,
     "losses": 1495
   },
-  "La Jinn the Mystical GenieOfthe Lamp": {
+  "La Jinn the Mystical Genie of the Lamp": {
     "elo": 4145,
     "wins": 2773,
     "losses": 1461
@@ -194,7 +194,7 @@
     "wins": 2661,
     "losses": 1491
   },
-  "CastleOfDark Illusions": {
+  "Castle of Dark Illusions": {
     "elo": 3927,
     "wins": 2707,
     "losses": 1597
@@ -209,7 +209,7 @@
     "wins": 2800,
     "losses": 1552
   },
-  "GuardianOfthe Throne Room": {
+  "Guardian of the Throne Room": {
     "elo": 3907,
     "wins": 2696,
     "losses": 1601
@@ -259,7 +259,7 @@
     "wins": 2681,
     "losses": 1641
   },
-  "EmbodimentOfApophis": {
+  "Embodiment of Apophis": {
     "elo": 3701,
     "wins": 2591,
     "losses": 1721
@@ -294,7 +294,7 @@
     "wins": 2546,
     "losses": 1627
   },
-  "FairyOfthe Fountain": {
+  "Fairy of the Fountain": {
     "elo": 3631,
     "wins": 2680,
     "losses": 1622
@@ -304,7 +304,7 @@
     "wins": 2532,
     "losses": 1695
   },
-  "SpiritOfthe Books": {
+  "Spirit of the Books": {
     "elo": 3582,
     "wins": 2696,
     "losses": 1742
@@ -349,7 +349,7 @@
     "wins": 2463,
     "losses": 1811
   },
-  "CocoonOfEvolution": {
+  "Cocoon of Evolution": {
     "elo": 3485,
     "wins": 2454,
     "losses": 1753
@@ -454,7 +454,7 @@
     "wins": 2463,
     "losses": 1813
   },
-  "AxeOfDespair": {
+  "Axe of Despair": {
     "elo": 3328,
     "wins": 2508,
     "losses": 1818
@@ -479,7 +479,7 @@
     "wins": 2430,
     "losses": 1814
   },
-  "MaidenOfthe Moonlight": {
+  "Maiden of the Moonlight": {
     "elo": 3317,
     "wins": 2420,
     "losses": 1853
@@ -499,7 +499,7 @@
     "wins": 2414,
     "losses": 1774
   },
-  "HornOfthe Unicorn": {
+  "Horn of the Unicorn": {
     "elo": 3290,
     "wins": 2563,
     "losses": 1856
@@ -549,7 +549,7 @@
     "wins": 2433,
     "losses": 1868
   },
-  "HornOfLight": {
+  "Horn of Light": {
     "elo": 3250,
     "wins": 2422,
     "losses": 1800
@@ -574,12 +574,12 @@
     "wins": 2360,
     "losses": 1923
   },
-  "Giant SoldierOfStone": {
+  "Giant Soldier of Stone": {
     "elo": 3220,
     "wins": 2388,
     "losses": 1850
   },
-  "The ImmortalOfThunder": {
+  "The Immortal of Thunder": {
     "elo": 3214,
     "wins": 2428,
     "losses": 1808
@@ -614,7 +614,7 @@
     "wins": 2335,
     "losses": 1990
   },
-  "Gazelle the KingOfMythical Beasts": {
+  "Gazelle the King of Mythical Beasts": {
     "elo": 3195,
     "wins": 2452,
     "losses": 1799
@@ -664,12 +664,12 @@
     "wins": 2399,
     "losses": 1867
   },
-  "SenjuOfthe Thousand Hands": {
+  "Senju of the Thousand Hands": {
     "elo": 3123,
     "wins": 2342,
     "losses": 1864
   },
-  "BaronOfthe Fiend Sword": {
+  "Baron of the Fiend Sword": {
     "elo": 3122,
     "wins": 2471,
     "losses": 1800
@@ -754,7 +754,7 @@
     "wins": 2299,
     "losses": 1967
   },
-  "Winged Dragon, GuardianOfthe Fortress #1": {
+  "Winged Dragon, Guardian of the Fortress #1": {
     "elo": 3022,
     "wins": 2282,
     "losses": 1914
@@ -804,7 +804,7 @@
     "wins": 2225,
     "losses": 1995
   },
-  "The Gross GhostOfFled Dreams": {
+  "The Gross Ghost of Fled Dreams": {
     "elo": 2993,
     "wins": 2372,
     "losses": 1966
@@ -819,7 +819,7 @@
     "wins": 2249,
     "losses": 1926
   },
-  "WallOfIllusion": {
+  "Wall of Illusion": {
     "elo": 2979,
     "wins": 2216,
     "losses": 2027
@@ -844,7 +844,7 @@
     "wins": 2247,
     "losses": 2083
   },
-  "Insect SoldiersOfthe Sky": {
+  "Insect Soldiers of the Sky": {
     "elo": 2957,
     "wins": 2219,
     "losses": 2049
@@ -874,12 +874,12 @@
     "wins": 2190,
     "losses": 2046
   },
-  "CurtainOfthe Dark Ones": {
+  "Curtain of the Dark Ones": {
     "elo": 2932,
     "wins": 2171,
     "losses": 2119
   },
-  "ExileOfthe Wicked": {
+  "Exile of the Wicked": {
     "elo": 2931,
     "wins": 2251,
     "losses": 2029
@@ -894,7 +894,7 @@
     "wins": 2213,
     "losses": 1997
   },
-  "SpiritOfthe Harp": {
+  "Spirit of the Harp": {
     "elo": 2923,
     "wins": 2289,
     "losses": 1985
@@ -924,7 +924,7 @@
     "wins": 2232,
     "losses": 2087
   },
-  "PrincessOfTsurugi": {
+  "Princess of Tsurugi": {
     "elo": 2909,
     "wins": 2239,
     "losses": 2054
@@ -1084,7 +1084,7 @@
     "wins": 2211,
     "losses": 2077
   },
-  "AmazonOfthe Seas": {
+  "Amazon of the Seas": {
     "elo": 2834,
     "wins": 2283,
     "losses": 2044
@@ -1119,7 +1119,7 @@
     "wins": 2252,
     "losses": 2106
   },
-  "WitchOfthe Black Forest": {
+  "Witch of the Black Forest": {
     "elo": 2820,
     "wins": 2239,
     "losses": 2037
@@ -1139,7 +1139,7 @@
     "wins": 2189,
     "losses": 2023
   },
-  "PotOfGreed": {
+  "Pot of Greed": {
     "elo": 2812,
     "wins": 2261,
     "losses": 2007
@@ -1159,7 +1159,7 @@
     "wins": 2179,
     "losses": 1949
   },
-  "KingOfYamimakai": {
+  "King of Yamimakai": {
     "elo": 2809,
     "wins": 2273,
     "losses": 2081
@@ -1219,7 +1219,7 @@
     "wins": 2127,
     "losses": 2130
   },
-  "WarriorOfTradition": {
+  "Warrior of Tradition": {
     "elo": 2794,
     "wins": 2122,
     "losses": 2126
@@ -1239,7 +1239,7 @@
     "wins": 2128,
     "losses": 2056
   },
-  "Winged Dragon, GuardianOfthe Fortress #2": {
+  "Winged Dragon, Guardian of the Fortress #2": {
     "elo": 2792,
     "wins": 2178,
     "losses": 1985
@@ -1254,7 +1254,7 @@
     "wins": 2227,
     "losses": 2092
   },
-  "OgreOfthe Black Shadow": {
+  "Ogre of the Black Shadow": {
     "elo": 2788,
     "wins": 2160,
     "losses": 2125
@@ -1294,7 +1294,7 @@
     "wins": 2143,
     "losses": 2086
   },
-  "PowerOfKaishin": {
+  "Power of Kaishin": {
     "elo": 2774,
     "wins": 2173,
     "losses": 2103
@@ -1344,7 +1344,7 @@
     "wins": 2195,
     "losses": 2062
   },
-  "BanisherOfthe Light": {
+  "Banisher of the Light": {
     "elo": 2757,
     "wins": 2164,
     "losses": 2011
@@ -1419,7 +1419,7 @@
     "wins": 2177,
     "losses": 2086
   },
-  "MessengerOfPeace": {
+  "Messenger of Peace": {
     "elo": 2740,
     "wins": 2231,
     "losses": 2065
@@ -1459,7 +1459,7 @@
     "wins": 2184,
     "losses": 2175
   },
-  "Dark KingOfthe Abyss": {
+  "Dark King of the Abyss": {
     "elo": 2732,
     "wins": 2185,
     "losses": 2014
@@ -1469,7 +1469,7 @@
     "wins": 2288,
     "losses": 2035
   },
-  "LadyOfFaith": {
+  "Lady of Faith": {
     "elo": 2723,
     "wins": 2167,
     "losses": 2140
@@ -1489,7 +1489,7 @@
     "wins": 2096,
     "losses": 2122
   },
-  "The Winged DragonOfRa (Phoenix Mode)": {
+  "The Winged Dragon of Ra (Phoenix Mode)": {
     "elo": 2716,
     "wins": 2214,
     "losses": 2078
@@ -1529,7 +1529,7 @@
     "wins": 2283,
     "losses": 1951
   },
-  "Stone StatueOfthe Aztecs": {
+  "Stone Statue of the Aztecs": {
     "elo": 2710,
     "wins": 2265,
     "losses": 2085
@@ -1599,7 +1599,7 @@
     "wins": 2161,
     "losses": 2167
   },
-  "Doma The AngelOfSilence": {
+  "Doma The Angel of Silence": {
     "elo": 2686,
     "wins": 2068,
     "losses": 2258
@@ -1614,7 +1614,7 @@
     "wins": 2187,
     "losses": 2098
   },
-  "Great MammothOfGoldfine": {
+  "Great Mammoth of Goldfine": {
     "elo": 2680,
     "wins": 2167,
     "losses": 2125
@@ -1689,12 +1689,12 @@
     "wins": 2119,
     "losses": 2111
   },
-  "HourglassOfLife": {
+  "Hourglass of Life": {
     "elo": 2656,
     "wins": 2096,
     "losses": 2060
   },
-  "EmperorOfthe Land and Sea": {
+  "Emperor of the Land and Sea": {
     "elo": 2654,
     "wins": 1972,
     "losses": 2187
@@ -1714,7 +1714,7 @@
     "wins": 2097,
     "losses": 2214
   },
-  "TempleOfSkulls": {
+  "Temple of Skulls": {
     "elo": 2651,
     "wins": 2147,
     "losses": 2082
@@ -1724,7 +1724,7 @@
     "wins": 2081,
     "losses": 2200
   },
-  "MaskOfShine & Dark": {
+  "Mask of Shine & Dark": {
     "elo": 2647,
     "wins": 2175,
     "losses": 2079
@@ -1734,7 +1734,7 @@
     "wins": 2237,
     "losses": 2158
   },
-  "TalonsOfShurilane": {
+  "Talons of Shurilane": {
     "elo": 2647,
     "wins": 2129,
     "losses": 2116
@@ -1784,7 +1784,7 @@
     "wins": 2033,
     "losses": 2298
   },
-  "The EarlOfDemise": {
+  "The Earl of Demise": {
     "elo": 2635,
     "wins": 2158,
     "losses": 2146
@@ -1814,7 +1814,7 @@
     "wins": 2141,
     "losses": 2087
   },
-  "PerformanceOfSword": {
+  "Performance of Sword": {
     "elo": 2618,
     "wins": 2101,
     "losses": 2110
@@ -1829,7 +1829,7 @@
     "wins": 2166,
     "losses": 2084
   },
-  "CandleOfFate": {
+  "Candle of Fate": {
     "elo": 2615,
     "wins": 2174,
     "losses": 2153
@@ -1849,7 +1849,7 @@
     "wins": 2200,
     "losses": 2017
   },
-  "Pumpking the KingOfGhosts": {
+  "Pumpking the King of Ghosts": {
     "elo": 2610,
     "wins": 2131,
     "losses": 2201
@@ -1894,7 +1894,7 @@
     "wins": 2124,
     "losses": 2170
   },
-  "WingsOfWicked Flame": {
+  "Wings of Wicked Flame": {
     "elo": 2595,
     "wins": 2102,
     "losses": 2200
@@ -1989,7 +1989,7 @@
     "wins": 2052,
     "losses": 2233
   },
-  "LordOfD.": {
+  "Lord of D.": {
     "elo": 2580,
     "wins": 2222,
     "losses": 2020
@@ -2004,7 +2004,7 @@
     "wins": 2095,
     "losses": 2137
   },
-  "The StatueOfEaster Island": {
+  "The Statue of Easter Island": {
     "elo": 2578,
     "wins": 2147,
     "losses": 2160
@@ -2059,7 +2059,7 @@
     "wins": 2106,
     "losses": 2051
   },
-  "MagicianOfFaith": {
+  "Magician of Faith": {
     "elo": 2570,
     "wins": 2135,
     "losses": 2110
@@ -2079,7 +2079,7 @@
     "wins": 2206,
     "losses": 2171
   },
-  "Giant ScorpionOfthe Tundra": {
+  "Giant Scorpion of the Tundra": {
     "elo": 2567,
     "wins": 2139,
     "losses": 2084
@@ -2089,7 +2089,7 @@
     "wins": 2155,
     "losses": 2166
   },
-  "Left ArmOfthe Forbidden One": {
+  "Left Arm of the Forbidden One": {
     "elo": 2565,
     "wins": 2060,
     "losses": 2128
@@ -2149,7 +2149,7 @@
     "wins": 2028,
     "losses": 2159
   },
-  "Wodan the ResidentOfthe Forest": {
+  "Wodan the Resident of the Forest": {
     "elo": 2552,
     "wins": 2248,
     "losses": 2059
@@ -2189,7 +2189,7 @@
     "wins": 2207,
     "losses": 1938
   },
-  "Air MarmotOfNefariousness": {
+  "Air Marmot of Nefariousness": {
     "elo": 2542,
     "wins": 2028,
     "losses": 2118
@@ -2199,7 +2199,7 @@
     "wins": 2025,
     "losses": 2212
   },
-  "SpiritOfthe Winds": {
+  "Spirit of the Winds": {
     "elo": 2541,
     "wins": 2011,
     "losses": 2286
@@ -2214,7 +2214,7 @@
     "wins": 2112,
     "losses": 2131
   },
-  "Ancient TreeOfEnlightenment": {
+  "Ancient Tree of Enlightenment": {
     "elo": 2539,
     "wins": 2098,
     "losses": 2067
@@ -2234,7 +2234,7 @@
     "wins": 2056,
     "losses": 2300
   },
-  "MagicianOfBlack Chaos": {
+  "Magician of Black Chaos": {
     "elo": 2535,
     "wins": 1998,
     "losses": 2272
@@ -2274,7 +2274,7 @@
     "wins": 2095,
     "losses": 2165
   },
-  "BeastkingOfthe Swamps": {
+  "Beastking of the Swamps": {
     "elo": 2526,
     "wins": 2098,
     "losses": 2114
@@ -2304,7 +2304,7 @@
     "wins": 2181,
     "losses": 2136
   },
-  "MasterOfDragon Soldier": {
+  "Master of Dragon Soldier": {
     "elo": 2519,
     "wins": 2005,
     "losses": 2267
@@ -2334,7 +2334,7 @@
     "wins": 2031,
     "losses": 2223
   },
-  "Last DayOfWitch": {
+  "Last Day of Witch": {
     "elo": 2513,
     "wins": 2134,
     "losses": 2181
@@ -2354,7 +2354,7 @@
     "wins": 2086,
     "losses": 2075
   },
-  "DollOfDemise": {
+  "Doll of Demise": {
     "elo": 2509,
     "wins": 2074,
     "losses": 2250
@@ -2504,7 +2504,7 @@
     "wins": 2005,
     "losses": 2160
   },
-  "BookOfSecret Arts": {
+  "Book of Secret Arts": {
     "elo": 2473,
     "wins": 2038,
     "losses": 2206
@@ -2619,7 +2619,7 @@
     "wins": 2111,
     "losses": 2144
   },
-  "MaskOfDarkness": {
+  "Mask of Darkness": {
     "elo": 2457,
     "wins": 2106,
     "losses": 2112
@@ -2699,7 +2699,7 @@
     "wins": 1921,
     "losses": 2202
   },
-  "KagemushaOfthe Blue Flame": {
+  "Kagemusha of the Blue Flame": {
     "elo": 2443,
     "wins": 2140,
     "losses": 2202
@@ -2744,7 +2744,7 @@
     "wins": 1992,
     "losses": 2193
   },
-  "Right ArmOfthe Forbidden One": {
+  "Right Arm of the Forbidden One": {
     "elo": 2431,
     "wins": 2102,
     "losses": 2097
@@ -2764,7 +2764,7 @@
     "wins": 2099,
     "losses": 2152
   },
-  "SwordsmanOfLandstar": {
+  "Swordsman of Landstar": {
     "elo": 2429,
     "wins": 2129,
     "losses": 2181
@@ -2789,7 +2789,7 @@
     "wins": 2153,
     "losses": 2237
   },
-  "Djinn the WatcherOfthe Wind": {
+  "Djinn the Watcher of the Wind": {
     "elo": 2425,
     "wins": 2180,
     "losses": 2176
@@ -2799,12 +2799,12 @@
     "wins": 2030,
     "losses": 2266
   },
-  "HouseOfAdhesive Tape": {
+  "House of Adhesive Tape": {
     "elo": 2420,
     "wins": 2035,
     "losses": 2177
   },
-  "Shinato, KingOfa Higher Plane": {
+  "Shinato, King of a Higher Plane": {
     "elo": 2420,
     "wins": 1960,
     "losses": 2330
@@ -2824,12 +2824,12 @@
     "wins": 2092,
     "losses": 2133
   },
-  "SoulOfthe Pure": {
+  "Soul of the Pure": {
     "elo": 2412,
     "wins": 2046,
     "losses": 2151
   },
-  "QueenOfAutumn Leaves": {
+  "Queen of Autumn Leaves": {
     "elo": 2411,
     "wins": 2158,
     "losses": 2172
@@ -2839,7 +2839,7 @@
     "wins": 2111,
     "losses": 2168
   },
-  "Rose SpectreOfDunn": {
+  "Rose Spectre of Dunn": {
     "elo": 2407,
     "wins": 2057,
     "losses": 2132
@@ -2894,7 +2894,7 @@
     "wins": 2040,
     "losses": 2250
   },
-  "Right LegOfthe Forbidden One": {
+  "Right Leg of the Forbidden One": {
     "elo": 2396,
     "wins": 2119,
     "losses": 2210
@@ -3039,7 +3039,7 @@
     "wins": 1938,
     "losses": 2263
   },
-  "The Little SwordsmanOfAile": {
+  "The Little Swordsman of Aile": {
     "elo": 2360,
     "wins": 2120,
     "losses": 2205
@@ -3059,7 +3059,7 @@
     "wins": 2163,
     "losses": 2229
   },
-  "GoddessOfWhim": {
+  "Goddess of Whim": {
     "elo": 2358,
     "wins": 2059,
     "losses": 2361
@@ -3119,12 +3119,12 @@
     "wins": 2003,
     "losses": 2162
   },
-  "The Winged DragonOfRa (Sphere Mode)": {
+  "The Winged Dragon of Ra (Sphere Mode)": {
     "elo": 2343,
     "wins": 2053,
     "losses": 2274
   },
-  "SangaOfthe Thunder": {
+  "Sanga of the Thunder": {
     "elo": 2343,
     "wins": 1998,
     "losses": 2252
@@ -3194,7 +3194,7 @@
     "wins": 2025,
     "losses": 2256
   },
-  "SwordOfDark Destruction": {
+  "Sword of Dark Destruction": {
     "elo": 2315,
     "wins": 1985,
     "losses": 2214
@@ -3229,7 +3229,7 @@
     "wins": 2056,
     "losses": 2212
   },
-  "CurseOfDragon": {
+  "Curse of Dragon": {
     "elo": 2307,
     "wins": 2078,
     "losses": 2196
@@ -3249,7 +3249,7 @@
     "wins": 1990,
     "losses": 2186
   },
-  "Sword ArmOfDragon": {
+  "Sword Arm of Dragon": {
     "elo": 2305,
     "wins": 1948,
     "losses": 2202
@@ -3314,7 +3314,7 @@
     "wins": 1993,
     "losses": 2290
   },
-  "Left LegOfthe Forbidden One": {
+  "Left Leg of the Forbidden One": {
     "elo": 2291,
     "wins": 2040,
     "losses": 2231
@@ -3324,7 +3324,7 @@
     "wins": 2122,
     "losses": 2317
   },
-  "BeastOfTalwar": {
+  "Beast of Talwar": {
     "elo": 2288,
     "wins": 1858,
     "losses": 2351
@@ -3344,7 +3344,7 @@
     "wins": 2027,
     "losses": 2261
   },
-  "BreathOfLight": {
+  "Breath of Light": {
     "elo": 2281,
     "wins": 2018,
     "losses": 2229
@@ -3589,7 +3589,7 @@
     "wins": 2068,
     "losses": 2168
   },
-  "The Winged DragonOfRa (Battle Mode)": {
+  "The Winged Dragon of Ra (Battle Mode)": {
     "elo": 2210,
     "wins": 2039,
     "losses": 2270
@@ -3839,7 +3839,7 @@
     "wins": 2036,
     "losses": 2214
   },
-  "SpiritOfthe Mountain": {
+  "Spirit of the Mountain": {
     "elo": 2066,
     "wins": 2013,
     "losses": 2168
@@ -3974,7 +3974,7 @@
     "wins": 1842,
     "losses": 2407
   },
-  "ReaperOfthe Cards": {
+  "Reaper of the Cards": {
     "elo": 1747,
     "wins": 1822,
     "losses": 2371
@@ -3989,7 +3989,7 @@
     "wins": 1644,
     "losses": 2626
   },
-  "BeastOfGilfer": {
+  "Beast of Gilfer": {
     "elo": 479,
     "wins": 1315,
     "losses": 2988
