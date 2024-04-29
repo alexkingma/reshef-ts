@@ -1,4 +1,4 @@
-import { duellists } from "../../assets/duellists";
+import { duellists } from "../../assets/data/duellists";
 import { BattlePosition, DuellistStatus, Orientation, RowKey } from "../common";
 import { getCard, getRandomCardId } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
@@ -44,7 +44,7 @@ export const getRandomDuellistState = (): Duellist => {
             orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
             card: getCard(
               getRandomCardId({ category: rand() ? "Trap" : "Magic" })
-            ) as SpellOrTrapOrRitualCard,
+            ) as SpellTrapRitualCard,
           }
     ),
     activeEffects: {

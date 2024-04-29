@@ -1023,6 +1023,8 @@ export enum Ritual {
   BlackIllusionRitual = 783,
 }
 
+export type SpellTrapRitual = Spell | Trap | Ritual;
+
 export type DirectSpell = Exclude<Spell, AutoSpellTrap>;
 
 export type CounterSpellCard = Extract<

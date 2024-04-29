@@ -5,7 +5,7 @@ import { getFirstEmptyZoneIdx } from "./rowUtil";
 
 export const initialiseDeck = (cardQuantMap: CardQuantityMap) => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [id, qty]) => {
-    const card = getCard(parseInt(id) as CardId);
+    const card = getCard(parseInt(id));
     const cards: Card[] = Array.from({ length: qty });
     cards.fill(card);
     deck.push(

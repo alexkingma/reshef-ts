@@ -87,12 +87,12 @@ const useCardRedrawAndSave = () => {
     let cardPortrait: HTMLImageElement;
     let overridePortrait: HTMLImageElement;
     try {
-      cardPortrait = await loadImage(getReferenceAnimeImage(getCard(id).code));
+      cardPortrait = await loadImage(getReferenceAnimeImage(card.code));
     } catch {
       /* empty */
     }
     try {
-      overridePortrait = await loadImage(getOverrideImage(card.id));
+      overridePortrait = await loadImage(getOverrideImage(card.name));
     } catch {
       /* empty */
     }

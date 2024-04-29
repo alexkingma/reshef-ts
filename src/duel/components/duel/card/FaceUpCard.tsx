@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const FaceUpCard = ({ card, customClasses }: Props) => {
-  const cardFront = getCardImage(card.id);
+  const cardFront = getCardImage(card.name);
 
   return (
     <div className={classNames(customClasses)}>

@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/hooks";
-import cardEloMap from "../assets/cardElo.json";
-import duellistEloMap from "../assets/duellistElo.json";
+import cardEloMap from "../assets/data/cardElo.json";
+import duellistEloMap from "../assets/data/duellistElo.json";
 import { selectDuel } from "./duelSlice";
 import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";
@@ -17,7 +17,7 @@ interface EloMap {
 const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
   return Object.entries(cardQuantMap).reduce((deck, [card, quant]) => {
     for (let i = 0; i < quant; i++) {
-      deck.push(parseInt(card) as CardId);
+      deck.push(parseInt(card));
     }
     return deck;
   }, [] as CardId[]);
@@ -26,7 +26,7 @@ const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
 const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   // remove cards that never made it out of the deck pile, since those
   // didn't contribute to the outcome of the duel one way or another
-  const unusedCards: CardId[] = deck.map((z) => z.card.id);
+  const unusedCards = deck.map((z) => z.card.id);
   const entireDeck = cardQuantMapToDeck(deckTemplate);
 
   unusedCards.forEach((c) => {
@@ -43,12 +43,12 @@ const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   return entireDeck;
 };
 
-const getAvgCardElo = (deck: CardId[]) => {
-  const totalDeckElo = deck.reduce((total, card) => {
+const getAvgCardElo = (ids: CardId[]) => {
+  const totalDeckElo = ids.reduce((total, card) => {
     const { name } = getCard(card);
     return total + (cardEloMap as EloMap)[name].elo;
   }, 0);
-  return totalDeckElo / deck.length;
+  return totalDeckElo / ids.length;
 };
 
 const sortEloMap = (unsortedMap: EloMap) => {

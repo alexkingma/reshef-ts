@@ -11,7 +11,7 @@ interface Duellable {
 }
 
 type CardQuantityMap = {
-  [id in CardId]?: number;
+  [id in CardId]: number;
 };
 
 type DuellableName =

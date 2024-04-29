@@ -9,6 +9,7 @@ import {
   Monster,
   Orientation,
   RowKey,
+  SpellTrapRitual,
 } from "../common";
 import { getAlignmentResult, getCard } from "./cardUtil";
 import {
@@ -68,7 +69,7 @@ export const isAlignment = (
 
 export const isSpecificMonster = (
   z: Zone,
-  id: CardId
+  id: Monster
 ): z is OccupiedMonsterZone => isMonster(z) && z.card.id === id;
 
 export const isOrientation = (z: Zone, o: Orientation): z is OccupiedZone =>
@@ -87,7 +88,7 @@ export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && z.isLocked;
 
 export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
-  const godCards: CardId[] = [
+  const godCards: Monster[] = [
     Monster.SliferTheSkyDragon,
     Monster.ObeliskTheTormentor,
     Monster.TheWingedDragonOfRaBattleMode,
@@ -266,7 +267,7 @@ export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 export const specialSummon = (
   state: Duel,
   dKey: DuellistKey,
-  id: CardId,
+  id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
   try {
@@ -284,7 +285,7 @@ export const specialSummon = (
 export const specialSummonAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  id: CardId,
+  id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
   const zone = getZone(state, zoneCoords) as MonsterZone;
@@ -297,7 +298,7 @@ export const specialSummonAtCoords = (
 export const setSpellTrap = (
   state: Duel,
   dKey: DuellistKey,
-  id: CardId,
+  id: SpellTrapRitual,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
   try {
@@ -316,7 +317,7 @@ export const setSpellTrap = (
 export const setSpellTrapAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  id: CardId,
+  id: SpellTrapRitual,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
   const zone = getZone(state, zoneCoords) as SpellTrapZone;
@@ -441,7 +442,7 @@ export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
 };
 
 export const generateOccupiedMonsterZone = (
-  id: CardId
+  id: Monster
 ): OccupiedMonsterZone => ({
   // use this to avoid boilerplate elsewhere
   isOccupied: true,
@@ -456,7 +457,7 @@ export const generateOccupiedMonsterZone = (
 export const postDirectMonsterAction = (
   state: Duel,
   zoneCoords: ZoneCoords,
-  originalCardId: CardId
+  originalCardId: Monster
 ) => {
   // After attacking or manually activating an effect,
   // that monster should be flipped/locked, etc.

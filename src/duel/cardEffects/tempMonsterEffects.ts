@@ -120,7 +120,7 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.PumpkingTheKingOfGhosts]: (state, { ownMonsters }) => {
-    const cards: CardId[] = [
+    const cards: Monster[] = [
       Monster.ArmoredZombie,
       Monster.DragonZombie,
       Monster.ClownZombie,

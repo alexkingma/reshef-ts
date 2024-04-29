@@ -1,3 +1,4 @@
+type CardId = Monster; // decorative type
 type CardCategory = "Monster" | "Magic" | "Trap" | "Ritual";
 
 type CardType =
@@ -35,19 +36,18 @@ type Alignment =
   | "Divine"
   | "Thunder";
 
-type DBCard = DBMonsterCard | SpellOrTrapOrRitualCard;
-type Card<K extends CardId = CardId> = MonsterCard<K> | SpellOrTrapOrRitualCard;
+type DBCard = DBMonsterCard | SpellTrapRitualCard;
+type Card = MonsterCard | SpellTrapRitualCard;
 
-interface BaseCard<K extends CardId = CardId> {
-  id: K;
+interface BaseCard {
+  id: CardId;
   name: string;
   cost: number;
   limit?: 1 | 2;
   category: CardCategory;
 }
 
-type DBMonsterCard<K extends CardId = CardId> = BaseCard<K> & {
-  id: Monster;
+type DBMonsterCard = BaseCard & {
   category: "Monster";
   effect: boolean;
   type: CardType;
@@ -58,13 +58,12 @@ type DBMonsterCard<K extends CardId = CardId> = BaseCard<K> & {
   code: number;
 };
 
-type MonsterCard<K extends CardId = CardId> = DBMonsterCard<K> & {
+type MonsterCard = DBMonsterCard & {
   effAtk: number;
   effDef: number;
 };
 
-type SpellOrTrapOrRitualCard = BaseCard<Monster> & {
-  id: SpellTrapRitualId;
+type SpellTrapRitualCard = BaseCard & {
   category: "Magic" | "Trap" | "Ritual";
   code: number;
 };

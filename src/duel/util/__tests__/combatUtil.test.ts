@@ -21,8 +21,8 @@ const getState = (
   return state;
 };
 
-const createZone = (cardName: CardId): OccupiedMonsterZone => ({
-  ...generateOccupiedMonsterZone(cardName),
+const createZone = (id: CardId): OccupiedMonsterZone => ({
+  ...generateOccupiedMonsterZone(id),
 });
 
 const originCoords: ZoneCoords = ["p1", RowKey.Monster, 0];

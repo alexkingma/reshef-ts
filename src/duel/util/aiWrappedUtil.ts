@@ -43,12 +43,12 @@ export const onlyOpponentHasMonster =
     !hasMatchInRow(state, ownMonsters, condition);
 
 export const opponentHasMonster =
-  (condition?: (z: OccupiedZone<MonsterId>) => boolean) =>
+  (condition?: (z: OccupiedZone) => boolean) =>
   (state: Duel, { otherMonsters }: ZoneCoordsMap) =>
     hasMatchInRow(state, otherMonsters, condition);
 
 export const selfHasMonster =
-  (condition?: (z: OccupiedZone<MonsterId>) => boolean) =>
+  (condition?: (z: OccupiedZone) => boolean) =>
   (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
     hasMatchInRow(state, ownMonsters, condition);
 

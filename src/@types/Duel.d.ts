@@ -2,17 +2,17 @@ interface EmptyZone {
   isOccupied: false;
 }
 
-interface OccupiedZone<K extends CardId = CardId> {
+interface OccupiedZone {
   isOccupied: true;
-  card: Card<K>;
+  card: Card;
   orientation: Orientation;
 }
 
-type Zone<K extends CardId = CardId> = EmptyZone | OccupiedZone<K>;
+type Zone = EmptyZone | OccupiedZone;
 
 type MonsterZone = EmptyZone | OccupiedMonsterZone;
 
-type OccupiedMonsterZone = Omit<OccupiedZone<CardId>, "card"> & {
+type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
   card: MonsterCard;
   battlePosition: BattlePosition;
   permPowerUpLevel: number; // lingers indefinitely
@@ -22,14 +22,14 @@ type OccupiedMonsterZone = Omit<OccupiedZone<CardId>, "card"> & {
 
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;
 
-type OccupiedSpellTrapZone = Omit<OccupiedZone<SpellTrapRitualId>, "card"> & {
-  card: SpellTrapCard;
+type OccupiedSpellTrapZone = Omit<OccupiedZone, "card"> & {
+  card: SpellTrapRitualCard;
 };
 
 type HandZone = Zone;
 type DeckZone = OccupiedZone;
-type GraveyardZone = Zone<MonsterId>;
-type FieldZone = Zone<FieldId>;
+type GraveyardZone = Zone;
+type FieldZone = Zone;
 
 interface Duellist {
   name: string;

@@ -1,5 +1,5 @@
-import { default as alignmentMap } from "@/assets/alignment.json";
-import cards from "@/assets/cards";
+import { default as alignmentMap } from "@/assets/data/alignment.json";
+import cards from "@/assets/data/cards";
 import { Monster, Spell, Trap } from "../common";
 
 // Create a lookup map at runtime to avoid doing [].find()
@@ -13,10 +13,10 @@ const CARD_MAP = cards.reduce(
       [dbCard.id]: dbCard,
     };
   },
-  {} as { [key in CardId]: DBCard }
+  {} as { [id in CardId]: DBCard }
 );
 
-export const getCard = <T extends CardId>(id: T): Card<T> => {
+export const getCard = (id: CardId): Card => {
   const dbCard = CARD_MAP[id];
   if (!dbCard) {
     throw new Error(`Unknown card id: ${id}`);
@@ -29,7 +29,7 @@ export const getCard = <T extends CardId>(id: T): Card<T> => {
     ...dbCard,
     effAtk: dbCard.atk,
     effDef: dbCard.def,
-  } as Card<T>;
+  };
 };
 
 export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {

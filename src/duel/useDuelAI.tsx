@@ -37,7 +37,6 @@ import { isValidSpellTarget, spellHasTarget } from "./util/targetedSpellUtil";
 import {
   getZoneCoordsMap,
   isFaceDown,
-  isFaceUp,
   isLocked,
   isMonster,
   isSpell,
@@ -174,22 +173,21 @@ export const useDuelAI = () => {
     // activate all monster effects that fulfil activation criteria
     for (const [i, originZone] of getRow(state, ownMonsters).entries()) {
       if (
-        !originZone.isOccupied ||
-        isFaceUp(originZone) ||
-        isLocked(originZone)
-      )
-        continue;
+        originZone.isOccupied &&
+        isFaceDown(originZone) &&
+        !isLocked(originZone)
+      ) {
+        const originCoords: ZoneCoords = [dKey, RowKey.Monster, i];
+        const coordsMap = getZoneCoordsMap(originCoords);
+        const condition =
+          monsterUsageMap[originZone.card.id as FlipEffectMonster];
+        if (!condition || !condition(state, coordsMap)) continue;
 
-      const originCoords: ZoneCoords = [dKey, RowKey.Monster, i];
-      const coordsMap = getZoneCoordsMap(originCoords);
-      const condition =
-        monsterUsageMap[originZone.card.id as FlipEffectMonster];
-      if (!condition || !condition(state, coordsMap)) continue;
-
-      setOriginZone(originCoords);
-      dispatch(activateMonsterFlipEffectAction(coordsMap));
-      resetInteractions();
-      return true;
+        setOriginZone(originCoords);
+        dispatch(activateMonsterFlipEffectAction(coordsMap));
+        resetInteractions();
+        return true;
+      }
     }
     return false;
   };

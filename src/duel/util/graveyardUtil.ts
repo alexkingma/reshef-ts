@@ -1,4 +1,4 @@
-import { Orientation } from "../common";
+import { Monster, Orientation } from "../common";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { specialSummon } from "./zoneUtil";
@@ -16,7 +16,7 @@ export const getGraveyardCard = (state: Duel, dKey: DuellistKey) => {
   return gy.card.id;
 };
 
-export const addToGraveyard = (state: Duel, dKey: DuellistKey, id: CardId) => {
+export const addToGraveyard = (state: Duel, dKey: DuellistKey, id: Monster) => {
   state[dKey].graveyard[0] = {
     isOccupied: true,
     card: getCard(id),
@@ -27,7 +27,7 @@ export const addToGraveyard = (state: Duel, dKey: DuellistKey, id: CardId) => {
 export const graveyardContainsCards = (
   state: Duel,
   dKey: DuellistKey,
-  ...ids: CardId[]
+  ...ids: Monster[]
 ) => {
   if (isGraveyardEmpty(state, dKey)) return false;
   return ids.some((c) => c === getGraveyardCard(state, dKey));

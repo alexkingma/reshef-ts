@@ -1,10 +1,10 @@
-import { default as fieldMultiplierMap } from "@/assets/fields.json";
+import { default as fieldMultiplierMap } from "@/assets/data/fields.json";
 import { Field, Orientation, RowKey, Spell } from "../common";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { clearZone, getZone } from "./zoneUtil";
 
-export const getFieldCardId = (field: Field): FieldId => {
+export const getFieldCardId = (field: Field): Spell => {
   switch (field) {
     case Field.Yami:
       return Spell.Yami;
