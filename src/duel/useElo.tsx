@@ -79,8 +79,8 @@ export const useElo = () => {
   const state = useAppSelector(selectDuel);
   const winnerKey = getVictorKey(state);
   const loserKey = getOtherDuellistKey(winnerKey);
-  const winnerDeck = getUsedCards(state[winnerKey]);
-  const loserDeck = getUsedCards(state[loserKey]);
+  const winnerDeck = cardQuantMapToDeck(state[winnerKey].deckTemplate);
+  const loserDeck = cardQuantMapToDeck(state[loserKey].deckTemplate);
 
   const calculateCardEloMap = () => {
     const { ratingGain, ratingLoss } = getRatingDelta(
