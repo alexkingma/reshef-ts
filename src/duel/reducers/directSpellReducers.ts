@@ -155,33 +155,43 @@ export const spellEffectReducers: CardReducerMap<
   [Spell.Metalmorph]: (state) => {
     const { targetCoords } = state.interaction;
     const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    // TODO: should it special summon in same orientation as original card?
+    const props = {
+      permPowerUpLevel: z.permPowerUpLevel,
+      orientation: z.orientation,
+      isLocked: z.isLocked,
+      battlePosition: z.battlePosition,
+    };
     if (z.card.id === Monster.Zoa) {
-      specialSummonAtCoords(state, targetCoords!, Monster.Metalzoa);
+      specialSummonAtCoords(state, targetCoords!, Monster.Metalzoa, props);
       return;
     }
     if (z.card.id === Monster.JiraiGumo) {
-      specialSummonAtCoords(state, targetCoords!, Monster.LauncherSpider);
+      specialSummonAtCoords(
+        state,
+        targetCoords!,
+        Monster.LauncherSpider,
+        props
+      );
       return;
     }
     if (z.card.id === Monster.RedEyesBDragon) {
       specialSummonAtCoords(
         state,
         targetCoords!,
-        Monster.RedEyesBlackMetalDragon
+        Monster.RedEyesBlackMetalDragon,
+        props
       );
       return;
     }
   },
   [Spell.ElegantEgotist]: (state) => {
     const { targetCoords } = state.interaction;
-    // TODO: should it special summon in same orientation as original card?
-    const { permPowerUpLevel } = getZone(
-      state,
-      targetCoords!
-    ) as OccupiedMonsterZone;
+    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
     specialSummonAtCoords(state, targetCoords!, Monster.HarpieLadySisters, {
-      permPowerUpLevel,
+      permPowerUpLevel: z.permPowerUpLevel,
+      orientation: z.orientation,
+      isLocked: z.isLocked,
+      battlePosition: z.battlePosition,
     });
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
@@ -204,13 +214,12 @@ export const spellEffectReducers: CardReducerMap<
     clearGraveyard(state, dKey);
     clearGraveyard(state, otherDKey);
   },
-  [Spell.DarknessApproaches]: (state, { ownMonsters }) => {
-    // TODO: description says "all cards on own field" -- include spells/traps?
+  [Spell.DarknessApproaches]: (state, { ownMonsters, ownSpellTrap }) => {
     setRowFaceDown(state, ownMonsters);
+    setRowFaceDown(state, ownSpellTrap);
   },
   [Spell.BrainControl]: (state, { dKey }) => {
     const controlledMonCoords = convertMonster(state, dKey);
-
     if (!controlledMonCoords) return; // conversion failed, no space to house monster
 
     // converted monster must undo conversion on turn end
@@ -227,7 +236,6 @@ export const spellEffectReducers: CardReducerMap<
     monsterZones.forEach((z) => {
       if (z.isOccupied) return;
       specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
-      // TODO: does this count as your normal summon for this turn?
     });
   },
   [Spell.PotOfGreed]: draw(2),
