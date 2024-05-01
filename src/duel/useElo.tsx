@@ -6,13 +6,7 @@ import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";
 import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
 
-interface EloMap {
-  [key: string]: {
-    wins: number;
-    losses: number;
-    elo: number;
-  };
-}
+type EloMap = Record<string, number>;
 
 const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
   return Object.entries(cardQuantMap).reduce((deck, [card, quant]) => {
@@ -46,24 +40,21 @@ const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
 const getAvgCardElo = (ids: CardId[]) => {
   const totalDeckElo = ids.reduce((total, card) => {
     const { name } = getCard(card);
-    return total + (cardEloMap as EloMap)[name].elo;
+    return total + (cardEloMap as EloMap)[name];
   }, 0);
   return totalDeckElo / ids.length;
 };
 
 const sortEloMap = (unsortedMap: EloMap) => {
   return Object.entries(unsortedMap)
-    .map(([card, data]) => {
-      return {
-        ...data,
-        name: card,
-      };
-    })
-    .sort((a, b) => b.elo - a.elo)
-    .reduce((map, { name, ...data }) => {
-      map[name] = data;
-      return map;
-    }, {} as EloMap);
+    .sort(([, eloA], [, eloB]) => eloB - eloA)
+    .reduce(
+      (map, [name, elo]) => ({
+        ...map,
+        [name]: elo,
+      }),
+      {} as EloMap
+    );
 };
 
 const getRatingDelta = (winnerElo: number, loserElo: number) => {
@@ -99,14 +90,12 @@ export const useElo = () => {
 
     for (const card of winnerDeck) {
       const { name } = getCard(card);
-      (cardEloMap as EloMap)[name].wins++;
-      (cardEloMap as EloMap)[name].elo += ratingGain;
+      (cardEloMap as EloMap)[name] += ratingGain;
     }
 
     for (const card of loserDeck) {
       const { name } = getCard(card);
-      (cardEloMap as EloMap)[name].losses++;
-      (cardEloMap as EloMap)[name].elo += ratingLoss;
+      (cardEloMap as EloMap)[name] += ratingLoss;
     }
 
     return sortEloMap(cardEloMap);
@@ -115,16 +104,12 @@ export const useElo = () => {
   const calculateDuellistEloMap = () => {
     const winnerName = state[winnerKey].name as DuellableName;
     const loserName = state[loserKey].name as DuellableName;
-    const winnerElo = duellistEloMap[winnerName].elo;
-    const loserElo = duellistEloMap[loserName].elo;
+    const winnerElo = duellistEloMap[winnerName];
+    const loserElo = duellistEloMap[loserName];
 
     const { ratingGain, ratingLoss } = getRatingDelta(winnerElo, loserElo);
-
-    duellistEloMap[winnerName].wins++;
-    duellistEloMap[winnerName].elo += ratingGain;
-
-    duellistEloMap[loserName].losses++;
-    duellistEloMap[loserName].elo += ratingLoss;
+    duellistEloMap[winnerName] += ratingGain;
+    duellistEloMap[loserName] += ratingLoss;
 
     return sortEloMap(duellistEloMap);
   };
