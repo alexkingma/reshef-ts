@@ -241,7 +241,8 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.DarkMagicianGirl]: (state, { dKey }) => {
-    const isDarkMagician = (c: MonsterCard) => c.id === Monster.DarkMagician;
+    const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
+    const isDarkMagician = (c: MonsterCard) => cards.includes(c.id);
     const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[state, dKey, isDarkMagician]]
@@ -249,7 +250,8 @@ export const tempMonsterEffects: CardReducerMap<
     return [effCon];
   },
   [Monster.ToonDarkMagicianGirl]: (state, { dKey }) => {
-    const isDarkMagician = (c: MonsterCard) => c.id === Monster.DarkMagician;
+    const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
+    const isDarkMagician = (c: MonsterCard) => cards.includes(c.id);
     const effCon = getEffCon_powerUpSelfConditional(
       [],
       [[state, dKey, isDarkMagician]]
