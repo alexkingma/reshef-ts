@@ -35,10 +35,7 @@ import {
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
-export const spellEffectReducers: CardReducerMap<
-  DirectSpell,
-  DirectEffectReducer
-> = {
+export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
   // burn
   [Spell.Sparks]: burnOther(50),
   [Spell.Hinotama]: burnOther(100),

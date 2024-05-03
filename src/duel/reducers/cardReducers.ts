@@ -1,5 +1,6 @@
 import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
 import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
+import { spellEffects } from "../cardEffects/directSpellEffects";
 import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
 import {
   BattlePosition,
@@ -19,7 +20,6 @@ import {
   setSpellTrapAtCoords,
   specialSummonAtCoords,
 } from "../util/zoneUtil";
-import { spellEffectReducers as spellReducers } from "./directSpellReducers";
 
 export const cardReducers = {
   normalSummon: (state: Duel) => {
@@ -98,7 +98,7 @@ export const cardReducers = {
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
     const { card } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
-    const spellReducer = spellReducers[card.id as DirectSpell];
+    const spellReducer = spellEffects[card.id as DirectSpell];
     if (!spellReducer) {
       console.log(`Spell effect not implemented for card: ${card.name}`);
       return;
