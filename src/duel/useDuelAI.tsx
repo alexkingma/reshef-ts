@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useEffect } from "react";
-import {
-  BattlePosition,
-  DirectSpell,
-  FlipEffectMonster,
-  RowKey,
-} from "./common";
+import { BattlePosition, DirectSpell, FlipEffectMonster } from "./common";
 import {
   actions,
   selectActiveTurn,
@@ -78,10 +73,10 @@ export const useDuelAI = () => {
 
     const { attackerIdx, targetIdx } = lethal;
     if (Number.isInteger(targetIdx)) {
-      // direct attack
+      // mon-vs-mon attack
       commitAttack(attackerIdx, targetIdx);
     } else {
-      // mon-vs-mon attack
+      // direct attack
       commitAttack(attackerIdx);
     }
     return true;
@@ -90,7 +85,7 @@ export const useDuelAI = () => {
   const setSpellTrap = (condition: (z: OccupiedZone) => boolean): boolean => {
     let emptyZoneIdx;
     try {
-      emptyZoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.SpellTrap]);
+      emptyZoneIdx = getFirstEmptyZoneIdx(state, [...ownSpellTrap]);
     } catch {
       // no space to summon spells
       return false;
@@ -114,21 +109,21 @@ export const useDuelAI = () => {
     for (const [i, originZone] of getRow(state, ownSpellTrap).entries()) {
       if (!isSpell(originZone)) continue;
 
-      const originCoords: ZoneCoords = [dKey, RowKey.SpellTrap, i];
+      const originCoords: ZoneCoords = [...ownSpellTrap, i];
       const coordsMap = getZoneCoordsMap(originCoords);
       const condition = spellUsageMap[originZone.card.id as DirectSpell];
       if (!condition || !condition(state, coordsMap)) continue;
 
       setOriginZone(originCoords);
       if (spellHasTarget(originZone.card.id)) {
-        const targetIdx = getFirstOccupiedZoneIdx(
+        const targetIdx = getHighestAtkZoneIdx(
           state,
           ownMonsters,
           (targetZone) =>
             isValidSpellTarget(originZone.card.id, targetZone.card.id)
         );
         if (targetIdx === -1) continue;
-        setTargetZone([dKey, RowKey.Monster, targetIdx]);
+        setTargetZone([...ownMonsters, targetIdx]);
       }
       dispatch(activateSpellEffectAction(coordsMap));
       resetInteractions();
@@ -177,7 +172,7 @@ export const useDuelAI = () => {
         isFaceDown(originZone) &&
         !isLocked(originZone)
       ) {
-        const originCoords: ZoneCoords = [dKey, RowKey.Monster, i];
+        const originCoords: ZoneCoords = [...ownMonsters, i];
         const coordsMap = getZoneCoordsMap(originCoords);
         const condition =
           monsterUsageMap[originZone.card.id as FlipEffectMonster];
