@@ -264,6 +264,21 @@ export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
   };
 };
 
+export const setCardAtCoords = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  id: CardId,
+  customProps: Partial<OccupiedZone> = {}
+) => {
+  const z = getZone(state, zoneCoords) as SpellTrapZone;
+  Object.assign(z, {
+    isOccupied: true,
+    card: getCard(id),
+    orientation: Orientation.FaceDown,
+    ...customProps,
+  });
+};
+
 export const specialSummon = (
   state: Duel,
   dKey: DuellistKey,
@@ -295,6 +310,15 @@ export const specialSummonAtCoords = (
   });
 };
 
+export const transformMonster = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  id: Monster
+) => {
+  const z = getZone(state, zoneCoords);
+  Object.assign(z, { id });
+};
+
 export const setSpellTrap = (
   state: Duel,
   dKey: DuellistKey,
@@ -303,30 +327,24 @@ export const setSpellTrap = (
 ) => {
   try {
     const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.SpellTrap]);
-    setSpellTrapAtCoords(
-      state,
-      [dKey, RowKey.SpellTrap, zoneIdx],
-      id,
-      customProps
-    );
+    setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
   } catch (e) {
     return; // no free zone;
   }
 };
 
-export const setSpellTrapAtCoords = (
+export const addCardToHand = (
   state: Duel,
-  zoneCoords: ZoneCoords,
-  id: SpellTrapRitual,
-  customProps: Partial<OccupiedSpellTrapZone> = {}
+  dKey: DuellistKey,
+  id: CardId,
+  customProps: Partial<OccupiedZone> = {}
 ) => {
-  const zone = getZone(state, zoneCoords) as SpellTrapZone;
-  Object.assign(zone, {
-    isOccupied: true,
-    card: getCard(id),
-    orientation: Orientation.FaceDown,
-    ...customProps,
-  });
+  try {
+    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
+    setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
+  } catch (e) {
+    return; // no free zone;
+  }
 };
 
 export const magnetWarriorMergeAttempt = (
@@ -426,19 +444,12 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
 };
 
 export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {
-  try {
-    const [dKey, rKey] = coords;
-    const handIdx = getFirstEmptyZoneIdx(state, [dKey, rKey]);
-    const targetZone = getZone(state, coords) as OccupiedZone;
-    state[dKey].hand[handIdx] = {
-      isOccupied: true,
-      card: getCard(targetZone.card.id),
-      orientation: Orientation.FaceDown,
-    };
-    clearZone(state, coords);
-  } catch (e) {
-    // no space in hand, do nothing
-  }
+  const [dKey, rKey] = coords;
+  // no space in hand, do nothing
+  if (!hasEmptyZone(state, [dKey, rKey])) return;
+  const targetZone = getZone(state, coords) as OccupiedZone;
+  addCardToHand(state, dKey, targetZone.card.id);
+  clearZone(state, coords);
 };
 
 export const generateOccupiedMonsterZone = (

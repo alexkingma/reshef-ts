@@ -1,8 +1,7 @@
 import { default as fieldMultiplierMap } from "@/assets/data/fields.json";
 import { Field, Orientation, RowKey, Spell } from "../common";
-import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { clearZone, getZone } from "./zoneUtil";
+import { clearZone, getZone, setCardAtCoords } from "./zoneUtil";
 
 export const getFieldCardId = (field: Field): Spell => {
   switch (field) {
@@ -48,11 +47,9 @@ export const setActiveField = (
     // any active field cards, rather than setting one
     clearActiveField(state, dKey);
   } else {
-    state[dKey].fieldZone[0] = {
-      isOccupied: true,
-      card: getCard(getFieldCardId(field)),
+    setCardAtCoords(state, [dKey, RowKey.Field, 0], getFieldCardId(field), {
       orientation: Orientation.FaceUp,
-    };
+    });
   }
 };
 

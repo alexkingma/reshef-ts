@@ -32,7 +32,7 @@ import {
   convertMonster,
   getZone,
   specialSummon,
-  specialSummonAtCoords,
+  transformMonster,
 } from "../util/zoneUtil";
 
 export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
@@ -152,44 +152,22 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
   [Spell.Metalmorph]: (state) => {
     const { targetCoords } = state.interaction;
     const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    const props = {
-      permPowerUpLevel: z.permPowerUpLevel,
-      orientation: z.orientation,
-      isLocked: z.isLocked,
-      battlePosition: z.battlePosition,
-    };
     if (z.card.id === Monster.Zoa) {
-      specialSummonAtCoords(state, targetCoords!, Monster.Metalzoa, props);
+      transformMonster(state, targetCoords!, Monster.Metalzoa);
       return;
     }
     if (z.card.id === Monster.JiraiGumo) {
-      specialSummonAtCoords(
-        state,
-        targetCoords!,
-        Monster.LauncherSpider,
-        props
-      );
+      transformMonster(state, targetCoords!, Monster.LauncherSpider);
       return;
     }
     if (z.card.id === Monster.RedEyesBDragon) {
-      specialSummonAtCoords(
-        state,
-        targetCoords!,
-        Monster.RedEyesBlackMetalDragon,
-        props
-      );
+      transformMonster(state, targetCoords!, Monster.RedEyesBlackMetalDragon);
       return;
     }
   },
   [Spell.ElegantEgotist]: (state) => {
     const { targetCoords } = state.interaction;
-    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    specialSummonAtCoords(state, targetCoords!, Monster.HarpieLadySisters, {
-      permPowerUpLevel: z.permPowerUpLevel,
-      orientation: z.orientation,
-      isLocked: z.isLocked,
-      battlePosition: z.battlePosition,
-    });
+    transformMonster(state, targetCoords!, Monster.HarpieLadySisters);
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
     // TODO: stop DEF mode for duellist as a whole for a turn, don't just move current monsters' pos

@@ -17,7 +17,7 @@ import {
   directAttack,
   getZone,
   postDirectMonsterAction,
-  setSpellTrapAtCoords,
+  setCardAtCoords,
   specialSummonAtCoords,
 } from "../util/zoneUtil";
 
@@ -42,7 +42,7 @@ export const cardReducers = {
     const { originCoords, targetCoords } = state.interaction;
     const { card, orientation } = getZone(state, originCoords!) as OccupiedZone;
     clearZone(state, originCoords!);
-    setSpellTrapAtCoords(state, targetCoords!, card.id, { orientation });
+    setCardAtCoords(state, targetCoords!, card.id, { orientation });
   },
   attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { otherDKey } = coordsMap;
