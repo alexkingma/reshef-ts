@@ -14,6 +14,7 @@ import {
 import {
   clearZone,
   destroyAtCoords,
+  directAttack as directAttackDirect,
   getOriginZone,
   isNotGodCard,
   permPowerUp as permPowerUpDirect,
@@ -45,6 +46,10 @@ export const setOwnField = (newField: Field) => (state: Duel) => {
 
 export const destroyRows = (rowsToDestroy: RowCoords[]) => (state: Duel) => {
   rowsToDestroy.forEach((row) => destroyRow(state, row));
+};
+
+export const directAttack = (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
+  directAttackDirect(state, zoneCoords);
 };
 
 export const destroyHighestAtk =

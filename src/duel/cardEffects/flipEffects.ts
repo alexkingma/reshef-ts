@@ -32,6 +32,7 @@ import {
   destroyMonsterAlignment,
   destroyMonsterType,
   destroyRows,
+  directAttack as directAttack_Wrapped,
   draw as draw_Wrapped,
   healSelf as heal_Wrapped,
   setOwnField,
@@ -284,15 +285,9 @@ export const flipEffectReducers: CardReducerMap<
 
   // burn/direct attack
   [Monster.FireReaper]: burnOther(50),
-  [Monster.MysticLamp]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
-  [Monster.Leghul]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
-  [Monster.PenguinTorpedo]: (state, { zoneCoords }) => {
-    directAttack(state, zoneCoords);
-  },
+  [Monster.MysticLamp]: directAttack_Wrapped,
+  [Monster.Leghul]: directAttack_Wrapped,
+  [Monster.PenguinTorpedo]: directAttack_Wrapped,
   [Monster.ExarionUniverse]: (state, { zoneCoords }) => {
     directAttack(state, zoneCoords);
     permPowerDown(state, zoneCoords);

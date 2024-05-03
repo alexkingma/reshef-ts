@@ -13,7 +13,7 @@ const CARD_MAP = cards.reduce(
       [dbCard.id]: dbCard,
     };
   },
-  {} as { [id in CardId]: DBCard }
+  {} as Record<CardId, Card>
 );
 
 export const getCard = (id: CardId): Card => {

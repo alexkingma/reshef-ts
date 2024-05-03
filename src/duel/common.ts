@@ -561,7 +561,7 @@ export enum Monster {
   InjectionFairyLily = 556,
   JacksKnight = 557,
   PotTheTrick = 558,
-  OscilloHero = 559,
+  OscilloHero1 = 559,
   InvaderFromAnotherDimension = 560,
   LesserDragon = 561,
   NeedleWorm = 562,
