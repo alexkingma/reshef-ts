@@ -23,3 +23,14 @@ type CardReducerMap<
 > = {
   [key in K]: V;
 };
+
+type CardSubsetReducerMap<
+  K extends CardId,
+  V extends
+    | EffConReducer
+    | MultiEffConReducer
+    | DirectEffectReducer
+    | CardCondition,
+> = {
+  [key in K]?: V;
+};
