@@ -6,6 +6,16 @@ import {
   shouldUseField,
   spellHasValidTarget,
 } from "./aiWrappedUtil";
+import {
+  isFiend,
+  isFish,
+  isInsect,
+  isMachine,
+  isRock,
+  isSpellcaster,
+  isWarrior,
+  isZombie,
+} from "./cardTypeUtil";
 import { always } from "./common";
 import { opponentIsUnderSoRL } from "./duellistUtil";
 import { isGraveyardEmpty } from "./graveyardUtil";
@@ -17,7 +27,6 @@ import {
   isFaceUp,
   isNotGodCard,
   isSpecificMonster,
-  isType,
   isUnlocked,
 } from "./zoneUtil";
 
@@ -121,28 +130,28 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
 
   // type-specific destruction
   [Spell.WarriorElimination]: onlyOpponentHasMonster(
-    (z) => isType(z, "Warrior") && isNotGodCard(z)
+    (z) => isWarrior(z) && isNotGodCard(z)
   ),
   [Spell.EternalRest]: onlyOpponentHasMonster(
-    (z) => isType(z, "Zombie") && isNotGodCard(z)
+    (z) => isZombie(z) && isNotGodCard(z)
   ),
   [Spell.StainStorm]: onlyOpponentHasMonster(
-    (z) => isType(z, "Machine") && isNotGodCard(z)
+    (z) => isMachine(z) && isNotGodCard(z)
   ),
   [Spell.EradicatingAerosol]: onlyOpponentHasMonster(
-    (z) => isType(z, "Insect") && isNotGodCard(z)
+    (z) => isInsect(z) && isNotGodCard(z)
   ),
   [Spell.BreathOfLight]: onlyOpponentHasMonster(
-    (z) => isType(z, "Rock") && isNotGodCard(z)
+    (z) => isRock(z) && isNotGodCard(z)
   ),
   [Spell.EternalDrought]: onlyOpponentHasMonster(
-    (z) => isType(z, "Fish") && isNotGodCard(z)
+    (z) => isFish(z) && isNotGodCard(z)
   ),
   [Spell.ExileOfTheWicked]: onlyOpponentHasMonster(
-    (z) => isType(z, "Fiend") && isNotGodCard(z)
+    (z) => isFiend(z) && isNotGodCard(z)
   ),
   [Spell.LastDayOfWitch]: onlyOpponentHasMonster(
-    (z) => isType(z, "Spellcaster") && isNotGodCard(z)
+    (z) => isSpellcaster(z) && isNotGodCard(z)
   ),
 
   // assorted
@@ -150,7 +159,9 @@ export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
     hasMatchInRow(
       state,
       ownMonsters,
-      (z) => (z as OccupiedMonsterZone).permPowerUpLevel < 0
+      (z) =>
+        (z as OccupiedMonsterZone).permPowerUpAtk < 0 ||
+        (z as OccupiedMonsterZone).permPowerUpDef < 0
     ),
   [Spell.StopDefense]: opponentHasMonster(isDefMode),
   [Spell.SwordsOfRevealingLight]: (state, { dKey }) =>

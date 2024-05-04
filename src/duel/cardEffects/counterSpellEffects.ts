@@ -91,7 +91,7 @@ export const counterSpellReducers: CardReducerMap<
         return isReflectablePowerUp(originZone.card.id);
       },
       effect: () => {
-        permPowerDown(state, state.interaction.targetCoords!);
+        permPowerDown(state, state.interaction.targetCoords!, 500, 500);
       },
     };
   },

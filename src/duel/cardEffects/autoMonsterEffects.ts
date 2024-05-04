@@ -1,4 +1,5 @@
 import { AutoEffectMonster, Field, Monster } from "../common";
+import { isLight } from "../util/cardAlignmentUtil";
 import { getExodiaCards } from "../util/cardUtil";
 import { isStartOfEitherTurn } from "../util/duelUtil";
 import { burn, isStartOfTurn } from "../util/duellistUtil";
@@ -13,7 +14,6 @@ import {
 import {
   clearZone,
   destroyAtCoords,
-  isAlignment,
   isTrap,
   permPowerDown,
   permPowerUp,
@@ -29,11 +29,7 @@ export const autoMonsterEffects: CardReducerMap<
     return [
       {
         condition: () => {
-          return hasMatchInRow(
-            state,
-            ownMonsters,
-            (z) => !isAlignment(z, "Light")
-          );
+          return hasMatchInRow(state, ownMonsters, isLight);
         },
         effect: () => {
           destroyAtCoords(state, zoneCoords);
@@ -56,7 +52,7 @@ export const autoMonsterEffects: CardReducerMap<
           return isStartOfTurn(state, dKey);
         },
         effect: (state, { zoneCoords }) => {
-          permPowerUp(state, zoneCoords);
+          permPowerUp(state, zoneCoords, 500, 500);
         },
       },
     ];
@@ -93,7 +89,7 @@ export const autoMonsterEffects: CardReducerMap<
           return isStartOfTurn(state, dKey);
         },
         effect: (state, { zoneCoords }) => {
-          permPowerUp(state, zoneCoords, 2);
+          permPowerUp(state, zoneCoords, 1000, 1000);
         },
       },
     ];
@@ -145,7 +141,7 @@ export const autoMonsterEffects: CardReducerMap<
           return isStartOfTurn(state, otherDKey);
         },
         effect: (state, { zoneCoords }) => {
-          permPowerDown(state, zoneCoords);
+          permPowerDown(state, zoneCoords, 500, 500);
         },
       },
     ];

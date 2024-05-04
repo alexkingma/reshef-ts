@@ -15,9 +15,15 @@ type MonsterZone = EmptyZone | OccupiedMonsterZone;
 type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
   card: MonsterCard;
   battlePosition: BattlePosition;
-  permPowerUpLevel: number; // lingers indefinitely
-  tempPowerUpLevel: number; // reset and re-applied after every action
   isLocked: boolean;
+
+  // lingers indefinitely
+  permPowerUpAtk: number;
+  permPowerUpDef: number;
+
+  // reset and re-applied after every action
+  tempPowerUpAtk: number;
+  tempPowerUpDef: number;
 };
 
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;

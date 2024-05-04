@@ -62,3 +62,15 @@ export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
     state[dKey].hand[zoneIdx] = card;
   }
 };
+
+export const addToTopOfDeck = (
+  state: Duel,
+  dKey: DuellistKey,
+  cardId: CardId
+) => {
+  state[dKey].deck.unshift({
+    isOccupied: true,
+    card: getCard(cardId),
+    orientation: Orientation.FaceDown,
+  });
+};

@@ -6,6 +6,7 @@ import {
   RowKey,
   Trap,
 } from "../common";
+import { isInsect } from "../util/cardTypeUtil";
 import { getCard } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
@@ -50,7 +51,6 @@ import {
   isNotGodCard,
   isSpecificMonster,
   isSpell,
-  isType,
   magnetWarriorMergeAttempt,
   permPowerDown,
   permPowerUp,
@@ -90,7 +90,7 @@ export const flipEffectReducers: CardReducerMap<
   },
   [Monster.ZombyraTheDark]: (state, { zoneCoords, otherDKey }) => {
     destroyHighestAtk(state, otherDKey);
-    permPowerDown(state, zoneCoords);
+    permPowerDown(state, zoneCoords, 500, 500);
   },
   [Monster.DesVolstgalph]: (state, { otherDKey }) => {
     destroyHighestAtk(state, otherDKey);
@@ -103,7 +103,7 @@ export const flipEffectReducers: CardReducerMap<
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
     if (targetIdx === -1) return;
     destroyAtCoords(state, [...otherMonsters, targetIdx]);
-    permPowerUp(state, zoneCoords);
+    permPowerUp(state, zoneCoords, 500, 500);
   },
   [Monster.FGD]: destroyRows([
     [DuellistKey.Opponent, RowKey.Monster],
@@ -212,9 +212,7 @@ export const flipEffectReducers: CardReducerMap<
     // For its own demise, it can summon (the strongest) insect from the own hand
     destroyAtCoords(state, zoneCoords);
 
-    const handIdx = getHighestAtkZoneIdx(state, ownHand, (z: OccupiedZone) =>
-      isType(z, "Insect")
-    );
+    const handIdx = getHighestAtkZoneIdx(state, ownHand, isInsect);
     if (handIdx === -1) return; // no insect to summon
     const { card } = state[dKey].hand[handIdx] as OccupiedZone;
     specialSummon(state, dKey, card.id);
@@ -241,16 +239,22 @@ export const flipEffectReducers: CardReducerMap<
     updateMonsters(
       state,
       ownMonsters,
-      (z: OccupiedMonsterZone) => z.tempPowerUpLevel++,
+      (z: OccupiedMonsterZone) => {
+        z.permPowerUpAtk += 500;
+        z.permPowerUpDef += 500;
+      },
       (z: OccupiedMonsterZone) => z.card.atk <= 500
     );
   },
   [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
     burn(state, dKey, 1000);
-    updateMonsters(state, ownMonsters, (z) => z.permPowerUpLevel++);
+    updateMonsters(state, ownMonsters, (z) => {
+      z.permPowerUpAtk += 500;
+      z.permPowerUpDef += 500;
+    });
   },
   [Monster.LegendaryFiend]: (state, { zoneCoords }) => {
-    permPowerUp(state, zoneCoords);
+    permPowerUp(state, zoneCoords, 500, 500);
   },
 
   // immobilise opponent
@@ -268,7 +272,7 @@ export const flipEffectReducers: CardReducerMap<
   [Monster.RedArcheryGirl]: (state, { otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) return;
-    permPowerDown(state, [...otherMonsters, targetIdx]);
+    permPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
     immobiliseCard(state, [...otherMonsters, targetIdx]);
   },
   [Monster.InvitationToADarkSleep]: (state, { otherMonsters }) => {
@@ -290,7 +294,7 @@ export const flipEffectReducers: CardReducerMap<
   [Monster.PenguinTorpedo]: directAttack_Wrapped,
   [Monster.ExarionUniverse]: (state, { zoneCoords }) => {
     directAttack(state, zoneCoords);
-    permPowerDown(state, zoneCoords);
+    permPowerDown(state, zoneCoords, 500, 500);
   },
   [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) => {
     const dmg = state[dKey].lp - 1;
@@ -325,7 +329,7 @@ export const flipEffectReducers: CardReducerMap<
     if (targetIdx === -1) return; // no monsters to consume
 
     subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
-    permPowerUp(state, zoneCoords, 2);
+    permPowerUp(state, zoneCoords, 1000, 1000);
   },
   [Monster.ParasiteParacide]: (state, { zoneCoords, otherMonsters }) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isNotGodCard);
@@ -431,11 +435,10 @@ export const flipEffectReducers: CardReducerMap<
     });
   },
   [Monster.BeastOfGilfer]: (state, { zoneCoords, otherMonsters }) => {
-    updateMonsters(
-      state,
-      otherMonsters,
-      (z: OccupiedMonsterZone) => z.permPowerUpLevel--
-    );
+    updateMonsters(state, otherMonsters, (z: OccupiedMonsterZone) => {
+      z.permPowerUpAtk -= 500;
+      z.permPowerUpDef -= 500;
+    });
     destroyAtCoords(state, zoneCoords);
   },
 };

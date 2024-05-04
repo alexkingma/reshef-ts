@@ -11,7 +11,7 @@ export const counterAttackReducers: CardReducerMap<
     return {
       condition: () => true,
       effect: () => {
-        permPowerDown(state, state.interaction.originCoords!);
+        permPowerDown(state, state.interaction.originCoords!, 500, 500);
       },
     };
   },

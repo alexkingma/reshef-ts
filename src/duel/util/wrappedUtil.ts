@@ -1,4 +1,4 @@
-import { Field, Trap } from "../common";
+import { Field, Monster, Trap } from "../common";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
 import { setActiveField as setActiveFieldDirect } from "./fieldUtil";
@@ -17,6 +17,7 @@ import {
   directAttack as directAttackDirect,
   getOriginZone,
   isNotGodCard,
+  isSpecificMonster,
   permPowerUp as permPowerUpDirect,
   tempPowerUp as tempPowerUpDirect,
 } from "./zoneUtil";
@@ -34,10 +35,10 @@ export const healSelf =
   };
 
 export const permPowerUp =
-  (levels: number = 1) =>
+  (atk: number = 500, def: number = 500) =>
   (state: Duel) => {
     const { targetCoords } = state.interaction;
-    permPowerUpDirect(state, targetCoords!, levels);
+    permPowerUpDirect(state, targetCoords!, atk, def);
   };
 
 export const setOwnField = (newField: Field) => (state: Duel) => {
@@ -115,7 +116,9 @@ export const getEffCon_powerUpSelfConditional = (
   graveyardConditionPairs: (
     | [Duel, DuellistKey, (c: MonsterCard) => boolean]
     | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = []
+  )[] = [],
+  atk: number = 500,
+  def: number = 500
 ) => {
   return {
     condition: () => {
@@ -126,7 +129,7 @@ export const getEffCon_powerUpSelfConditional = (
         rowConditionPairs,
         graveyardConditionPairs
       );
-      tempPowerUpDirect(state, zoneCoords, count);
+      tempPowerUpDirect(state, zoneCoords, count * atk, count * def);
     },
   };
 };
@@ -180,3 +183,17 @@ export const getEffCon_requireDestinyBoard =
       },
     ];
   };
+
+export const tempDown =
+  (atk: number, def: number) => (z: OccupiedMonsterZone) => {
+    z.tempPowerUpAtk -= atk;
+    z.tempPowerUpDef -= def;
+  };
+
+export const tempUp =
+  (atk: number, def: number) => (z: OccupiedMonsterZone) => {
+    z.tempPowerUpAtk += atk;
+    z.tempPowerUpDef += def;
+  };
+
+export const isMon = (mon: Monster) => (z: Zone) => isSpecificMonster(z, mon);

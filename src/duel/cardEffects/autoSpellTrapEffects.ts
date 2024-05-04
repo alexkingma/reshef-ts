@@ -1,4 +1,5 @@
 import { AutoSpellTrap, Monster, Orientation, Spell, Trap } from "../common";
+import { isDragon } from "../util/cardTypeUtil";
 import { getFinalCards } from "../util/cardUtil";
 import { burn, isStartOfTurn, winByFINAL } from "../util/duellistUtil";
 import {
@@ -8,12 +9,7 @@ import {
   updateMonsters,
 } from "../util/rowUtil";
 import { getEffCon_requireDestinyBoard } from "../util/wrappedUtil";
-import {
-  isMonster,
-  isType,
-  setSpellTrap,
-  specialSummon,
-} from "../util/zoneUtil";
+import { isMonster, setSpellTrap, specialSummon } from "../util/zoneUtil";
 
 export const autoSpellTrapEffects: CardReducerMap<
   AutoSpellTrap,
@@ -68,7 +64,7 @@ export const autoSpellTrapEffects: CardReducerMap<
             hasMatchInRow(
               state,
               otherMonsters,
-              (z) => isType(z, "Dragon") && !z.isLocked
+              (z) => isDragon(z) && !z.isLocked
             )
           );
         },
@@ -77,7 +73,7 @@ export const autoSpellTrapEffects: CardReducerMap<
             state,
             otherMonsters,
             (z) => (z.isLocked = true),
-            (z) => isType(z, "Dragon")
+            (z) => isDragon(z)
           );
         },
       },

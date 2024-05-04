@@ -286,16 +286,23 @@ export const powerUpSelfConditional = (
   graveyardConditionPairs: (
     | [Duel, DuellistKey, (c: MonsterCard) => boolean]
     | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = []
+  )[] = [],
+  atk: number = 500,
+  def: number = 500
 ) => {
   let count = countConditional(rowConditionPairs, graveyardConditionPairs);
-  tempPowerUp(state, coords, count);
+  tempPowerUp(state, coords, count * atk, count * def);
 };
 
-export const powerDownHighestAtk = (state: Duel, targetKey: DuellistKey) => {
+export const powerDownHighestAtk = (
+  state: Duel,
+  targetKey: DuellistKey,
+  atk: number = 500,
+  def: number = 500
+) => {
   const targetIdx = getHighestAtkZoneIdx(state, [targetKey, RowKey.Monster]);
   if (targetIdx === -1) return; // no monster to target
-  permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -1);
+  permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -atk, -def);
 };
 
 export const checkTriggeredTraps = <

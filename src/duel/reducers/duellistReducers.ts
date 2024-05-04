@@ -23,11 +23,14 @@ export const duellistReducers = {
     const ownActiveEffects = getActiveEffects(state, dKey);
     const opponentActiveEffects = getActiveEffects(state, otherDKey);
     ownActiveEffects.brainControlZones.forEach((zoneCoords) => {
-      const { card, permPowerUpLevel } = getZone(
+      const { card, permPowerUpAtk, permPowerUpDef } = getZone(
         state,
         zoneCoords
       ) as OccupiedMonsterZone;
-      specialSummon(state, otherDKey, card.id, { permPowerUpLevel });
+      specialSummon(state, otherDKey, card.id, {
+        permPowerUpAtk,
+        permPowerUpDef,
+      });
       clearZone(state, zoneCoords);
     });
     ownActiveEffects.brainControlZones = [];

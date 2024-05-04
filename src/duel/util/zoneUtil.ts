@@ -59,14 +59,6 @@ export const isDefMode = (z: Zone): z is OccupiedMonsterZone => {
   return isMonster(z) && z.battlePosition === BattlePosition.Defence;
 };
 
-export const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
-  isMonster(z) && z.card.type === type;
-
-export const isAlignment = (
-  z: Zone,
-  alignment: Alignment
-): z is OccupiedMonsterZone => isMonster(z) && z.card.alignment === alignment;
-
 export const isSpecificMonster = (
   z: Zone,
   id: Monster
@@ -115,35 +107,41 @@ export const canActivateEffect = (z: OccupiedMonsterZone) =>
 export const permPowerUp = (
   state: Duel,
   coords: ZoneCoords,
-  levels: number = 1
+  atk: number,
+  def: number
 ) => {
-  const zone = getZone(state, coords) as OccupiedMonsterZone;
-  zone.permPowerUpLevel += levels;
+  const z = getZone(state, coords) as OccupiedMonsterZone;
+  z.permPowerUpAtk += atk;
+  z.permPowerUpDef += def;
 };
 
 export const tempPowerUp = (
   state: Duel,
   coords: ZoneCoords,
-  levels: number = 1
+  atk: number,
+  def: number
 ) => {
-  const zone = getZone(state, coords) as OccupiedMonsterZone;
-  zone.tempPowerUpLevel += levels;
+  const z = getZone(state, coords) as OccupiedMonsterZone;
+  z.tempPowerUpAtk += atk;
+  z.tempPowerUpDef += def;
 };
 
 export const permPowerDown = (
   state: Duel,
   coords: ZoneCoords,
-  levels: number = 1
+  atk: number,
+  def: number
 ) => {
-  permPowerUp(state, coords, -levels);
+  permPowerUp(state, coords, -atk, -def);
 };
 
 export const tempPowerDown = (
   state: Duel,
   coords: ZoneCoords,
-  levels: number = 1
+  atk: number,
+  def: number
 ) => {
-  tempPowerUp(state, coords, -levels);
+  tempPowerUp(state, coords, -atk, -def);
 };
 
 export const destroyAtCoords = (
@@ -248,19 +246,25 @@ export const calculateAttack = (
 
 export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
   const activeField = getActiveField(state);
-  const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-  const { card, permPowerUpLevel: perm = 0, tempPowerUpLevel: temp = 0 } = zone;
+  const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+  const {
+    card,
+    permPowerUpAtk: permAtk = 0,
+    permPowerUpDef: permDef = 0,
+    tempPowerUpAtk: tempAtk = 0,
+    tempPowerUpDef: tempDef = 0,
+  } = z;
   const fieldMultiplier = getFieldMultiplier(activeField, card.type);
-  const { atk: baseAtk, def: baseDef } = zone.card;
+  const { atk: baseAtk, def: baseDef } = z.card;
 
   // Math.round() isn't necessary in 99.9% of cases, but there's some weird JS
   // interaction with Aeris and Yami, where somehow 1400 * 0.7 = 979.9999999999,
   // despite the IRL answer being a clean integer (980).
-  const calc = (base: number) =>
-    Math.max(0, Math.round(base * fieldMultiplier + (perm + temp) * 500));
+  const calc = (base: number, perm: number, temp: number) =>
+    Math.max(0, Math.round(base * fieldMultiplier + (perm + temp)));
   return {
-    effAtk: calc(baseAtk),
-    effDef: calc(baseDef),
+    effAtk: calc(baseAtk, permAtk, tempAtk),
+    effDef: calc(baseDef, permDef, tempDef),
   };
 };
 
@@ -435,7 +439,10 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
     state,
     originatorKey,
     targetZone.card.id,
-    { permPowerUpLevel: targetZone.permPowerUpLevel }
+    {
+      permPowerUpAtk: targetZone.permPowerUpAtk,
+      permPowerUpDef: targetZone.permPowerUpDef,
+    }
   )!;
   clearZone(state, targetCoords);
 
@@ -461,8 +468,10 @@ export const generateOccupiedMonsterZone = (
   battlePosition: BattlePosition.Attack,
   orientation: Orientation.FaceUp,
   isLocked: false,
-  permPowerUpLevel: 0,
-  tempPowerUpLevel: 0,
+  permPowerUpAtk: 0,
+  permPowerUpDef: 0,
+  tempPowerUpAtk: 0,
+  tempPowerUpDef: 0,
 });
 
 export const postDirectMonsterAction = (
@@ -499,6 +508,16 @@ export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
 export const getFinalPowerUpLevel = (z: OccupiedMonsterZone) => {
   if (!isMonster(z)) return 0;
 
-  const { tempPowerUpLevel = 0, permPowerUpLevel = 0 } = z;
-  return tempPowerUpLevel + permPowerUpLevel;
+  // TODO: this will be unrealiable for uneven atk/def boosts
+  const {
+    permPowerUpAtk = 0,
+    permPowerUpDef = 0,
+    tempPowerUpAtk = 0,
+    tempPowerUpDef = 0,
+  } = z;
+  const max = Math.max(
+    permPowerUpAtk + tempPowerUpAtk,
+    permPowerUpDef + tempPowerUpDef
+  );
+  return Math.round(max / 500);
 };

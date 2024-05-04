@@ -92,10 +92,16 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
 
   // power-down
   [Spell.SpellbindingCircle]: (state, { otherMonsters }) => {
-    updateMonsters(state, otherMonsters, (z) => z.permPowerUpLevel--);
+    updateMonsters(state, otherMonsters, (z) => {
+      z.permPowerUpAtk--;
+      z.permPowerUpDef--;
+    });
   },
   [Spell.ShadowSpell]: (state, { otherMonsters }) => {
-    updateMonsters(state, otherMonsters, (z) => (z.permPowerUpLevel -= 2));
+    updateMonsters(state, otherMonsters, (z) => {
+      z.permPowerUpAtk -= 2;
+      z.permPowerUpDef -= 2;
+    });
   },
 
   // field
@@ -146,7 +152,8 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
   [Spell.Cursebreaker]: (state, { ownMonsters }) => {
     // restores the power-up levels of all player's powered-down monsters
     updateMonsters(state, ownMonsters, (z) => {
-      z.permPowerUpLevel = Math.max(z.permPowerUpLevel, 0);
+      z.permPowerUpAtk = Math.max(0, z.permPowerUpAtk);
+      z.permPowerUpDef = Math.max(0, z.permPowerUpDef);
     });
   },
   [Spell.Metalmorph]: (state) => {

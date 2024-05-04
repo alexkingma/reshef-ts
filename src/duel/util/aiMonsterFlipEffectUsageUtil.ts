@@ -7,29 +7,27 @@ import {
   selfHasSpecificMonster,
   shouldUseField,
 } from "./aiWrappedUtil";
+import { isFire } from "./cardAlignmentUtil";
+import { isDinosaur, isDragon, isInsect } from "./cardTypeUtil";
 import { always } from "./common";
 import { graveyardContainsCards } from "./graveyardUtil";
 import { countMatchesInRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
 import {
-  isAlignment,
   isFaceDown,
   isFaceUp,
   isNotGodCard,
   isSpell,
-  isType,
   isUnlocked,
 } from "./zoneUtil";
 
 export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
   {
-    [Monster.FlameSwordsman]: opponentHasMonster((z) => isType(z, "Dinosaur")),
+    [Monster.FlameSwordsman]: opponentHasMonster(isDinosaur),
     [Monster.TimeWizard]: selfHasSpecificMonster(
       Monster.BabyDragon,
       Monster.DarkMagician
     ),
-    [Monster.BattleOx]: opponentHasMonster(
-      (z) => isAlignment(z, "Fire") && isNotGodCard(z)
-    ),
+    [Monster.BattleOx]: opponentHasMonster((z) => isFire(z) && isNotGodCard(z)),
     [Monster.CurseOfDragon]: shouldUseField(Field.Wasteland),
     [Monster.IllusionistFacelessMage]: opponentHasMonster(),
     [Monster.KairyuShin]: shouldUseField(Field.Umi),
@@ -75,7 +73,7 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.GoddessOfWhim]: (state, { ownHand }) =>
       hasEmptyZone(state, ownHand),
     [Monster.DragonSeeker]: opponentHasMonster(
-      (z) => isType(z, "Dragon") && isNotGodCard(z)
+      (z) => isDragon(z) && isNotGodCard(z)
     ),
     [Monster.PenguinTorpedo]: always,
     [Monster.ZombyraTheDark]: opponentHasMonster(isNotGodCard),
@@ -138,11 +136,7 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
     [Monster.ParasiteParacide]: opponentHasMonster(isNotGodCard),
     [Monster.SkullMarkLadyBug]: always,
     [Monster.PinchHopper]: (state, { ownHand }) =>
-      hasMatchInRow(
-        state,
-        ownHand,
-        (z) => (z as OccupiedMonsterZone).card.type === "Insect"
-      ),
+      hasMatchInRow(state, ownHand, isInsect),
     [Monster.ChironTheMage]: opponentHasMonster(isNotGodCard),
     [Monster.BeastOfGilfer]: opponentHasMonster(),
   };

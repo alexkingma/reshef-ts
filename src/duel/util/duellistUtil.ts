@@ -33,7 +33,8 @@ export const getRandomDuellistState = (): Duellist => {
               ? BattlePosition.Attack
               : BattlePosition.Defence,
             orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
-            permPowerUpLevel: Math.floor(Math.random() * 9) - 5,
+            permPowerUpAtk: (Math.floor(Math.random() * 9) - 5) * 500,
+            permPowerUpDef: (Math.floor(Math.random() * 9) - 5) * 500,
           }
     ),
     spellTrapZones: Array.from({ length: 5 }).map(() =>
