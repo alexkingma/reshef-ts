@@ -1,5 +1,5 @@
-import { RowKey } from "@/duel/common";
 import { selectFieldCard } from "@/duel/duelSlice";
+import { RowKey } from "@/duel/enums/duel";
 import { getCard } from "@/duel/util/cardUtil";
 import { getFieldCardId } from "@/duel/util/fieldUtil";
 import { useAppSelector } from "@/hooks";

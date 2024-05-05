@@ -1,5 +1,10 @@
-import { duellists } from "../../assets/data/duellists";
-import { BattlePosition, DuellistStatus, Orientation, RowKey } from "../common";
+import { duellists } from "@/assets/data/duellists";
+import {
+  BattlePosition,
+  DuellistStatus,
+  Orientation,
+  RowKey,
+} from "../enums/duel";
 import { getCard, getRandomCardId } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";

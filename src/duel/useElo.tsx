@@ -1,6 +1,6 @@
+import cardEloMap from "@/assets/data/cardElo.json";
+import duellistEloMap from "@/assets/data/duellistElo.json";
 import { useAppSelector } from "@/hooks";
-import cardEloMap from "../assets/data/cardElo.json";
-import duellistEloMap from "../assets/data/duellistElo.json";
 import { selectDuel } from "./duelSlice";
 import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";

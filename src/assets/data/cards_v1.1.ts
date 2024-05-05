@@ -1,4 +1,5 @@
-import { Monster, Spell, Trap } from "@/duel/common";
+import { Monster } from "@/duel/enums/monster";
+import { Spell, Trap } from "@/duel/enums/spellTrapRitual_v1.0";
 import cards from "./cards";
 
 const getCard = (id: CardId): DBCard => {

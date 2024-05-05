@@ -1,4 +1,4 @@
-import { DuellistStatus, Orientation, RowKey } from "../common";
+import { DuellistStatus, Orientation, RowKey } from "../enums/duel";
 import { getCard, getRandomCardId } from "./cardUtil";
 import { shuffle } from "./common";
 import { getFirstEmptyZoneIdx } from "./rowUtil";

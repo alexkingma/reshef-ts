@@ -3,7 +3,7 @@ import { handEffects } from "../cardEffects/autoHandEffects";
 import { autoMonsterEffects } from "../cardEffects/autoMonsterEffects";
 import { autoSpellTrapEffects } from "../cardEffects/autoSpellTrapEffects";
 import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
-import { Orientation, RowKey } from "../common";
+import { Orientation, RowKey } from "../enums/duel";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { getRow, updateMonsters } from "./rowUtil";
 import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
@@ -47,7 +47,8 @@ const calcRowCombatStats = (state: Duel, rowCoords: RowCoords) => {
 const resetRowCombatStats = (state: Duel, dKey: DuellistKey) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
   updateMonsters(state, rowCoords, (z, i) => {
-    z.tempPowerUpLevel = 0;
+    z.tempPowerUpAtk = 0;
+    z.tempPowerUpDef = 0;
     calcZoneCombatStats(state, [...rowCoords, i]);
   });
 };

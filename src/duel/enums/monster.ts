@@ -1,60 +1,4 @@
-export enum PlayerType {
-  Human = "HUMAN",
-  CPU = "CPU",
-}
-
-export enum BattlePosition {
-  Attack = "ATTACK_POSITION",
-  Defence = "DEFENCE_POSITION",
-}
-
-export enum Orientation {
-  FaceDown = "FACE_DOWN",
-  FaceUp = "FACE_UP",
-}
-
-export enum RowKey {
-  Hand = "hand",
-  SpellTrap = "spellTrapZones",
-  Monster = "monsterZones",
-  Deck = "deck",
-  Graveyard = "graveyard",
-  Field = "fieldZone",
-}
-
-export enum DuellistKey {
-  Player = "p1",
-  Opponent = "p2",
-}
-
-export enum Field {
-  Arena = "Arena",
-  Yami = "Yami",
-  Wasteland = "Wasteland",
-  Mountain = "Mountain",
-  Sogen = "Sogen",
-  Umi = "Umi",
-  Forest = "Forest",
-}
-
-export enum InteractionMode {
-  Locked = "LOCKED", // cursor movement not allowed (animation playing, dialogue cued, opponent's turn)
-  FreeMovement = "FREE_MOVEMENT", // default state during own turn
-  ViewingOptions = "VIEWING_OPTIONS", // zone buttons/actions appear (attack, summon, discard)
-  ChoosingOwnMonster = "CHOOSING_OWN_MONSTER", // select a monster to target/power-up with a spell
-  ChoosingOwnMonsterZone = "CHOOSING_OWN_MONSTER_ZONE", // zone to summon at (empty or otherwise)
-  ChoosingOwnSpellTrapZone = "CHOOSING_OWN_SPELL_TRAP_ZONE", // zone to set at (empty or otherwise)
-  ChoosingOpponentMonster = "CHOOSING_OPPONENT_MONSTER", // monster to attack (non-direct attacks)
-}
-
-export enum DuellistStatus {
-  HEALTHY = "HEALTHY",
-  OUT_OF_LP = "OUT_OF_LP",
-  DECK_OUT = "DECK_OUT",
-  SURRENDER = "SURRENDER",
-  EXODIA = "EXODIA",
-  DESTINY_BOARD = "DESTINY_BOARD",
-}
+const TODO = 999;
 
 export enum Monster {
   BlueEyesWhiteDragon = 1,
@@ -750,313 +694,74 @@ export enum Monster {
   BeastOfTalwar = 798,
   CyberTechAlligator = 799,
   TalonsOfShurilane = 800,
+
+  // updated stats
+  DarkEyesIllusionist_v1_1 = TODO,
+  Barox_v1_1 = TODO,
+  DarkChimera_v1_1 = TODO,
+  KingOfYamimakai_v1_1 = TODO,
+  CastleOfDarkIllusions_v1_1 = TODO,
+  ReaperOfTheCards_v1_1 = TODO,
+  MetalGuardian_v1_1 = TODO,
+  PenguinTorpedo_v1_1 = TODO,
+  HannibalNecromancer_v1_1 = TODO,
+  Kaminarikozou_v1_1 = TODO,
+  FGD_v1_1 = TODO,
+  MasterOfDragonSoldier_v1_1 = TODO,
+  AmazonChainMaster_v1_1 = TODO,
+  HarpiesBrother_v1_1 = TODO,
+  OscilloHero1_v1_1 = TODO,
+  OscilloHero2_v1_1 = TODO,
+  FrogTheJam_v1_1 = TODO,
+  BeastOfGilfer_v1_1 = TODO,
+  SuperWarLion_v1_1 = TODO,
+  ZeraTheMant_v1_1 = TODO,
+  BlackLusterSoldier_v1_1 = TODO,
+  FiendsMirror_v1_1 = TODO,
+  PerformanceOfSword_v1_1 = TODO,
+  HungryBurger_v1_1 = TODO,
+  SkullGuardian_v1_1 = TODO,
+  Chakra_v1_1 = TODO,
+  CrabTurtle_v1_1 = TODO,
+  GarmaSword_v1_1 = TODO,
+  JavelinBeetle_v1_1 = TODO,
+  FortressWhale_v1_1 = TODO,
+  Dokurorider_v1_1 = TODO,
+  MagicianOfBlackChaos_v1_1 = TODO,
+  Relinquished_v1_1 = TODO,
+
+  // removed effects
+  GoddessOfWhim_v1_1 = TODO,
+  PumpkingTheKingOfGhosts_v1_1 = TODO,
+  ChironTheMage_v1_1 = TODO,
+  FlameSwordsman_v1_1 = TODO,
+  MonsterTamer_v1_1 = TODO,
+  HourglassOfLife_v1_1 = TODO,
+  GyakutennoMegami_v1_1 = TODO,
+  LadyOfFaith_v1_1 = TODO,
+  HarpieLadySisters_v1_1 = TODO,
+  MammothGraveyard_v1_1 = TODO,
+  IllusionistFacelessMage_v1_1 = TODO,
+  HarpieLady_v1_1 = TODO,
+  FairysGift_v1_1 = TODO,
+  MWarrior1_v1_1 = TODO,
+  MWarrior2_v1_1 = TODO,
+  RedArcheryGirl_v1_1 = TODO,
+  BattleOx_v1_1 = TODO,
+  AlphaTheMagnetWarrior_v1_1 = TODO,
+  BetaTheMagnetWarrior_v1_1 = TODO,
+  GammaTheMagnetWarrior_v1_1 = TODO,
+  MysticalElf_v1_1 = TODO,
+
+  // new effects
+  FireReaper_v1_1 = TODO,
+  Ooguchi_v1_1 = TODO,
+  RainbowFlower_v1_1 = TODO,
+  Jinzo7_v1_1 = TODO,
+  QueensDouble_v1_1 = TODO,
+  NightmarePenguin_v1_1 = TODO,
+  MilusRadiant_v1_1 = TODO,
+  StarBoy_v1_1 = TODO,
+  LittleChimera_v1_1 = TODO,
+  // TODO: list unfinished
 }
-
-export type GraveyardEffectMonster = Extract<
-  Monster,
-  | Monster.TheWingedDragonOfRaPhoenixMode
-  | Monster.Helpoemer
-  | Monster.Newdoria
-  | Monster.VampireLord
-  | Monster.DifferentDimensionDragon
-  | Monster.DarkFlareKnight
->;
-
-export type HandEffectCard = Extract<
-  Monster,
-  Monster.LavaGolem | Monster.ExodiaTheForbiddenOne
->;
-
-export type FlipEffectMonster = Extract<
-  Monster,
-  | Monster.FlameSwordsman
-  | Monster.TimeWizard
-  | Monster.BattleOx
-  | Monster.CurseOfDragon
-  | Monster.IllusionistFacelessMage
-  | Monster.KairyuShin
-  | Monster.GiantSoldierOfStone
-  | Monster.ReaperOfTheCards
-  | Monster.CatapultTurtle
-  | Monster.GyakutennoMegami
-  | Monster.SpiritOfTheBooks
-  | Monster.XYZDragonCannon
-  | Monster.Nemuriko
-  | Monster.RevivalJam
-  | Monster.FiendsHand
-  | Monster.DarkNecrofear
-  | Monster.ToadMaster
-  | Monster.XHeadCannon
-  | Monster.FireReaper
-  | Monster.Doron
-  | Monster.TrapMaster
-  | Monster.HourglassOfLife
-  | Monster.ObeliskTheTormentor
-  | Monster.TheWingedDragonOfRaBattleMode
-  | Monster.RocketWarrior
-  | Monster.BeastkingOfTheSwamps
-  | Monster.FairysGift
-  | Monster.MysticLamp
-  | Monster.Leghul
-  | Monster.GammaTheMagnetWarrior
-  | Monster.MonsterEye
-  | Monster.TheWingedDragonOfRaPhoenixMode
-  | Monster.GoddessOfWhim
-  | Monster.DragonSeeker
-  | Monster.PenguinTorpedo
-  | Monster.ZombyraTheDark
-  | Monster.SpiritOfTheMountain
-  | Monster.AncientLamp
-  | Monster.Skelengel
-  | Monster.KingsKnight
-  | Monster.YDragonHead
-  | Monster.ZMetalTank
-  | Monster.XYDragonCannon
-  | Monster.XZTankCannon
-  | Monster.YZTankDragon
-  | Monster.ElectricLizard
-  | Monster.LadyOfFaith
-  | Monster.ByserShock
-  | Monster.PuppetMaster
-  | Monster.DarkPaladin
-  | Monster.Trent
-  | Monster.BerserkDragon
-  | Monster.DesVolstgalph
-  | Monster.GilfordTheLightning
-  | Monster.MysticalBeastSerket
-  | Monster.ExarionUniverse
-  | Monster.LegendaryFiend
-  | Monster.ValkyrionTheMagnaWarrior
-  | Monster.FGD
-  | Monster.RedArcheryGirl
-  | Monster.Relinquished
-  | Monster.ThousandEyesRestrict
-  | Monster.AlphaTheMagnetWarrior
-  | Monster.InvitationToADarkSleep
-  | Monster.BarrelDragon
-  | Monster.ReflectBounder
-  | Monster.BetaTheMagnetWarrior
-  | Monster.ParasiteParacide
-  | Monster.SkullMarkLadyBug
-  | Monster.PinchHopper
-  | Monster.ChironTheMage
-  | Monster.BeastOfGilfer
->;
-
-export type AutoEffectMonster = Extract<
-  Monster,
-  | Monster.CastleOfDarkIllusions
-  | Monster.SatelliteCannon
-  | Monster.ThunderNyanNyan
-  | Monster.ExodiaNecross
-  | Monster.LavaGolem
-  | Monster.ViserDes
-  | Monster.MirageKnight
-  | Monster.BerserkDragon
-  | Monster.Jinzo
-  | Monster.PetitMoth
-  | Monster.LarvaeMoth
-  | Monster.CocoonOfEvolution
-  | Monster.GreatMoth
->;
-
-export type TempEffectMonster = Extract<
-  Monster,
-  | Monster.MysticalElf
-  | Monster.HarpieLady
-  | Monster.HarpieLadySisters
-  | Monster.CyberHarpie
-  | Monster.MonsterTamer
-  | Monster.SwampBattleguard
-  | Monster.MammothGraveyard
-  | Monster.PumpkingTheKingOfGhosts
-  | Monster.BusterBlader
-  | Monster.MWarrior1
-  | Monster.MWarrior2
-  | Monster.NightmarePenguin
-  | Monster.WodanTheResidentOfTheForest
-  | Monster.PerfectMachineKing
-  | Monster.SliferTheSkyDragon
-  | Monster.LabyrinthTank
-  | Monster.MachineKing
-  | Monster.Hoshiningen
-  | Monster.LavaBattleguard
-  | Monster.BladeKnight
-  | Monster.DarkJeroid
-  | Monster.WitchsApprentice
-  | Monster.CommandAngel
-  | Monster.ToonDarkMagicianGirl
-  | Monster.MasterOfDragonSoldier
-  | Monster.DarkMagicianGirl
-  | Monster.InsectQueen
->;
-export enum Spell {
-  // burn
-  Sparks = 343,
-  Hinotama = 344,
-  FinalFlame = 345,
-  Ookazi = 346,
-  TremendousFire = 347,
-  RestructerRevolution = 788,
-
-  // heal
-  MooyanCurry = 338,
-  RedMedicine = 339,
-  GoblinsSecretRemedy = 340,
-  SoulOfThePure = 341,
-  DianKetoTheCureMaster = 342,
-
-  // power-up
-  LegendarySword = 301,
-  SwordOfDarkDestruction = 302,
-  DarkEnergy = 303,
-  AxeOfDespair = 304,
-  LaserCannonArmor = 305,
-  InsectArmorWithLaserCannon = 306,
-  ElfsLight = 307,
-  BeastFangs = 308,
-  SteelShell = 309,
-  VileGerms = 310,
-  BlackPendant = 311,
-  SilverBowAndArrow = 312,
-  HornOfLight = 313,
-  HornOfTheUnicorn = 314,
-  DragonTreasure = 315,
-  ElectroWhip = 316,
-  CyberShield = 317,
-  MysticalMoon = 319,
-  MalevolentNuzzler = 321,
-  VioletCrystal = 322,
-  BookOfSecretArts = 323,
-  Invigoration = 324,
-  MachineConversionFactory = 325,
-  RaiseBodyHeat = 326,
-  FollowWind = 327,
-  PowerOfKaishin = 328,
-  KunaiWithChain = 651,
-  Salamandra = 654,
-  Megamorph = 657,
-  WingedTrumpeter = 659,
-  BrightCastle = 668,
-
-  // monster-specific
-  CyclonLaser = 196,
-  ElegantEgotist = 318,
-  MagicalLabyrinth = 652,
-  Metalmorph = 658,
-  _7Completed = 695,
-
-  // power-down
-  SpellbindingCircle = 349,
-  ShadowSpell = 669,
-
-  // field
-  Forest = 330,
-  Wasteland = 331,
-  Mountain = 332,
-  Sogen = 333,
-  Umi = 334,
-  Yami = 335,
-
-  // general card destruction
-  FinalDestiny = 193,
-  HeavyStorm = 194,
-  DarkHole = 336,
-  Raigeki = 337,
-  CrushCard = 661,
-  HarpiesFeatherDuster = 672,
-  BeckonToDarkness = 693,
-
-  // type-specific destruction
-  WarriorElimination = 653,
-  EternalRest = 656,
-  StainStorm = 660,
-  EradicatingAerosol = 662,
-  BreathOfLight = 663,
-  EternalDrought = 664,
-  ExileOfTheWicked = 786,
-  LastDayOfWitch = 787,
-
-  // assorted
-  Cursebreaker = 655,
-  JamBreedingMachine = 233,
-  StopDefense = 320,
-  SwordsOfRevealingLight = 348,
-  DarkPiercingLight = 350,
-  MonsterReborn = 601,
-  GravediggerGhoul = 609,
-  MessengerOfPeace = 699,
-  DarknessApproaches = 700,
-  BrainControl = 781,
-  ChangeOfHeart = 784,
-  Multiply = 785,
-  PotOfGreed = 789,
-  TheInexperiencedSpy = 790,
-}
-
-export enum Trap {
-  DragonCaptureJar = 329,
-  DestinyBoard = 583,
-  SpiritMessageI = 584,
-  SpiritMessageN = 585,
-  SpiritMessageA = 586,
-  SpiritMessageL = 587,
-  AmazonArchers = 641,
-  HouseOfAdhesiveTape = 681,
-  Eatgaboon = 682,
-  BearTrap = 683,
-  InvisibleWire = 684,
-  AcidTrapHole = 685,
-  WidespreadRuin = 686,
-  GoblinFan = 687,
-  BadReactionToSimochi = 688,
-  ReverseTrap = 689,
-  FakeTrap = 690,
-  TorrentialTribute = 692,
-  InfiniteDismissal = 694,
-  AntiRaigeki = 782,
-}
-
-export enum Ritual {
-  BlackLusterRitual = 670,
-  DarkMagicRitual = 722,
-  BlackIllusionRitual = 783,
-}
-
-export type SpellTrapRitual = Spell | Trap | Ritual;
-
-export type DirectSpell = Exclude<Spell, AutoSpellTrap>;
-
-export type CounterSpellCard = Extract<
-  Trap,
-  | Trap.GoblinFan
-  | Trap.BadReactionToSimochi
-  | Trap.ReverseTrap
-  | Trap.FakeTrap
-  | Trap.AntiRaigeki
->;
-
-export type CounterAttackCard = Extract<
-  Trap,
-  | Trap.AmazonArchers
-  | Trap.HouseOfAdhesiveTape
-  | Trap.Eatgaboon
-  | Trap.BearTrap
-  | Trap.InvisibleWire
-  | Trap.AcidTrapHole
-  | Trap.WidespreadRuin
-  | Trap.TorrentialTribute
-  | Trap.InfiniteDismissal
->;
-
-export type AutoSpellTrap =
-  | Extract<
-      Trap,
-      | Trap.DragonCaptureJar
-      | Trap.DestinyBoard
-      | Trap.SpiritMessageI
-      | Trap.SpiritMessageN
-      | Trap.SpiritMessageA
-      | Trap.SpiritMessageL
-    >
-  | Extract<Spell, Spell.MessengerOfPeace | Spell.JamBreedingMachine>;

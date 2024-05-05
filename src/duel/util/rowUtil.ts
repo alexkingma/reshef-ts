@@ -1,9 +1,8 @@
+import { Orientation, RowKey } from "../enums/duel";
 import {
   CounterAttackCard,
   CounterSpellCard,
-  Orientation,
-  RowKey,
-} from "../common";
+} from "../enums/spellTrapRitual_v1.0";
 import { getCard, getExodiaCards, getFinalCards } from "./cardUtil";
 import { getGraveyardCard, isGraveyardEmpty } from "./graveyardUtil";
 import {
@@ -313,20 +312,21 @@ export const checkTriggeredTraps = <
   trapReducers: CardReducerMap<T, EffConReducer>
 ): boolean => {
   const { otherSpellTrap } = coordsMap;
-  for (const [trapIdx, z] of getRow(state, otherSpellTrap).entries()) {
-    if (!z.isOccupied) continue;
-    if (isTrap(z)) {
-      const reducer = trapReducers[z.card.id as T];
-      if (!reducer) continue;
+  for (const [i, z] of getRow(state, otherSpellTrap).entries()) {
+    if (!isTrap(z)) continue;
+    const reducer = trapReducers[z.card.id as T];
+    if (!reducer) continue;
 
-      const { condition, effect } = reducer(state, coordsMap);
-      if (condition(state, coordsMap)) {
-        // found valid trap, perform its effect instead of the original action
-        console.log(`%c${z.card.name}`, "color: #AC4E8D;");
-        effect(state, coordsMap);
-        clearZone(state, [...otherSpellTrap, trapIdx] as ZoneCoords);
-        return true;
+    const { condition, effect, noDiscard } = reducer(state, coordsMap);
+    if (condition(state, coordsMap)) {
+      // found valid trap, perform its effect instead of the original action
+      console.log(`%c${z.card.name}`, "color: #AC4E8D;");
+      effect(state, coordsMap);
+      if (!noDiscard) {
+        // some traps are continuous
+        clearZone(state, [...otherSpellTrap, i] as ZoneCoords);
       }
+      return true;
     }
   }
   return false;

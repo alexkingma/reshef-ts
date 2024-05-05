@@ -1,4 +1,4 @@
-import { Monster } from "@/duel/common";
+import { Monster } from "@/duel/enums/monster";
 import {
   isDark,
   isEarth,
@@ -10,6 +10,7 @@ import {
 import { always } from "@/duel/util/common";
 import { countMatchesInRow, powerDownHighestAtk } from "@/duel/util/rowUtil";
 import {
+  isAnyOfMons,
   isMon,
   getEffCon_powerUpSelfConditional as powerUpSelf,
   tempDown,
@@ -72,18 +73,18 @@ export const tempMonsterEffects: CardSubsetReducerMap<
     const effCon = powerUpSelf([[state, ownHand, always]], [], 300, 300);
     return [effCon];
   },
-  [Monster.SwampBattleguard]: (state, { ownHand }) => {
+  [Monster.SwampBattleguard]: (state, { ownMonsters }) => {
     const effCon = powerUpSelf(
-      [[state, ownHand, isMon(Monster.LavaBattleguard)]],
+      [[state, ownMonsters, isMon(Monster.LavaBattleguard)]],
       [],
       500,
       0
     );
     return [effCon];
   },
-  [Monster.LavaBattleguard]: (state, { ownHand }) => {
+  [Monster.LavaBattleguard]: (state, { ownMonsters }) => {
     const effCon = powerUpSelf(
-      [[state, ownHand, isMon(Monster.SwampBattleguard)]],
+      [[state, ownMonsters, isMon(Monster.SwampBattleguard)]],
       [],
       500,
       0
@@ -137,5 +138,20 @@ export const tempMonsterEffects: CardSubsetReducerMap<
         },
       },
     ];
+  },
+  [Monster.HarpiesPetDragon]: (state, { ownMonsters }) => {
+    const effCon = powerUpSelf(
+      [
+        [
+          state,
+          ownMonsters,
+          isAnyOfMons(Monster.HarpieLady, Monster.CyberHarpie),
+        ],
+      ],
+      [],
+      300,
+      300
+    );
+    return [effCon];
   },
 };

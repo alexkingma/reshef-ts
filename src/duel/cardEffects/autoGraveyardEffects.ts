@@ -1,4 +1,5 @@
-import { GraveyardEffectMonster, Monster } from "../common";
+import { Monster } from "../enums/monster";
+import { GraveyardEffectMonster } from "../enums/monster_v1.0";
 import { isStartOfTurn } from "../util/duellistUtil";
 import { clearGraveyard, resurrectOwn } from "../util/graveyardUtil";
 import {

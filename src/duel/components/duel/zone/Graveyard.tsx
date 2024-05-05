@@ -1,5 +1,5 @@
-import { DuellistKey, RowKey } from "@/duel/common";
 import { selectGraveyardZone } from "@/duel/duelSlice";
+import { DuellistKey, RowKey } from "@/duel/enums/duel";
 import { getCard } from "@/duel/util/cardUtil";
 import { useAppSelector } from "@/hooks";
 import { FaceUpCard } from "../card/FaceUpCard";

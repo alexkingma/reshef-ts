@@ -2,12 +2,9 @@ import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
 import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
 import { spellEffects } from "../cardEffects/directSpellEffects";
 import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
-import {
-  BattlePosition,
-  DirectSpell,
-  FlipEffectMonster,
-  Orientation,
-} from "../common";
+import { BattlePosition, Orientation } from "../enums/duel";
+import { FlipEffectMonster } from "../enums/monster_v1.0";
+import { DirectSpell } from "../enums/spellTrapRitual_v1.0";
 import { getActiveEffects, removeBrainControlZone } from "../util/duellistUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {

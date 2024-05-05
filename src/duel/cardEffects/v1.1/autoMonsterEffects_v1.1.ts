@@ -1,14 +1,24 @@
-import { BattlePosition, Monster } from "@/duel/common";
+import { BattlePosition } from "@/duel/enums/duel";
+import { Monster } from "@/duel/enums/monster";
 import { isZombie } from "@/duel/util/cardTypeUtil";
 import { isStartOfTurn } from "@/duel/util/duellistUtil";
 import { clearGraveyard } from "@/duel/util/graveyardUtil";
 import {
   countMatchesInRow,
+  hasEmptyZone,
   hasMatchInRow,
   setRowFaceUp,
   updateMonsters,
 } from "@/duel/util/rowUtil";
-import { getZone, isFaceDown, permPowerUp } from "@/duel/util/zoneUtil";
+import {
+  getZone,
+  isDefMode,
+  isFaceDown,
+  permPowerUp,
+  returnCardToHand,
+  setDefMode,
+  specialSummon,
+} from "@/duel/util/zoneUtil";
 
 export const autoMonsterEffects: CardSubsetReducerMap<
   Monster,
@@ -125,6 +135,44 @@ export const autoMonsterEffects: CardSubsetReducerMap<
       {
         condition: () => isStartOfTurn(state, dKey),
         effect: (state) => permPowerUp(state, zoneCoords, 700, 0),
+      },
+    ];
+  },
+  [Monster.TotalDefenseShogun]: (state, { zoneCoords }) => {
+    const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    return [
+      {
+        condition: () => !isDefMode(z),
+        effect: () => setDefMode(z),
+      },
+    ];
+  },
+  [Monster.TheWickedWormBeast]: (state, { otherDKey, zoneCoords, ownHand }) => {
+    return [
+      {
+        condition: () => {
+          return (
+            isStartOfTurn(state, otherDKey) && hasEmptyZone(state, ownHand)
+          );
+        },
+        effect: () => {
+          returnCardToHand(state, zoneCoords);
+        },
+      },
+    ];
+  },
+  [Monster.TheFiendMegacyber]: (state, { ownMonsters, otherMonsters }) => {
+    return [
+      {
+        condition: () => {
+          return (
+            countMatchesInRow(state, otherMonsters) >
+            countMatchesInRow(state, ownMonsters) + 1
+          );
+        },
+        effect: (state, { dKey }) => {
+          specialSummon(state, dKey, Monster.TheFiendMegacyber);
+        },
       },
     ];
   },

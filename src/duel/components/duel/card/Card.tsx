@@ -1,5 +1,5 @@
-import { RowKey } from "@/duel/common";
 import { selectZone } from "@/duel/duelSlice";
+import { RowKey } from "@/duel/enums/duel";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import { isDefMode, isFaceUp, isMonster } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";

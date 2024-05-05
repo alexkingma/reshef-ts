@@ -1,4 +1,6 @@
-import { Field, Monster, Trap } from "../common";
+import { Field } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { Trap } from "../enums/spellTrapRitual_v1.0";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
 import { setActiveField as setActiveFieldDirect } from "./fieldUtil";
@@ -197,3 +199,8 @@ export const tempUp =
   };
 
 export const isMon = (mon: Monster) => (z: Zone) => isSpecificMonster(z, mon);
+
+export const isAnyOfMons =
+  (...mons: Monster[]) =>
+  (z: Zone) =>
+    mons.some((mon) => isMon(mon)(z));

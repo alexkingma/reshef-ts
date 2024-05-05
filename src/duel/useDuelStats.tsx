@@ -1,7 +1,7 @@
+import duelStatsMap from "@/assets/data/duelStats.json";
 import { useAppSelector } from "@/hooks";
-import duelStatsMap from "../assets/data/duelStats.json";
-import { DuellistStatus } from "./common";
 import { selectActiveField, selectDuel } from "./duelSlice";
+import { DuellistStatus } from "./enums/duel";
 import { getVictorKey } from "./util/duelUtil";
 import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
 

@@ -1,4 +1,5 @@
-import { HandEffectCard, Monster } from "../common";
+import { Monster } from "../enums/monster";
+import { HandEffectCard } from "../enums/monster_v1.0";
 import { isStartOfEitherTurn } from "../util/duelUtil";
 import { winByExodia } from "../util/duellistUtil";
 import {

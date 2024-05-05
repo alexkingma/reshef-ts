@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useEffect } from "react";
-import { BattlePosition, DirectSpell, FlipEffectMonster } from "./common";
 import {
   actions,
   selectActiveTurn,
@@ -10,6 +9,9 @@ import {
   selectIsDuelOver,
   selectIsMyTurn,
 } from "./duelSlice";
+import { BattlePosition } from "./enums/duel";
+import { FlipEffectMonster } from "./enums/monster_v1.0";
+import { DirectSpell } from "./enums/spellTrapRitual_v1.0";
 import { useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";

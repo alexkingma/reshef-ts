@@ -1,4 +1,5 @@
-import { CounterSpellCard, Spell, Trap } from "../common";
+import { CounterSpellCard, Spell, Trap } from "../enums/spellTrapRitual_v1.0";
+import { getBurnSpells, getHealSpells } from "../util/cardUtil";
 import { burn } from "../util/duellistUtil";
 import { countMatchesInRow, destroyRow } from "../util/rowUtil";
 import { isReflectablePowerUp } from "../util/targetedSpellUtil";
@@ -9,20 +10,12 @@ export const counterSpellReducers: CardReducerMap<
   EffConReducer
 > = {
   [Trap.GoblinFan]: (state, { otherHand, dKey }) => {
+    const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
     return {
       condition: () => {
-        const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
-        return [
-          Spell.Sparks,
-          Spell.Hinotama,
-          Spell.FinalFlame,
-          Spell.Ookazi,
-          Spell.TremendousFire,
-          Spell.RestructerRevolution,
-        ].includes(originZone.card.id as Spell);
+        return getBurnSpells().includes(originZone.card.id as Spell);
       },
       effect: () => {
-        const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
         let burnAmt = 0;
         switch (originZone.card.id) {
           case Spell.Sparks:
@@ -52,13 +45,7 @@ export const counterSpellReducers: CardReducerMap<
     return {
       condition: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
-        return [
-          Spell.MooyanCurry,
-          Spell.RedMedicine,
-          Spell.GoblinsSecretRemedy,
-          Spell.SoulOfThePure,
-          Spell.DianKetoTheCureMaster,
-        ].includes(originZone.card.id as Spell);
+        return getHealSpells().includes(originZone.card.id as Spell);
       },
       effect: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
@@ -71,7 +58,7 @@ export const counterSpellReducers: CardReducerMap<
             burnAmt = 500;
             break;
           case Spell.GoblinsSecretRemedy:
-            burnAmt = 100;
+            burnAmt = 1000;
             break;
           case Spell.SoulOfThePure:
             burnAmt = 2000;

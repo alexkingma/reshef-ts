@@ -1,4 +1,4 @@
-import { DuellistKey, RowKey } from "@/duel/common";
+import { DuellistKey, RowKey } from "@/duel/enums/duel";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import classNames from "classnames";
 import { Counterweight } from "../zone/Counterweight";

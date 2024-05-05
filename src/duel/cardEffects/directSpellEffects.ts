@@ -1,12 +1,6 @@
-import {
-  BattlePosition,
-  DirectSpell,
-  DuellistKey,
-  Field,
-  Monster,
-  RowKey,
-  Spell,
-} from "../common";
+import { BattlePosition, DuellistKey, Field, RowKey } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { DirectSpell, Spell } from "../enums/spellTrapRitual_v1.0";
 import { burn, getActiveEffects } from "../util/duellistUtil";
 import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {

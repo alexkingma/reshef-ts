@@ -1,4 +1,4 @@
-import { BattlePosition, RowKey } from "../common";
+import { BattlePosition, RowKey } from "../enums/duel";
 import { getNumTributesRequired } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import {

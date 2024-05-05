@@ -1,4 +1,4 @@
-import { DuellistKey } from "@/duel/common";
+import { DuellistKey } from "@/duel/enums/duel";
 import "./Duel.scss";
 import { ZoneSummaryBar } from "./ZoneSummaryBar";
 import { Duellist } from "./duellist/Duellist";

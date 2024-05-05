@@ -1,4 +1,6 @@
-import { Field, FlipEffectMonster, Monster } from "../common";
+import { Field } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { FlipEffectMonster } from "../enums/monster_v1.0";
 import {
   hasEmptyMonsterZones,
   opponentHasMonster,

@@ -1,4 +1,6 @@
-import { AutoEffectMonster, Field, Monster } from "../common";
+import { Field } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { AutoEffectMonster } from "../enums/monster_v1.0";
 import { isLight } from "../util/cardAlignmentUtil";
 import { getExodiaCards } from "../util/cardUtil";
 import { isStartOfEitherTurn } from "../util/duelUtil";

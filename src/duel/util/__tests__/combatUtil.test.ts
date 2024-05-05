@@ -1,5 +1,6 @@
+import { BattlePosition, RowKey } from "@/duel/enums/duel";
+import { Monster } from "@/duel/enums/monster";
 import { beforeEach, describe, expect, test } from "vitest";
-import { BattlePosition, Monster, RowKey } from "../../common";
 import { getNewDuel } from "../duelUtil";
 import { calculateAttack, generateOccupiedMonsterZone } from "../zoneUtil";
 

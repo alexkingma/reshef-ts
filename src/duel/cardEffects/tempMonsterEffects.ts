@@ -1,4 +1,5 @@
-import { Monster, TempEffectMonster } from "../common";
+import { Monster } from "../enums/monster";
+import { TempEffectMonster } from "../enums/monster_v1.0";
 import { isDark, isLight } from "../util/cardAlignmentUtil";
 import {
   isDragon,

@@ -1,7 +1,10 @@
-import { DuellistKey, Monster, RowKey, Spell } from "@/duel/common";
+import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { Monster } from "@/duel/enums/monster";
+import { Spell } from "@/duel/enums/spellTrapRitual_v1.0";
 import { burn } from "@/duel/util/duellistUtil";
+import { rowContainsAnyCards } from "@/duel/util/rowUtil";
 import { burnOther, destroyRows, healSelf } from "@/duel/util/wrappedUtil";
-import { transformMonster } from "@/duel/util/zoneUtil";
+import { specialSummon, transformMonster } from "@/duel/util/zoneUtil";
 
 export const spellEffects: CardSubsetReducerMap<Spell, DirectEffectReducer> = {
   // burn
@@ -35,4 +38,18 @@ export const spellEffects: CardSubsetReducerMap<Spell, DirectEffectReducer> = {
     [DuellistKey.Player, RowKey.SpellTrap],
     [DuellistKey.Opponent, RowKey.SpellTrap],
   ]),
+  [Spell.ElegantEgotist]: (state, { ownMonsters, dKey }) => {
+    // If "Harpie Lady" or "Cyber Harpie" is on the field:
+    // Special Summon 1 "Harpie Lady" or "Harpie Lady Sisters"
+    if (
+      rowContainsAnyCards(
+        state,
+        ownMonsters,
+        Monster.HarpieLady,
+        Monster.CyberHarpie
+      )
+    ) {
+      specialSummon(state, dKey, Monster.HarpieLadySisters);
+    }
+  },
 };

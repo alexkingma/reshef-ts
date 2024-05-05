@@ -1,4 +1,5 @@
-import { Monster, Orientation, RowKey } from "../common";
+import { Orientation, RowKey } from "../enums/duel";
+import { Monster } from "../enums/monster";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { setCardAtCoords, specialSummon } from "./zoneUtil";
 

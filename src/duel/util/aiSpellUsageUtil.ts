@@ -1,4 +1,6 @@
-import { DirectSpell, Field, Monster, Spell } from "../common";
+import { Field } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { DirectSpell, Spell } from "../enums/spellTrapRitual_v1.0";
 import {
   onlyOpponentHasMonster,
   opponentHasMonster,

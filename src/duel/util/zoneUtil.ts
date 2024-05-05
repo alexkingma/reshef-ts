@@ -1,16 +1,14 @@
 import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
 import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
 import { flipEffectReducers } from "../cardEffects/flipEffects";
+import { BattlePosition, Orientation, RowKey } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { FlipEffectMonster } from "../enums/monster_v1.0";
 import {
-  BattlePosition,
   CounterAttackCard,
   CounterSpellCard,
-  FlipEffectMonster,
-  Monster,
-  Orientation,
-  RowKey,
   SpellTrapRitual,
-} from "../common";
+} from "../enums/spellTrapRitual_v1.0";
 import { getAlignmentResult, getCard } from "./cardUtil";
 import {
   burn,
@@ -104,6 +102,21 @@ export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
 
+export const setDefMode = (z: OccupiedMonsterZone) => {
+  z.battlePosition = BattlePosition.Defence;
+};
+
+export const setAtkMode = (z: OccupiedMonsterZone) => {
+  z.battlePosition = BattlePosition.Attack;
+};
+
+export const toggleBattlePosition = (z: OccupiedMonsterZone) => {
+  if (z.battlePosition === BattlePosition.Attack) {
+    setDefMode(z);
+  } else {
+    setAtkMode(z);
+  }
+};
 export const permPowerUp = (
   state: Duel,
   coords: ZoneCoords,

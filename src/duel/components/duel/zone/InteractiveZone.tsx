@@ -1,5 +1,5 @@
-import { InteractionMode, RowKey } from "@/duel/common";
 import { selectInteraction, selectZone } from "@/duel/duelSlice";
+import { InteractionMode, RowKey } from "@/duel/enums/duel";
 import { useInteractionActions } from "@/duel/useDuelActions";
 import { InteractionKey, useDuelInteraction } from "@/duel/useDuelInteraction";
 import { useZoneButtons } from "@/duel/useZoneButtons";

@@ -1,5 +1,5 @@
-import { InteractionMode, RowKey } from "@/duel/common";
 import { selectDuel, selectInteraction, selectZone } from "@/duel/duelSlice";
+import { InteractionMode, RowKey } from "@/duel/enums/duel";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import { isValidSpellTarget } from "@/duel/util/targetedSpellUtil";
 import { getZone } from "@/duel/util/zoneUtil";

@@ -1,5 +1,6 @@
+import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { Monster } from "@/duel/enums/monster";
 import { describe, expect, test } from "vitest";
-import { DuellistKey, Monster, RowKey } from "../../common";
 import { getNewDuel } from "../duelUtil";
 import { getHighestAtkZoneIdx } from "../rowUtil";
 import { generateOccupiedMonsterZone } from "../zoneUtil";

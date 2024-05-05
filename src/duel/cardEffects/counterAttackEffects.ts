@@ -1,4 +1,4 @@
-import { CounterAttackCard, Trap } from "../common";
+import { CounterAttackCard, Trap } from "../enums/spellTrapRitual_v1.0";
 import { destroyRow } from "../util/rowUtil";
 import { trapDestroyAttacker } from "../util/wrappedUtil";
 import { immobiliseCard, permPowerDown } from "../util/zoneUtil";

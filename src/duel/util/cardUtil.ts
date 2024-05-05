@@ -1,6 +1,7 @@
 import { default as alignmentMap } from "@/assets/data/alignment.json";
 import cards from "@/assets/data/cards";
-import { Monster, Spell, Trap } from "../common";
+import { Monster } from "../enums/monster";
+import { Spell, Trap } from "../enums/spellTrapRitual_v1.0";
 
 // Create a lookup map at runtime to avoid doing [].find()
 // every time card data needs to be fetched (100s of times per duel).
@@ -41,7 +42,7 @@ export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {
 export const getRandomCardId = (cardRules: Partial<Card> = {}): CardId => {
   let dbCard;
   do {
-    dbCard = cards[Math.floor(Math.random() * cards.length)];
+    dbCard = getCard(Math.floor(Math.random() * cards.length + 1));
   } while (!isCardMatch(getCard(dbCard.id), cardRules));
   return dbCard.id;
 };

@@ -1,4 +1,4 @@
-import { BattlePosition, Orientation, RowKey } from "../common";
+import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
 import { getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";

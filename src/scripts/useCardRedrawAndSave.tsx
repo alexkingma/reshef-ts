@@ -9,7 +9,7 @@ import frame_trap from "@/assets/images/blueprints/trap.png";
 import levelImgSrc from "@/assets/images/level.png";
 import spellImgSrc from "@/assets/images/spell.png";
 import trapImgSrc from "@/assets/images/trap.png";
-import { Monster } from "@/duel/common";
+import { Monster } from "@/duel/enums/monster";
 import { getCard } from "@/duel/util/cardUtil";
 import { useState } from "react";
 import {

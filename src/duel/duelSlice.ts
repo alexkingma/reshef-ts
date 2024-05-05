@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { DuellistStatus, PlayerType, RowKey } from "./common";
+import { DuellistStatus, PlayerType, RowKey } from "./enums/duel";
 import { cardReducers } from "./reducers/cardReducers";
 import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";

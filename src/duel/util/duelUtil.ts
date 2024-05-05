@@ -4,7 +4,7 @@ import {
   InteractionMode,
   PlayerType,
   RowKey,
-} from "../common";
+} from "../enums/duel";
 import {
   getFreshDuellistState,
   getRandomDuellable,

@@ -1,18 +1,29 @@
-import { Monster } from "@/duel/common";
+import { Monster } from "@/duel/enums/monster";
+import { draw } from "@/duel/util/deckUtil";
 import { burn } from "@/duel/util/duellistUtil";
 import { addToGraveyard } from "@/duel/util/graveyardUtil";
 import {
+  clearFirstTrap,
   countMatchesInRow,
+  destroyFirstFound,
   destroyHighestAtk,
+  destroyRow,
+  getHighestAtkZoneIdx,
   powerDownHighestAtk,
 } from "@/duel/util/rowUtil";
-import { directAttack as directAttack_Wrapped } from "@/duel/util/wrappedUtil";
+import {
+  directAttack as directAttack_Wrapped,
+  healSelf,
+} from "@/duel/util/wrappedUtil";
 import {
   addCardToHand,
   clearZone,
   getZone,
+  isFaceUp,
   isMonster,
-  isNotGodCard,
+  isSpell,
+  returnCardToHand,
+  toggleBattlePosition,
 } from "@/duel/util/zoneUtil";
 
 export const flipEffectReducers: CardSubsetReducerMap<
@@ -34,17 +45,17 @@ export const flipEffectReducers: CardSubsetReducerMap<
   // unsorted
   [Monster.Suijin]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    destroyHighestAtk(state, otherDKey, isNotGodCard);
+    destroyHighestAtk(state, otherDKey);
     burn(state, otherDKey, z.card.effAtk);
   },
   [Monster.Kazejin]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    destroyHighestAtk(state, otherDKey, isNotGodCard);
+    destroyHighestAtk(state, otherDKey);
     burn(state, otherDKey, z.card.effAtk);
   },
   [Monster.SangaOfTheThunder]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    destroyHighestAtk(state, otherDKey, isNotGodCard);
+    destroyHighestAtk(state, otherDKey);
     burn(state, otherDKey, z.card.effAtk);
   },
   [Monster.Berfomet]: (state, { dKey }) => {
@@ -79,4 +90,39 @@ export const flipEffectReducers: CardSubsetReducerMap<
   [Monster.DarkJeroid]: (state, { otherDKey }) => {
     powerDownHighestAtk(state, otherDKey);
   },
+  [Monster.ArmedNinja]: (state, { otherSpellTrap }) => {
+    destroyFirstFound(state, otherSpellTrap, isSpell);
+  },
+  [Monster.TrapMaster]: (state, { otherDKey }) => {
+    clearFirstTrap(state, otherDKey);
+  },
+  [Monster.MorphingJar]: (state, { ownHand, otherHand, dKey, otherDKey }) => {
+    // both players discard hands, draw 5 new cards
+    destroyRow(state, ownHand);
+    destroyRow(state, otherHand);
+    draw(state, dKey, 5);
+    draw(state, otherDKey, 5);
+  },
+  [Monster.ManEaterBug]: (state, { otherDKey }) => {
+    destroyHighestAtk(state, otherDKey);
+  },
+  [Monster.HaneHane]: (state, { otherMonsters }) => {
+    const i = getHighestAtkZoneIdx(state, otherMonsters);
+    if (i === -1) return;
+    returnCardToHand(state, [...otherMonsters, i]);
+  },
+  [Monster.PenguinSoldier]: (state, { otherMonsters }) => {
+    for (let i = 0; i < 2; i++) {
+      const i = getHighestAtkZoneIdx(state, otherMonsters);
+      if (i === -1) return;
+      returnCardToHand(state, [...otherMonsters, i]);
+    }
+  },
+  [Monster.BiteShoes]: (state, { otherMonsters }) => {
+    const i = getHighestAtkZoneIdx(state, otherMonsters, isFaceUp);
+    if (i === -1) return;
+    const z = getZone(state, [...otherMonsters, i]) as OccupiedMonsterZone;
+    toggleBattlePosition(z);
+  },
+  [Monster.TheImmortalOfThunder]: healSelf(3000),
 };

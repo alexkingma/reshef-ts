@@ -1,5 +1,5 @@
-import { PlayerType } from "@/duel/common";
 import { selectConfig } from "@/duel/duelSlice";
+import { PlayerType } from "@/duel/enums/duel";
 import { useDuelActions } from "@/duel/useDuelActions";
 import { getDuellables } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";

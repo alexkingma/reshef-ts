@@ -1,5 +1,5 @@
-import { DuellistKey } from "@/duel/common";
 import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
+import { DuellistKey } from "@/duel/enums/duel";
 import { useDuellistActions } from "@/duel/useDuelActions";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";

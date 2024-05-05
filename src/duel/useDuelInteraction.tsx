@@ -1,11 +1,11 @@
 import { useAppSelector } from "../hooks";
-import { InteractionMode, RowKey } from "./common";
 import {
   selectActiveTurn,
   selectIsMyTurn,
   selectOpponentHasMonster,
   selectZone,
 } from "./duelSlice";
+import { InteractionMode, RowKey } from "./enums/duel";
 import { useCardActions, useInteractionActions } from "./useDuelActions";
 import { getNumTributesRequired } from "./util/cardUtil";
 import { spellHasTarget } from "./util/targetedSpellUtil";

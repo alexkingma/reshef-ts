@@ -1,17 +1,19 @@
+import { Monster } from "../enums/monster";
 import {
   AutoEffectMonster,
+  FlipEffectMonster,
+  GraveyardEffectMonster,
+  HandEffectCard,
+  TempEffectMonster,
+} from "../enums/monster_v1.0";
+import {
   AutoSpellTrap,
   CounterAttackCard,
   CounterSpellCard,
   DirectSpell,
-  FlipEffectMonster,
-  GraveyardEffectMonster,
-  HandEffectCard,
-  Monster,
   Spell,
-  TempEffectMonster,
   Trap,
-} from "../common";
+} from "../enums/spellTrapRitual_v1.0";
 
 type DialogueMap<K extends number> = {
   [key in K]: string;

@@ -4,6 +4,8 @@ type CardEffect = (state: Duel, coords: ZoneCoordsMap) => void;
 interface ConditionalEffect {
   condition: CardCondition;
   effect: CardEffect;
+  noDiscard?: boolean;
+  dialogue?: string; // TODO
 }
 
 type EffConReducer = (state: Duel, coords: ZoneCoordsMap) => ConditionalEffect;

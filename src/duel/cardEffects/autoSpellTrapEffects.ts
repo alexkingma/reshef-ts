@@ -1,4 +1,6 @@
-import { AutoSpellTrap, Monster, Orientation, Spell, Trap } from "../common";
+import { Orientation } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { AutoSpellTrap, Spell, Trap } from "../enums/spellTrapRitual_v1.0";
 import { isDragon } from "../util/cardTypeUtil";
 import { getFinalCards } from "../util/cardUtil";
 import { burn, isStartOfTurn, winByFINAL } from "../util/duellistUtil";

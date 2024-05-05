@@ -1,11 +1,7 @@
-import {
-  DuellistKey,
-  Field,
-  FlipEffectMonster,
-  Monster,
-  RowKey,
-  Trap,
-} from "../common";
+import { DuellistKey, Field, RowKey } from "../enums/duel";
+import { Monster } from "../enums/monster";
+import { FlipEffectMonster } from "../enums/monster_v1.0";
+import { Trap } from "../enums/spellTrapRitual_v1.0";
 import { isInsect } from "../util/cardTypeUtil";
 import { getCard } from "../util/cardUtil";
 import { shuffle } from "../util/common";
