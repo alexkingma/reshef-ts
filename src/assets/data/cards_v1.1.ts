@@ -2,7 +2,7 @@ import { Monster } from "@/duel/enums/monster";
 import { Spell, Trap } from "@/duel/enums/spellTrapRitual_v1.0";
 import cards from "./cards";
 
-const getCard = (id: CardId): DBCard => {
+const getCard = (id: CardId): Card => {
   const dbCard = cards[id + 1];
   if (!dbCard) {
     throw new Error(`Unknown card id: ${id}`);
@@ -10,68 +10,68 @@ const getCard = (id: CardId): DBCard => {
   return dbCard;
 };
 
-const updatedCards: DBCard[] = [
+const updatedCards: Card[] = [
   // ---- stat changes ----- //
   {
-    ...(getCard(Monster.DarkEyesIllusionist) as DBMonsterCard),
+    ...(getCard(Monster.DarkEyesIllusionist) as MonsterCard),
     cost: 161,
     def: 1400,
   },
   {
-    ...(getCard(Monster.NightmarePenguin) as DBMonsterCard),
+    ...(getCard(Monster.NightmarePenguin) as MonsterCard),
     cost: 260,
     level: 4,
     atk: 900,
     def: 1800,
   },
   {
-    ...(getCard(Monster.Barox) as DBMonsterCard),
+    ...(getCard(Monster.Barox) as MonsterCard),
     cost: 9,
     atk: 1380,
     def: 1530,
   },
   {
-    ...(getCard(Monster.DarkChimera) as DBMonsterCard),
+    ...(getCard(Monster.DarkChimera) as MonsterCard),
     cost: 15,
     atk: 1610,
     def: 1460,
   },
   {
-    ...(getCard(Monster.KingOfYamimakai) as DBMonsterCard),
+    ...(getCard(Monster.KingOfYamimakai) as MonsterCard),
     cost: 86,
     atk: 2000,
     def: 1530,
   },
   {
-    ...(getCard(Monster.CastleOfDarkIllusions) as DBMonsterCard),
+    ...(getCard(Monster.CastleOfDarkIllusions) as MonsterCard),
     cost: 298,
     atk: 920,
     def: 1930,
   },
   {
-    ...(getCard(Monster.ReaperOfTheCards) as DBMonsterCard),
+    ...(getCard(Monster.ReaperOfTheCards) as MonsterCard),
     cost: 68,
     atk: 1380,
     def: 1930,
   },
   {
-    ...(getCard(Monster.MetalGuardian) as DBMonsterCard),
+    ...(getCard(Monster.MetalGuardian) as MonsterCard),
     cost: 132,
     atk: 1150,
     def: 2150,
   },
   {
-    ...(getCard(Monster.PenguinTorpedo) as DBMonsterCard),
+    ...(getCard(Monster.PenguinTorpedo) as MonsterCard),
     cost: 33,
     atk: 550,
   },
   {
-    ...(getCard(Monster.HannibalNecromancer) as DBMonsterCard),
+    ...(getCard(Monster.HannibalNecromancer) as MonsterCard),
     cost: 260,
     level: 4,
   },
   {
-    ...(getCard(Monster.SliferTheSkyDragon) as DBMonsterCard),
+    ...(getCard(Monster.SliferTheSkyDragon) as MonsterCard),
     atk: 0,
     def: 0,
   },
@@ -132,77 +132,77 @@ const updatedCards: DBCard[] = [
 
   // ---- type changes ----- //
   {
-    ...(getCard(Monster.SuperWarLion) as DBMonsterCard),
+    ...(getCard(Monster.SuperWarLion) as MonsterCard),
     alignment: "Earth",
     cost: 6,
   },
   {
-    ...(getCard(Monster.ZeraTheMant) as DBMonsterCard),
+    ...(getCard(Monster.ZeraTheMant) as MonsterCard),
     alignment: "Dark",
     cost: 58,
   },
   {
-    ...(getCard(Monster.BlackLusterSoldier) as DBMonsterCard),
+    ...(getCard(Monster.BlackLusterSoldier) as MonsterCard),
     alignment: "Earth",
     cost: 95,
   },
   {
-    ...(getCard(Monster.FiendsMirror) as DBMonsterCard),
+    ...(getCard(Monster.FiendsMirror) as MonsterCard),
     alignment: "Dark",
     cost: 116,
   },
   {
-    ...(getCard(Monster.PerformanceOfSword) as DBMonsterCard),
+    ...(getCard(Monster.PerformanceOfSword) as MonsterCard),
     alignment: "Earth",
     cost: 73,
   },
   {
-    ...(getCard(Monster.HungryBurger) as DBMonsterCard),
+    ...(getCard(Monster.HungryBurger) as MonsterCard),
     alignment: "Dark",
     cost: 86,
   },
   {
-    ...(getCard(Monster.SkullGuardian) as DBMonsterCard),
+    ...(getCard(Monster.SkullGuardian) as MonsterCard),
     alignment: "Light",
     cost: 20,
   },
   {
-    ...(getCard(Monster.Chakra) as DBMonsterCard),
+    ...(getCard(Monster.Chakra) as MonsterCard),
     alignment: "Dark",
     cost: 16,
   },
   {
-    ...(getCard(Monster.CrabTurtle) as DBMonsterCard),
+    ...(getCard(Monster.CrabTurtle) as MonsterCard),
     alignment: "Water",
     cost: 25,
   },
   {
-    ...(getCard(Monster.GarmaSword) as DBMonsterCard),
+    ...(getCard(Monster.GarmaSword) as MonsterCard),
     alignment: "Dark",
     cost: 25,
   },
   {
-    ...(getCard(Monster.JavelinBeetle) as DBMonsterCard),
+    ...(getCard(Monster.JavelinBeetle) as MonsterCard),
     alignment: "Earth",
     cost: 25,
   },
   {
-    ...(getCard(Monster.FortressWhale) as DBMonsterCard),
+    ...(getCard(Monster.FortressWhale) as MonsterCard),
     alignment: "Water",
     cost: 9,
   },
   {
-    ...(getCard(Monster.Dokurorider) as DBMonsterCard),
+    ...(getCard(Monster.Dokurorider) as MonsterCard),
     alignment: "Dark",
     cost: 61,
   },
   {
-    ...(getCard(Monster.MagicianOfBlackChaos) as DBMonsterCard),
+    ...(getCard(Monster.MagicianOfBlackChaos) as MonsterCard),
     alignment: "Dark",
     cost: 58,
   },
   {
-    ...(getCard(Monster.Relinquished) as DBMonsterCard),
+    ...(getCard(Monster.Relinquished) as MonsterCard),
     alignment: "Dark",
   },
 ];
@@ -280,4 +280,5 @@ const newEffectCardIds = new Set<CardId>([
   Spell.MagicalLabyrinth,
 
   // TODO: convert this into type keys for the effect map
-];
+]);
+

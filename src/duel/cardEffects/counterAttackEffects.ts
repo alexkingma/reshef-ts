@@ -15,11 +15,11 @@ export const counterAttackReducers: CardReducerMap<
       },
     };
   },
-  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => z.card.effAtk <= 500),
-  [Trap.Eatgaboon]: trapDestroyAttacker((z) => z.card.effAtk <= 1000),
-  [Trap.BearTrap]: trapDestroyAttacker((z) => z.card.effAtk <= 1500),
-  [Trap.InvisibleWire]: trapDestroyAttacker((z) => z.card.effAtk <= 2000),
-  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => z.card.effAtk <= 3000),
+  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => z.effAtk <= 500),
+  [Trap.Eatgaboon]: trapDestroyAttacker((z) => z.effAtk <= 1000),
+  [Trap.BearTrap]: trapDestroyAttacker((z) => z.effAtk <= 1500),
+  [Trap.InvisibleWire]: trapDestroyAttacker((z) => z.effAtk <= 2000),
+  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => z.effAtk <= 3000),
   [Trap.WidespreadRuin]: trapDestroyAttacker(() => true),
   [Trap.TorrentialTribute]: (state, { ownMonsters }) => {
     return {

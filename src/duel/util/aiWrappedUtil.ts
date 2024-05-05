@@ -1,6 +1,7 @@
 import { Field } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Spell } from "../enums/spellTrapRitual_v1.0";
+import { getCard } from "./cardUtil";
 import { getActiveField, isBuffedByField } from "./fieldUtil";
 import { countMatchesInRow, hasMatchInRow } from "./rowUtil";
 import { isValidSpellTarget } from "./targetedSpellUtil";
@@ -11,8 +12,10 @@ export const shouldUseField =
     const activeField = getActiveField(state);
     if (newField === activeField) return false;
 
-    const isBuffed = (field: Field) => (z: OccupiedZone) =>
-      isBuffedByField((z.card as MonsterCard).type, field);
+    const isBuffed = (field: Field) => (z: OccupiedZone) => {
+      const { type } = getCard(z.id) as MonsterCard;
+      return isBuffedByField(type, field);
+    };
 
     if (newField === Field.Arena) {
       // turn off field if opponent is benefiting and AI isn't
@@ -29,9 +32,7 @@ export const shouldUseField =
 export const spellHasValidTarget =
   (spell: Spell) =>
   (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
-    hasMatchInRow(state, ownMonsters, (z) =>
-      isValidSpellTarget(spell, z.card.id)
-    );
+    hasMatchInRow(state, ownMonsters, (z) => isValidSpellTarget(spell, z.id));
 
 export const opponentHasSpellTrap =
   (condition?: (z: OccupiedZone) => boolean) =>
@@ -55,10 +56,10 @@ export const selfHasMonster =
     hasMatchInRow(state, ownMonsters, condition);
 
 export const selfHasSpecificMonster = (...monsters: Monster[]) =>
-  selfHasMonster((z) => monsters.includes(z.card.id));
+  selfHasMonster((z) => monsters.includes(z.id));
 
 export const selfHasAllSpecificMonsters = (...monsters: Monster[]) =>
-  selfHasMonster((z) => monsters.every((m) => m === z.card.id));
+  selfHasMonster((z) => monsters.every((m) => m === z.id));
 
 export const hasEmptyMonsterZones =
   (numFreeZones: number = 1) =>

@@ -13,11 +13,11 @@ export const counterSpellReducers: CardReducerMap<
     const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
     return {
       condition: () => {
-        return getBurnSpells().includes(originZone.card.id as Spell);
+        return getBurnSpells().includes(originZone.id as Spell);
       },
       effect: () => {
         let burnAmt = 0;
-        switch (originZone.card.id) {
+        switch (originZone.id) {
           case Spell.Sparks:
             burnAmt = 50;
             break;
@@ -45,12 +45,12 @@ export const counterSpellReducers: CardReducerMap<
     return {
       condition: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
-        return getHealSpells().includes(originZone.card.id as Spell);
+        return getHealSpells().includes(originZone.id as Spell);
       },
       effect: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
         let burnAmt = 0;
-        switch (originZone.card.id) {
+        switch (originZone.id) {
           case Spell.MooyanCurry:
             burnAmt = 200;
             break;
@@ -75,7 +75,7 @@ export const counterSpellReducers: CardReducerMap<
     return {
       condition: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
-        return isReflectablePowerUp(originZone.card.id);
+        return isReflectablePowerUp(originZone.id);
       },
       effect: () => {
         permPowerDown(state, state.interaction.targetCoords!, 500, 500);
@@ -93,7 +93,7 @@ export const counterSpellReducers: CardReducerMap<
     return {
       condition: () => {
         const originZone = getOriginZone(state) as OccupiedSpellTrapZone;
-        return originZone.card.id === Spell.Raigeki;
+        return originZone.id === Spell.Raigeki;
       },
       effect: () => {
         destroyRow(state, ownMonsters);

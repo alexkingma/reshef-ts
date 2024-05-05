@@ -41,7 +41,7 @@ export const monsterUsageMap: CardReducerMap<FlipEffectMonster, CardCondition> =
       hasMatchInRow(
         state,
         ownMonsters,
-        (z) => (z as OccupiedMonsterZone).card.effAtk <= 500
+        (z) => (z as OccupiedMonsterZone).effAtk <= 500
       ),
     [Monster.SpiritOfTheBooks]: hasEmptyMonsterZones(),
     [Monster.Nemuriko]: opponentHasMonster(),

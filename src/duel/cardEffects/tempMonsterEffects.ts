@@ -122,7 +122,7 @@ export const tempMonsterEffects: CardReducerMap<
       Monster.ClownZombie,
     ];
     const effCon = updateMatches(state, ownMonsters, tempUp500, (z) =>
-      cards.includes(z.card.id)
+      cards.includes(z.id)
     );
     return [effCon];
   },

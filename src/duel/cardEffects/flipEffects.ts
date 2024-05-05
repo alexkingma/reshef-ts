@@ -3,7 +3,6 @@ import { Monster } from "../enums/monster";
 import { FlipEffectMonster } from "../enums/monster_v1.0";
 import { Trap } from "../enums/spellTrapRitual_v1.0";
 import { isInsect } from "../util/cardTypeUtil";
-import { getCard } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { burn, heal } from "../util/duellistUtil";
@@ -45,6 +44,7 @@ import {
   isFaceDown,
   isFaceUp,
   isNotGodCard,
+  isOccupied,
   isSpecificMonster,
   isSpell,
   magnetWarriorMergeAttempt,
@@ -54,6 +54,7 @@ import {
   setSpellTrap,
   specialSummon,
   subsumeMonster,
+  transformMonster,
   xyzMergeAttempt,
 } from "../util/zoneUtil";
 
@@ -109,7 +110,7 @@ export const flipEffectReducers: CardReducerMap<
     // select up to 3 (random, occupied) enemy monster idxs
     const idxsToTarget = shuffle(
       state[otherDKey].monsterZones.reduce((arr, z, idx) => {
-        if (!z.isOccupied) return arr;
+        if (!isOccupied(z)) return arr;
         return [...arr, idx];
       }, [] as number[])
     ).slice(0, 3);
@@ -210,8 +211,8 @@ export const flipEffectReducers: CardReducerMap<
 
     const handIdx = getHighestAtkZoneIdx(state, ownHand, isInsect);
     if (handIdx === -1) return; // no insect to summon
-    const { card } = state[dKey].hand[handIdx] as OccupiedZone;
-    specialSummon(state, dKey, card.id);
+    const z = getZone(state, [...ownHand, handIdx]);
+    specialSummon(state, dKey, z.id);
 
     clearZone(state, [...ownHand, handIdx]);
   },
@@ -221,13 +222,13 @@ export const flipEffectReducers: CardReducerMap<
     updateMonsters(
       state,
       ownMonsters,
-      (z) => (z.card = getCard(Monster.DarkSage) as MonsterCard),
+      (z) => transformMonster(z, Monster.DarkSage),
       (z) => isSpecificMonster(z, Monster.DarkMagician)
     );
     updateMonsters(
       state,
       ownMonsters,
-      (z) => (z.card = getCard(Monster.ThousandDragon) as MonsterCard),
+      (z) => transformMonster(z, Monster.ThousandDragon),
       (z) => isSpecificMonster(z, Monster.BabyDragon)
     );
   },
@@ -239,7 +240,7 @@ export const flipEffectReducers: CardReducerMap<
         z.permPowerUpAtk += 500;
         z.permPowerUpDef += 500;
       },
-      (z: OccupiedMonsterZone) => z.card.atk <= 500
+      (z: OccupiedMonsterZone) => z.effAtk <= 500
     );
   },
   [Monster.HourglassOfLife]: (state, { dKey, ownMonsters }) => {
@@ -303,10 +304,11 @@ export const flipEffectReducers: CardReducerMap<
   ) => {
     const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
     if (targetIdx === -1) return;
-    const { card } = state[otherDKey].monsterZones[
-      targetIdx
-    ] as OccupiedMonsterZone;
-    burn(state, otherDKey, card.atk);
+    const z = getZone(state, [
+      ...otherMonsters,
+      targetIdx,
+    ]) as OccupiedMonsterZone;
+    burn(state, otherDKey, z.effAtk);
     destroyAtCoords(state, zoneCoords);
   },
 
@@ -378,9 +380,9 @@ export const flipEffectReducers: CardReducerMap<
     const idxsToClear: number[] = [];
     let combinedAtk = 0;
     state[dKey].monsterZones.forEach((z, idx) => {
-      if (!z.isOccupied || z.isLocked || idx === monsterIdx) return;
+      if (!isOccupied(z) || z.isLocked || idx === monsterIdx) return;
       idxsToClear.push(idx);
-      combinedAtk += z.card.atk;
+      combinedAtk += z.effAtk;
     });
     idxsToClear.forEach((idx) => destroyAtCoords(state, [...ownMonsters, idx]));
     burn(state, otherDKey, combinedAtk);
@@ -407,7 +409,7 @@ export const flipEffectReducers: CardReducerMap<
     // the hands of both players if there is space in the hands
     const returnRowToHand = (rowCoords: RowCoords) => {
       getRow(state, rowCoords).forEach((z, i) => {
-        if (!z.isOccupied) return;
+        if (!isOccupied(z)) return;
         returnCardToHand(state, [...rowCoords, i]);
       });
     };
@@ -423,7 +425,7 @@ export const flipEffectReducers: CardReducerMap<
       // must re-get zone on each iteration of loop in order to check if
       // Berserk Dragon has destroyed itself before completing all attacks
       const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-      if (!z.isOccupied || !originZone.isOccupied) {
+      if (!isOccupied(z) || !isOccupied(originZone)) {
         // don't attack if Berserk Dragon itself has been destroyed
         return;
       }

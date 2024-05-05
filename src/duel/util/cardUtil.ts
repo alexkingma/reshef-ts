@@ -7,30 +7,19 @@ import { Spell, Trap } from "../enums/spellTrapRitual_v1.0";
 // every time card data needs to be fetched (100s of times per duel).
 // Measured to be on average 6-10x faster than array lookup, and
 // will scale better as new cards are added.
-const CARD_MAP = cards.reduce(
-  (map, dbCard) => {
-    return {
-      ...map,
-      [dbCard.id]: dbCard,
-    };
-  },
-  {} as Record<CardId, Card>
-);
+const CARD_MAP: Record<CardId, Card> = cards.reduce((map, dbCard) => {
+  return {
+    ...map,
+    [dbCard.id]: dbCard,
+  };
+}, {});
 
 export const getCard = (id: CardId): Card => {
-  const dbCard = CARD_MAP[id];
-  if (!dbCard) {
+  const card = CARD_MAP[id];
+  if (!card) {
     throw new Error(`Unknown card id: ${id}`);
   }
-  if (dbCard.category !== "Monster") {
-    return dbCard;
-  }
-
-  return {
-    ...dbCard,
-    effAtk: dbCard.atk,
-    effDef: dbCard.def,
-  };
+  return card;
 };
 
 export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {
@@ -40,11 +29,11 @@ export const isCardMatch = (card: Card, cardRules: Partial<Card> = {}) => {
 };
 
 export const getRandomCardId = (cardRules: Partial<Card> = {}): CardId => {
-  let dbCard;
+  let card;
   do {
-    dbCard = getCard(Math.floor(Math.random() * cards.length + 1));
-  } while (!isCardMatch(getCard(dbCard.id), cardRules));
-  return dbCard.id;
+    card = getCard(Math.floor(Math.random() * cards.length + 1));
+  } while (!isCardMatch(card, cardRules));
+  return card.id;
 };
 
 export const getExodiaCards = () => {

@@ -1,4 +1,5 @@
-type CardId = Monster; // decorative type
+type CARD_NONE = 0;
+type CardId = number; // decorative type
 type CardCategory = "Monster" | "Magic" | "Trap" | "Ritual";
 
 type CardType =
@@ -36,7 +37,6 @@ type Alignment =
   | "Divine"
   | "Thunder";
 
-type DBCard = DBMonsterCard | SpellTrapRitualCard;
 type Card = MonsterCard | SpellTrapRitualCard;
 
 interface BaseCard {
@@ -47,7 +47,7 @@ interface BaseCard {
   category: CardCategory;
 }
 
-type DBMonsterCard = BaseCard & {
+type MonsterCard = BaseCard & {
   category: "Monster";
   effect: boolean;
   type: CardType;
@@ -56,11 +56,6 @@ type DBMonsterCard = BaseCard & {
   atk: number;
   def: number;
   code: number;
-};
-
-type MonsterCard = DBMonsterCard & {
-  effAtk: number;
-  effDef: number;
 };
 
 type SpellTrapRitualCard = BaseCard & {

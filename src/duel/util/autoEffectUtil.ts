@@ -6,7 +6,12 @@ import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
 import { Orientation, RowKey } from "../enums/duel";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { getRow, updateMonsters } from "./rowUtil";
-import { getCombatStats, getZone, getZoneCoordsMap } from "./zoneUtil";
+import {
+  getCombatStats,
+  getZone,
+  getZoneCoordsMap,
+  isOccupied,
+} from "./zoneUtil";
 
 export const checkAutoEffects = (state: Duel) => {
   // Temp power-up effects are separate from perm (but still auto) effects.
@@ -54,11 +59,10 @@ const resetRowCombatStats = (state: Duel, dKey: DuellistKey) => {
 };
 
 const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
-  const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-  zone.card = {
-    ...zone.card,
-    ...getCombatStats(state, zoneCoords),
-  };
+  const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+  const { effAtk, effDef } = getCombatStats(state, zoneCoords);
+  z.effAtk = effAtk;
+  z.effDef = effDef;
 };
 
 const checkPermAutoEffects = (state: Duel) => {
@@ -91,17 +95,17 @@ const checkRowEffects = <T extends CardId>(
     const coordsMap = getZoneCoordsMap([...rowCoords, i]);
     const { zoneCoords } = coordsMap;
 
-    const zone = getZone(state, zoneCoords);
-    if (!zone.isOccupied) return;
+    const z = getZone(state, zoneCoords);
+    if (!isOccupied(z)) return;
 
-    const reducer = reducerMap[zone.card.id as T];
+    const reducer = reducerMap[z.id as T];
     if (!reducer) return;
 
     const conEffectPairs = reducer(state, coordsMap);
     conEffectPairs.forEach(({ condition, effect }) => {
       if (!condition(state, coordsMap)) return;
 
-      zone.orientation = Orientation.FaceUp;
+      z.orientation = Orientation.FaceUp;
       effect(state, coordsMap);
     });
   });

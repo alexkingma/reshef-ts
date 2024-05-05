@@ -20,7 +20,7 @@ const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
 const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   // remove cards that never made it out of the deck pile, since those
   // didn't contribute to the outcome of the duel one way or another
-  const unusedCards = deck.map((z) => z.card.id);
+  const unusedCards = deck.map((z) => z.id);
   const entireDeck = cardQuantMapToDeck(deckTemplate);
 
   unusedCards.forEach((c) => {
@@ -38,8 +38,8 @@ const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
 };
 
 const getAvgCardElo = (ids: CardId[]) => {
-  const totalDeckElo = ids.reduce((total, card) => {
-    const { name } = getCard(card);
+  const totalDeckElo = ids.reduce((total, id) => {
+    const { name } = getCard(id);
     return total + (cardEloMap as EloMap)[name];
   }, 0);
   return totalDeckElo / ids.length;

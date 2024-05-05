@@ -2,8 +2,10 @@ import duelStatsMap from "@/assets/data/duelStats.json";
 import { useAppSelector } from "@/hooks";
 import { selectActiveField, selectDuel } from "./duelSlice";
 import { DuellistStatus } from "./enums/duel";
+import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";
 import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
+import { isOccupied } from "./util/zoneUtil";
 
 const sortByValue = <T extends Record<string, number>>(obj: T): T => {
   return Object.entries(obj)
@@ -51,11 +53,12 @@ export const useDuelStats = () => {
     duelStatsMap.winnerRemainingLP[winner.lp] = lpCount + 1;
 
     winner.monsterZones.forEach((z) => {
-      if (!z.isOccupied) return;
+      if (!isOccupied(z)) return;
+      const card = getCard(z.id);
       //@ts-expect-error
-      const count = duelStatsMap.winnerEndingMonsters[z.card.name] || 0;
+      const count = duelStatsMap.winnerEndingMonsters[card.name] || 0;
       //@ts-expect-error
-      duelStatsMap.winnerEndingMonsters[z.card.name] = count + 1;
+      duelStatsMap.winnerEndingMonsters[card.name] = count + 1;
     });
 
     // duelStatsMap.winnerEndingMonsters = sortByValue(
@@ -63,11 +66,12 @@ export const useDuelStats = () => {
     // );
 
     winner.spellTrapZones.forEach((z) => {
-      if (!z.isOccupied) return;
+      if (!isOccupied(z)) return;
+      const card = getCard(z.id);
       //@ts-expect-error
-      const count = duelStatsMap.winnerEndingSpellTraps[z.card.name] || 0;
+      const count = duelStatsMap.winnerEndingSpellTraps[card.name] || 0;
       //@ts-expect-error
-      duelStatsMap.winnerEndingSpellTraps[z.card.name] = count + 1;
+      duelStatsMap.winnerEndingSpellTraps[card.name] = count + 1;
     });
 
     // duelStatsMap.winnerEndingSpellTraps = sortByValue(

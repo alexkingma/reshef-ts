@@ -2,14 +2,15 @@ import classNames from "classnames";
 import "./MonsterStats.scss";
 
 interface Props {
-  card: MonsterCard;
+  atk: number;
+  def: number;
 }
 
-export const MonsterStats = ({ card }: Props) => {
+export const MonsterStats = ({ atk, def }: Props) => {
   return (
     <div className={classNames("statsContainer")}>
-      <p className="atk">{card.effAtk}</p>
-      <p className="def">{card.effDef}</p>
+      <p className="atk">{atk}</p>
+      <p className="def">{def}</p>
     </div>
   );
 };

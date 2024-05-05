@@ -1,5 +1,5 @@
 import { BattlePosition, RowKey } from "../enums/duel";
-import { getNumTributesRequired } from "./cardUtil";
+import { getCard, getNumTributesRequired } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import {
   countMatchesInRow,
@@ -14,6 +14,7 @@ import {
   getZone,
   isFaceDown,
   isFaceUp,
+  isOccupied,
   isUnlocked,
 } from "./zoneUtil";
 
@@ -25,12 +26,13 @@ export const canAISummonMonster = (
   // However, it must have enough tributes available that are weaker than it.
   const [dKey] = summonableCoords;
   const handZone = getZone(state, summonableCoords) as OccupiedMonsterZone;
-  const numTributesRequired = getNumTributesRequired(handZone.card);
+  const handCard = getCard(handZone.id) as MonsterCard;
+  const numTributesRequired = getNumTributesRequired(handCard);
   const currentTributes = state.activeTurn.numTributedMonsters;
   const numTributesAvailable = getMonsterIdxsByTributeable(
     state,
     dKey,
-    handZone.card.effAtk
+    handZone.effAtk
   ).length;
 
   // If AI has no space to summon, must have >= 1 mon weaker than it
@@ -61,15 +63,15 @@ export const getMonsterIdxsByTributeable = (
     .map((_, i) => i)
     .filter((i) => {
       const z = monsterZones[i] as OccupiedMonsterZone;
-      return z.isOccupied && z.card.effAtk < atkThreshold;
+      return isOccupied(z) && z.effAtk < atkThreshold;
     })
     .sort((aI, bI) => {
       const a = monsterZones[aI] as OccupiedMonsterZone;
       const b = monsterZones[bI] as OccupiedMonsterZone;
-      if (b.card.effAtk === a.card.effAtk) {
-        return a.card.effDef - b.card.effDef;
+      if (b.effAtk === a.effAtk) {
+        return a.effDef - b.effDef;
       }
-      return a.card.effAtk - b.card.effAtk;
+      return a.effAtk - b.effAtk;
     });
 };
 
@@ -121,7 +123,7 @@ export const getIdealBattlePos = (
   const targetIdx = getHighestAtkZoneIdx(state, otherMonsters, isFaceUp);
   if (targetIdx === -1) {
     // no opponent mons exist, determine what is best for origin in isolation
-    return originZone.card.effDef >= originZone.card.effAtk
+    return originZone.effDef >= originZone.effAtk
       ? BattlePosition.Defence
       : BattlePosition.Attack;
   }
@@ -131,7 +133,7 @@ export const getIdealBattlePos = (
 
   // a faceup opponent mon exists, determine best pos based on
   // if it's stronger or weaker than origin card
-  return targetZone.card.effAtk > originZone.card.effAtk
+  return targetZone.effAtk > originZone.effAtk
     ? BattlePosition.Defence
     : BattlePosition.Attack;
 };
@@ -158,7 +160,7 @@ export const getLethalAttackerTarget = (
     // if opponent has no monsters, lethal takes the form of a direct attack
     if (
       !hasMatchInRow(state, otherMonsters) &&
-      attackerZone.card.effAtk >= opponentLp
+      attackerZone.effAtk >= opponentLp
     ) {
       return { attackerIdx };
     }
@@ -166,7 +168,7 @@ export const getLethalAttackerTarget = (
     // If the opponent has faceup (attack pos) monsters, lethal must involve
     // dealing collateral lp damage through a mon-vs-mon attack.
     for (const [targetIdx, targetZone] of targetZones.entries()) {
-      if (!targetZone.isOccupied || isFaceDown(targetZone)) continue;
+      if (!isOccupied(targetZone) || isFaceDown(targetZone)) continue;
 
       const targetCoords: ZoneCoords = [...otherMonsters, targetIdx];
       const { targetLpLoss } = calculateAttack(

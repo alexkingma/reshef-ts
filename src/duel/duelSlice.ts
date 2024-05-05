@@ -11,7 +11,7 @@ import { getRandomDuel } from "./util/duelUtil";
 import { getOtherDuellistKey, isPlayer } from "./util/duellistUtil";
 import { getActiveField, getFieldCard } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
-import { getZone, isFaceUp } from "./util/zoneUtil";
+import { getZone, isFaceUp, isOccupied } from "./util/zoneUtil";
 
 export type CardActionKey = keyof typeof cardReducers;
 export type DuellistActionKey = keyof typeof duellistReducers;
@@ -150,7 +150,7 @@ export const selectShouldHighlightCursorZone = ({ duel }: RootState) => {
   const { cursorCoords } = duel.interaction;
   const [dKey] = cursorCoords;
   const z = getZone(duel, cursorCoords);
-  if (!z.isOccupied) return false;
+  if (!isOccupied(z)) return false;
   return isFaceUp(z) || isPlayer(dKey);
 };
 

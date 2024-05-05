@@ -1,6 +1,6 @@
 import { RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
-import { getNumTributesRequired } from "../util/cardUtil";
+import { getCard, getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
 import { endTurn } from "../util/duellistUtil";
 import { hasEmptyZone } from "../util/rowUtil";
@@ -25,13 +25,14 @@ export const duellistReducers = {
     activeTurn.hasNormalSummoned = true;
     const { originCoords } = interaction;
     const originZone = getZone(state, originCoords!) as OccupiedMonsterZone;
-    const numTributesRequired = getNumTributesRequired(originZone.card);
+    const originCard = getCard(originZone.id) as MonsterCard;
+    const numTributesRequired = getNumTributesRequired(originCard);
 
     // these idxs hold mons that are weaker than the intended summon
     const weakerIdxs = getMonsterIdxsByTributeable(
       state,
       dKey,
-      originZone.card.effAtk
+      originZone.effAtk
     );
 
     if (
@@ -65,7 +66,7 @@ export const duellistReducers = {
     }
 
     // summon monster to field
-    specialSummon(state, dKey, originZone.card.id, {
+    specialSummon(state, dKey, originZone.id, {
       orientation: originZone.orientation,
     });
 

@@ -17,11 +17,11 @@ export const counterSpellReducers: CardSubsetReducerMap<
     return {
       noDiscard: true,
       condition: () => {
-        return getHealSpells().includes(originZone.card.id as Spell);
+        return getHealSpells().includes(originZone.id as Spell);
       },
       effect: () => {
         let burnAmt = 0;
-        switch (originZone.card.id) {
+        switch (originZone.id) {
           case Spell.MooyanCurry:
             burnAmt = 200;
             break;

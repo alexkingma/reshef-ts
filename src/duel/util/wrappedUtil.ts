@@ -1,6 +1,8 @@
 import { Field } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual_v1.0";
+import { isOneOfAlignments } from "./cardAlignmentUtil";
+import { isOneOfTypes } from "./cardTypeUtil";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
 import { setActiveField as setActiveFieldDirect } from "./fieldUtil";
@@ -19,6 +21,7 @@ import {
   directAttack as directAttackDirect,
   getOriginZone,
   isNotGodCard,
+  isOccupied,
   isSpecificMonster,
   permPowerUp as permPowerUpDirect,
   tempPowerUp as tempPowerUpDirect,
@@ -72,11 +75,11 @@ export const destroyHighestAtk =
   };
 
 const destroyMonsterConditional =
-  (condition: (c: MonsterCard) => boolean) =>
+  (condition: (zone: OccupiedMonsterZone) => boolean) =>
   (state: Duel, { otherMonsters }: CoordsMap) => {
     const monsterZones = getRow(state, otherMonsters) as MonsterZone[];
     const validColIdxs = monsterZones.reduce((validCols, z, idx) => {
-      if (z.isOccupied && condition(z.card)) {
+      if (isOccupied(z) && condition(z)) {
         return [...validCols, idx];
       }
       return validCols;
@@ -96,13 +99,13 @@ const destroyMonsterConditional =
   };
 
 export const destroy1500PlusAtk = () =>
-  destroyMonsterConditional((card) => card.atk >= 1500);
+  destroyMonsterConditional((card) => card.effAtk >= 1500);
 
 export const destroyMonsterType = (type: CardType) =>
-  destroyMonsterConditional((card) => card.type === type);
+  destroyMonsterConditional(isOneOfTypes(type));
 
 export const destroyMonsterAlignment = (alignment: Alignment) =>
-  destroyMonsterConditional((card) => card.alignment === alignment);
+  destroyMonsterConditional(isOneOfAlignments(alignment));
 
 export const draw =
   (numCards: number = 1) =>

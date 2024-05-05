@@ -4,7 +4,7 @@ import { useInteractionActions } from "@/duel/useDuelActions";
 import { InteractionKey, useDuelInteraction } from "@/duel/useDuelInteraction";
 import { useZoneButtons } from "@/duel/useZoneButtons";
 import { isPlayer } from "@/duel/util/duellistUtil";
-import { isCoordMatch } from "@/duel/util/zoneUtil";
+import { isCoordMatch, isMonster, isOccupied } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
@@ -36,8 +36,8 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
     InteractionMode.ChoosingOpponentMonster,
     InteractionMode.ChoosingOwnMonster,
   ].includes(mode);
-  const zone = useAppSelector(selectZone(zoneCoords));
-  const hasCard = zone.isOccupied;
+  const z = useAppSelector(selectZone(zoneCoords));
+  const hasCard = isOccupied(z);
   const [dKey, rKey] = zoneCoords;
   const isOwn = isPlayer(dKey);
 
@@ -62,16 +62,15 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
           key = InteractionKey.ActivateSpell;
           break;
         case RowKey.Hand:
-          key =
-            zone.card.category === "Monster"
-              ? InteractionKey.Summon
-              : InteractionKey.SetSpellTrap;
+          key = isMonster(z)
+            ? InteractionKey.Summon
+            : InteractionKey.SetSpellTrap;
           break;
         default:
           return;
       }
       const { effect, condition } = interactionMap[key];
-      if (condition(zone)) effect();
+      if (condition(z)) effect();
       return;
     }
 

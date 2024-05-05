@@ -5,6 +5,7 @@ import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation } from "../enums/duel";
 import { FlipEffectMonster } from "../enums/monster_v1.0";
 import { DirectSpell } from "../enums/spellTrapRitual_v1.0";
+import { getCard } from "../util/cardUtil";
 import { clearConvertedZoneFlag, getActiveEffects } from "../util/duellistUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {
@@ -21,7 +22,7 @@ import {
 export const cardReducers = {
   normalSummon: (state: Duel) => {
     const { originCoords, targetCoords } = state.interaction;
-    const { card, orientation } = getZone(
+    const { id, orientation } = getZone(
       state,
       originCoords!
     ) as OccupiedMonsterZone;
@@ -32,14 +33,14 @@ export const cardReducers = {
     // "unconverted" come turn end and wind up in the opponent's hands
     clearConvertedZoneFlag(state, targetCoords!);
 
-    specialSummonAtCoords(state, targetCoords!, card.id, { orientation });
+    specialSummonAtCoords(state, targetCoords!, id, { orientation });
     state.activeTurn.hasNormalSummoned = true;
   },
   setSpellTrap: (state: Duel) => {
     const { originCoords, targetCoords } = state.interaction;
-    const { card, orientation } = getZone(state, originCoords!) as OccupiedZone;
+    const { id, orientation } = getZone(state, originCoords!) as OccupiedZone;
     clearZone(state, originCoords!);
-    setCardAtCoords(state, targetCoords!, card.id, { orientation });
+    setCardAtCoords(state, targetCoords!, id, { orientation });
   },
   attack: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { otherDKey } = coordsMap;
@@ -70,14 +71,14 @@ export const cardReducers = {
     }
   },
   setDefencePos: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
-    const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    zone.battlePosition = BattlePosition.Defence;
-    zone.isLocked = true;
+    const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    z.battlePosition = BattlePosition.Defence;
+    z.isLocked = true;
   },
   setAttackPos: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
-    const zone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    zone.battlePosition = BattlePosition.Attack;
-    zone.isLocked = true;
+    const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    z.battlePosition = BattlePosition.Attack;
+    z.isLocked = true;
   },
   tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords, true);
@@ -94,10 +95,11 @@ export const cardReducers = {
   },
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
-    const { card } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
-    const spellReducer = spellEffects[card.id as DirectSpell];
+    const { id } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+    const { name } = getCard(id);
+    const spellReducer = spellEffects[id as DirectSpell];
     if (!spellReducer) {
-      console.log(`Spell effect not implemented for card: ${card.name}`);
+      console.log(`Spell effect not implemented for card: ${name}`);
       return;
     }
 
@@ -108,7 +110,7 @@ export const cardReducers = {
     }
 
     // no traps triggered, activate original spell effect
-    console.log(`%c${card.name}`, "color: #39A24E;");
+    console.log(`%c${name}`, "color: #39A24E;");
     spellReducer(state, coordsMap);
 
     // discard after activation
@@ -117,11 +119,11 @@ export const cardReducers = {
   activateMonsterFlipEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
     const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    const originalCard = originalZone.card;
+    const originalCard = getCard(originalZone.id);
     const flipReducer = flipReducers[originalCard.id as FlipEffectMonster];
 
     if (!flipReducer) {
-      console.log(`Flip effect not implemented for card: ${originalCard}`);
+      console.log(`Flip effect not implemented for card: ${originalCard.name}`);
       return;
     }
 
@@ -130,7 +132,7 @@ export const cardReducers = {
       flipReducer(state, coordsMap);
 
       // lock/flip/etc.
-      postDirectMonsterAction(state, zoneCoords, originalCard.id);
+      postDirectMonsterAction(state, zoneCoords, originalZone.id);
     }
   },
 };

@@ -1,19 +1,19 @@
 import { Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
+import { CARD_NONE } from "./common";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { setCardAtCoords, specialSummon } from "./zoneUtil";
 
 export const clearGraveyard = (state: Duel, dKey: DuellistKey) => {
-  state[dKey].graveyard = [{ isOccupied: false }];
+  state[dKey].graveyard = [{ id: CARD_NONE }];
 };
 
 export const isGraveyardEmpty = (state: Duel, dKey: DuellistKey) => {
-  return !state[dKey].graveyard[0].isOccupied;
+  return state[dKey].graveyard[0].id === CARD_NONE;
 };
 
 export const getGraveyardCard = (state: Duel, dKey: DuellistKey) => {
-  const gy = state[dKey].graveyard[0] as OccupiedMonsterZone;
-  return gy.card.id;
+  return state[dKey].graveyard[0].id;
 };
 
 export const addToGraveyard = (state: Duel, dKey: DuellistKey, id: Monster) => {

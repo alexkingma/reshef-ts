@@ -1,8 +1,9 @@
 import { default as fieldMultiplierMap } from "@/assets/data/fields.json";
 import { Field, Orientation, RowKey } from "../enums/duel";
 import { Spell } from "../enums/spellTrapRitual_v1.0";
+import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { clearZone, getZone, setCardAtCoords } from "./zoneUtil";
+import { clearZone, getZone, isOccupied, setCardAtCoords } from "./zoneUtil";
 
 export const getFieldCardId = (field: Field): Spell => {
   switch (field) {
@@ -57,14 +58,18 @@ export const setActiveField = (
 export const getActiveField = (state: Duel): Field => {
   const pZone = state.p1.fieldZone[0];
   const oZone = state.p2.fieldZone[0];
-  const pField = pZone.isOccupied ? (pZone.card.name as Field) : Field.Arena;
-  const oField = oZone.isOccupied ? (oZone.card.name as Field) : Field.Arena;
+  const pCard = isOccupied(pZone) ? getCard(pZone.id) : null;
+  const oCard = isOccupied(oZone) ? getCard(oZone.id) : null;
+  const pField = pCard ? (pCard.name as Field) : Field.Arena;
+  const oField = oCard ? (oCard.name as Field) : Field.Arena;
   return pField === Field.Arena ? oField : pField;
 };
 
 export const getFieldCard = (state: Duel, dKey: DuellistKey): Field | null => {
   const [z] = state[dKey].fieldZone;
-  return z.isOccupied ? (z.card.name as Field) : null;
+  if (!isOccupied(z)) return null;
+  const { name } = getCard(z.id);
+  return name as Field;
 };
 
 export const getFieldMultiplier = (field: Field, type: CardType) => {
@@ -78,7 +83,7 @@ export const isBuffedByField = (type: CardType, field: Field): boolean => {
 
 export const hasActiveField = (state: Duel, dKey: DuellistKey) => {
   const z = getZone(state, [dKey, RowKey.Field, 0]);
-  return z.isOccupied;
+  return isOccupied(z);
 };
 
 export const clearActiveField = (state: Duel, dKey: DuellistKey) => {

@@ -5,7 +5,8 @@ import {
   Orientation,
   RowKey,
 } from "../enums/duel";
-import { getCard, getRandomCardId } from "./cardUtil";
+import { getRandomCardId } from "./cardUtil";
+import { CARD_NONE } from "./common";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";
 import { updateMonsters } from "./rowUtil";
@@ -25,20 +26,17 @@ export const getRandomDuellistState = (): Duellist => {
     name: "Random Cards",
     lp: Math.ceil(Math.random() * 8) * 1000,
     deckTemplate: cardQuantMap,
-    hand: deck
-      .splice(0, 5)
-      .map((card) => (rand() ? { isOccupied: false } : card)),
+    hand: deck.splice(0, 5).map((card) => (rand() ? { id: CARD_NONE } : card)),
     deck: deck.slice(0, Math.floor(Math.random() * 35)),
     graveyard: [
       {
-        isOccupied: true,
-        card: getCard(getRandomCardId({ category: "Monster" })),
+        id: getRandomCardId({ category: "Monster" }),
         orientation: Orientation.FaceUp,
       },
     ],
     monsterZones: Array.from({ length: 5 }).map(() =>
       rand()
-        ? { isOccupied: false }
+        ? { id: CARD_NONE }
         : {
             ...generateOccupiedMonsterZone(getRandomCardId({ effect: true })),
             battlePosition: rand()
@@ -51,13 +49,10 @@ export const getRandomDuellistState = (): Duellist => {
     ),
     spellTrapZones: Array.from({ length: 5 }).map(() =>
       rand()
-        ? { isOccupied: false }
+        ? { id: CARD_NONE }
         : {
-            isOccupied: true,
+            id: getRandomCardId({ category: rand() ? "Trap" : "Magic" }),
             orientation: rand() ? Orientation.FaceDown : Orientation.FaceUp,
-            card: getCard(
-              getRandomCardId({ category: rand() ? "Trap" : "Magic" })
-            ) as SpellTrapRitualCard,
           }
     ),
     activeEffects: {
@@ -66,8 +61,7 @@ export const getRandomDuellistState = (): Duellist => {
     },
     fieldZone: [
       {
-        isOccupied: true,
-        card: getCard(getFieldCardId(getRandomFieldCard())),
+        id: getFieldCardId(getRandomFieldCard()),
         orientation: Orientation.FaceUp,
       },
     ],
@@ -87,10 +81,10 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
     deckTemplate: cardQuantMap,
     hand: deck.splice(0, 5).map((card) => card),
     deck: deck,
-    graveyard: [{ isOccupied: false }],
-    monsterZones: Array.from({ length: 5 }).map(() => ({ isOccupied: false })),
+    graveyard: [{ id: CARD_NONE }],
+    monsterZones: Array.from({ length: 5 }).map(() => ({ id: CARD_NONE })),
     spellTrapZones: Array.from({ length: 5 }).map(() => ({
-      isOccupied: false,
+      id: CARD_NONE,
     })),
     activeEffects: {
       sorlTurnsRemaining: 0,
@@ -99,11 +93,10 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
     fieldZone: [
       isDuellable && getDuellable(name).field !== "Arena"
         ? {
-            isOccupied: true,
-            card: getCard(getFieldCardId(getDuellable(name).field)),
+            id: getFieldCardId(getDuellable(name).field),
             orientation: Orientation.FaceUp,
           }
-        : { isOccupied: false },
+        : { id: CARD_NONE },
     ],
     status: DuellistStatus.HEALTHY,
   };
@@ -221,11 +214,11 @@ export const endTurn = (
   const ownActiveEffects = getActiveEffects(state, dKey);
   const opponentActiveEffects = getActiveEffects(state, otherDKey);
   ownActiveEffects.convertedZones.forEach((zoneCoords) => {
-    const { card, permPowerUpAtk, permPowerUpDef } = getZone(
+    const { id, permPowerUpAtk, permPowerUpDef } = getZone(
       state,
       zoneCoords
     ) as OccupiedMonsterZone;
-    specialSummon(state, otherDKey, card.id, {
+    specialSummon(state, otherDKey, id, {
       permPowerUpAtk,
       permPowerUpDef,
     });

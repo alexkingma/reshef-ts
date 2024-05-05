@@ -26,6 +26,7 @@ import {
   convertMonster,
   convertMonsterCurrentTurn,
   getZone,
+  isOccupied,
   specialSummon,
   transformMonster,
 } from "../util/zoneUtil";
@@ -154,22 +155,23 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
   [Spell.Metalmorph]: (state) => {
     const { targetCoords } = state.interaction;
     const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    if (z.card.id === Monster.Zoa) {
-      transformMonster(state, targetCoords!, Monster.Metalzoa);
+    if (z.id === Monster.Zoa) {
+      transformMonster(z, Monster.Metalzoa);
       return;
     }
-    if (z.card.id === Monster.JiraiGumo) {
-      transformMonster(state, targetCoords!, Monster.LauncherSpider);
+    if (z.id === Monster.JiraiGumo) {
+      transformMonster(z, Monster.LauncherSpider);
       return;
     }
-    if (z.card.id === Monster.RedEyesBDragon) {
-      transformMonster(state, targetCoords!, Monster.RedEyesBlackMetalDragon);
+    if (z.id === Monster.RedEyesBDragon) {
+      transformMonster(z, Monster.RedEyesBlackMetalDragon);
       return;
     }
   },
   [Spell.ElegantEgotist]: (state) => {
     const { targetCoords } = state.interaction;
-    transformMonster(state, targetCoords!, Monster.HarpieLadySisters);
+    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
+    transformMonster(z, Monster.HarpieLadySisters);
   },
   [Spell.StopDefense]: (state, { otherMonsters }) => {
     // TODO: stop DEF mode for duellist as a whole for a turn, don't just move current monsters' pos
@@ -206,7 +208,7 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
 
     const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
     monsterZones.forEach((z) => {
-      if (z.isOccupied) return;
+      if (isOccupied(z)) return;
       specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
     });
   },

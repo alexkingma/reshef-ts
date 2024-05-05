@@ -18,7 +18,7 @@ const ZoneButton = ({ zone, zoneIdx, label, condition, onClick }: Props) => {
 
 export const useZoneButtons = (zoneCoords: ZoneCoords) => {
   const [, , colIdx] = zoneCoords;
-  const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
+  const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
   const duelButtons = useDuelInteraction(zoneCoords);
 
   return (
@@ -30,7 +30,7 @@ export const useZoneButtons = (zoneCoords: ZoneCoords) => {
               {...buttonProps}
               key={buttonKey}
               onClick={effect}
-              zone={zone}
+              zone={z}
               zoneIdx={colIdx}
             />
           );

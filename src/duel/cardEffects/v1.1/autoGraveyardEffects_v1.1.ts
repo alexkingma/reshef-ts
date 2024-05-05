@@ -51,11 +51,8 @@ export const graveyardEffects: GraveyardEffectReducers = {
         effect: (state, { dKey, ownHand }) => {
           const handIdx = getHighestAtkZoneIdx(state, ownHand, isInsect);
           if (handIdx === -1) return; // no insect to summon
-          const { card } = getZone(state, [
-            ...ownHand,
-            handIdx,
-          ]) as OccupiedZone;
-          specialSummon(state, dKey, card.id);
+          const z = getZone(state, [...ownHand, handIdx]) as OccupiedZone;
+          specialSummon(state, dKey, z.id);
           clearZone(state, [...ownHand, handIdx]);
         },
       },

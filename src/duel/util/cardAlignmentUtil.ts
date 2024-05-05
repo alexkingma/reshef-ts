@@ -1,7 +1,11 @@
+import { getCard } from "./cardUtil";
 import { isMonster } from "./zoneUtil";
 
-const isAlignment = (z: Zone, alignment: Alignment): z is OccupiedMonsterZone =>
-  isMonster(z) && z.card.alignment === alignment;
+const isAlignment = (z: Zone, a: Alignment): z is OccupiedMonsterZone => {
+  if (!isMonster(z)) return false;
+  const { alignment } = getCard(z.id) as MonsterCard;
+  return alignment === a;
+};
 
 export const isOneOfAlignments =
   (...alignments: Alignment[]) =>

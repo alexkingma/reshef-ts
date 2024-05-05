@@ -18,7 +18,7 @@ export const autoSpellTrapEffects: CardReducerMap<
   MultiEffConReducer
 > = {
   [Spell.MessengerOfPeace]: (state, { dKey, ownMonsters, otherMonsters }) => {
-    const is1500 = (z: OccupiedZone) => isMonster(z) && z.card.effAtk >= 1500;
+    const is1500 = (z: OccupiedZone) => isMonster(z) && z.effAtk >= 1500;
     return [
       {
         // activates on player's next turn regardless of

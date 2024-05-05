@@ -6,7 +6,13 @@ import {
   selectCursorZone,
   selectShouldHighlightCursorZone,
 } from "@/duel/duelSlice";
-import { getFinalPowerUpLevel, isTrap } from "@/duel/util/zoneUtil";
+import { getCard } from "@/duel/util/cardUtil";
+import {
+  getFinalPowerUpLevel,
+  isMonster,
+  isOccupied,
+  isTrap,
+} from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import "./ZoneSummaryBar.scss";
@@ -16,11 +22,11 @@ export const ZoneSummaryBar = () => {
   const isHoverAllowed = useAppSelector(selectShouldHighlightCursorZone);
 
   // render empty bar for empty zones and opponent facedowns
-  if (!z.isOccupied || !isHoverAllowed) {
+  if (!isOccupied(z) || !isHoverAllowed) {
     return <div className="zoneSummaryBar" />;
   }
 
-  const { name, category } = z.card;
+  const card = getCard(z.id);
 
   return (
     <div className={classNames("zoneSummaryBar")}>
@@ -28,17 +34,17 @@ export const ZoneSummaryBar = () => {
         <div className="levelContainer">
           {/* render the level container regardless, in order to
           keep the name text aligned with the bottom of the bar */}
-          {category === "Monster" && (
+          {isMonster(z) && (
             <>
               <img src={levelIcon} className="levelIcon" />
-              <div className="levelText">{z.card.level}</div>
+              <div className="levelText">{(card as MonsterCard).level}</div>
             </>
           )}
         </div>
-        <div className="name">{name}</div>
+        <div className="name">{card.name}</div>
       </div>
       <div className="rightJustify">
-        {category === "Monster" ? (
+        {isMonster(z) ? (
           <MonsterZonePartialSummaryBar />
         ) : (
           <SpellTrapRitualZonePartialSummaryBar />
@@ -51,7 +57,8 @@ export const ZoneSummaryBar = () => {
 const MonsterZonePartialSummaryBar = () => {
   const z = useAppSelector(selectCursorZone) as OccupiedMonsterZone;
   const finalPowerUpLevel = getFinalPowerUpLevel(z);
-  const { effAtk, effDef, atk, def, alignment, type } = z.card;
+  const { effAtk, effDef, id } = z;
+  const { atk, def, alignment, type } = getCard(id) as MonsterCard;
   const hasPositivePowerUpLevel = finalPowerUpLevel > 0;
   const hasNegativePowerUpLevel = finalPowerUpLevel < 0;
 

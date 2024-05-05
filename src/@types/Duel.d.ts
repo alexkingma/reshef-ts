@@ -1,19 +1,11 @@
-interface EmptyZone {
-  isOccupied: false;
-}
-
-interface OccupiedZone {
-  isOccupied: true;
-  card: Card;
+type EmptyZone = { id: 0 };
+type OccupiedZone = {
+  id: Exclude<number, 0>; // resolves as just "number", unfortunately
   orientation: Orientation;
-}
-
+};
 type Zone = EmptyZone | OccupiedZone;
 
-type MonsterZone = EmptyZone | OccupiedMonsterZone;
-
-type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
-  card: MonsterCard;
+type OccupiedMonsterZone = OccupiedZone & {
   battlePosition: BattlePosition;
   isLocked: boolean;
 
@@ -24,14 +16,15 @@ type OccupiedMonsterZone = Omit<OccupiedZone, "card"> & {
   // reset and re-applied after every action
   tempPowerUpAtk: number;
   tempPowerUpDef: number;
+
+  // effective final stats, recomputed after every action
+  effAtk: number;
+  effDef: number;
 };
 
+type MonsterZone = EmptyZone | OccupiedMonsterZone;
 type SpellTrapZone = EmptyZone | OccupiedSpellTrapZone;
-
-type OccupiedSpellTrapZone = Omit<OccupiedZone, "card"> & {
-  card: SpellTrapRitualCard;
-};
-
+type OccupiedSpellTrapZone = OccupiedZone;
 type HandZone = Zone;
 type DeckZone = OccupiedZone;
 type GraveyardZone = Zone;

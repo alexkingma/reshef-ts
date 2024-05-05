@@ -10,6 +10,7 @@ import {
   destroyAtCoords,
   immobiliseCard,
   isMonster,
+  isOccupied,
   isTrap,
   permPowerUp,
   tempPowerUp,
@@ -33,7 +34,7 @@ export const getFirstEmptyZoneIdx = (
   defaultToFirst: boolean = false
 ) => {
   const row = state[dKey][rKey];
-  const nextFreeZoneIdx = row.findIndex((zone) => !zone.isOccupied);
+  const nextFreeZoneIdx = row.findIndex((z) => !isOccupied(z));
   if (nextFreeZoneIdx !== -1) return nextFreeZoneIdx;
   if (defaultToFirst) {
     // no free zones, return the default index
@@ -58,11 +59,11 @@ export const hasEmptyZone = (state: Duel, rowCoords: RowCoords) => {
 
 export const getFirstOccupiedZoneIdx = (
   state: Duel,
-  [dKey, rKey]: RowCoords,
+  rowCoords: RowCoords,
   condition: (z: OccupiedZone) => boolean = () => true
 ) => {
-  const zone = state[dKey][rKey];
-  return zone.findIndex((z) => z.isOccupied && condition(z));
+  const row = getRow(state, rowCoords);
+  return row.findIndex((z) => isOccupied(z) && condition(z));
 };
 
 export const getHighestAtkZoneIdx = (
@@ -74,8 +75,8 @@ export const getHighestAtkZoneIdx = (
   let highestAtk = -1;
   state[dKey][rKey].forEach((z, i) => {
     if (!isMonster(z) || !condition(z, i)) return;
-    if (z.card.effAtk > highestAtk) {
-      highestAtk = z.card.effAtk;
+    if (z.effAtk > highestAtk) {
+      highestAtk = z.effAtk;
       idx = i;
     }
   });
@@ -91,8 +92,8 @@ export const getLowestAtkZoneIdx = (
   let lowestAtk = Number.MAX_SAFE_INTEGER;
   state[dKey][rKey].forEach((z, i) => {
     if (!isMonster(z) || !condition(z, i)) return;
-    if (z.card.effAtk < lowestAtk) {
-      lowestAtk = z.card.effAtk;
+    if (z.effAtk < lowestAtk) {
+      lowestAtk = z.effAtk;
       idx = i;
     }
   });
@@ -105,7 +106,7 @@ export const getFirstSpecficCardIdx = (
   id: CardId
 ) => {
   const row = state[dKey][rKey];
-  return row.findIndex((z) => z.isOccupied && z.card.id === id);
+  return row.findIndex((z) => z.id === id);
 };
 
 export const rowContainsAnyCards = (
@@ -113,9 +114,7 @@ export const rowContainsAnyCards = (
   rowCoords: RowCoords,
   ...ids: CardId[]
 ) => {
-  return ids.some((c) =>
-    hasMatchInRow(state, rowCoords, (z) => z.card.id === c)
-  );
+  return ids.some((id) => hasMatchInRow(state, rowCoords, (z) => z.id === id));
 };
 
 export const rowContainsAllCards = (
@@ -142,7 +141,7 @@ export const countMatchesInRow = (
   condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
   const row = state[dKey][rKey];
-  return row.filter((z, i) => z.isOccupied && condition(z, i)).length;
+  return row.filter((z, i) => isOccupied(z) && condition(z, i)).length;
 };
 
 export const destroyRow = (state: Duel, rowCoords: RowCoords) => {
@@ -217,7 +216,7 @@ export const updateMatches = (
   condition: (z: OccupiedZone, i: number) => boolean = () => true
 ) => {
   getRow(state, rowCoords).forEach((z, i, zones) => {
-    if (!z.isOccupied || !condition(z, i)) return;
+    if (!isOccupied(z) || !condition(z, i)) return;
     effect(zones[i] as OccupiedZone, i);
   });
 };
@@ -314,13 +313,14 @@ export const checkTriggeredTraps = <
   const { otherSpellTrap } = coordsMap;
   for (const [i, z] of getRow(state, otherSpellTrap).entries()) {
     if (!isTrap(z)) continue;
-    const reducer = trapReducers[z.card.id as T];
+    const reducer = trapReducers[z.id as T];
     if (!reducer) continue;
 
     const { condition, effect, noDiscard } = reducer(state, coordsMap);
     if (condition(state, coordsMap)) {
       // found valid trap, perform its effect instead of the original action
-      console.log(`%c${z.card.name}`, "color: #AC4E8D;");
+      const { name } = getCard(z.id);
+      console.log(`%c${name}`, "color: #AC4E8D;");
       effect(state, coordsMap);
       if (!noDiscard) {
         // some traps are continuous

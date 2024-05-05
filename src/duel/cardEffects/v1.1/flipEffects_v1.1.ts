@@ -22,6 +22,7 @@ import {
   getZone,
   isFaceUp,
   isMonster,
+  isOccupied,
   isSpell,
   returnCardToHand,
   toggleBattlePosition,
@@ -39,7 +40,7 @@ export const flipEffectReducers: CardSubsetReducerMap<
   [Monster.QueensDouble]: directAttack_Wrapped,
   [Monster.PenguinTorpedo]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    burn(state, otherDKey, z.card.effAtk);
+    burn(state, otherDKey, z.effAtk);
     clearZone(state, zoneCoords);
   },
 
@@ -47,17 +48,17 @@ export const flipEffectReducers: CardSubsetReducerMap<
   [Monster.Suijin]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
     destroyHighestAtk(state, otherDKey);
-    burn(state, otherDKey, z.card.effAtk);
+    burn(state, otherDKey, z.effAtk);
   },
   [Monster.Kazejin]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
     destroyHighestAtk(state, otherDKey);
-    burn(state, otherDKey, z.card.effAtk);
+    burn(state, otherDKey, z.effAtk);
   },
   [Monster.SangaOfTheThunder]: (state, { zoneCoords, otherDKey }) => {
     const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
     destroyHighestAtk(state, otherDKey);
-    burn(state, otherDKey, z.card.effAtk);
+    burn(state, otherDKey, z.effAtk);
   },
   [Monster.Berfomet]: (state, { dKey }) => {
     addCardToHand(state, dKey, Monster.GazelleTheKingOfMythicalBeasts);
@@ -74,7 +75,7 @@ export const flipEffectReducers: CardSubsetReducerMap<
     const zones = state[otherDKey].deck.splice(0, 5);
     for (const z of zones) {
       if (!isMonster(z)) continue;
-      addToGraveyard(state, otherDKey, z.card.id);
+      addToGraveyard(state, otherDKey, z.id);
     }
   },
   [Monster.BlastJuggler]: (state, { otherDKey, zoneCoords }) => {
@@ -83,7 +84,7 @@ export const flipEffectReducers: CardSubsetReducerMap<
       destroyHighestAtk(
         state,
         otherDKey,
-        (z) => (z as OccupiedMonsterZone).card.effAtk <= 1000
+        (z) => (z as OccupiedMonsterZone).effAtk <= 1000
       );
     }
     clearZone(state, zoneCoords);
@@ -133,9 +134,9 @@ export const flipEffectReducers: CardSubsetReducerMap<
     const [, , selfIdx] = zoneCoords;
     for (let i = 0; i < 5; i++) {
       const z = getZone(state, [...ownMonsters, i]) as MonsterZone;
-      if (!z.isOccupied) continue;
+      if (!isOccupied(z)) continue;
       if (i !== selfIdx) {
-        totalAtk += z.card.effAtk;
+        totalAtk += z.effAtk;
       }
       destroyAtCoords(state, [...ownMonsters, i]);
     }

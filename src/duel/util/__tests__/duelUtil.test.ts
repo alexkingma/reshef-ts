@@ -1,6 +1,7 @@
 import { DuellistKey, RowKey } from "@/duel/enums/duel";
 import { Monster } from "@/duel/enums/monster";
 import { describe, expect, test } from "vitest";
+import { CARD_NONE } from "../common";
 import { getNewDuel } from "../duelUtil";
 import { getHighestAtkZoneIdx } from "../rowUtil";
 import { generateOccupiedMonsterZone } from "../zoneUtil";
@@ -10,7 +11,7 @@ describe("getHighestAtkZoneIdx", () => {
     const state = getNewDuel();
     state.p1.monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
-      zones[i] = c ? generateOccupiedMonsterZone(c) : { isOccupied: false };
+      zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
     return state;
   };

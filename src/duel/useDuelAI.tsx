@@ -36,6 +36,7 @@ import {
   isFaceDown,
   isLocked,
   isMonster,
+  isOccupied,
   isSpell,
   isTrap,
   isUnlocked,
@@ -95,7 +96,7 @@ export const useDuelAI = () => {
 
     const hand = getRow(state, ownHand);
     for (const [idx, z] of hand.entries()) {
-      if (!z.isOccupied || isMonster(z) || !condition(z)) continue;
+      if (!isOccupied(z) || isMonster(z) || !condition(z)) continue;
       const originCoords: ZoneCoords = [...ownHand, idx];
       setOriginZone(originCoords);
       setTargetZone([...ownSpellTrap, emptyZoneIdx]);
@@ -113,16 +114,15 @@ export const useDuelAI = () => {
 
       const originCoords: ZoneCoords = [...ownSpellTrap, i];
       const coordsMap = getZoneCoordsMap(originCoords);
-      const condition = spellUsageMap[originZone.card.id as DirectSpell];
+      const condition = spellUsageMap[originZone.id as DirectSpell];
       if (!condition || !condition(state, coordsMap)) continue;
 
       setOriginZone(originCoords);
-      if (spellHasTarget(originZone.card.id)) {
+      if (spellHasTarget(originZone.id)) {
         const targetIdx = getHighestAtkZoneIdx(
           state,
           ownMonsters,
-          (targetZone) =>
-            isValidSpellTarget(originZone.card.id, targetZone.card.id)
+          (targetZone) => isValidSpellTarget(originZone.id, targetZone.id)
         );
         if (targetIdx === -1) continue;
         setTargetZone([...ownMonsters, targetIdx]);
@@ -170,14 +170,13 @@ export const useDuelAI = () => {
     // activate all monster effects that fulfil activation criteria
     for (const [i, originZone] of getRow(state, ownMonsters).entries()) {
       if (
-        originZone.isOccupied &&
+        isOccupied(originZone) &&
         isFaceDown(originZone) &&
         !isLocked(originZone)
       ) {
         const originCoords: ZoneCoords = [...ownMonsters, i];
         const coordsMap = getZoneCoordsMap(originCoords);
-        const condition =
-          monsterUsageMap[originZone.card.id as FlipEffectMonster];
+        const condition = monsterUsageMap[originZone.id as FlipEffectMonster];
         if (!condition || !condition(state, coordsMap)) continue;
 
         setOriginZone(originCoords);
@@ -256,7 +255,7 @@ export const useDuelAI = () => {
     const attackerIdx = getHighestAtkZoneIdx(
       state,
       ownMonsters,
-      (z) => isUnlocked(z) && z.card.atk > 0
+      (z) => isUnlocked(z) && z.effAtk > 0
     );
     if (attackerIdx === -1) return false;
 

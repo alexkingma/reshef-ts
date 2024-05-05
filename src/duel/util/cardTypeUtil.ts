@@ -1,7 +1,11 @@
+import { getCard } from "./cardUtil";
 import { isMonster } from "./zoneUtil";
 
-const isType = (z: Zone, type: CardType): z is OccupiedMonsterZone =>
-  isMonster(z) && z.card.type === type;
+const isType = (z: Zone, t: CardType): z is OccupiedMonsterZone => {
+  if (!isMonster(z)) return false;
+  const { type } = getCard(z.id) as MonsterCard;
+  return type === t;
+};
 
 export const isOneOfTypes =
   (...types: CardType[]) =>

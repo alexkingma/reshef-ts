@@ -7,7 +7,7 @@ import {
 } from "./duelSlice";
 import { InteractionMode, RowKey } from "./enums/duel";
 import { useCardActions, useInteractionActions } from "./useDuelActions";
-import { getNumTributesRequired } from "./util/cardUtil";
+import { getCard, getNumTributesRequired } from "./util/cardUtil";
 import { spellHasTarget } from "./util/targetedSpellUtil";
 import { canActivateEffect, isMonster, isSpell } from "./util/zoneUtil";
 
@@ -38,7 +38,7 @@ export const useDuelInteraction = (
   const [duellistKey, rowKey] = zoneCoords;
   const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
 
-  const zone = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
+  const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
   const opponentHasMonster = useAppSelector(
     selectOpponentHasMonster(duellistKey)
   );
@@ -46,8 +46,9 @@ export const useDuelInteraction = (
   const { hasNormalSummoned, numTributedMonsters } =
     useAppSelector(selectActiveTurn);
 
-  const canNormalSummon = (card: MonsterCard) => {
+  const canNormalSummon = (z: OccupiedMonsterZone) => {
     if (!isMyTurn || hasNormalSummoned) return false;
+    const card = getCard(z.id) as MonsterCard;
     return numTributedMonsters >= getNumTributesRequired(card);
   };
 
@@ -100,10 +101,7 @@ export const useDuelInteraction = (
     [InteractionKey.Summon]: {
       label: "Summon",
       condition: (z: Zone) =>
-        isMyTurn &&
-        isMonster(z) &&
-        canNormalSummon(z.card) &&
-        isRow(RowKey.Hand),
+        isMyTurn && isMonster(z) && canNormalSummon(z) && isRow(RowKey.Hand),
       effect: () => {
         setOriginZone(zoneCoords);
         setPendingAction(normalSummonAction);
@@ -126,7 +124,7 @@ export const useDuelInteraction = (
       condition: (z: Zone) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
       effect: () => {
         setOriginZone(zoneCoords);
-        if (spellHasTarget(zone.card.id)) {
+        if (spellHasTarget(z.id)) {
           setPendingAction(activateSpellEffectAction);
           setInteractionMode(InteractionMode.ChoosingOwnMonster);
           // TODO: set cursor to be on first monster

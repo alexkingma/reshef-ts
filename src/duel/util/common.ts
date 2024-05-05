@@ -10,3 +10,5 @@ export const shuffle = <T extends any[]>(arr: T): T => {
 
 export const always = () => true;
 export const never = () => false;
+
+export const CARD_NONE = 0;

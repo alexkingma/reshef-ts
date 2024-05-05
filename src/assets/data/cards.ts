@@ -1,4 +1,4 @@
-const cards: DBCard[] = [
+const cards: Card[] = [
   {
     id: 1,
     name: "Blue-Eyes White Dragon",
