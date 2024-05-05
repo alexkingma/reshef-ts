@@ -12,9 +12,10 @@ import {
 import { getAlignmentResult, getCard } from "./cardUtil";
 import {
   burn,
+  clearConvertedZoneFlag,
+  getActiveEffects,
   getDuellistCoordsMap,
   getOtherDuellistKey,
-  removeBrainControlZone,
 } from "./duellistUtil";
 import { getActiveField, getFieldMultiplier } from "./fieldUtil";
 import { addToGraveyard } from "./graveyardUtil";
@@ -174,7 +175,7 @@ export const destroyAtCoords = (
 export const clearZone = (state: Duel, [dKey, rKey, colIdx]: ZoneCoords) => {
   // does NOT send anything to graveyard
   state[dKey][rKey][colIdx] = { isOccupied: false };
-  removeBrainControlZone(state, [dKey, rKey, colIdx]);
+  clearConvertedZoneFlag(state, [dKey, rKey, colIdx]);
 };
 
 export const clearZones = (
@@ -461,6 +462,18 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
 
   // pass back the coords of the newly converted monster
   return conversionCoords;
+};
+
+export const convertMonsterCurrentTurn = (
+  state: Duel,
+  originatorKey: DuellistKey
+) => {
+  const controlledMonCoords = convertMonster(state, originatorKey);
+  if (!controlledMonCoords) return; // conversion failed, no space to house monster
+
+  // converted monster must undo conversion on turn end
+  const activeEffects = getActiveEffects(state, originatorKey);
+  activeEffects.convertedZones.push(controlledMonCoords);
 };
 
 export const returnCardToHand = (state: Duel, coords: ZoneCoords) => {

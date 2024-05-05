@@ -49,7 +49,7 @@ interface Duellist {
   fieldZone: FieldZone[];
   activeEffects: {
     sorlTurnsRemaining: 0 | 1 | 2 | 3;
-    brainControlZones: ZoneCoords[];
+    convertedZones: ZoneCoords[];
   };
   status: DuellistStatus;
 }

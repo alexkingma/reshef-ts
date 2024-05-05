@@ -8,7 +8,14 @@ import {
 import { getCard, getRandomCardId } from "./cardUtil";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";
-import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
+import { updateMonsters } from "./rowUtil";
+import {
+  clearZone,
+  generateOccupiedMonsterZone,
+  getZone,
+  isCoordMatch,
+  specialSummon,
+} from "./zoneUtil";
 
 export const getRandomDuellistState = (): Duellist => {
   const rand = () => Math.random() > 0.5;
@@ -55,7 +62,7 @@ export const getRandomDuellistState = (): Duellist => {
     ),
     activeEffects: {
       sorlTurnsRemaining: 0,
-      brainControlZones: [],
+      convertedZones: [],
     },
     fieldZone: [
       {
@@ -87,7 +94,7 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
     })),
     activeEffects: {
       sorlTurnsRemaining: 0,
-      brainControlZones: [],
+      convertedZones: [],
     },
     fieldZone: [
       isDuellable && getDuellable(name).field !== "Arena"
@@ -161,10 +168,10 @@ export const selfUnderSoRL = (state: Duel, dKey: DuellistKey) => {
   return state[getOtherDuellistKey(dKey)].activeEffects.sorlTurnsRemaining > 0;
 };
 
-export const removeBrainControlZone = (state: Duel, coords: ZoneCoords) => {
+export const clearConvertedZoneFlag = (state: Duel, coords: ZoneCoords) => {
   const [dKey] = coords;
   const activeEffects = getActiveEffects(state, dKey);
-  activeEffects.brainControlZones = activeEffects.brainControlZones.filter(
+  activeEffects.convertedZones = activeEffects.convertedZones.filter(
     (zoneCoords) => !isCoordMatch(zoneCoords, coords)
   );
 };
@@ -204,4 +211,48 @@ export const isDuellable = (name: string) => {
 
 export const isPlayer = (dKey: DuellistKey) => {
   return dKey === "p1";
+};
+
+export const endTurn = (
+  state: Duel,
+  { ownMonsters, dKey, otherDKey }: DuellistCoordsMap
+) => {
+  // restore ownership of any temp-converted monsters
+  const ownActiveEffects = getActiveEffects(state, dKey);
+  const opponentActiveEffects = getActiveEffects(state, otherDKey);
+  ownActiveEffects.convertedZones.forEach((zoneCoords) => {
+    const { card, permPowerUpAtk, permPowerUpDef } = getZone(
+      state,
+      zoneCoords
+    ) as OccupiedMonsterZone;
+    specialSummon(state, otherDKey, card.id, {
+      permPowerUpAtk,
+      permPowerUpDef,
+    });
+    clearZone(state, zoneCoords);
+  });
+  ownActiveEffects.convertedZones = [];
+
+  // decrement turns remaining for SoRL
+  // Note that we check the originator/opponent's effect flag
+  if (opponentActiveEffects.sorlTurnsRemaining > 0) {
+    opponentActiveEffects.sorlTurnsRemaining--;
+  }
+
+  // unlock all monster zones
+  updateMonsters(state, ownMonsters, (z) => {
+    if (z.battlePosition === BattlePosition.Attack) {
+      z.orientation = Orientation.FaceUp;
+    }
+    z.isLocked = false;
+  });
+
+  // reset all turn-based params
+  state.activeTurn = {
+    ...state.activeTurn,
+    duellistKey: otherDKey,
+    isStartOfTurn: true,
+    hasNormalSummoned: false,
+    numTributedMonsters: 0,
+  };
 };

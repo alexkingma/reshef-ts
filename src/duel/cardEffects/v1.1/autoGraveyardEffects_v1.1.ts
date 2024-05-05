@@ -3,7 +3,7 @@ import { Monster } from "@/duel/enums/monster";
 import { isInsect } from "@/duel/util/cardTypeUtil";
 import { always } from "@/duel/util/common";
 import { addToTopOfDeck } from "@/duel/util/deckUtil";
-import { burn, heal, isStartOfTurn } from "@/duel/util/duellistUtil";
+import { burn, endTurn, heal, isStartOfTurn } from "@/duel/util/duellistUtil";
 import { clearGraveyard } from "@/duel/util/graveyardUtil";
 import {
   getHighestAtkZoneIdx,
@@ -47,9 +47,7 @@ export const graveyardEffects: GraveyardEffectReducers = {
   [Monster.PinchHopper]: (state, { ownMonsters }) => {
     return [
       {
-        condition: () => {
-          return hasEmptyZone(state, ownMonsters);
-        },
+        condition: () => hasEmptyZone(state, ownMonsters),
         effect: (state, { dKey, ownHand }) => {
           const handIdx = getHighestAtkZoneIdx(state, ownHand, isInsect);
           if (handIdx === -1) return; // no insect to summon
@@ -120,6 +118,29 @@ export const graveyardEffects: GraveyardEffectReducers = {
         condition: always,
         effect: (state, { dKey }) => {
           burn(state, dKey, 5000);
+          clearGraveyard(state, dKey);
+        },
+      },
+    ];
+  },
+  [Monster.TheUnhappyMaiden]: () => {
+    return [
+      {
+        condition: always,
+        effect: (state, coordsMap) => {
+          const { dKey } = coordsMap;
+          endTurn(state, coordsMap);
+          clearGraveyard(state, dKey);
+        },
+      },
+    ];
+  },
+  [Monster.DarkNecrofear]: (state, { otherMonsters }) => {
+    return [
+      {
+        condition: () => hasMatchInRow(state, otherMonsters),
+        effect: (state, { dKey }) => {
+          convertMonster(state, dKey);
           clearGraveyard(state, dKey);
         },
       },

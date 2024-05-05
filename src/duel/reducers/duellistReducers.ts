@@ -1,9 +1,9 @@
-import { BattlePosition, Orientation, RowKey } from "../enums/duel";
+import { RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
 import { getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
-import { getActiveEffects } from "../util/duellistUtil";
-import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
+import { endTurn } from "../util/duellistUtil";
+import { hasEmptyZone } from "../util/rowUtil";
 import {
   clearZone,
   destroyAtCoords,
@@ -15,49 +15,7 @@ export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
     shuffle(state[dKey].deck);
   },
-  endTurn: (
-    state: Duel,
-    { ownMonsters, dKey, otherDKey }: DuellistCoordsMap
-  ) => {
-    // restore ownership of any monsters affected by Brain Control
-    const ownActiveEffects = getActiveEffects(state, dKey);
-    const opponentActiveEffects = getActiveEffects(state, otherDKey);
-    ownActiveEffects.brainControlZones.forEach((zoneCoords) => {
-      const { card, permPowerUpAtk, permPowerUpDef } = getZone(
-        state,
-        zoneCoords
-      ) as OccupiedMonsterZone;
-      specialSummon(state, otherDKey, card.id, {
-        permPowerUpAtk,
-        permPowerUpDef,
-      });
-      clearZone(state, zoneCoords);
-    });
-    ownActiveEffects.brainControlZones = [];
-
-    // decrement turns remaining for SoRL
-    // Note that we check the originator/opponent's effect flag
-    if (opponentActiveEffects.sorlTurnsRemaining > 0) {
-      opponentActiveEffects.sorlTurnsRemaining--;
-    }
-
-    // unlock all monster zones
-    updateMonsters(state, ownMonsters, (z) => {
-      if (z.battlePosition === BattlePosition.Attack) {
-        z.orientation = Orientation.FaceUp;
-      }
-      z.isLocked = false;
-    });
-
-    // reset all turn-based params
-    state.activeTurn = {
-      ...state.activeTurn,
-      duellistKey: otherDKey,
-      isStartOfTurn: true,
-      hasNormalSummoned: false,
-      numTributedMonsters: 0,
-    };
-  },
+  endTurn,
   aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {
     // originCoords refers to the mon in hand to summon to the field.
     // Which tributes should be used need to be calced first,

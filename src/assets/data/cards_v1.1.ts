@@ -70,6 +70,11 @@ const updatedCards: DBCard[] = [
     cost: 260,
     level: 4,
   },
+  {
+    ...(getCard(Monster.SliferTheSkyDragon) as DBMonsterCard),
+    atk: 0,
+    def: 0,
+  },
 
   // ---- name changes ----- //
   {
@@ -202,7 +207,7 @@ const updatedCards: DBCard[] = [
   },
 ];
 
-const removedCardIds: CardId[] = [
+const removedCardIds = new Set<CardId>([
   Monster.RuklambaTheSpiritKing,
   Monster.GateSword,
   Monster.LeopardGirl,
@@ -219,9 +224,9 @@ const removedCardIds: CardId[] = [
   Spell.BeckonToDarkness,
   Spell.WingedTrumpeter,
   Trap.InvisibleWire,
-];
+]);
 
-const removedEffectCardIds: CardId[] = [
+const removedEffectCardIds = new Set<CardId>([
   Monster.GoddessOfWhim,
   Monster.PumpkingTheKingOfGhosts,
   Monster.ChironTheMage,
@@ -245,9 +250,10 @@ const removedEffectCardIds: CardId[] = [
   Monster.BetaTheMagnetWarrior,
   Monster.GammaTheMagnetWarrior,
   Monster.MysticalElf,
-];
+  Monster.LabyrinthTank,
+]);
 
-const newEffectCardIds: CardId[] = [
+const newEffectCardIds = new Set<CardId>([
   // direct attack
   Monster.FireReaper,
   Monster.Ooguchi,

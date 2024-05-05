@@ -5,7 +5,7 @@ import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation } from "../enums/duel";
 import { FlipEffectMonster } from "../enums/monster_v1.0";
 import { DirectSpell } from "../enums/spellTrapRitual_v1.0";
-import { getActiveEffects, removeBrainControlZone } from "../util/duellistUtil";
+import { clearConvertedZoneFlag, getActiveEffects } from "../util/duellistUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {
   attackMonster,
@@ -30,7 +30,7 @@ export const cardReducers = {
     // summoning a monster over the top of a BC-ed monster resets
     // the flag, so that the newly summoned monster doesn't get
     // "unconverted" come turn end and wind up in the opponent's hands
-    removeBrainControlZone(state, targetCoords!);
+    clearConvertedZoneFlag(state, targetCoords!);
 
     specialSummonAtCoords(state, targetCoords!, card.id, { orientation });
     state.activeTurn.hasNormalSummoned = true;
@@ -84,13 +84,13 @@ export const cardReducers = {
     state.activeTurn.numTributedMonsters++;
 
     // tributing a BC-ed monster removes the BC flag from that zone
-    removeBrainControlZone(state, zoneCoords);
+    clearConvertedZoneFlag(state, zoneCoords);
   },
   discard: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords, true);
 
     // discarding a BC-ed monster removes the BC flag from that zone
-    removeBrainControlZone(state, zoneCoords);
+    clearConvertedZoneFlag(state, zoneCoords);
   },
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;

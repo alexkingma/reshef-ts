@@ -24,6 +24,7 @@ import {
 } from "../util/wrappedUtil";
 import {
   convertMonster,
+  convertMonsterCurrentTurn,
   getZone,
   specialSummon,
   transformMonster,
@@ -195,12 +196,7 @@ export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
     setRowFaceDown(state, ownSpellTrap);
   },
   [Spell.BrainControl]: (state, { dKey }) => {
-    const controlledMonCoords = convertMonster(state, dKey);
-    if (!controlledMonCoords) return; // conversion failed, no space to house monster
-
-    // converted monster must undo conversion on turn end
-    const activeEffects = getActiveEffects(state, dKey);
-    activeEffects.brainControlZones.push(controlledMonCoords);
+    convertMonsterCurrentTurn(state, dKey);
   },
   [Spell.ChangeOfHeart]: (state, { dKey }) => {
     convertMonster(state, dKey);

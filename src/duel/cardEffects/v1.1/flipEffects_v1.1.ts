@@ -18,6 +18,7 @@ import {
 import {
   addCardToHand,
   clearZone,
+  destroyAtCoords,
   getZone,
   isFaceUp,
   isMonster,
@@ -88,7 +89,7 @@ export const flipEffectReducers: CardSubsetReducerMap<
     clearZone(state, zoneCoords);
   },
   [Monster.DarkJeroid]: (state, { otherDKey }) => {
-    powerDownHighestAtk(state, otherDKey);
+    powerDownHighestAtk(state, otherDKey, 800, 0);
   },
   [Monster.ArmedNinja]: (state, { otherSpellTrap }) => {
     destroyFirstFound(state, otherSpellTrap, isSpell);
@@ -125,4 +126,19 @@ export const flipEffectReducers: CardSubsetReducerMap<
     toggleBattlePosition(z);
   },
   [Monster.TheImmortalOfThunder]: healSelf(3000),
+  [Monster.JigenBakudan]: (state, { otherDKey, ownMonsters, zoneCoords }) => {
+    // destroy all monsters on your side of the field and inflict Direct Damage equal
+    // to half of the total ATK of the destroyed cards, excluding this monster
+    let totalAtk = 0;
+    const [, , selfIdx] = zoneCoords;
+    for (let i = 0; i < 5; i++) {
+      const z = getZone(state, [...ownMonsters, i]) as MonsterZone;
+      if (!z.isOccupied) continue;
+      if (i !== selfIdx) {
+        totalAtk += z.card.effAtk;
+      }
+      destroyAtCoords(state, [...ownMonsters, i]);
+    }
+    burn(state, otherDKey, Math.round(totalAtk / 2));
+  },
 };

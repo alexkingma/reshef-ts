@@ -4,7 +4,11 @@ import { Spell } from "@/duel/enums/spellTrapRitual_v1.0";
 import { burn } from "@/duel/util/duellistUtil";
 import { rowContainsAnyCards } from "@/duel/util/rowUtil";
 import { burnOther, destroyRows, healSelf } from "@/duel/util/wrappedUtil";
-import { specialSummon, transformMonster } from "@/duel/util/zoneUtil";
+import {
+  convertMonsterCurrentTurn,
+  specialSummon,
+  transformMonster,
+} from "@/duel/util/zoneUtil";
 
 export const spellEffects: CardSubsetReducerMap<Spell, DirectEffectReducer> = {
   // burn
@@ -51,5 +55,12 @@ export const spellEffects: CardSubsetReducerMap<Spell, DirectEffectReducer> = {
     ) {
       specialSummon(state, dKey, Monster.HarpieLadySisters);
     }
+  },
+  [Spell.ChangeOfHeart]: (state, { dKey }) => {
+    convertMonsterCurrentTurn(state, dKey);
+  },
+  [Spell.BrainControl]: (state, { dKey }) => {
+    burn(state, dKey, 800);
+    convertMonsterCurrentTurn(state, dKey);
   },
 };

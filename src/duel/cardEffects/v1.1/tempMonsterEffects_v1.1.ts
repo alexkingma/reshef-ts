@@ -7,8 +7,9 @@ import {
   isWater,
   isWind,
 } from "@/duel/util/cardAlignmentUtil";
+import { isDragon } from "@/duel/util/cardTypeUtil";
 import { always } from "@/duel/util/common";
-import { countMatchesInRow, powerDownHighestAtk } from "@/duel/util/rowUtil";
+import { countMatchesInRow } from "@/duel/util/rowUtil";
 import {
   isAnyOfMons,
   isMon,
@@ -124,21 +125,6 @@ export const tempMonsterEffects: CardSubsetReducerMap<
       },
     ];
   },
-  [Monster.DarkJeroid]: (state, { otherDKey, otherMonsters }) => {
-    return [
-      {
-        condition: () =>
-          countMatchesInRow(
-            state,
-            otherMonsters,
-            (z) => (z as OccupiedMonsterZone).card.effAtk > 0
-          ) > 0,
-        effect: () => {
-          powerDownHighestAtk(state, otherDKey, 800, 0);
-        },
-      },
-    ];
-  },
   [Monster.HarpiesPetDragon]: (state, { ownMonsters }) => {
     const effCon = powerUpSelf(
       [
@@ -151,6 +137,20 @@ export const tempMonsterEffects: CardSubsetReducerMap<
       [],
       300,
       300
+    );
+    return [effCon];
+  },
+  [Monster.SliferTheSkyDragon]: (state, { ownHand }) => {
+    const effCon = powerUpSelf([[state, ownHand, always]], [], 1000, 1000);
+    return [effCon];
+  },
+  [Monster.BusterBlader]: (state, { otherMonsters, otherDKey }) => {
+    const isDragonCard = (c: MonsterCard) => c.type === "Dragon";
+    const effCon = powerUpSelf(
+      [[state, otherMonsters, isDragon]],
+      [[state, otherDKey, isDragonCard]],
+      500,
+      0
     );
     return [effCon];
   },
