@@ -1,23 +1,7 @@
 import { Monster } from "../enums/monster";
-import {
-  AutoEffectMonster,
-  FlipEffectMonster,
-  GraveyardEffectMonster,
-  HandEffectCard,
-  TempEffectMonster,
-} from "../enums/monster_v1.0";
-import {
-  AutoSpellTrap,
-  CounterAttackCard,
-  CounterSpellCard,
-  DirectSpell,
-  Spell,
-  Trap,
-} from "../enums/spellTrapRitual_v1.0";
+import { Spell, Trap } from "../enums/spellTrapRitual";
 
-type DialogueMap<K extends number> = {
-  [key in K]: string;
-};
+type DialogueMap = Record<CardId, string>;
 
 // TODO: make this into a map
 const generalDialogue = [
@@ -78,7 +62,7 @@ const spiritMessageFail = "Disappeared because Destiny Board is missing.";
 //                 MONSTERS                  //
 // ----------------------------------------- //
 
-export const flipDialogueMap: DialogueMap<FlipEffectMonster> = {
+export const flipDialogueMap: DialogueMap = {
   // destroy opponent cards
   [Monster.FlameSwordsman]:
     "Its circular slash will destroy all dinosaurs on the opponent's field.",
@@ -224,7 +208,7 @@ export const flipDialogueMap: DialogueMap<FlipEffectMonster> = {
     "In return, it powers down every monster on the foe's field.",
 };
 
-export const graveyardDialogueMap: DialogueMap<GraveyardEffectMonster> = {
+export const graveyardDialogueMap: DialogueMap = {
   [Monster.TheWingedDragonOfRaPhoenixMode]:
     "Resurrected to own field in Battle Mode.",
   [Monster.Helpoemer]: "Discard one card in own hand.",
@@ -235,7 +219,7 @@ export const graveyardDialogueMap: DialogueMap<GraveyardEffectMonster> = {
     "The Dark Flare Knight in the graveyard summoned a Mirage Knight to the own field.",
 };
 
-export const permAutoMonsterDialogueMap: DialogueMap<AutoEffectMonster> = {
+export const permAutoMonsterDialogueMap: DialogueMap = {
   [Monster.ThunderNyanNyan]:
     "It was sent to the graveyard because a non-light monster appeared on the own field.",
 
@@ -263,7 +247,7 @@ export const permAutoMonsterDialogueMap: DialogueMap<AutoEffectMonster> = {
     "Great Moth transformed into Perfectly Ultimate Great Moth!",
 };
 
-export const tempAutoMonsterDialogueMap: DialogueMap<TempEffectMonster> = {
+export const tempAutoMonsterDialogueMap: DialogueMap = {
   [Monster.MammothGraveyard]: "Powered down every monster on the foe's field.",
   [Monster.DarkJeroid]: "Weakened the enemy monster with the highest ATK.",
   [Monster.Hoshiningen]:
@@ -307,7 +291,7 @@ export const tempAutoMonsterDialogueMap: DialogueMap<TempEffectMonster> = {
   [Monster.BladeKnight]: "Powered up for having one or no cards in the hand.",
 };
 
-export const handDialogueMap: DialogueMap<HandEffectCard> = {
+export const handDialogueMap: DialogueMap = {
   [Monster.LavaGolem]:
     "Emerged on the foe's field in exchange for two enemy tributes.",
   [Monster.ExodiaTheForbiddenOne]:
@@ -318,7 +302,7 @@ export const handDialogueMap: DialogueMap<HandEffectCard> = {
 //                  SPELLS                   //
 // ----------------------------------------- //
 
-export const spellDialogueMap: DialogueMap<DirectSpell> = {
+export const spellDialogueMap: DialogueMap = {
   // burn
   [Spell.Sparks]: burnSpell(50),
   [Spell.Hinotama]: burnSpell(100),
@@ -451,7 +435,7 @@ export const spellDialogueMap: DialogueMap<DirectSpell> = {
 //                   TRAPS                   //
 // ----------------------------------------- //
 
-export const perpetualSpellTrapDialogueMap: DialogueMap<AutoSpellTrap> = {
+export const perpetualSpellTrapDialogueMap: DialogueMap = {
   [Spell.MessengerOfPeace]:
     "Immobilised all monsters with 1,500 ATK or higher.", // as soon as a 1500+ card is present
 
@@ -467,7 +451,7 @@ export const perpetualSpellTrapDialogueMap: DialogueMap<AutoSpellTrap> = {
   [Trap.SpiritMessageL]: spiritMessageFail,
 };
 
-export const attackTrapDialogueMap: DialogueMap<CounterAttackCard> = {
+export const attackTrapDialogueMap: DialogueMap = {
   [Trap.AmazonArchers]: "The monster is powered down.",
   [Trap.HouseOfAdhesiveTape]: destroyAttackerTrap,
   [Trap.Eatgaboon]: destroyAttackerTrap,
@@ -480,7 +464,7 @@ export const attackTrapDialogueMap: DialogueMap<CounterAttackCard> = {
   [Trap.InfiniteDismissal]: "[X] will be unable to move for one turn.",
 };
 
-export const spellTrapDialogueMap: DialogueMap<CounterSpellCard> = {
+export const spellTrapDialogueMap: DialogueMap = {
   // TODO
   [Trap.GoblinFan]: "",
   [Trap.BadReactionToSimochi]: "",

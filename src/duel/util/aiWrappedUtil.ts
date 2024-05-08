@@ -1,6 +1,6 @@
 import { Field } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { Spell } from "../enums/spellTrapRitual_v1.0";
+import { Spell } from "../enums/spellTrapRitual";
 import { getCard } from "./cardUtil";
 import { getActiveField, isBuffedByField } from "./fieldUtil";
 import { countMatchesInRow, hasMatchInRow } from "./rowUtil";

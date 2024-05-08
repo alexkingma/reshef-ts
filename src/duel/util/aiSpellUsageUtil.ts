@@ -1,6 +1,6 @@
 import { Field } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { DirectSpell, Spell } from "../enums/spellTrapRitual_v1.0";
+import { Spell } from "../enums/spellTrapRitual";
 import {
   onlyOpponentHasMonster,
   opponentHasMonster,
@@ -32,7 +32,7 @@ import {
   isUnlocked,
 } from "./zoneUtil";
 
-export const spellUsageMap: CardReducerMap<DirectSpell, CardCondition> = {
+export const spellUsageMap: Record<CardId, CardCondition> = {
   // burn
   [Spell.Sparks]: always,
   [Spell.Hinotama]: always,

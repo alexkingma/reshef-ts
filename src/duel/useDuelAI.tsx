@@ -10,8 +10,6 @@ import {
   selectIsMyTurn,
 } from "./duelSlice";
 import { BattlePosition } from "./enums/duel";
-import { FlipEffectMonster } from "./enums/monster_v1.0";
-import { DirectSpell } from "./enums/spellTrapRitual_v1.0";
 import { useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";
@@ -114,7 +112,7 @@ export const useDuelAI = () => {
 
       const originCoords: ZoneCoords = [...ownSpellTrap, i];
       const coordsMap = getZoneCoordsMap(originCoords);
-      const condition = spellUsageMap[originZone.id as DirectSpell];
+      const condition = spellUsageMap[originZone.id];
       if (!condition || !condition(state, coordsMap)) continue;
 
       setOriginZone(originCoords);
@@ -176,7 +174,7 @@ export const useDuelAI = () => {
       ) {
         const originCoords: ZoneCoords = [...ownMonsters, i];
         const coordsMap = getZoneCoordsMap(originCoords);
-        const condition = monsterUsageMap[originZone.id as FlipEffectMonster];
+        const condition = monsterUsageMap[originZone.id];
         if (!condition || !condition(state, coordsMap)) continue;
 
         setOriginZone(originCoords);

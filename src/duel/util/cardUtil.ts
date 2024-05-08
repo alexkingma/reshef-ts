@@ -1,7 +1,7 @@
 import { default as alignmentMap } from "@/assets/data/alignment.json";
 import cards from "@/assets/data/cards";
 import { Monster } from "../enums/monster";
-import { Spell, Trap } from "../enums/spellTrapRitual_v1.0";
+import { Spell, Trap } from "../enums/spellTrapRitual";
 
 // Create a lookup map at runtime to avoid doing [].find()
 // every time card data needs to be fetched (100s of times per duel).

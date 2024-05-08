@@ -1,17 +1,18 @@
-import { Field } from "../enums/duel";
+import { Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { Trap } from "../enums/spellTrapRitual_v1.0";
+import { Trap } from "../enums/spellTrapRitual";
 import { isOneOfAlignments } from "./cardAlignmentUtil";
 import { isOneOfTypes } from "./cardTypeUtil";
+import { always } from "./common";
 import { draw as drawDirect } from "./deckUtil";
 import { burn, heal } from "./duellistUtil";
 import { setActiveField as setActiveFieldDirect } from "./fieldUtil";
 import {
-  countConditional,
   countMatchesInRow,
   destroyRow,
   getHighestAtkZoneIdx,
   getRow,
+  hasMatchInRow,
   rowContainsAnyCards,
   updateMonsters,
 } from "./rowUtil";
@@ -20,6 +21,7 @@ import {
   destroyAtCoords,
   directAttack as directAttackDirect,
   getOriginZone,
+  isMinAtk,
   isNotGodCard,
   isOccupied,
   isSpecificMonster,
@@ -31,6 +33,12 @@ export const burnOther =
   (amt: number) =>
   (state: Duel, { otherDKey }: CoordsMap) => {
     burn(state, otherDKey, amt);
+  };
+
+export const burnSelf =
+  (amt: number) =>
+  (state: Duel, { dKey }: CoordsMap) => {
+    burn(state, dKey, amt);
   };
 
 export const healSelf =
@@ -99,7 +107,7 @@ const destroyMonsterConditional =
   };
 
 export const destroy1500PlusAtk = () =>
-  destroyMonsterConditional((card) => card.effAtk >= 1500);
+  destroyMonsterConditional((z) => isMinAtk(z, 1500));
 
 export const destroyMonsterType = (type: CardType) =>
   destroyMonsterConditional(isOneOfTypes(type));
@@ -113,81 +121,85 @@ export const draw =
     drawDirect(state, dKey, numCards);
   };
 
-export const getEffCon_powerUpSelfConditional = (
-  rowConditionPairs: (
-    | [Duel, RowCoords, (z: Zone) => boolean]
-    | [Duel, RowCoords, (z: Zone) => boolean, number]
-  )[],
-  graveyardConditionPairs: (
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = [],
-  atk: number = 500,
-  def: number = 500
+export const getEffCon_powerUpSelfFromOwnMonsters = (
+  condition: (z: OccupiedZone) => boolean = always,
+  atkPerMatch: number = 500,
+  defPerMatch: number = 500
 ) => {
   return {
-    condition: () => {
-      return countConditional(rowConditionPairs, graveyardConditionPairs) > 0;
+    row: RowKey.Monster,
+    condition: (state: Duel, { ownMonsters }: ZoneCoordsMap) => {
+      return hasMatchInRow(state, ownMonsters, condition);
     },
-    effect: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
-      const count = countConditional(
-        rowConditionPairs,
-        graveyardConditionPairs
+    effect: (state: Duel, { zoneCoords, ownMonsters }: ZoneCoordsMap) => {
+      const count = countMatchesInRow(state, ownMonsters, condition);
+      tempPowerUpDirect(
+        state,
+        zoneCoords,
+        count * atkPerMatch,
+        count * defPerMatch
       );
-      tempPowerUpDirect(state, zoneCoords, count * atk, count * def);
     },
   };
 };
 
-export const getEffCon_updateMatchesInRow = (
-  state: Duel,
-  coords: RowCoords,
+export const getEffCon_updateOwnMonsters = (
   effect: (z: OccupiedMonsterZone) => void,
-  condition: (z: OccupiedMonsterZone) => boolean = () => true
+  condition: (z: OccupiedZone) => boolean = always
 ) => {
   return {
-    condition: () => {
-      return (
-        countMatchesInRow(state, coords, (z) =>
-          condition(z as OccupiedMonsterZone)
-        ) > 0
-      );
+    row: RowKey.Monster,
+    condition: (state: Duel, { ownMonsters }: ZoneCoordsMap) => {
+      return hasMatchInRow(state, ownMonsters, condition);
     },
-    effect: () => {
-      updateMonsters(state, coords, effect, condition);
+    effect: (state: Duel, { ownMonsters }: ZoneCoordsMap) => {
+      updateMonsters(state, ownMonsters, effect, condition);
     },
   };
 };
 
-export const trapDestroyAttacker =
-  (atkCondition: (z: OccupiedMonsterZone) => boolean) => (state: Duel) => {
-    return {
-      condition: () => {
-        const attackerZone = getOriginZone(state) as OccupiedMonsterZone;
-        return atkCondition(attackerZone);
-      },
-      effect: () => {
-        destroyAtCoords(state, state.interaction.originCoords!);
-      },
-    };
+export const getEffCon_updateOtherMonsters = (
+  effect: (z: OccupiedMonsterZone) => void,
+  condition: (z: OccupiedZone) => boolean = always
+) => {
+  return {
+    row: RowKey.Monster,
+    condition: (state: Duel, { otherMonsters }: ZoneCoordsMap) => {
+      return hasMatchInRow(state, otherMonsters, condition);
+    },
+    effect: (state: Duel, { otherMonsters }: ZoneCoordsMap) => {
+      updateMonsters(state, otherMonsters, effect, condition);
+    },
   };
+};
 
-export const getEffCon_requireDestinyBoard =
-  () =>
-  (state: Duel, { zoneCoords, ownSpellTrap }: ZoneCoordsMap) => {
-    return [
-      {
-        condition: () => {
-          return !rowContainsAnyCards(state, ownSpellTrap, Trap.DestinyBoard);
-        },
-        effect: () => {
-          // I/N/A/L letters require Destiny Board to also be
-          // on the field or they auto-disappear
-          clearZone(state, zoneCoords);
-        },
-      },
-    ];
+export const getEffCon_trapDestroyAttacker = (
+  atkCondition: (z: OccupiedMonsterZone) => boolean
+) => {
+  return {
+    row: RowKey.SpellTrap,
+    condition: (state: Duel) => {
+      const attackerZone = getOriginZone(state) as OccupiedMonsterZone;
+      return atkCondition(attackerZone);
+    },
+    effect: (state: Duel) => {
+      destroyAtCoords(state, state.interaction.originCoords!);
+    },
   };
+};
+
+export const getEffCon_requireDestinyBoard = (): AutoEffectReducer => ({
+  row: RowKey.SpellTrap,
+  dialogue: "TODO",
+  condition: (state: Duel, { ownSpellTrap }: ZoneCoordsMap) => {
+    return !rowContainsAnyCards(state, ownSpellTrap, Trap.DestinyBoard);
+  },
+  effect: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
+    // I/N/A/L letters require Destiny Board to also be
+    // on the field or they auto-disappear
+    clearZone(state, zoneCoords);
+  },
+});
 
 export const tempDown =
   (atk: number, def: number) => (z: OccupiedMonsterZone) => {

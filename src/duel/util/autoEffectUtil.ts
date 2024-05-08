@@ -1,11 +1,10 @@
-import { graveyardEffects } from "../cardEffects/autoGraveyardEffects";
-import { handEffects } from "../cardEffects/autoHandEffects";
-import { autoMonsterEffects } from "../cardEffects/autoMonsterEffects";
-import { autoSpellTrapEffects } from "../cardEffects/autoSpellTrapEffects";
+import { customAutoEffects } from "../cardEffects/customAutoEffects";
 import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
 import { Orientation, RowKey } from "../enums/duel";
+import { getCard } from "./cardUtil";
+import { getColor } from "./common";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { getRow, updateMonsters } from "./rowUtil";
+import { getRow, isRowCoordMatch, updateMonsters } from "./rowUtil";
 import {
   getCombatStats,
   getZone,
@@ -68,42 +67,45 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 const checkPermAutoEffects = (state: Duel) => {
   const dKey = state.activeTurn.duellistKey;
   const otherDKey = getOtherDuellistKey(dKey);
-
-  // graveyard effects
-  checkRowEffects(state, [dKey, RowKey.Graveyard], graveyardEffects);
-  checkRowEffects(state, [otherDKey, RowKey.Graveyard], graveyardEffects);
-
-  // monster (perm) effects
-  checkRowEffects(state, [dKey, RowKey.Monster], autoMonsterEffects);
-  checkRowEffects(state, [otherDKey, RowKey.Monster], autoMonsterEffects);
-
-  // spell/trap effects
-  checkRowEffects(state, [dKey, RowKey.SpellTrap], autoSpellTrapEffects);
-  checkRowEffects(state, [otherDKey, RowKey.SpellTrap], autoSpellTrapEffects);
-
-  // hand effects
-  checkRowEffects(state, [dKey, RowKey.Hand], handEffects);
-  checkRowEffects(state, [otherDKey, RowKey.Hand], handEffects);
+  const orderedRows: RowCoords[] = [
+    [dKey, RowKey.Graveyard],
+    [otherDKey, RowKey.Graveyard],
+    [dKey, RowKey.Monster],
+    [otherDKey, RowKey.Monster],
+    [dKey, RowKey.SpellTrap],
+    [otherDKey, RowKey.SpellTrap],
+    [dKey, RowKey.Hand],
+    [otherDKey, RowKey.Hand],
+  ];
+  orderedRows.forEach((rowCoords) => {
+    checkRowEffects(state, rowCoords, customAutoEffects);
+  });
 };
 
-const checkRowEffects = <T extends CardId>(
+const checkRowEffects = (
   state: Duel,
   rowCoords: RowCoords,
-  reducerMap: CardReducerMap<T, MultiEffConReducer>
+  reducerMap: CardEffectMap<AutoEffectReducer>
 ) => {
-  getRow(state, rowCoords).forEach((_: any, i: number) => {
+  getRow(state, rowCoords).forEach((_, i: number) => {
     const coordsMap = getZoneCoordsMap([...rowCoords, i]);
-    const { zoneCoords } = coordsMap;
+    const { zoneCoords, dKey } = coordsMap;
 
     const z = getZone(state, zoneCoords);
     if (!isOccupied(z)) return;
 
-    const reducer = reducerMap[z.id as T];
-    if (!reducer) return;
+    const temp = reducerMap[z.id];
+    if (!temp) return;
 
-    const conEffectPairs = reducer(state, coordsMap);
-    conEffectPairs.forEach(({ condition, effect }) => {
-      if (!condition(state, coordsMap)) return;
+    const { name, category } = getCard(z.id);
+    const effects = Array.isArray(temp) ? temp : [temp];
+    effects.forEach(({ row, condition, effect, dialogue }) => {
+      // auto effects only activate in specific rows
+      if (!isRowCoordMatch(rowCoords, [dKey, row as RowKey])) return;
+      // if condition doesn't exist, it's an "always" effect
+      if (condition && !condition(state, coordsMap)) return;
+      console.log(`[Auto Effect] ${name}: ${dialogue}`);
+      console.log(`%c${name}: ${dialogue}`, `color: ${getColor(category)};`);
 
       z.orientation = Orientation.FaceUp;
       effect(state, coordsMap);

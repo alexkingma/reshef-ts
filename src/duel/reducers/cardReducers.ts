@@ -1,11 +1,10 @@
-import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
-import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
+import { counterAttackEffects } from "../cardEffects/counterAttackEffects";
+import { counterSpellEffects } from "../cardEffects/counterSpellEffects";
 import { spellEffects } from "../cardEffects/directSpellEffects";
-import { flipEffectReducers as flipReducers } from "../cardEffects/flipEffects";
+import { flipEffects } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation } from "../enums/duel";
-import { FlipEffectMonster } from "../enums/monster_v1.0";
-import { DirectSpell } from "../enums/spellTrapRitual_v1.0";
 import { getCard } from "../util/cardUtil";
+import { COLOR_EFFECT_MONSTER, COLOR_SPELL } from "../util/common";
 import { clearConvertedZoneFlag, getActiveEffects } from "../util/duellistUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {
@@ -58,7 +57,7 @@ export const cardReducers = {
 
     // a trap triggering cancels the attack attempt and
     // carries out the trap's effect instead
-    if (checkTriggeredTraps(state, coordsMap, counterAttackReducers)) {
+    if (checkTriggeredTraps(state, coordsMap, counterAttackEffects)) {
       return;
     }
 
@@ -97,42 +96,50 @@ export const cardReducers = {
     const { zoneCoords } = coordsMap;
     const { id } = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
     const { name } = getCard(id);
-    const spellReducer = spellEffects[id as DirectSpell];
+    const spellReducer = spellEffects[id];
     if (!spellReducer) {
-      console.log(`Spell effect not implemented for card: ${name}`);
+      console.error(`Effect not implemented for direct spell: ${name}`);
+      return;
+    } else if (Array.isArray(spellReducer)) {
+      console.error(`Multiple effects found for direct spell: ${name}`);
       return;
     }
 
     // a trap triggering cancels the spell activation attempt
     // and carries out the trap's effect instead
-    if (checkTriggeredTraps(state, coordsMap, counterSpellReducers)) {
+    if (checkTriggeredTraps(state, coordsMap, counterSpellEffects)) {
       return;
     }
 
     // no traps triggered, activate original spell effect
-    console.log(`%c${name}`, "color: #39A24E;");
-    spellReducer(state, coordsMap);
+    const { effect, dialogue, noDiscard } = spellReducer;
+    console.log(`%c${name}: ${dialogue}`, `color: ${COLOR_SPELL};`);
+    effect(state, coordsMap);
 
-    // discard after activation
-    clearZone(state, zoneCoords);
+    if (!noDiscard) {
+      // discard after activation
+      clearZone(state, zoneCoords);
+    }
   },
   activateMonsterFlipEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;
-    const originalZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-    const originalCard = getCard(originalZone.id);
-    const flipReducer = flipReducers[originalCard.id as FlipEffectMonster];
+    const { id } = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    const { name } = getCard(id);
+    const flipReducer = flipEffects[id];
 
     if (!flipReducer) {
-      console.log(`Flip effect not implemented for card: ${originalCard.name}`);
+      console.error(`Effect not implemented for flip monster: ${name}`);
+      return;
+    } else if (Array.isArray(flipReducer)) {
+      console.error(`Multiple effects found for flip monster: ${name}`);
       return;
     }
 
-    if (flipReducer) {
-      console.log(`%c${originalCard.name}`, "color: #D45420;");
-      flipReducer(state, coordsMap);
+    const { effect, dialogue } = flipReducer;
+    console.log(`%c${name}: ${dialogue}`, `color: ${COLOR_EFFECT_MONSTER};`);
+    effect(state, coordsMap);
 
-      // lock/flip/etc.
-      postDirectMonsterAction(state, zoneCoords, originalZone.id);
-    }
+    // lock/flip/etc.
+    postDirectMonsterAction(state, zoneCoords, id);
   },
 };

@@ -1,38 +1,15 @@
 type CardCondition = (state: Duel, coordsMap: ZoneCoordsMap) => boolean;
-type CardEffect = (state: Duel, coords: ZoneCoordsMap) => void;
+type CardEffect = (state: Duel, coordsMap: ZoneCoordsMap) => void;
 
-interface ConditionalEffect {
-  condition: CardCondition;
+type DirectEffectReducer = {
   effect: CardEffect;
-  noDiscard?: boolean;
-  dialogue?: string; // TODO
-}
-
-type EffConReducer = (state: Duel, coords: ZoneCoordsMap) => ConditionalEffect;
-type MultiEffConReducer = (
-  state: Duel,
-  coords: ZoneCoordsMap
-) => ConditionalEffect[];
-type DirectEffectReducer = CardEffect;
-
-type CardReducerMap<
-  K extends CardId,
-  V extends
-    | EffConReducer
-    | MultiEffConReducer
-    | DirectEffectReducer
-    | CardCondition,
-> = {
-  [key in K]: V;
+  dialogue: string;
+  noDiscard?: boolean; // spellTrap only
 };
 
-type CardSubsetReducerMap<
-  K extends CardId,
-  V extends
-    | EffConReducer
-    | MultiEffConReducer
-    | DirectEffectReducer
-    | CardCondition,
-> = {
-  [key in K]?: V;
+type AutoEffectReducer = DirectEffectReducer & {
+  row: string; // uses RowKey enum
+  condition: CardCondition;
 };
+
+type CardEffectMap<T extends DirectEffectReducer> = Record<CardId, T | T[]>;

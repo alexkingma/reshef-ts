@@ -1,6 +1,6 @@
 import SpellTargetMap from "@/assets/data/spellTargets";
 import { Monster } from "../enums/monster";
-import { Spell } from "../enums/spellTrapRitual_v1.0";
+import { Spell } from "../enums/spellTrapRitual";
 
 export const spellHasTarget = (id: Spell) => {
   return id in SpellTargetMap;

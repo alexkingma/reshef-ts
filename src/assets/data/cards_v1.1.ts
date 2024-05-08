@@ -1,5 +1,5 @@
 import { Monster } from "@/duel/enums/monster";
-import { Spell, Trap } from "@/duel/enums/spellTrapRitual_v1.0";
+import { Spell, Trap } from "@/duel/enums/spellTrapRitual";
 import cards from "./cards";
 
 const getCard = (id: CardId): Card => {
@@ -281,4 +281,3 @@ const newEffectCardIds = new Set<CardId>([
 
   // TODO: convert this into type keys for the effect map
 ]);
-

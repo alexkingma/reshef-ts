@@ -1,40 +1,66 @@
-import { CounterAttackCard, Trap } from "../enums/spellTrapRitual_v1.0";
+import { RowKey } from "../enums/duel";
+import { Trap } from "../enums/spellTrapRitual";
+import { always } from "../util/common";
 import { destroyRow } from "../util/rowUtil";
-import { trapDestroyAttacker } from "../util/wrappedUtil";
-import { immobiliseCard, permPowerDown } from "../util/zoneUtil";
+import { getEffCon_trapDestroyAttacker } from "../util/wrappedUtil";
+import {
+  getZone,
+  immobiliseZone,
+  isMinAtk,
+  permPowerDown,
+} from "../util/zoneUtil";
 
-export const counterAttackReducers: CardReducerMap<
-  CounterAttackCard,
-  EffConReducer
-> = {
-  [Trap.AmazonArchers]: (state) => {
-    return {
-      condition: () => true,
-      effect: () => {
-        permPowerDown(state, state.interaction.originCoords!, 500, 500);
-      },
-    };
+export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
+  [Trap.AmazonArchers]: {
+    row: RowKey.SpellTrap,
+    condition: always,
+    effect: (state) => {
+      permPowerDown(state, state.interaction.originCoords!, 500, 500);
+    },
+    dialogue: "TODO",
   },
-  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => z.effAtk <= 500),
-  [Trap.Eatgaboon]: trapDestroyAttacker((z) => z.effAtk <= 1000),
-  [Trap.BearTrap]: trapDestroyAttacker((z) => z.effAtk <= 1500),
-  [Trap.InvisibleWire]: trapDestroyAttacker((z) => z.effAtk <= 2000),
-  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => z.effAtk <= 3000),
-  [Trap.WidespreadRuin]: trapDestroyAttacker(() => true),
-  [Trap.TorrentialTribute]: (state, { ownMonsters }) => {
-    return {
-      condition: () => true,
-      effect: () => {
-        destroyRow(state, ownMonsters);
-      },
-    };
+  [Trap.HouseOfAdhesiveTape]: {
+    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 500)),
+    dialogue: "TODO",
   },
-  [Trap.InfiniteDismissal]: (state) => {
-    return {
-      condition: () => true,
-      effect: () => {
-        immobiliseCard(state, state.interaction.originCoords!);
-      },
-    };
+  [Trap.Eatgaboon]: {
+    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 1000)),
+    dialogue: "TODO",
+  },
+  [Trap.BearTrap]: {
+    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 1500)),
+    dialogue: "TODO",
+  },
+  [Trap.InvisibleWire]: {
+    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 2000)),
+    dialogue: "TODO",
+  },
+  [Trap.AcidTrapHole]: {
+    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 3000)),
+    dialogue: "TODO",
+  },
+  [Trap.WidespreadRuin]: {
+    ...getEffCon_trapDestroyAttacker(always),
+    dialogue: "TODO",
+  },
+  [Trap.TorrentialTribute]: {
+    row: RowKey.SpellTrap,
+    condition: always,
+    effect: (state, { ownMonsters }) => {
+      destroyRow(state, ownMonsters);
+    },
+    dialogue: "TODO",
+  },
+  [Trap.InfiniteDismissal]: {
+    row: RowKey.SpellTrap,
+    condition: () => true,
+    effect: (state) => {
+      const z = getZone(
+        state,
+        state.interaction.originCoords!
+      ) as OccupiedMonsterZone;
+      immobiliseZone(z);
+    },
+    dialogue: "TODO",
   },
 };

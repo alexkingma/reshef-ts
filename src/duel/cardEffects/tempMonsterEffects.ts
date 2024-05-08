@@ -1,6 +1,6 @@
+import { RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { TempEffectMonster } from "../enums/monster_v1.0";
-import { isDark, isLight } from "../util/cardAlignmentUtil";
+import { isDark, isLight, isLightOrDark } from "../util/cardAlignmentUtil";
 import {
   isDragon,
   isFairy,
@@ -9,233 +9,207 @@ import {
   isOneOfTypes,
   isPlant,
 } from "../util/cardTypeUtil";
+import { effCon_DarkMagicianGirl } from "../util/effectsUtil";
 import {
   countMatchesInRow,
   getHighestAtkZoneIdx,
   hasMatchInRow,
+  updateMonsters,
 } from "../util/rowUtil";
 import {
   isMon,
-  getEffCon_powerUpSelfConditional as powerUpSelf,
+  getEffCon_powerUpSelfFromOwnMonsters as powerUpSelfFromOwnMonsters,
   tempDown,
   tempUp,
-  getEffCon_updateMatchesInRow as updateMatches,
+  getEffCon_updateOtherMonsters as updateOtherMonsters,
+  getEffCon_updateOwnMonsters as updateOwnMonsters,
 } from "../util/wrappedUtil";
 import { tempPowerDown, tempPowerUp } from "../util/zoneUtil";
 
 const tempDown500 = tempDown(500, 500);
 const tempUp500 = tempUp(500, 500);
 
-export const tempMonsterEffects: CardReducerMap<
-  TempEffectMonster,
-  MultiEffConReducer
-> = {
+export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
   // power down enemies
-  [Monster.MammothGraveyard]: (state, { otherMonsters }) => {
-    const effCon = updateMatches(state, otherMonsters, tempDown500);
-    return [effCon];
+  [Monster.MammothGraveyard]: {
+    ...updateOtherMonsters(tempDown500),
+    dialogue: "TODO",
   },
-  [Monster.DarkJeroid]: (state, { otherMonsters }) => {
-    return [
-      {
-        condition: () => {
-          return hasMatchInRow(state, otherMonsters);
-        },
-        effect: () => {
-          const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-          if (targetIdx === -1) return;
-          tempPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
-        },
-      },
-    ];
+  [Monster.DarkJeroid]: {
+    row: RowKey.Monster,
+    condition: (state, { otherMonsters }) => {
+      return hasMatchInRow(state, otherMonsters);
+    },
+    effect: (state, { otherMonsters }) => {
+      const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
+      if (targetIdx === -1) return;
+      tempPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
+    },
+    dialogue: "TODO",
   },
 
   // power up cross-field
-  [Monster.Hoshiningen]: (state, { ownMonsters, otherMonsters }) => {
-    return [
-      updateMatches(state, ownMonsters, tempUp500, isLight),
-      updateMatches(state, ownMonsters, tempDown500, isDark),
-      updateMatches(state, otherMonsters, tempUp500, isLight),
-      updateMatches(state, otherMonsters, tempDown500, isDark),
-    ];
+  [Monster.Hoshiningen]: {
+    row: RowKey.Monster,
+    condition: (state, { ownMonsters, otherMonsters }) => {
+      return (
+        hasMatchInRow(state, otherMonsters, isLightOrDark) ||
+        hasMatchInRow(state, ownMonsters, isLightOrDark)
+      );
+    },
+    effect: (state, { ownMonsters, otherMonsters }) => {
+      updateMonsters(state, ownMonsters, tempUp500, isLight);
+      updateMonsters(state, ownMonsters, tempDown500, isDark);
+      updateMonsters(state, otherMonsters, tempUp500, isLight);
+      updateMonsters(state, otherMonsters, tempDown500, isDark);
+    },
+    dialogue: "TODO",
   },
-  [Monster.WitchsApprentice]: (state, { ownMonsters, otherMonsters }) => {
-    return [
-      updateMatches(state, ownMonsters, tempDown500, isLight),
-      updateMatches(state, ownMonsters, tempUp500, isDark),
-      updateMatches(state, otherMonsters, tempDown500, isLight),
-      updateMatches(state, otherMonsters, tempUp500, isDark),
-    ];
+  [Monster.WitchsApprentice]: {
+    row: RowKey.Monster,
+    condition: (state, { ownMonsters, otherMonsters }) => {
+      return (
+        hasMatchInRow(state, otherMonsters, isLightOrDark) ||
+        hasMatchInRow(state, ownMonsters, isLightOrDark)
+      );
+    },
+    effect: (state, { ownMonsters, otherMonsters }) => {
+      updateMonsters(state, ownMonsters, tempUp500, isDark);
+      updateMonsters(state, ownMonsters, tempDown500, isLight);
+      updateMonsters(state, otherMonsters, tempUp500, isDark);
+      updateMonsters(state, otherMonsters, tempDown500, isLight);
+    },
+    dialogue: "TODO",
   },
 
   // power up allies
-  [Monster.MysticalElf]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.BlueEyesWhiteDragon)
-    );
-    return [effCon];
+  [Monster.MysticalElf]: {
+    ...updateOwnMonsters(tempUp500, isMon(Monster.BlueEyesWhiteDragon)),
+    dialogue: "TODO",
   },
-  [Monster.HarpieLady]: (state, { ownMonsters }) => {
+  [Monster.HarpieLady]: {
     // wording says powers up "a" pet dragon, but that's not how it works
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.HarpiesPetDragon)
-    );
-    return [effCon];
+    ...updateOwnMonsters(tempUp500, isMon(Monster.HarpiesPetDragon)),
+    dialogue: "TODO",
   },
-  [Monster.CyberHarpie]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.HarpiesPetDragon)
-    );
-    return [effCon];
+  [Monster.CyberHarpie]: {
+    ...updateOwnMonsters(tempUp500, isMon(Monster.HarpiesPetDragon)),
+    dialogue: "TODO",
   },
-  [Monster.HarpieLadySisters]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp(1000, 1000),
-      isMon(Monster.HarpiesPetDragon)
-    );
-    return [effCon];
+  [Monster.HarpieLadySisters]: {
+    ...updateOwnMonsters(tempUp(1000, 1000), isMon(Monster.HarpiesPetDragon)),
+    dialogue: "TODO",
   },
-  [Monster.MonsterTamer]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.DungeonWorm)
-    );
-    return [effCon];
+  [Monster.MonsterTamer]: {
+    ...updateOwnMonsters(tempUp500, isMon(Monster.DungeonWorm)),
+    dialogue: "TODO",
   },
-  [Monster.PumpkingTheKingOfGhosts]: (state, { ownMonsters }) => {
-    const cards: Monster[] = [
-      Monster.ArmoredZombie,
-      Monster.DragonZombie,
-      Monster.ClownZombie,
-    ];
-    const effCon = updateMatches(state, ownMonsters, tempUp500, (z) =>
-      cards.includes(z.id)
-    );
-    return [effCon];
+  [Monster.PumpkingTheKingOfGhosts]: {
+    ...updateOwnMonsters(tempUp500, (z) =>
+      [
+        Monster.ArmoredZombie,
+        Monster.DragonZombie,
+        Monster.ClownZombie,
+      ].includes(z.id)
+    ),
+    dialogue: "TODO",
   },
-  [Monster.MWarrior1]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.MWarrior2)
-    );
-    return [effCon];
+  [Monster.MWarrior1]: {
+    ...updateOwnMonsters(tempUp500, isMon(Monster.MWarrior2)),
+    dialogue: "TODO",
   },
-  [Monster.MWarrior2]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
-      tempUp500,
-      isMon(Monster.MWarrior1)
-    );
-    return [effCon];
+  [Monster.MWarrior2]: {
+    ...updateOwnMonsters(tempUp500, isMon(Monster.MWarrior1)),
+    dialogue: "TODO",
   },
-  [Monster.NightmarePenguin]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(
-      state,
-      ownMonsters,
+  [Monster.NightmarePenguin]: {
+    ...updateOwnMonsters(
       tempUp500,
       isOneOfTypes("Aqua", "Fish", "Sea Serpent", "Reptile")
-    );
-    return [effCon];
+    ),
+    dialogue: "TODO",
   },
-  [Monster.CommandAngel]: (state, { ownMonsters }) => {
-    const effCon = updateMatches(state, ownMonsters, tempUp500, isFairy);
-    return [effCon];
+  [Monster.CommandAngel]: {
+    ...updateOwnMonsters(tempUp500, isFairy),
+    dialogue: "TODO",
   },
 
   // power up self
-  [Monster.SwampBattleguard]: (state, { ownMonsters }) => {
-    const effCon = powerUpSelf([
-      [state, ownMonsters, isMon(Monster.LavaBattleguard)],
-    ]);
-    return [effCon];
+  [Monster.SwampBattleguard]: {
+    ...powerUpSelfFromOwnMonsters(isMon(Monster.LavaBattleguard)),
+    dialogue: "TODO",
   },
-  [Monster.LavaBattleguard]: (state, { ownMonsters }) => {
-    const effCon = powerUpSelf([
-      [state, ownMonsters, isMon(Monster.SwampBattleguard)],
-    ]);
-    return [effCon];
+  [Monster.LavaBattleguard]: {
+    ...powerUpSelfFromOwnMonsters(isMon(Monster.SwampBattleguard)),
+    dialogue: "TODO",
   },
-  [Monster.BusterBlader]: (state, { dKey, ownMonsters }) => {
-    const isDragonCard = (c: MonsterCard) => c.type === "Dragon";
-    const effCon = powerUpSelf(
-      [[state, ownMonsters, isDragon]],
-      [[state, dKey, isDragonCard]]
-    );
-    return [effCon];
+  [Monster.BusterBlader]: {
+    row: RowKey.Monster,
+    condition: (state, { ownMonsters, ownGraveyard }) => {
+      return (
+        hasMatchInRow(state, ownMonsters, isDragon) ||
+        hasMatchInRow(state, ownGraveyard, isDragon)
+      );
+    },
+    effect: (state, { zoneCoords, ownMonsters, ownGraveyard }) => {
+      const count =
+        countMatchesInRow(state, ownMonsters, isDragon) +
+        countMatchesInRow(state, ownGraveyard, isDragon);
+      tempPowerUp(state, zoneCoords, count * 500, count * 500);
+    },
+    dialogue: "TODO",
   },
-  [Monster.WodanTheResidentOfTheForest]: (state, { ownMonsters }) => {
-    const effCon = powerUpSelf([[state, ownMonsters, isPlant]]);
-    return [effCon];
+  [Monster.WodanTheResidentOfTheForest]: {
+    ...powerUpSelfFromOwnMonsters(isPlant),
+    dialogue: "TODO",
   },
-  [Monster.PerfectMachineKing]: (state, { ownMonsters, otherMonsters }) => {
-    const effCon = powerUpSelf([
-      [state, ownMonsters, isMachine, 2],
-      [state, otherMonsters, isMachine, 2],
-    ]);
-    return [effCon];
+  [Monster.MachineKing]: {
+    ...powerUpSelfFromOwnMonsters(isMachine),
+    dialogue: "TODO",
   },
-  [Monster.SliferTheSkyDragon]: (state, { ownHand }) => {
-    const effCon = powerUpSelf([[state, ownHand, () => true, 3]]);
-    return [effCon];
+  [Monster.PerfectMachineKing]: {
+    ...powerUpSelfFromOwnMonsters(isPlant, 1000, 1000),
+    dialogue: "TODO",
   },
-  [Monster.LabyrinthTank]: (state, { ownMonsters }) => {
-    const isLabyrinthWall = isMon(Monster.LabyrinthWall);
-    const effCon = powerUpSelf([[state, ownMonsters, isLabyrinthWall]]);
-    return [effCon];
+  [Monster.SliferTheSkyDragon]: {
+    row: RowKey.Monster,
+    condition: (state, { ownHand }) => {
+      return hasMatchInRow(state, ownHand);
+    },
+    effect: (state, { zoneCoords, ownHand }) => {
+      const count = countMatchesInRow(state, ownHand);
+      tempPowerUp(state, zoneCoords, count * 1500, count * 1500);
+    },
+    dialogue: "TODO",
   },
-  [Monster.MachineKing]: (state, { ownMonsters, otherMonsters }) => {
-    const effCon = powerUpSelf([
-      [state, ownMonsters, isMachine],
-      [state, otherMonsters, isMachine],
-    ]);
-    return [effCon];
+  [Monster.LabyrinthTank]: {
+    ...powerUpSelfFromOwnMonsters(isMon(Monster.LabyrinthWall)),
+    dialogue: "TODO",
   },
-  [Monster.MasterOfDragonSoldier]: (state, { ownMonsters }) => {
-    const effCon = powerUpSelf([[state, ownMonsters, isDragon]]);
-    return [effCon];
+  [Monster.MasterOfDragonSoldier]: {
+    ...powerUpSelfFromOwnMonsters(isDragon),
+    dialogue: "TODO",
   },
-  [Monster.DarkMagicianGirl]: (state, { dKey }) => {
-    const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
-    const isDarkMagician = (c: MonsterCard) => cards.includes(c.id);
-    const effCon = powerUpSelf([], [[state, dKey, isDarkMagician]]);
-    return [effCon];
+  [Monster.DarkMagicianGirl]: {
+    ...effCon_DarkMagicianGirl,
+    dialogue: "TODO",
   },
-  [Monster.ToonDarkMagicianGirl]: (state, { dKey }) => {
-    const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
-    const isDarkMagician = (c: MonsterCard) => cards.includes(c.id);
-    const effCon = powerUpSelf([], [[state, dKey, isDarkMagician]]);
-    return [effCon];
+  [Monster.ToonDarkMagicianGirl]: {
+    ...effCon_DarkMagicianGirl,
+    dialogue: "TODO",
   },
-  [Monster.InsectQueen]: (state, { ownMonsters }) => {
-    const effCon = powerUpSelf([[state, ownMonsters, isInsect]]);
-    return [effCon];
+  [Monster.InsectQueen]: {
+    ...powerUpSelfFromOwnMonsters(isInsect),
+    dialogue: "TODO",
   },
-  [Monster.BladeKnight]: (state, { ownHand }) => {
-    return [
-      {
-        condition: () => {
-          return countMatchesInRow(state, ownHand) <= 1;
-        },
-        effect: (state, { zoneCoords }) => {
-          tempPowerUp(state, zoneCoords, 500, 500);
-        },
-      },
-    ];
+  [Monster.BladeKnight]: {
+    row: RowKey.Monster,
+    condition: (state, { ownHand }) => {
+      return countMatchesInRow(state, ownHand) <= 1;
+    },
+    effect: (state, { zoneCoords }) => {
+      tempPowerUp(state, zoneCoords, 500, 500);
+    },
+    dialogue: "TODO",
   },
 };

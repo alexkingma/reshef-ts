@@ -132,39 +132,3 @@ export enum Ritual {
   DarkMagicRitual = 722,
   BlackIllusionRitual = 783,
 }
-
-export type DirectSpell = Exclude<Spell, AutoSpellTrap>;
-
-export type CounterSpellCard = Extract<
-  Trap,
-  | Trap.GoblinFan
-  | Trap.BadReactionToSimochi
-  | Trap.ReverseTrap
-  | Trap.FakeTrap
-  | Trap.AntiRaigeki
->;
-
-export type CounterAttackCard = Extract<
-  Trap,
-  | Trap.AmazonArchers
-  | Trap.HouseOfAdhesiveTape
-  | Trap.Eatgaboon
-  | Trap.BearTrap
-  | Trap.InvisibleWire
-  | Trap.AcidTrapHole
-  | Trap.WidespreadRuin
-  | Trap.TorrentialTribute
-  | Trap.InfiniteDismissal
->;
-
-export type AutoSpellTrap =
-  | Extract<
-      Trap,
-      | Trap.DragonCaptureJar
-      | Trap.DestinyBoard
-      | Trap.SpiritMessageI
-      | Trap.SpiritMessageN
-      | Trap.SpiritMessageA
-      | Trap.SpiritMessageL
-    >
-  | Extract<Spell, Spell.MessengerOfPeace | Spell.JamBreedingMachine>;

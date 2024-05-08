@@ -208,7 +208,7 @@ export const isPlayer = (dKey: DuellistKey) => {
 
 export const endTurn = (
   state: Duel,
-  { ownMonsters, dKey, otherDKey }: DuellistCoordsMap
+  { dKey, otherDKey, ownMonsters }: DuellistCoordsMap
 ) => {
   // restore ownership of any temp-converted monsters
   const ownActiveEffects = getActiveEffects(state, dKey);

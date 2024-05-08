@@ -1,5 +1,5 @@
 import { Monster } from "@/duel/enums/monster";
-import { Ritual, Spell, Trap } from "@/duel/enums/spellTrapRitual_v1.0";
+import { Ritual, Spell, Trap } from "@/duel/enums/spellTrapRitual";
 
 export const duellists: Duellable[] = [
   {

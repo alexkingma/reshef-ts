@@ -1,5 +1,5 @@
 import { Monster } from "@/duel/enums/monster";
-import { Spell } from "@/duel/enums/spellTrapRitual_v1.0";
+import { Spell } from "@/duel/enums/spellTrapRitual";
 
 const SpellTargetMap: {
   [key in Spell]?: Set<Monster>;

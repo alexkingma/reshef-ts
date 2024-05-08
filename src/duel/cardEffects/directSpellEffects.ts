@@ -1,7 +1,13 @@
-import { BattlePosition, DuellistKey, Field, RowKey } from "../enums/duel";
+import { DuellistKey, Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { DirectSpell, Spell } from "../enums/spellTrapRitual_v1.0";
+import { Spell } from "../enums/spellTrapRitual";
 import { burn, getActiveEffects } from "../util/duellistUtil";
+import {
+  effDi_BurnSpell,
+  effDi_EquipSpell,
+  effDi_HealSpell,
+  effDi_TypeDestructionSpell,
+} from "../util/effectsUtil";
 import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {
   countMatchesInRow,
@@ -12,14 +18,10 @@ import {
   updateMonsters,
 } from "../util/rowUtil";
 import {
-  burnOther,
   destroy1500PlusAtk,
   destroyHighestAtk,
-  destroyMonsterType,
   destroyRows,
   draw,
-  healSelf,
-  permPowerUp,
   setOwnField,
 } from "../util/wrappedUtil";
 import {
@@ -27,193 +29,281 @@ import {
   convertMonsterCurrentTurn,
   getZone,
   isOccupied,
+  setAtkMode,
   specialSummon,
   transformMonster,
 } from "../util/zoneUtil";
 
-export const spellEffects: CardReducerMap<DirectSpell, DirectEffectReducer> = {
+export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   // burn
-  [Spell.Sparks]: burnOther(50),
-  [Spell.Hinotama]: burnOther(100),
-  [Spell.FinalFlame]: burnOther(200),
-  [Spell.Ookazi]: burnOther(500),
-  [Spell.TremendousFire]: burnOther(1000),
-  [Spell.RestructerRevolution]: (state, { otherDKey, otherHand }) =>
-    burn(state, otherDKey, countMatchesInRow(state, otherHand) * 200),
+  [Spell.Sparks]: effDi_BurnSpell(50),
+  [Spell.Hinotama]: effDi_BurnSpell(100),
+  [Spell.FinalFlame]: effDi_BurnSpell(200),
+  [Spell.Ookazi]: effDi_BurnSpell(500),
+  [Spell.TremendousFire]: effDi_BurnSpell(1000),
+  [Spell.RestructerRevolution]: {
+    effect: (state, { otherDKey, otherHand }) => {
+      burn(state, otherDKey, countMatchesInRow(state, otherHand) * 200);
+    },
+    dialogue: "TODO",
+  },
 
   // heal
-  [Spell.MooyanCurry]: healSelf(200),
-  [Spell.RedMedicine]: healSelf(500),
-  [Spell.GoblinsSecretRemedy]: healSelf(1000),
-  [Spell.SoulOfThePure]: healSelf(2000),
-  [Spell.DianKetoTheCureMaster]: healSelf(5000),
+  [Spell.MooyanCurry]: effDi_HealSpell(200),
+  [Spell.RedMedicine]: effDi_HealSpell(500),
+  [Spell.GoblinsSecretRemedy]: effDi_HealSpell(1000),
+  [Spell.SoulOfThePure]: effDi_HealSpell(2000),
+  [Spell.DianKetoTheCureMaster]: effDi_HealSpell(5000),
 
   // power-up
-  [Spell.LegendarySword]: permPowerUp(),
-  [Spell.SwordOfDarkDestruction]: permPowerUp(),
-  [Spell.DarkEnergy]: permPowerUp(),
-  [Spell.AxeOfDespair]: permPowerUp(),
-  [Spell.LaserCannonArmor]: permPowerUp(),
-  [Spell.InsectArmorWithLaserCannon]: permPowerUp(),
-  [Spell.ElfsLight]: permPowerUp(),
-  [Spell.BeastFangs]: permPowerUp(),
-  [Spell.SteelShell]: permPowerUp(),
-  [Spell.VileGerms]: permPowerUp(),
-  [Spell.BlackPendant]: permPowerUp(),
-  [Spell.SilverBowAndArrow]: permPowerUp(),
-  [Spell.HornOfLight]: permPowerUp(),
-  [Spell.HornOfTheUnicorn]: permPowerUp(),
-  [Spell.DragonTreasure]: permPowerUp(),
-  [Spell.ElectroWhip]: permPowerUp(),
-  [Spell.CyberShield]: permPowerUp(),
-  [Spell.MysticalMoon]: permPowerUp(),
-  [Spell.MalevolentNuzzler]: permPowerUp(),
-  [Spell.VioletCrystal]: permPowerUp(),
-  [Spell.BookOfSecretArts]: permPowerUp(),
-  [Spell.Invigoration]: permPowerUp(),
-  [Spell.MachineConversionFactory]: permPowerUp(),
-  [Spell.RaiseBodyHeat]: permPowerUp(),
-  [Spell.FollowWind]: permPowerUp(),
-  [Spell.PowerOfKaishin]: permPowerUp(),
-  [Spell.KunaiWithChain]: permPowerUp(),
-  [Spell.Salamandra]: permPowerUp(),
-  [Spell.Megamorph]: permPowerUp(),
-  [Spell.WingedTrumpeter]: permPowerUp(),
-  [Spell.BrightCastle]: permPowerUp(),
+  [Spell.LegendarySword]: effDi_EquipSpell(),
+  [Spell.SwordOfDarkDestruction]: effDi_EquipSpell(),
+  [Spell.DarkEnergy]: effDi_EquipSpell(),
+  [Spell.AxeOfDespair]: effDi_EquipSpell(),
+  [Spell.LaserCannonArmor]: effDi_EquipSpell(),
+  [Spell.InsectArmorWithLaserCannon]: effDi_EquipSpell(),
+  [Spell.ElfsLight]: effDi_EquipSpell(),
+  [Spell.BeastFangs]: effDi_EquipSpell(),
+  [Spell.SteelShell]: effDi_EquipSpell(),
+  [Spell.VileGerms]: effDi_EquipSpell(),
+  [Spell.BlackPendant]: effDi_EquipSpell(),
+  [Spell.SilverBowAndArrow]: effDi_EquipSpell(),
+  [Spell.HornOfLight]: effDi_EquipSpell(),
+  [Spell.HornOfTheUnicorn]: effDi_EquipSpell(),
+  [Spell.DragonTreasure]: effDi_EquipSpell(),
+  [Spell.ElectroWhip]: effDi_EquipSpell(),
+  [Spell.CyberShield]: effDi_EquipSpell(),
+  [Spell.MysticalMoon]: effDi_EquipSpell(),
+  [Spell.MalevolentNuzzler]: effDi_EquipSpell(),
+  [Spell.VioletCrystal]: effDi_EquipSpell(),
+  [Spell.BookOfSecretArts]: effDi_EquipSpell(),
+  [Spell.Invigoration]: effDi_EquipSpell(),
+  [Spell.MachineConversionFactory]: effDi_EquipSpell(),
+  [Spell.RaiseBodyHeat]: effDi_EquipSpell(),
+  [Spell.FollowWind]: effDi_EquipSpell(),
+  [Spell.PowerOfKaishin]: effDi_EquipSpell(),
+  [Spell.KunaiWithChain]: effDi_EquipSpell(),
+  [Spell.Salamandra]: effDi_EquipSpell(),
+  [Spell.Megamorph]: effDi_EquipSpell(),
+  [Spell.WingedTrumpeter]: effDi_EquipSpell(),
+  [Spell.BrightCastle]: effDi_EquipSpell(),
 
   // monster-specific power-up
-  [Spell.CyclonLaser]: permPowerUp(),
-  [Spell.MagicalLabyrinth]: permPowerUp(),
-  [Spell._7Completed]: permPowerUp(),
+  [Spell.CyclonLaser]: effDi_EquipSpell(),
+  [Spell.MagicalLabyrinth]: effDi_EquipSpell(),
+  [Spell._7Completed]: effDi_EquipSpell(),
 
   // power-down
-  [Spell.SpellbindingCircle]: (state, { otherMonsters }) => {
-    updateMonsters(state, otherMonsters, (z) => {
-      z.permPowerUpAtk--;
-      z.permPowerUpDef--;
-    });
+  [Spell.SpellbindingCircle]: {
+    effect: (state, { otherMonsters }) => {
+      updateMonsters(state, otherMonsters, (z) => {
+        z.permPowerUpAtk -= 500;
+        z.permPowerUpDef -= 500;
+      });
+    },
+    dialogue: "TODO",
   },
-  [Spell.ShadowSpell]: (state, { otherMonsters }) => {
-    updateMonsters(state, otherMonsters, (z) => {
-      z.permPowerUpAtk -= 2;
-      z.permPowerUpDef -= 2;
-    });
+  [Spell.ShadowSpell]: {
+    effect: (state, { otherMonsters }) => {
+      updateMonsters(state, otherMonsters, (z) => {
+        z.permPowerUpAtk -= 1000;
+        z.permPowerUpDef -= 1000;
+      });
+    },
+    dialogue: "TODO",
   },
 
   // field
-  [Spell.Forest]: setOwnField(Field.Forest),
-  [Spell.Wasteland]: setOwnField(Field.Wasteland),
-  [Spell.Mountain]: setOwnField(Field.Mountain),
-  [Spell.Sogen]: setOwnField(Field.Sogen),
-  [Spell.Umi]: setOwnField(Field.Umi),
-  [Spell.Yami]: setOwnField(Field.Yami),
+  [Spell.Forest]: {
+    effect: setOwnField(Field.Forest),
+    dialogue: "TODO",
+  },
+  [Spell.Wasteland]: {
+    effect: setOwnField(Field.Wasteland),
+    dialogue: "TODO",
+  },
+  [Spell.Mountain]: {
+    effect: setOwnField(Field.Mountain),
+    dialogue: "TODO",
+  },
+  [Spell.Sogen]: {
+    effect: setOwnField(Field.Sogen),
+    dialogue: "TODO",
+  },
+  [Spell.Umi]: {
+    effect: setOwnField(Field.Umi),
+    dialogue: "TODO",
+  },
+  [Spell.Yami]: {
+    effect: setOwnField(Field.Yami),
+    dialogue: "TODO",
+  },
 
   // card destruction
-  [Spell.FinalDestiny]: destroyRows([
-    [DuellistKey.Player, RowKey.Hand],
-    [DuellistKey.Player, RowKey.SpellTrap],
-    [DuellistKey.Player, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.SpellTrap],
-    [DuellistKey.Opponent, RowKey.Hand],
-  ]),
-  [Spell.HeavyStorm]: destroyRows([
-    [DuellistKey.Player, RowKey.SpellTrap],
-    [DuellistKey.Player, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.SpellTrap],
-  ]),
-  [Spell.DarkHole]: destroyRows([
-    [DuellistKey.Player, RowKey.Monster],
-    [DuellistKey.Opponent, RowKey.Monster],
-  ]),
-  [Spell.Raigeki]: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
-  [Spell.CrushCard]: destroy1500PlusAtk(),
-  [Spell.HarpiesFeatherDuster]: destroyRows([
-    [DuellistKey.Opponent, RowKey.SpellTrap],
-  ]),
-  [Spell.BeckonToDarkness]: destroyHighestAtk(),
+  [Spell.FinalDestiny]: {
+    effect: destroyRows([
+      [DuellistKey.Player, RowKey.Hand],
+      [DuellistKey.Player, RowKey.SpellTrap],
+      [DuellistKey.Player, RowKey.Monster],
+      [DuellistKey.Opponent, RowKey.Monster],
+      [DuellistKey.Opponent, RowKey.SpellTrap],
+      [DuellistKey.Opponent, RowKey.Hand],
+    ]),
+    dialogue: "TODO",
+  },
+  [Spell.HeavyStorm]: {
+    effect: destroyRows([
+      [DuellistKey.Player, RowKey.SpellTrap],
+      [DuellistKey.Player, RowKey.Monster],
+      [DuellistKey.Opponent, RowKey.Monster],
+      [DuellistKey.Opponent, RowKey.SpellTrap],
+    ]),
+    dialogue: "TODO",
+  },
+  [Spell.DarkHole]: {
+    effect: destroyRows([
+      [DuellistKey.Player, RowKey.Monster],
+      [DuellistKey.Opponent, RowKey.Monster],
+    ]),
+    dialogue: "TODO",
+  },
+  [Spell.Raigeki]: {
+    effect: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
+    dialogue: "TODO",
+  },
+  [Spell.CrushCard]: {
+    effect: destroy1500PlusAtk(),
+    dialogue: "TODO",
+  },
+  [Spell.HarpiesFeatherDuster]: {
+    effect: destroyRows([[DuellistKey.Opponent, RowKey.SpellTrap]]),
+    dialogue: "TODO",
+  },
+  [Spell.BeckonToDarkness]: {
+    effect: destroyHighestAtk(),
+    dialogue: "TODO",
+  },
 
   // type-specific destruction
-  [Spell.WarriorElimination]: destroyMonsterType("Warrior"),
-  [Spell.EternalRest]: destroyMonsterType("Zombie"),
-  [Spell.StainStorm]: destroyMonsterType("Machine"),
-  [Spell.EradicatingAerosol]: destroyMonsterType("Insect"),
-  [Spell.BreathOfLight]: destroyMonsterType("Rock"),
-  [Spell.EternalDrought]: destroyMonsterType("Fish"),
-  [Spell.ExileOfTheWicked]: destroyMonsterType("Fiend"),
-  [Spell.LastDayOfWitch]: destroyMonsterType("Spellcaster"),
+  [Spell.WarriorElimination]: effDi_TypeDestructionSpell("Warrior"),
+  [Spell.EternalRest]: effDi_TypeDestructionSpell("Zombie"),
+  [Spell.StainStorm]: effDi_TypeDestructionSpell("Machine"),
+  [Spell.EradicatingAerosol]: effDi_TypeDestructionSpell("Insect"),
+  [Spell.BreathOfLight]: effDi_TypeDestructionSpell("Rock"),
+  [Spell.EternalDrought]: effDi_TypeDestructionSpell("Fish"),
+  [Spell.ExileOfTheWicked]: effDi_TypeDestructionSpell("Fiend"),
+  [Spell.LastDayOfWitch]: effDi_TypeDestructionSpell("Spellcaster"),
 
   // assorted
-  [Spell.Cursebreaker]: (state, { ownMonsters }) => {
-    // restores the power-up levels of all player's powered-down monsters
-    updateMonsters(state, ownMonsters, (z) => {
-      z.permPowerUpAtk = Math.max(0, z.permPowerUpAtk);
-      z.permPowerUpDef = Math.max(0, z.permPowerUpDef);
-    });
+  [Spell.Cursebreaker]: {
+    effect: (state, { ownMonsters }) => {
+      // restores the power-up levels of all player's powered-down monsters
+      updateMonsters(state, ownMonsters, (z) => {
+        z.permPowerUpAtk = Math.max(0, z.permPowerUpAtk);
+        z.permPowerUpDef = Math.max(0, z.permPowerUpDef);
+      });
+    },
+    dialogue: "TODO",
   },
-  [Spell.Metalmorph]: (state) => {
-    const { targetCoords } = state.interaction;
-    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    if (z.id === Monster.Zoa) {
-      transformMonster(z, Monster.Metalzoa);
-      return;
-    }
-    if (z.id === Monster.JiraiGumo) {
-      transformMonster(z, Monster.LauncherSpider);
-      return;
-    }
-    if (z.id === Monster.RedEyesBDragon) {
-      transformMonster(z, Monster.RedEyesBlackMetalDragon);
-      return;
-    }
+  [Spell.Metalmorph]: {
+    effect: (state) => {
+      const { targetCoords } = state.interaction;
+      const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
+      if (z.id === Monster.Zoa) {
+        transformMonster(z, Monster.Metalzoa);
+        return;
+      }
+      if (z.id === Monster.JiraiGumo) {
+        transformMonster(z, Monster.LauncherSpider);
+        return;
+      }
+      if (z.id === Monster.RedEyesBDragon) {
+        transformMonster(z, Monster.RedEyesBlackMetalDragon);
+        return;
+      }
+    },
+    dialogue: "TODO",
   },
-  [Spell.ElegantEgotist]: (state) => {
-    const { targetCoords } = state.interaction;
-    const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-    transformMonster(z, Monster.HarpieLadySisters);
+  [Spell.ElegantEgotist]: {
+    effect: (state) => {
+      const { targetCoords } = state.interaction;
+      const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
+      transformMonster(z, Monster.HarpieLadySisters);
+    },
+    dialogue: "TODO",
   },
-  [Spell.StopDefense]: (state, { otherMonsters }) => {
-    // TODO: stop DEF mode for duellist as a whole for a turn, don't just move current monsters' pos
-    updateMonsters(state, otherMonsters, (z) => {
-      z.battlePosition = BattlePosition.Attack;
-    });
+  [Spell.StopDefense]: {
+    effect: (state, { otherMonsters }) => {
+      // TODO: stop DEF mode for duellist as a whole for a turn, don't just move current monsters' pos
+      updateMonsters(state, otherMonsters, setAtkMode);
+    },
+    dialogue: "TODO",
   },
-  [Spell.SwordsOfRevealingLight]: (state, { dKey }) => {
-    const activeEffects = getActiveEffects(state, dKey);
-    activeEffects.sorlTurnsRemaining = 3;
+  [Spell.SwordsOfRevealingLight]: {
+    effect: (state, { dKey }) => {
+      const activeEffects = getActiveEffects(state, dKey);
+      activeEffects.sorlTurnsRemaining = 3;
+    },
+    dialogue: "TODO",
   },
-  [Spell.DarkPiercingLight]: (state, { otherMonsters }) => {
-    setRowFaceUp(state, otherMonsters);
+  [Spell.DarkPiercingLight]: {
+    effect: (state, { otherMonsters }) => {
+      setRowFaceUp(state, otherMonsters);
+    },
+    dialogue: "TODO",
   },
-  [Spell.MonsterReborn]: (state, { dKey }) => {
-    resurrectEnemy(state, dKey);
+  [Spell.MonsterReborn]: {
+    effect: (state, { dKey }) => {
+      resurrectEnemy(state, dKey);
+    },
+    dialogue: "TODO",
   },
-  [Spell.GravediggerGhoul]: (state, { dKey, otherDKey }) => {
-    clearGraveyard(state, dKey);
-    clearGraveyard(state, otherDKey);
+  [Spell.GravediggerGhoul]: {
+    effect: (state, { dKey, otherDKey }) => {
+      clearGraveyard(state, dKey);
+      clearGraveyard(state, otherDKey);
+    },
+    dialogue: "TODO",
   },
-  [Spell.DarknessApproaches]: (state, { ownMonsters, ownSpellTrap }) => {
-    setRowFaceDown(state, ownMonsters);
-    setRowFaceDown(state, ownSpellTrap);
+  [Spell.DarknessApproaches]: {
+    effect: (state, { ownMonsters, ownSpellTrap }) => {
+      setRowFaceDown(state, ownMonsters);
+      setRowFaceDown(state, ownSpellTrap);
+    },
+    dialogue: "TODO",
   },
-  [Spell.BrainControl]: (state, { dKey }) => {
-    convertMonsterCurrentTurn(state, dKey);
+  [Spell.BrainControl]: {
+    effect: (state, { dKey }) => {
+      convertMonsterCurrentTurn(state, dKey);
+    },
+    dialogue: "TODO",
   },
-  [Spell.ChangeOfHeart]: (state, { dKey }) => {
-    convertMonster(state, dKey);
+  [Spell.ChangeOfHeart]: {
+    effect: (state, { dKey }) => {
+      convertMonster(state, dKey);
+    },
+    dialogue: "TODO",
   },
-  [Spell.Multiply]: (state, { ownMonsters, dKey }) => {
-    if (!rowContainsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
+  [Spell.Multiply]: {
+    effect: (state, { ownMonsters, dKey }) => {
+      if (!rowContainsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
 
-    const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
-    monsterZones.forEach((z) => {
-      if (isOccupied(z)) return;
-      specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
-    });
+      const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
+      monsterZones.forEach((z) => {
+        if (isOccupied(z)) return;
+        specialSummon(state, dKey, Monster.Kuriboh, { isLocked: true });
+      });
+    },
+    dialogue: "TODO",
   },
-  [Spell.PotOfGreed]: draw(2),
-  [Spell.TheInexperiencedSpy]: (state, { otherHand }) => {
-    setRowFaceUp(state, otherHand);
+  [Spell.PotOfGreed]: {
+    effect: draw(2),
+    dialogue: "TODO",
+  },
+  [Spell.TheInexperiencedSpy]: {
+    effect: (state, { otherHand }) => {
+      setRowFaceUp(state, otherHand);
+    },
+    dialogue: "TODO",
   },
 };

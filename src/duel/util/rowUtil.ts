@@ -1,19 +1,14 @@
 import { Orientation, RowKey } from "../enums/duel";
-import {
-  CounterAttackCard,
-  CounterSpellCard,
-} from "../enums/spellTrapRitual_v1.0";
 import { getCard, getExodiaCards, getFinalCards } from "./cardUtil";
-import { getGraveyardCard, isGraveyardEmpty } from "./graveyardUtil";
+import { COLOR_TRAP, always } from "./common";
 import {
   clearZone,
   destroyAtCoords,
-  immobiliseCard,
+  immobiliseZone,
   isMonster,
   isOccupied,
   isTrap,
   permPowerUp,
-  tempPowerUp,
 } from "./zoneUtil";
 
 export const getRow = (state: Duel, [dKey, rKey]: RowCoords) => {
@@ -169,9 +164,7 @@ export const setRowFaceDown = (state: Duel, rowCoords: RowCoords) => {
 };
 
 export const immobiliseRow = (state: Duel, rowCoords: RowCoords) => {
-  updateMatches(state, rowCoords, (_, idx) => {
-    immobiliseCard(state, [...rowCoords, idx]);
-  });
+  updateMonsters(state, rowCoords, immobiliseZone);
 };
 
 export const destroyHighestAtk = (
@@ -225,7 +218,7 @@ export const updateMonsters = (
   state: Duel,
   rowCoords: RowCoords,
   effect: (z: OccupiedMonsterZone, i: number) => void,
-  condition: (z: OccupiedMonsterZone, i: number) => boolean = () => true
+  condition: (z: OccupiedMonsterZone, i: number) => boolean = always
 ) => {
   updateMatches(
     state,
@@ -248,50 +241,6 @@ export const clearAllTraps = (state: Duel, targetKey: DuellistKey) => {
   });
 };
 
-export const countConditional = (
-  rowConditionPairs: (
-    | [Duel, RowCoords, (z: Zone) => boolean]
-    | [Duel, RowCoords, (z: Zone) => boolean, number]
-  )[],
-  graveyardConditionPairs: (
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = []
-) => {
-  let count = 0;
-  rowConditionPairs.forEach(([state, coords, condition, value = 1]) => {
-    // TODO: exclude origin monster from the condition?
-    count += countMatchesInRow(state, coords, condition) * value;
-  });
-  graveyardConditionPairs.forEach(([state, dKey, condition, value = 1]) => {
-    if (
-      !isGraveyardEmpty(state, dKey) &&
-      condition(getCard(getGraveyardCard(state, dKey)) as MonsterCard)
-    ) {
-      count += value;
-    }
-  });
-  return count;
-};
-
-export const powerUpSelfConditional = (
-  state: Duel,
-  coords: ZoneCoords,
-  rowConditionPairs: (
-    | [Duel, RowCoords, (z: Zone) => boolean]
-    | [Duel, RowCoords, (z: Zone) => boolean, number]
-  )[],
-  graveyardConditionPairs: (
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean]
-    | [Duel, DuellistKey, (c: MonsterCard) => boolean, number]
-  )[] = [],
-  atk: number = 500,
-  def: number = 500
-) => {
-  let count = countConditional(rowConditionPairs, graveyardConditionPairs);
-  tempPowerUp(state, coords, count * atk, count * def);
-};
-
 export const powerDownHighestAtk = (
   state: Duel,
   targetKey: DuellistKey,
@@ -303,24 +252,26 @@ export const powerDownHighestAtk = (
   permPowerUp(state, [targetKey, RowKey.Monster, targetIdx], -atk, -def);
 };
 
-export const checkTriggeredTraps = <
-  T extends CounterAttackCard | CounterSpellCard,
->(
+export const checkTriggeredTraps = (
   state: Duel,
   coordsMap: ZoneCoordsMap,
-  trapReducers: CardReducerMap<T, EffConReducer>
+  trapReducers: CardEffectMap<AutoEffectReducer>
 ): boolean => {
   const { otherSpellTrap } = coordsMap;
   for (const [i, z] of getRow(state, otherSpellTrap).entries()) {
     if (!isTrap(z)) continue;
-    const reducer = trapReducers[z.id as T];
+    const reducer = trapReducers[z.id];
     if (!reducer) continue;
+    const { name } = getCard(z.id);
+    if (Array.isArray(reducer)) {
+      console.error(`Multiple effects found for trap: ${name}`);
+      continue;
+    }
 
-    const { condition, effect, noDiscard } = reducer(state, coordsMap);
+    const { condition, effect, dialogue, noDiscard } = reducer;
     if (condition(state, coordsMap)) {
       // found valid trap, perform its effect instead of the original action
-      const { name } = getCard(z.id);
-      console.log(`%c${name}`, "color: #AC4E8D;");
+      console.log(`%c${name}: ${dialogue}`, `color: #${COLOR_TRAP};`);
       effect(state, coordsMap);
       if (!noDiscard) {
         // some traps are continuous
@@ -330,4 +281,8 @@ export const checkTriggeredTraps = <
     }
   }
   return false;
+};
+
+export const isRowCoordMatch = (c1: RowCoords, c2: RowCoords) => {
+  return c1[0] === c2[0] && c1[1] === c2[1];
 };

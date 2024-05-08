@@ -1,14 +1,9 @@
-import { counterAttackReducers } from "../cardEffects/counterAttackEffects";
-import { counterSpellReducers } from "../cardEffects/counterSpellEffects";
-import { flipEffectReducers } from "../cardEffects/flipEffects";
+import { counterAttackEffects } from "../cardEffects/counterAttackEffects";
+import { counterSpellEffects } from "../cardEffects/counterSpellEffects";
+import { flipEffects } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
-import { FlipEffectMonster } from "../enums/monster_v1.0";
-import {
-  CounterAttackCard,
-  CounterSpellCard,
-  SpellTrapRitual,
-} from "../enums/spellTrapRitual_v1.0";
+import { SpellTrapRitual } from "../enums/spellTrapRitual";
 import { getAlignmentResult, getCard } from "./cardUtil";
 import { CARD_NONE } from "./common";
 import {
@@ -85,6 +80,9 @@ export const isUnlocked = (z: Zone): z is OccupiedMonsterZone =>
 export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && z.isLocked;
 
+export const isMinAtk = (z: Zone, atk: number): z is OccupiedMonsterZone =>
+  isMonster(z) && z.effAtk <= atk;
+
 export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
   const godCards: Monster[] = [
     Monster.SliferTheSkyDragon,
@@ -98,14 +96,19 @@ export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
 
 export const isNotGodCard = (z: Zone) => !isGodCard(z);
 
-export const hasManualEffect = (z: OccupiedMonsterZone) =>
-  !!flipEffectReducers[z.id as FlipEffectMonster];
+export const isDarkMagician = (z: Zone) => {
+  // for the purposes of Dark Magician Girl's effect
+  const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
+  return isMonster(z) && cards.includes(z.id);
+};
+
+export const hasManualEffect = (z: OccupiedMonsterZone) => !!flipEffects[z.id];
 
 export const hasTrapCounterAttackEffect = (z: OccupiedMonsterZone) =>
-  !!counterAttackReducers[z.id as CounterAttackCard];
+  !!counterAttackEffects[z.id];
 
 export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
-  !!counterSpellReducers[z.id as CounterSpellCard];
+  !!counterSpellEffects[z.id];
 
 export const canActivateEffect = (z: OccupiedMonsterZone) =>
   !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
@@ -125,6 +128,11 @@ export const toggleBattlePosition = (z: OccupiedMonsterZone) => {
     setAtkMode(z);
   }
 };
+
+export const immobiliseZone = (z: OccupiedMonsterZone) => {
+  z.isLocked = true;
+};
+
 export const permPowerUp = (
   state: Duel,
   coords: ZoneCoords,
@@ -191,11 +199,6 @@ export const clearZones = (
   idxs: number[]
 ) => {
   idxs.forEach((idx) => clearZone(state, [...rowCoords, idx] as ZoneCoords));
-};
-
-export const immobiliseCard = (state: Duel, zoneCoords: ZoneCoords) => {
-  const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
-  z.isLocked = true;
 };
 
 export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {

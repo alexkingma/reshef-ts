@@ -1,6 +1,6 @@
 import { default as fieldMultiplierMap } from "@/assets/data/fields.json";
 import { Field, Orientation, RowKey } from "../enums/duel";
-import { Spell } from "../enums/spellTrapRitual_v1.0";
+import { Spell } from "../enums/spellTrapRitual";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import { clearZone, getZone, isOccupied, setCardAtCoords } from "./zoneUtil";

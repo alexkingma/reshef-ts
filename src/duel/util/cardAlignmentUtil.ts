@@ -28,3 +28,5 @@ export const isFire = is("Fire");
 export const isDreams = is("Dreams");
 export const isDivine = is("Divine");
 export const isThunder = is("Thunder");
+
+export const isLightOrDark = isOneOfAlignments("Dark", "Light");
