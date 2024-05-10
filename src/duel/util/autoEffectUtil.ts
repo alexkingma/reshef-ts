@@ -1,9 +1,11 @@
 import { customAutoEffects } from "../cardEffects/customAutoEffects";
 import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
+import { turnEndEffects } from "../cardEffects/turnEndEffects";
+import { turnStartEffects } from "../cardEffects/turnStartEffects";
 import { Orientation, RowKey } from "../enums/duel";
-import { getCard } from "./cardUtil";
-import { getColor } from "./common";
-import { getOtherDuellistKey } from "./duellistUtil";
+import { logEffectMessage } from "../util/logUtil";
+import { mergeMapsAndValues } from "./common";
+import { getOtherDuellistKey, isStartOfTurn } from "./duellistUtil";
 import { getRow, isRowCoordMatch, updateMonsters } from "./rowUtil";
 import {
   getCombatStats,
@@ -11,6 +13,15 @@ import {
   getZoneCoordsMap,
   isOccupied,
 } from "./zoneUtil";
+
+const includeTurnStartEffects = mergeMapsAndValues(
+  turnStartEffects,
+  customAutoEffects
+);
+const includeTurnEndEffects = mergeMapsAndValues(
+  turnEndEffects,
+  customAutoEffects
+);
 
 export const checkAutoEffects = (state: Duel) => {
   // Temp power-up effects are separate from perm (but still auto) effects.
@@ -67,6 +78,11 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 const checkPermAutoEffects = (state: Duel) => {
   const dKey = state.activeTurn.duellistKey;
   const otherDKey = getOtherDuellistKey(dKey);
+  const relevantEffects = isStartOfTurn(state, dKey)
+    ? includeTurnStartEffects
+    : isStartOfTurn(state, otherDKey)
+      ? includeTurnEndEffects
+      : customAutoEffects;
   const orderedRows: RowCoords[] = [
     [dKey, RowKey.Graveyard],
     [otherDKey, RowKey.Graveyard],
@@ -78,7 +94,7 @@ const checkPermAutoEffects = (state: Duel) => {
     [otherDKey, RowKey.Hand],
   ];
   orderedRows.forEach((rowCoords) => {
-    checkRowEffects(state, rowCoords, customAutoEffects);
+    checkRowEffects(state, rowCoords, relevantEffects);
   });
 };
 
@@ -97,15 +113,14 @@ const checkRowEffects = (
     const temp = reducerMap[z.id];
     if (!temp) return;
 
-    const { name, category } = getCard(z.id);
     const effects = Array.isArray(temp) ? temp : [temp];
-    effects.forEach(({ row, condition, effect, dialogue }) => {
+    effects.forEach(({ row, condition, effect, text }) => {
       // auto effects only activate in specific rows
       if (!isRowCoordMatch(rowCoords, [dKey, row as RowKey])) return;
       // if condition doesn't exist, it's an "always" effect
       if (condition && !condition(state, coordsMap)) return;
-      console.log(`[Auto Effect] ${name}: ${dialogue}`);
-      console.log(`%c${name}: ${dialogue}`, `color: ${getColor(category)};`);
+      // TODO: only log this once, not every time we re-update the duel state
+      logEffectMessage(state, zoneCoords, text);
 
       z.orientation = Orientation.FaceUp;
       effect(state, coordsMap);

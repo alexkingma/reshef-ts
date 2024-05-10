@@ -4,8 +4,8 @@ import { spellEffects } from "../cardEffects/directSpellEffects";
 import { flipEffects } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation } from "../enums/duel";
 import { getCard } from "../util/cardUtil";
-import { COLOR_EFFECT_MONSTER, COLOR_SPELL } from "../util/common";
 import { clearConvertedZoneFlag, getActiveEffects } from "../util/duellistUtil";
+import { logEffectMessage } from "../util/logUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {
   attackMonster,
@@ -112,8 +112,8 @@ export const cardReducers = {
     }
 
     // no traps triggered, activate original spell effect
-    const { effect, dialogue, noDiscard } = spellReducer;
-    console.log(`%c${name}: ${dialogue}`, `color: ${COLOR_SPELL};`);
+    const { effect, text, noDiscard } = spellReducer;
+    logEffectMessage(state, zoneCoords, text);
     effect(state, coordsMap);
 
     if (!noDiscard) {
@@ -135,8 +135,8 @@ export const cardReducers = {
       return;
     }
 
-    const { effect, dialogue } = flipReducer;
-    console.log(`%c${name}: ${dialogue}`, `color: ${COLOR_EFFECT_MONSTER};`);
+    const { effect, text } = flipReducer;
+    logEffectMessage(state, zoneCoords, text);
     effect(state, coordsMap);
 
     // lock/flip/etc.

@@ -1,6 +1,7 @@
 import { Orientation, RowKey } from "../enums/duel";
+import { logEffectMessage } from "../util/logUtil";
 import { getCard, getExodiaCards, getFinalCards } from "./cardUtil";
-import { COLOR_TRAP, always } from "./common";
+import { always } from "./common";
 import {
   clearZone,
   destroyAtCoords,
@@ -268,14 +269,15 @@ export const checkTriggeredTraps = (
       continue;
     }
 
-    const { condition, effect, dialogue, noDiscard } = reducer;
+    const { condition, effect, text, noDiscard } = reducer;
     if (condition(state, coordsMap)) {
       // found valid trap, perform its effect instead of the original action
-      console.log(`%c${name}: ${dialogue}`, `color: #${COLOR_TRAP};`);
+      const trapCoords = [...otherSpellTrap, i] as ZoneCoords;
+      logEffectMessage(state, trapCoords, text);
       effect(state, coordsMap);
       if (!noDiscard) {
         // some traps are continuous
-        clearZone(state, [...otherSpellTrap, i] as ZoneCoords);
+        clearZone(state, trapCoords);
       }
       return true;
     }

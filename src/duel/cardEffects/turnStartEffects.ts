@@ -1,3 +1,4 @@
+import { CardTextPrefix as Pre } from "../enums/dialogue";
 import { Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Spell, Trap } from "../enums/spellTrapRitual";
@@ -5,8 +6,8 @@ import { getFinalCards } from "../util/cardUtil";
 import { always } from "../util/common";
 import { burn, winByFINAL } from "../util/duellistUtil";
 import {
-  effConDi_LavaGolem_Summon,
   effect_CastleOfDarkIllusions,
+  effect_LavaGolem_Summon,
 } from "../util/effectsUtil";
 import { clearGraveyard, resurrectOwn } from "../util/graveyardUtil";
 import {
@@ -20,6 +21,7 @@ import {
 import { burnSelf } from "../util/wrappedUtil";
 import {
   clearZone,
+  getZone,
   isNotGodCard,
   permPowerUp,
   setSpellTrap,
@@ -34,11 +36,11 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.SpellTrap,
     condition: always,
     effect: burnSelf(1000),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Infliced 1,000LP damage on the player.`,
   },
   [Spell.JamBreedingMachine]: {
     row: RowKey.SpellTrap,
-    dialogue: "TODO",
+    text: `${Pre.Auto}Summoned a Change Slime to the own field.`,
     condition: always,
     effect: (state, { dKey }) => {
       // player is prevented from summoning, even if the
@@ -49,7 +51,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
   },
   [Trap.DestinyBoard]: {
     row: RowKey.SpellTrap,
-    dialogue: "TODO",
+    text: `${Pre.Auto}Added a letter to the Spirit Message on the own field.`,
     condition: (state, { ownSpellTrap }) => {
       return hasEmptyZone(state, ownSpellTrap);
     },
@@ -80,21 +82,19 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       permPowerUp(state, zoneCoords, 500, 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up one level.`,
   },
-  [Monster.CastleOfDarkIllusions]: {
-    row: RowKey.Monster,
-    condition: always,
-    effect: effect_CastleOfDarkIllusions,
-    dialogue: "TODO",
-  },
+  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions,
   [Monster.SatelliteCannon]: {
     row: RowKey.Monster,
-    condition: always,
+    condition: (state, { zoneCoords }) => {
+      const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+      return z.permPowerUpAtk < 3000 && z.permPowerUpDef < 3000;
+    },
     effect: (state, { zoneCoords }) => {
       permPowerUp(state, zoneCoords, 1000, 1000);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up two levels on own field to max six levels.`,
   },
   [Monster.LavaGolem]: [
     {
@@ -103,11 +103,11 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
       effect: (state, { dKey }) => {
         burn(state, dKey, 700);
       },
-      dialogue: "TODO",
+      text: `${Pre.Auto}Inflicted 700LP damage on the player.`,
     },
     {
       row: RowKey.Hand,
-      ...effConDi_LavaGolem_Summon,
+      ...effect_LavaGolem_Summon,
     },
   ],
   [Monster.ViserDes]: {
@@ -118,7 +118,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { otherDKey }) => {
       powerDownHighestAtk(state, otherDKey);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Weakened the enemy monster with the highest ATK.`,
   },
   [Monster.MirageKnight]: {
     row: RowKey.Monster,
@@ -128,7 +128,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
       specialSummon(state, dKey, Monster.DarkMagician);
       specialSummon(state, dKey, Monster.FlameSwordsman);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Split into Dark Magician and Flame Swordsman.`,
   },
   [Monster.PetitMoth]: {
     row: RowKey.Monster,
@@ -136,7 +136,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       specialSummonAtCoords(state, zoneCoords, Monster.LarvaeMoth);
     },
-    dialogue: "TODO",
+    text: `Petit Moth transformed into Larvae Moth!`,
   },
   [Monster.LarvaeMoth]: {
     row: RowKey.Monster,
@@ -144,7 +144,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       specialSummonAtCoords(state, zoneCoords, Monster.CocoonOfEvolution);
     },
-    dialogue: "TODO",
+    text: `Larvae Moth transformed into Cocoon of Evolution!`,
   },
   [Monster.CocoonOfEvolution]: {
     row: RowKey.Monster,
@@ -152,7 +152,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       specialSummonAtCoords(state, zoneCoords, Monster.GreatMoth);
     },
-    dialogue: "TODO",
+    text: `Cocoon of Evolution transformed into Great Moth!`,
   },
   [Monster.GreatMoth]: {
     row: RowKey.Monster,
@@ -164,7 +164,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
         Monster.PerfectlyUltimateGreatMoth
       );
     },
-    dialogue: "TODO",
+    text: `Great Moth transformed into Perfectly Ultimate Great Moth!`,
   },
   [Monster.Newdoria]: {
     row: RowKey.Graveyard,
@@ -175,7 +175,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
       destroyHighestAtk(state, otherDKey, isNotGodCard);
       clearGraveyard(state, dKey);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}Destroyed the enemy monster with the highest ATK.`,
   },
   [Monster.VampireLord]: {
     row: RowKey.Graveyard,
@@ -185,7 +185,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { dKey }) => {
       resurrectOwn(state, dKey);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}Resurrected to the own field.`,
   },
   [Monster.DifferentDimensionDragon]: {
     row: RowKey.Graveyard,
@@ -195,6 +195,6 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { dKey }) => {
       resurrectOwn(state, dKey);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}Resurrected to the own field.`,
   },
 };

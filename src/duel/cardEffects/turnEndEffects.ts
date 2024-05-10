@@ -1,11 +1,12 @@
+import { CardTextPrefix as Pre } from "../enums/dialogue";
 import { RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual";
 import { isDragon } from "../util/cardTypeUtil";
 import { always } from "../util/common";
 import {
-  effConDi_LavaGolem_Summon,
   effect_CastleOfDarkIllusions,
+  effect_LavaGolem_Summon,
 } from "../util/effectsUtil";
 import {
   countMatchesInRow,
@@ -18,7 +19,7 @@ import { immobiliseZone, permPowerDown } from "../util/zoneUtil";
 export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
   [Trap.DragonCaptureJar]: {
     row: RowKey.SpellTrap,
-    dialogue: "TODO",
+    text: `${Pre.Auto}All dragons are immobilised on the foe's field.`,
     effect: (state, { otherMonsters }) => {
       updateMonsters(state, otherMonsters, immobiliseZone, isDragon);
     },
@@ -30,23 +31,18 @@ export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
       );
     },
   },
-  [Monster.CastleOfDarkIllusions]: {
-    row: RowKey.Monster,
-    condition: always,
-    effect: effect_CastleOfDarkIllusions,
-    dialogue: "TODO",
-  },
+  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions,
   [Monster.BerserkDragon]: {
     row: RowKey.Monster,
     condition: always,
     effect: (state, { zoneCoords }) => {
       permPowerDown(state, zoneCoords, 500, 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered down.`,
   },
   [Monster.LavaGolem]: {
     row: RowKey.Hand,
-    ...effConDi_LavaGolem_Summon,
+    ...effect_LavaGolem_Summon,
   },
   [Monster.Helpoemer]: {
     row: RowKey.Graveyard,
@@ -58,6 +54,6 @@ export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
       // the foe has 3 or more cards in hand, the foe must discard one.
       destroyFirstFound(state, otherHand);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}The opponent must discard one card from their hand.`,
   },
 };

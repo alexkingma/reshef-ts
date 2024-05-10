@@ -1,3 +1,7 @@
+import {
+  CardTextPrefix as Pre,
+  EffectDialogueTag as Tag,
+} from "../enums/dialogue";
 import { Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual";
@@ -173,7 +177,7 @@ export const getEffCon_updateOtherMonsters = (
   };
 };
 
-export const getEffCon_trapDestroyAttacker = (
+export const getEffConDi_trapDestroyAttacker = (
   atkCondition: (z: OccupiedMonsterZone) => boolean
 ) => {
   return {
@@ -185,12 +189,13 @@ export const getEffCon_trapDestroyAttacker = (
     effect: (state: Duel) => {
       destroyAtCoords(state, state.interaction.originCoords!);
     },
+    text: `${Pre.Trap}${Tag.OriginZone} will disappear.`,
   };
 };
 
 export const getEffCon_requireDestinyBoard = (): AutoEffectReducer => ({
   row: RowKey.SpellTrap,
-  dialogue: "TODO",
+  text: `${Pre.SpiritMessage}Disappeared because Destiny Board is missing.`,
   condition: (state: Duel, { ownSpellTrap }: ZoneCoordsMap) => {
     return !rowContainsAnyCards(state, ownSpellTrap, Trap.DestinyBoard);
   },

@@ -1,3 +1,4 @@
+import { CardTextPrefix as Pre } from "../enums/dialogue";
 import { RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { isDark, isLight, isLightOrDark } from "../util/cardAlignmentUtil";
@@ -24,7 +25,7 @@ import {
   getEffCon_updateOtherMonsters as updateOtherMonsters,
   getEffCon_updateOwnMonsters as updateOwnMonsters,
 } from "../util/wrappedUtil";
-import { tempPowerDown, tempPowerUp } from "../util/zoneUtil";
+import { isFaceUp, tempPowerDown, tempPowerUp } from "../util/zoneUtil";
 
 const tempDown500 = tempDown(500, 500);
 const tempUp500 = tempUp(500, 500);
@@ -33,7 +34,7 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
   // power down enemies
   [Monster.MammothGraveyard]: {
     ...updateOtherMonsters(tempDown500),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered down every monster on the foe's field.`,
   },
   [Monster.DarkJeroid]: {
     row: RowKey.Monster,
@@ -45,7 +46,7 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
       if (targetIdx === -1) return;
       tempPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Weakened the enemy monster with the highest ATK.`,
   },
 
   // power up cross-field
@@ -63,7 +64,7 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
       updateMonsters(state, otherMonsters, tempUp500, isLight);
       updateMonsters(state, otherMonsters, tempDown500, isDark);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Light element monsters on the own field will be powered up.\nDark beings on the own field will be weakened.`,
   },
   [Monster.WitchsApprentice]: {
     row: RowKey.Monster,
@@ -79,30 +80,31 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
       updateMonsters(state, otherMonsters, tempUp500, isDark);
       updateMonsters(state, otherMonsters, tempDown500, isLight);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Dark monsters on the player's field will be powered up.\nLight monsters on the player's field will be weakened.`,
   },
 
   // power up allies
   [Monster.MysticalElf]: {
     ...updateOwnMonsters(tempUp500, isMon(Monster.BlueEyesWhiteDragon)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up a Blue Eyes White Dragon on the own field.`,
   },
   [Monster.HarpieLady]: {
     // wording says powers up "a" pet dragon, but that's not how it works
     ...updateOwnMonsters(tempUp500, isMon(Monster.HarpiesPetDragon)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up a Harpie's Pet Dragon on own field.`,
   },
   [Monster.CyberHarpie]: {
+    // TODO: text is different to harpie lady, double check
     ...updateOwnMonsters(tempUp500, isMon(Monster.HarpiesPetDragon)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up Harpie's Pet Dragons on own field.`,
   },
   [Monster.HarpieLadySisters]: {
     ...updateOwnMonsters(tempUp(1000, 1000), isMon(Monster.HarpiesPetDragon)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}2X powered up a Harpie's Pet Dragon on own field.`,
   },
   [Monster.MonsterTamer]: {
     ...updateOwnMonsters(tempUp500, isMon(Monster.DungeonWorm)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up a Dungeon Worm on the own field.`,
   },
   [Monster.PumpkingTheKingOfGhosts]: {
     ...updateOwnMonsters(tempUp500, (z) =>
@@ -112,64 +114,83 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
         Monster.ClownZombie,
       ].includes(z.id)
     ),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up all zombies on the own field.`,
   },
   [Monster.MWarrior1]: {
     ...updateOwnMonsters(tempUp500, isMon(Monster.MWarrior2)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up a M-Warrior 2 on the own field.`,
   },
   [Monster.MWarrior2]: {
     ...updateOwnMonsters(tempUp500, isMon(Monster.MWarrior1)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up a M-Warrior 1 on the own field.`,
   },
   [Monster.NightmarePenguin]: {
     ...updateOwnMonsters(
       tempUp500,
       isOneOfTypes("Aqua", "Fish", "Sea Serpent", "Reptile")
     ),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up monsters on own field.\nIt affects Aqua, Fish, Sea Serpent, & Reptile types.`,
   },
   [Monster.CommandAngel]: {
     ...updateOwnMonsters(tempUp500, isFairy),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up all fairies on the own field.`,
   },
 
   // power up self
   [Monster.SwampBattleguard]: {
     ...powerUpSelfFromOwnMonsters(isMon(Monster.LavaBattleguard)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for every Lava Battleguard on own field.`,
   },
   [Monster.LavaBattleguard]: {
     ...powerUpSelfFromOwnMonsters(isMon(Monster.SwampBattleguard)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for every Swamp Battleguard on own field.`,
   },
   [Monster.BusterBlader]: {
     row: RowKey.Monster,
-    condition: (state, { ownMonsters, ownGraveyard }) => {
+    condition: (state, { otherMonsters, otherGraveyard }) => {
       return (
-        hasMatchInRow(state, ownMonsters, isDragon) ||
-        hasMatchInRow(state, ownGraveyard, isDragon)
+        hasMatchInRow(state, otherMonsters, isDragon) ||
+        hasMatchInRow(state, otherGraveyard, isDragon)
       );
     },
-    effect: (state, { zoneCoords, ownMonsters, ownGraveyard }) => {
+    effect: (state, { zoneCoords, otherMonsters, otherGraveyard }) => {
       const count =
-        countMatchesInRow(state, ownMonsters, isDragon) +
-        countMatchesInRow(state, ownGraveyard, isDragon);
+        countMatchesInRow(state, otherMonsters, isDragon) +
+        countMatchesInRow(state, otherGraveyard, isDragon);
       tempPowerUp(state, zoneCoords, count * 500, count * 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for all dragons on foe's field & graveyard.`,
   },
   [Monster.WodanTheResidentOfTheForest]: {
     ...powerUpSelfFromOwnMonsters(isPlant),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for every plant on the own field.`,
   },
   [Monster.MachineKing]: {
-    ...powerUpSelfFromOwnMonsters(isMachine),
-    dialogue: "TODO",
+    row: RowKey.Monster,
+    condition: (state, { ownMonsters }) => {
+      return hasMatchInRow(state, ownMonsters, isMachine);
+    },
+    effect: (state, { zoneCoords, ownMonsters }) => {
+      const count = countMatchesInRow(state, ownMonsters, isMachine);
+      tempPowerUp(state, zoneCoords, count * 500, count * 500);
+    },
+    text: `${Pre.Auto}Powered up for every machine on both fields.`,
   },
   [Monster.PerfectMachineKing]: {
-    ...powerUpSelfFromOwnMonsters(isPlant, 1000, 1000),
-    dialogue: "TODO",
+    row: RowKey.Monster,
+    condition: (state, { ownMonsters, otherMonsters }) => {
+      return (
+        hasMatchInRow(state, ownMonsters, isMachine) ||
+        hasMatchInRow(state, otherMonsters, isMachine)
+      );
+    },
+    effect: (state, { zoneCoords, ownMonsters, otherMonsters }) => {
+      const count =
+        countMatchesInRow(state, ownMonsters, isMachine) +
+        countMatchesInRow(state, otherMonsters, isMachine);
+      tempPowerUp(state, zoneCoords, count * 1000, count * 1000);
+    },
+    text: `${Pre.Auto}2X powered up for every machine on both fields.`,
   },
   [Monster.SliferTheSkyDragon]: {
     row: RowKey.Monster,
@@ -180,27 +201,21 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
       const count = countMatchesInRow(state, ownHand);
       tempPowerUp(state, zoneCoords, count * 1500, count * 1500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}3X powered up for every card in the own hand.`,
   },
   [Monster.LabyrinthTank]: {
     ...powerUpSelfFromOwnMonsters(isMon(Monster.LabyrinthWall)),
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for every Labyrinth Wall on own field.`,
   },
   [Monster.MasterOfDragonSoldier]: {
-    ...powerUpSelfFromOwnMonsters(isDragon),
-    dialogue: "TODO",
+    ...powerUpSelfFromOwnMonsters((z) => isDragon(z) && isFaceUp(z)),
+    text: `${Pre.Auto}Powered up for all face-up dragons on own field.`,
   },
-  [Monster.DarkMagicianGirl]: {
-    ...effCon_DarkMagicianGirl,
-    dialogue: "TODO",
-  },
-  [Monster.ToonDarkMagicianGirl]: {
-    ...effCon_DarkMagicianGirl,
-    dialogue: "TODO",
-  },
+  [Monster.DarkMagicianGirl]: effCon_DarkMagicianGirl,
+  [Monster.ToonDarkMagicianGirl]: effCon_DarkMagicianGirl,
   [Monster.InsectQueen]: {
-    ...powerUpSelfFromOwnMonsters(isInsect),
-    dialogue: "TODO",
+    ...powerUpSelfFromOwnMonsters((z) => isInsect(z) && isFaceUp(z)),
+    text: `${Pre.Auto}Powered up for all face-up insects on own field.`,
   },
   [Monster.BladeKnight]: {
     row: RowKey.Monster,
@@ -210,6 +225,6 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       tempPowerUp(state, zoneCoords, 500, 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Powered up for having one or no cards in hand.`,
   },
 };

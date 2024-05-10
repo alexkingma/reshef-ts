@@ -1,8 +1,12 @@
+import {
+  CardTextPrefix as Pre,
+  EffectDialogueTag as Tag,
+} from "../enums/dialogue";
 import { RowKey } from "../enums/duel";
 import { Trap } from "../enums/spellTrapRitual";
 import { always } from "../util/common";
 import { destroyRow } from "../util/rowUtil";
-import { getEffCon_trapDestroyAttacker } from "../util/wrappedUtil";
+import { getEffConDi_trapDestroyAttacker as trapDestroyAttacker } from "../util/wrappedUtil";
 import {
   getZone,
   immobiliseZone,
@@ -17,43 +21,25 @@ export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state) => {
       permPowerDown(state, state.interaction.originCoords!, 500, 500);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}The monster is powered down.`,
   },
-  [Trap.HouseOfAdhesiveTape]: {
-    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 500)),
-    dialogue: "TODO",
-  },
-  [Trap.Eatgaboon]: {
-    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 1000)),
-    dialogue: "TODO",
-  },
-  [Trap.BearTrap]: {
-    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 1500)),
-    dialogue: "TODO",
-  },
-  [Trap.InvisibleWire]: {
-    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 2000)),
-    dialogue: "TODO",
-  },
-  [Trap.AcidTrapHole]: {
-    ...getEffCon_trapDestroyAttacker((z) => isMinAtk(z, 3000)),
-    dialogue: "TODO",
-  },
-  [Trap.WidespreadRuin]: {
-    ...getEffCon_trapDestroyAttacker(always),
-    dialogue: "TODO",
-  },
+  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => isMinAtk(z, 500)),
+  [Trap.Eatgaboon]: trapDestroyAttacker((z) => isMinAtk(z, 1000)),
+  [Trap.BearTrap]: trapDestroyAttacker((z) => isMinAtk(z, 1500)),
+  [Trap.InvisibleWire]: trapDestroyAttacker((z) => isMinAtk(z, 2000)),
+  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => isMinAtk(z, 3000)),
+  [Trap.WidespreadRuin]: trapDestroyAttacker(always),
   [Trap.TorrentialTribute]: {
     row: RowKey.SpellTrap,
     condition: always,
     effect: (state, { ownMonsters }) => {
       destroyRow(state, ownMonsters);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}All monsters on the attacking side of the field will be destroyed.`,
   },
   [Trap.InfiniteDismissal]: {
     row: RowKey.SpellTrap,
-    condition: () => true,
+    condition: always,
     effect: (state) => {
       const z = getZone(
         state,
@@ -61,6 +47,6 @@ export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
       ) as OccupiedMonsterZone;
       immobiliseZone(z);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}${Tag.OriginZone} will be unable to move for one turn.`,
   },
 };

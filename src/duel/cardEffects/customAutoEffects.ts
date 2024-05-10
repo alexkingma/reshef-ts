@@ -1,4 +1,5 @@
-import { RowKey } from "../enums/duel";
+import { CardTextPrefix as Pre } from "../enums/dialogue";
+import { Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Spell, Trap } from "../enums/spellTrapRitual";
 import { isLight } from "../util/cardAlignmentUtil";
@@ -15,28 +16,44 @@ import {
 import { getEffCon_requireDestinyBoard as requireDestinyBoard } from "../util/wrappedUtil";
 import {
   destroyAtCoords,
+  getZone,
   immobiliseZone,
+  isFaceDown,
   isMinAtk,
   isMonster,
   isTrap,
   specialSummon,
 } from "../util/zoneUtil";
 
-const isMin1500 = (z: Zone) => isMinAtk(z, 1500);
+const isUnlocked1500 = (z: Zone) => isMinAtk(z, 1500) && !z.isLocked;
 
 export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
   [Spell.MessengerOfPeace]: {
     row: RowKey.SpellTrap,
-    dialogue: "TODO",
+    text: `${Pre.Auto}Immobilised all monsters with 1,500 ATK or higher.`,
     condition: (state, { ownMonsters, otherMonsters }) => {
       return (
-        hasMatchInRow(state, otherMonsters, isMin1500) ||
-        hasMatchInRow(state, ownMonsters, isMin1500)
+        hasMatchInRow(state, otherMonsters, isUnlocked1500) ||
+        hasMatchInRow(state, ownMonsters, isUnlocked1500)
       );
     },
     effect: (state, { ownMonsters, otherMonsters }) => {
-      updateMonsters(state, ownMonsters, immobiliseZone, isMin1500);
-      updateMonsters(state, otherMonsters, immobiliseZone, isMin1500);
+      updateMonsters(state, ownMonsters, immobiliseZone, isUnlocked1500);
+      updateMonsters(state, otherMonsters, immobiliseZone, isUnlocked1500);
+    },
+  },
+  [Spell.JamBreedingMachine]: {
+    row: RowKey.SpellTrap,
+    text: `${Pre.Auto}No monsters can be summoned from the own deck.`,
+    condition: (state, { zoneCoords }) => {
+      // on initial set only
+      const z = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+      return isFaceDown(z);
+    },
+    effect: (state, { zoneCoords }) => {
+      state.activeTurn.hasNormalSummoned = true;
+      const z = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+      z.orientation = Orientation.FaceUp;
     },
   },
   [Trap.SpiritMessageI]: requireDestinyBoard(),
@@ -52,7 +69,7 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       destroyAtCoords(state, zoneCoords);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}It was sent to the graveyard because a non-light monster appeared on the own field.`,
   },
   [Monster.ExodiaNecross]: {
     row: RowKey.Monster,
@@ -62,7 +79,7 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { zoneCoords }) => {
       destroyAtCoords(state, zoneCoords);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}It was sent to the graveyard because there were no Exodia parts in the own graveyard.`,
   },
   [Monster.Jinzo]: {
     row: RowKey.Monster,
@@ -72,7 +89,7 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { otherDKey }) => {
       clearAllTraps(state, otherDKey);
     },
-    dialogue: "TODO",
+    text: `${Pre.Auto}Destroyed all enemy traps.`,
   },
   [Monster.ExodiaTheForbiddenOne]: {
     row: RowKey.Hand,
@@ -82,7 +99,7 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { dKey }) => {
       winByExodia(state, dKey);
     },
-    dialogue: "TODO",
+    text: `All Exodia pieces came together in the hand!`,
   },
   [Monster.TheWingedDragonOfRaPhoenixMode]: {
     row: RowKey.Graveyard,
@@ -93,7 +110,7 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
       clearGraveyard(state, dKey);
       specialSummon(state, dKey, Monster.TheWingedDragonOfRaBattleMode);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}Resurrected to own field in Battle Mode.`,
   },
   [Monster.DarkFlareKnight]: {
     row: RowKey.Graveyard,
@@ -104,6 +121,6 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
       clearGraveyard(state, dKey);
       specialSummon(state, dKey, Monster.MirageKnight);
     },
-    dialogue: "TODO",
+    text: `${Pre.AutoGraveyard}Summoned a Mirage Knight to the own field.`,
   },
 };

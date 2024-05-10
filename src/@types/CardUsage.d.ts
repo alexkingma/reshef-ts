@@ -3,7 +3,7 @@ type CardEffect = (state: Duel, coordsMap: ZoneCoordsMap) => void;
 
 type DirectEffectReducer = {
   effect: CardEffect;
-  dialogue: string;
+  text: string;
   noDiscard?: boolean; // spellTrap only
 };
 

@@ -1,7 +1,7 @@
+import { CardTextPrefix as Pre } from "../enums/dialogue";
 import { RowKey } from "../enums/duel";
 import { Spell, Trap } from "../enums/spellTrapRitual";
 import { getBurnSpells, getHealSpells } from "../util/cardUtil";
-import { never } from "../util/common";
 import { burn } from "../util/duellistUtil";
 import { countMatchesInRow, destroyRow } from "../util/rowUtil";
 import { isReflectablePowerUp } from "../util/targetedSpellUtil";
@@ -39,7 +39,7 @@ export const counterSpellEffects: CardEffectMap<AutoEffectReducer> = {
       }
       burn(state, dKey, burnAmt);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}It causes LP damage.`,
   },
   [Trap.BadReactionToSimochi]: {
     row: RowKey.SpellTrap,
@@ -67,7 +67,7 @@ export const counterSpellEffects: CardEffectMap<AutoEffectReducer> = {
       }
       burn(state, dKey, burnAmt);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}It causes LP damage.`,
   },
   [Trap.ReverseTrap]: {
     row: RowKey.SpellTrap,
@@ -77,14 +77,7 @@ export const counterSpellEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state) => {
       permPowerDown(state, state.interaction.targetCoords!, 500, 500);
     },
-    dialogue: "TODO",
-  },
-  [Trap.FakeTrap]: {
-    // never triggers, has no effect
-    row: RowKey.SpellTrap,
-    condition: never,
-    effect: () => null,
-    dialogue: "TODO",
+    text: `${Pre.Trap}The monster is powered down.`,
   },
   [Trap.AntiRaigeki]: {
     row: RowKey.SpellTrap,
@@ -94,6 +87,6 @@ export const counterSpellEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state, { ownMonsters }) => {
       destroyRow(state, ownMonsters);
     },
-    dialogue: "TODO",
+    text: `${Pre.Trap}All the monsters on the foe's field are destroyed instead of the player's.`,
   },
 };

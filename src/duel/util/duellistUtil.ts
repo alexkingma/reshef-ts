@@ -8,6 +8,7 @@ import {
 import { getRandomCardId } from "./cardUtil";
 import { CARD_NONE } from "./common";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
+import { isStartOfEitherTurn } from "./duelUtil";
 import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";
 import { updateMonsters } from "./rowUtil";
 import {
@@ -127,7 +128,7 @@ export const isOwnTurn = (state: Duel, dKey: DuellistKey) => {
 };
 
 export const isStartOfTurn = (state: Duel, dKey: DuellistKey) => {
-  return state.activeTurn.isStartOfTurn && isOwnTurn(state, dKey);
+  return isStartOfEitherTurn(state) && isOwnTurn(state, dKey);
 };
 
 export const getOtherDuellistKey = (dKey: DuellistKey) => {

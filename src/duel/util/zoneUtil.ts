@@ -34,6 +34,13 @@ export const getOriginZone = (state: Duel) => {
   return getZone(state, state.interaction.originCoords);
 };
 
+export const getTargetZone = (state: Duel) => {
+  if (!state.interaction.targetCoords) {
+    throw Error("Target coords not set!");
+  }
+  return getZone(state, state.interaction.targetCoords);
+};
+
 export const isOccupied = (z: Zone): z is OccupiedZone => {
   return z.id !== CARD_NONE;
 };
@@ -407,6 +414,8 @@ export const xyzMergeAttempt = (
   zoneCoords: ZoneCoords,
   mergeCombos: [inputs: Monster[], output: Monster][]
 ) => {
+  // note that x/y/z CANNOT merge with their "stage 2" counterparts
+  // e.g. X cannot merge with YZ, only with individual Y and/or Z pieces
   const [dKey, rKey, colIdx] = zoneCoords;
   const rowCoords: RowCoords = [dKey, rKey];
 

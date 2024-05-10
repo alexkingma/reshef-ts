@@ -1,3 +1,4 @@
+import { CardTextPrefix as Pre } from "../enums/dialogue";
 import { DuellistKey, Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual";
@@ -5,6 +6,7 @@ import { isInsect } from "../util/cardTypeUtil";
 import { shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { burn, heal } from "../util/duellistUtil";
+import { effect_DirectAttack } from "../util/effectsUtil";
 import { graveyardContainsCards } from "../util/graveyardUtil";
 import {
   clearFirstTrap,
@@ -27,7 +29,6 @@ import {
   destroyMonsterAlignment,
   destroyMonsterType,
   destroyRows,
-  directAttack as directAttack_Wrapped,
   draw as draw_Wrapped,
   healSelf as heal_Wrapped,
   setOwnField,
@@ -60,65 +61,65 @@ import {
 export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   // destroy opponent cards
   [Monster.FlameSwordsman]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Its circular slash will destroy all dinosaurs on the opponent's field.`,
     effect: destroyMonsterType("Dinosaur"),
   },
   [Monster.DragonSeeker]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All the dragons on the opponent's field will be destroyed.`,
     effect: destroyMonsterType("Dragon"),
   },
   [Monster.BattleOx]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Its Axe Crusher will destroy all fire monsters on the opponent's field.`,
     effect: destroyMonsterAlignment("Fire"),
   },
   [Monster.FiendsHand]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}One monster on the foe's field will be taken to the world of the dead.`,
     effect: (state, { otherDKey, zoneCoords }) => {
       destroyHighestAtk(state, otherDKey);
       destroyAtCoords(state, zoneCoords);
     },
   },
   [Monster.ObeliskTheTormentor]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Every monster on the foe's field will be destroyed.\nThe opponent will be hit with 4,000LP damage.`,
     effect: (state, { otherMonsters, otherDKey }) => {
       destroyRow(state, otherMonsters);
       burn(state, otherDKey, 4000);
     },
   },
   [Monster.BeastkingOfTheSwamps]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will drown all monsters on the field in a swamp.`,
     effect: destroyRows([
       [DuellistKey.Player, RowKey.Monster],
       [DuellistKey.Opponent, RowKey.Monster],
     ]),
   },
   [Monster.TheWingedDragonOfRaPhoenixMode]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters on the foe's field will be wiped out at the cost of 1,000LP.`,
     effect: (state, { dKey, otherMonsters }) => {
       burn(state, dKey, 1000);
       destroyRow(state, otherMonsters);
     },
   },
   [Monster.ZombyraTheDark]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}In return for powereing down, a monster on the foe's field will be destroyed.`,
     effect: (state, { zoneCoords, otherDKey }) => {
       destroyHighestAtk(state, otherDKey);
       permPowerDown(state, zoneCoords, 500, 500);
     },
   },
   [Monster.DesVolstgalph]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}One monster on the foe's field will be destroyed.\nThe opponent will be hit with 500LP damage.`,
     effect: (state, { otherDKey }) => {
       destroyHighestAtk(state, otherDKey);
       burn(state, otherDKey, 500);
     },
   },
   [Monster.GilfordTheLightning]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Every monster on the foe's field will be destroyed.`,
     effect: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
   },
   [Monster.MysticalBeastSerket]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will power up by enveloping one monster on the foe's field.`,
     effect: (state, { otherMonsters, zoneCoords }) => {
       const targetIdx = getHighestAtkZoneIdx(
         state,
@@ -131,14 +132,14 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.FGD]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters, spells, and traps on the opponent's field will be destroyed.`,
     effect: destroyRows([
       [DuellistKey.Opponent, RowKey.Monster],
       [DuellistKey.Opponent, RowKey.SpellTrap],
     ]),
   },
   [Monster.BarrelDragon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Up to three monsters on the foe's field will be wiped out at a 50% success rate.`,
     effect: (state, { otherDKey, otherMonsters }) => {
       // select up to 3 (random, occupied) enemy monster idxs
       const idxsToTarget = shuffle(
@@ -156,17 +157,17 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ChironTheMage]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A monster on the opponent's field will be destroyed.`,
     effect: destroyHighestAtk_Wrapped(),
   },
   [Monster.ReaperOfTheCards]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A trap on the foe's field will be destroyed.`,
     effect: (state, { otherDKey }) => {
       clearFirstTrap(state, otherDKey);
     },
   },
   [Monster.XYDragonCannon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Discard the card at the far left in your hand to destroy a face-up spell or trap on the opponent's field.`,
     effect: (state, { otherSpellTrap, ownHand }) => {
       // destroy a [face-up spell/trap] by discarding from hand
       if (!hasMatchInRow(state, otherSpellTrap, isFaceUp)) return;
@@ -175,7 +176,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.XZTankCannon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Discard the card at the far left in your hand to destroy a face-down spell or trap on the opponent's field.`,
     effect: (state, { otherSpellTrap, ownHand }) => {
       // destroy a [face-down spell/trap] by discarding from hand
       if (!hasMatchInRow(state, otherSpellTrap, isFaceDown)) return;
@@ -184,7 +185,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.YZTankDragon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Discard the card at the far left in your hand to destroy a face-down monster on the opponent's field.`,
     effect: (state, { otherDKey, otherMonsters, ownHand }) => {
       // destroy a [face-down monster] by discarding from hand
       if (!hasMatchInRow(state, otherMonsters, isFaceDown)) return;
@@ -193,7 +194,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.XYZDragonCannon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Discard the card at the far left in your hand to destroy a monster on the opponent's field.`,
     effect: (state, { otherDKey, otherMonsters, ownHand }) => {
       // destroy [any monster] by discarding from hand
       if (!hasMatchInRow(state, otherMonsters)) return;
@@ -202,7 +203,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.DarkPaladin]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Discard the card at the far left in your hand to destroy a spell on the opponent's field.`,
     effect: (state, { ownHand, otherSpellTrap }) => {
       // destroy a [spell] by discarding from hand
       if (!hasMatchInRow(state, otherSpellTrap, isSpell)) return;
@@ -213,59 +214,59 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // field
   [Monster.CurseOfDragon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The field will be turned into a wasteland.`,
     effect: setOwnField(Field.Wasteland),
   },
   [Monster.KairyuShin]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The field will be turned into a sea.`,
     effect: setOwnField(Field.Umi),
   },
   [Monster.GiantSoldierOfStone]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The field will be turned into an arena.`,
     effect: setOwnField(Field.Arena),
   },
   [Monster.SpiritOfTheMountain]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The field will be turned into a mountain.`,
     effect: setOwnField(Field.Mountain),
   },
   [Monster.Trent]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The field will be turned into a forest.`,
     effect: setOwnField(Field.Forest),
   },
 
   // special summon
   [Monster.SpiritOfTheBooks]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Boo Koo will be summoned if there is room on the own field.`,
     effect: (state, { dKey }) => {
       specialSummon(state, dKey, Monster.BooKoo);
     },
   },
   [Monster.RevivalJam]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Revival Jam will split if there is space on the player's field.`,
     effect: (state, { dKey }) => {
       specialSummon(state, dKey, Monster.RevivalJam, { isLocked: true });
     },
   },
   [Monster.ToadMaster]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Frog the Jam will be summoned if there is room on the own field.`,
     effect: (state, { dKey }) => {
       specialSummon(state, dKey, Monster.FrogTheJam);
     },
   },
   [Monster.Doron]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Doron will clone itself if there is room on the own field.`,
     effect: (state, { dKey }) => {
       specialSummon(state, dKey, Monster.Doron, { isLocked: true });
     },
   },
   [Monster.AncientLamp]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}La Jinn the Mystical Genie of the Lamp will be summoned if there is room on the own field.`,
     effect: (state, { dKey }) => {
       specialSummon(state, dKey, Monster.LaJinnTheMysticalGenieOfTheLamp);
     },
   },
   [Monster.KingsKnight]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A Jack's Knight is summoned if a Queen's Knight is on the player's field.`,
     effect: (state, { dKey, ownMonsters }) => {
       if (!rowContainsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
         return;
@@ -274,7 +275,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.PuppetMaster]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Three zombies will be summoned in exchange for 1,000LP.`,
     effect: (state, { dKey, otherDKey }) => {
       if (!graveyardContainsCards(state, dKey, Monster.Gernia)) return;
       specialSummon(state, dKey, Monster.DarkNecrofear);
@@ -284,7 +285,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ValkyrionTheMagnaWarrior]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}If there is room on the own field, it splits into Alpha, Beta, and Gamma.`,
     effect: (state, { dKey, zoneCoords, ownMonsters }) => {
       // separate into Alpha, Beta, and Gamma if there are two or more open spaces
       const numFreeZones = 5 - countMatchesInRow(state, ownMonsters);
@@ -297,7 +298,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.PinchHopper]: {
-    dialogue: "TODO",
+    text: `${Pre.Sacrifice}In return, it summons an insect monster from the player's hand.`,
     effect: (state, { zoneCoords, ownHand, dKey }) => {
       // For its own demise, it can summon (the strongest) insect from the own hand
       destroyAtCoords(state, zoneCoords);
@@ -313,7 +314,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // powerup/upgrade own monsters
   [Monster.TimeWizard]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Over a millennium, monsters are transformed.`,
     effect: (state, { ownMonsters }) => {
       updateMonsters(
         state,
@@ -330,7 +331,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.GyakutennoMegami]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters on the own field with 500 ATK or lower are powered up.`,
     effect: (state, { ownMonsters }) => {
       updateMonsters(
         state,
@@ -344,7 +345,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.HourglassOfLife]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters on the own field will be powered up in exchange for 1,000LP.`,
     effect: (state, { dKey, ownMonsters }) => {
       burn(state, dKey, 1000);
       updateMonsters(state, ownMonsters, (z) => {
@@ -354,7 +355,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.LegendaryFiend]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Legendary Fiend will power up.`,
     effect: (state, { zoneCoords }) => {
       permPowerUp(state, zoneCoords, 500, 500);
     },
@@ -362,19 +363,19 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // immobilise opponent
   [Monster.IllusionistFacelessMage]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Its illusory eye stops all monsters on the foe's field from moving on the next turn.`,
     effect: (state, { otherMonsters }) => {
       immobiliseRow(state, otherMonsters);
     },
   },
   [Monster.Nemuriko]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters on the foe's field will fall asleep.`,
     effect: (state, { otherMonsters }) => {
       immobiliseRow(state, otherMonsters);
     },
   },
   [Monster.ElectricLizard]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}One monster on the foe's field will be immobilised on the next turn.`,
     effect: (state, { otherMonsters }) => {
       const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
       if (targetIdx === -1) return;
@@ -386,7 +387,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.RedArcheryGirl]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A monster on the foe's field will be powered down and unable to move next turn.`,
     effect: (state, { otherMonsters }) => {
       const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
       if (targetIdx === -1) return;
@@ -399,7 +400,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.InvitationToADarkSleep]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All monsters on the foe's field will fall asleep and be incapable of moving.`,
     effect: (state, { otherMonsters }) => {
       immobiliseRow(state, otherMonsters);
     },
@@ -407,15 +408,15 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // heal self
   [Monster.FairysGift]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The player's LP will be restored by 1,000.`,
     effect: heal_Wrapped(1000),
   },
   [Monster.LadyOfFaith]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The player's LP will be restored by 500.`,
     effect: heal_Wrapped(500),
   },
   [Monster.SkullMarkLadyBug]: {
-    dialogue: "TODO",
+    text: `${Pre.Sacrifice}In return, it restores the player's LP by 500.`,
     effect: (state, { dKey, zoneCoords }) => {
       heal(state, dKey, 500);
       destroyAtCoords(state, zoneCoords);
@@ -424,30 +425,21 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // burn/direct attack
   [Monster.FireReaper]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will shoot a flaming arrow at the foe to inflict 50LP damage.`,
     effect: burnOther(50),
   },
-  [Monster.MysticLamp]: {
-    dialogue: "TODO",
-    effect: directAttack_Wrapped,
-  },
-  [Monster.Leghul]: {
-    dialogue: "TODO",
-    effect: directAttack_Wrapped,
-  },
-  [Monster.PenguinTorpedo]: {
-    dialogue: "TODO",
-    effect: directAttack_Wrapped,
-  },
+  [Monster.MysticLamp]: effect_DirectAttack,
+  [Monster.Leghul]: effect_DirectAttack,
+  [Monster.PenguinTorpedo]: effect_DirectAttack,
   [Monster.ExarionUniverse]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will inflict LP damage on the foe equal to its ATK, then power down.`,
     effect: (state, { zoneCoords }) => {
       directAttack(state, zoneCoords);
       permPowerDown(state, zoneCoords, 500, 500);
     },
   },
   [Monster.TheWingedDragonOfRaBattleMode]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The player's LP was cut to 1. In return, the opponent loses an identical amount of LP.`,
     effect: (state, { dKey, otherDKey }) => {
       const dmg = state[dKey].lp - 1;
       burn(state, dKey, dmg);
@@ -455,7 +447,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ReflectBounder]: {
-    dialogue: "TODO",
+    text: `${Pre.Sacrifice}In return, the ATK of a monster on the foe's field inflicts LP damage.`,
     effect: (state, { otherMonsters, otherDKey, zoneCoords }) => {
       const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
       if (targetIdx === -1) return;
@@ -470,13 +462,13 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // control/subsume opponent monster
   [Monster.DarkNecrofear]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A monster on the foe's field will be made an ally.`,
     effect: (state, { dKey }) => {
       convertMonster(state, dKey);
     },
   },
   [Monster.Relinquished]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}A monster on the foe's field will be robbed of its abilities.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
       const targetIdx = getHighestAtkZoneIdx(
         state,
@@ -489,7 +481,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ThousandEyesRestrict]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}The abilities of a foe will be stolen, and further powered up two levels.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
       const targetIdx = getHighestAtkZoneIdx(
         state,
@@ -503,7 +495,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ParasiteParacide]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It infected a monster on the foe's field.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
       const targetIdx = getHighestAtkZoneIdx(
         state,
@@ -518,10 +510,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // merge with own monsters
   [Monster.XHeadCannon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}X will combine with Y and/or Z on the player's field.\nCombine with Y to become XY. Combine with Z to become XZ. Combine with Y and Z to become XYZ.`,
     effect: (state, { zoneCoords }) => {
-      // note that x/y/z CANNOT merge with their "stage 2" counterparts
-      // e.g. X cannot merge with YZ, only with individual Y and/or Z pieces
       xyzMergeAttempt(state, zoneCoords, [
         [[Monster.YDragonHead, Monster.ZMetalTank], Monster.XYZDragonCannon],
         [[Monster.YDragonHead], Monster.XYDragonCannon],
@@ -530,7 +520,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.YDragonHead]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Y will combine with X and/or Z on the player's field.\nCombine with X to become XY. Combine with Z to become YZ. Combine with X and Z to become XYZ.`,
     effect: (state, { zoneCoords }) => {
       xyzMergeAttempt(state, zoneCoords, [
         [[Monster.XHeadCannon, Monster.ZMetalTank], Monster.XYZDragonCannon],
@@ -540,7 +530,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.ZMetalTank]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}Z will combine with X and/or Y on the player's field.\nCombine with X to become XZ. Combine with Y to become YZ. Combine with X and Z to become XYZ.`,
     effect: (state, { zoneCoords }) => {
       xyzMergeAttempt(state, zoneCoords, [
         [[Monster.XHeadCannon, Monster.YDragonHead], Monster.XYZDragonCannon],
@@ -550,19 +540,19 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.AlphaTheMagnetWarrior]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}If Beta and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
     effect: (state, { zoneCoords }) => {
       magnetWarriorMergeAttempt(state, zoneCoords);
     },
   },
   [Monster.BetaTheMagnetWarrior]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}If Alpha and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
     effect: (state, { zoneCoords }) => {
       magnetWarriorMergeAttempt(state, zoneCoords);
     },
   },
   [Monster.GammaTheMagnetWarrior]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}If Alpha and Beta are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
     effect: (state, { zoneCoords }) => {
       magnetWarriorMergeAttempt(state, zoneCoords);
     },
@@ -570,7 +560,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
 
   // assorted
   [Monster.CatapultTurtle]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All unused monsters on the own field will be launched by catapult.\nTheir combined ATK directly damages the opponent's LP.`,
     effect: (state, { dKey, ownMonsters, otherDKey, colIdx: monsterIdx }) => {
       // make all the unused monsters on the player's
       // field disappear and hit the foe with their combined power
@@ -588,36 +578,36 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.TrapMaster]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}An Acid Trap Hole will be set if there is room on the own field.`,
     effect: (state, { dKey }) => {
       setSpellTrap(state, dKey, Trap.AcidTrapHole);
     },
   },
   [Monster.RocketWarrior]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It transforms into a rocket that powers down a monster on the foe's field.`,
     effect: (state, { dKey }) => {
       powerDownHighestAtk(state, dKey);
     },
   },
   [Monster.MonsterEye]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will reveal the cards in the opponent's hand.`,
     effect: (state, { otherHand }) => {
       setRowFaceUp(state, otherHand);
     },
   },
   [Monster.GoddessOfWhim]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It lets the player draw a card from the deck, then disappears.`,
     effect: (state, { dKey, zoneCoords }) => {
       draw(state, dKey);
       destroyAtCoords(state, zoneCoords);
     },
   },
   [Monster.Skelengel]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}One card will be drawn from the player's deck.`,
     effect: draw_Wrapped(),
   },
   [Monster.ByserShock]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}All face-down cards on both fields are returned to the players' hands if space allows.`,
     effect: (
       state,
       { ownMonsters, otherMonsters, ownSpellTrap, otherSpellTrap }
@@ -638,7 +628,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.BerserkDragon]: {
-    dialogue: "TODO",
+    text: `${Pre.Manual}It will attack every monster on the opponent's field.`,
     effect: (state, { otherMonsters, zoneCoords }) => {
       // attack all enemy monsters from left to right in a single action
       getRow(state, otherMonsters).forEach((z, idx) => {
@@ -654,7 +644,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
   [Monster.BeastOfGilfer]: {
-    dialogue: "TODO",
+    text: `${Pre.Sacrifice}In return, it powers down every monster on the foe's field.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
       updateMonsters(state, otherMonsters, (z: OccupiedMonsterZone) => {
         z.permPowerUpAtk -= 500;
