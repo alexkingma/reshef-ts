@@ -26,7 +26,7 @@ import {
   permPowerUp,
   setSpellTrap,
   specialSummon,
-  specialSummonAtCoords,
+  transformMonster,
 } from "../util/zoneUtil";
 
 export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
@@ -84,7 +84,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     },
     text: `${Pre.Auto}Powered up one level.`,
   },
-  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions,
+  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions(),
   [Monster.SatelliteCannon]: {
     row: RowKey.Monster,
     condition: (state, { zoneCoords }) => {
@@ -105,10 +105,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
       },
       text: `${Pre.Auto}Inflicted 700LP damage on the player.`,
     },
-    {
-      row: RowKey.Hand,
-      ...effect_LavaGolem_Summon,
-    },
+    effect_LavaGolem_Summon(),
   ],
   [Monster.ViserDes]: {
     row: RowKey.Monster,
@@ -134,7 +131,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.Monster,
     condition: always,
     effect: (state, { zoneCoords }) => {
-      specialSummonAtCoords(state, zoneCoords, Monster.LarvaeMoth);
+      transformMonster(state, zoneCoords, Monster.LarvaeMoth);
     },
     text: `Petit Moth transformed into Larvae Moth!`,
   },
@@ -142,7 +139,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.Monster,
     condition: always,
     effect: (state, { zoneCoords }) => {
-      specialSummonAtCoords(state, zoneCoords, Monster.CocoonOfEvolution);
+      transformMonster(state, zoneCoords, Monster.CocoonOfEvolution);
     },
     text: `Larvae Moth transformed into Cocoon of Evolution!`,
   },
@@ -150,7 +147,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.Monster,
     condition: always,
     effect: (state, { zoneCoords }) => {
-      specialSummonAtCoords(state, zoneCoords, Monster.GreatMoth);
+      transformMonster(state, zoneCoords, Monster.GreatMoth);
     },
     text: `Cocoon of Evolution transformed into Great Moth!`,
   },
@@ -158,11 +155,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.Monster,
     condition: always,
     effect: (state, { zoneCoords }) => {
-      specialSummonAtCoords(
-        state,
-        zoneCoords,
-        Monster.PerfectlyUltimateGreatMoth
-      );
+      transformMonster(state, zoneCoords, Monster.PerfectlyUltimateGreatMoth);
     },
     text: `Great Moth transformed into Perfectly Ultimate Great Moth!`,
   },

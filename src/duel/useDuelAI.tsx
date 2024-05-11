@@ -84,13 +84,8 @@ export const useDuelAI = () => {
   };
 
   const setSpellTrap = (condition: (z: OccupiedZone) => boolean): boolean => {
-    let emptyZoneIdx;
-    try {
-      emptyZoneIdx = getFirstEmptyZoneIdx(state, [...ownSpellTrap]);
-    } catch {
-      // no space to summon spells
-      return false;
-    }
+    const emptyZoneIdx = getFirstEmptyZoneIdx(state, [...ownSpellTrap]);
+    if (emptyZoneIdx === -1) return false; // no space
 
     const hand = getRow(state, ownHand);
     for (const [idx, z] of hand.entries()) {

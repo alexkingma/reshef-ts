@@ -1,6 +1,3 @@
-import { counterAttackEffects } from "../cardEffects/counterAttackEffects";
-import { counterSpellEffects } from "../cardEffects/counterSpellEffects";
-import { flipEffects } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { SpellTrapRitual } from "../enums/spellTrapRitual";
@@ -45,7 +42,11 @@ export const isOccupied = (z: Zone): z is OccupiedZone => {
   return z.id !== CARD_NONE;
 };
 
-const isCategory = (z: Zone, c: CardCategory): z is OccupiedSpellTrapZone => {
+export const isEmpty = (z: Zone): z is EmptyZone => {
+  return z.id === CARD_NONE;
+};
+
+const isCategory = (z: Zone, c: CardCategory): z is OccupiedZone => {
   if (!isOccupied(z)) return false;
   const { category } = getCard(z.id);
   return category === c;
@@ -103,22 +104,8 @@ export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
 
 export const isNotGodCard = (z: Zone) => !isGodCard(z);
 
-export const isDarkMagician = (z: Zone) => {
-  // for the purposes of Dark Magician Girl's effect
-  const cards = [Monster.DarkMagician, Monster.MagicianOfBlackChaos];
-  return isMonster(z) && cards.includes(z.id);
-};
-
-export const hasManualEffect = (z: OccupiedMonsterZone) => !!flipEffects[z.id];
-
-export const hasTrapCounterAttackEffect = (z: OccupiedMonsterZone) =>
-  !!counterAttackEffects[z.id];
-
-export const hasTrapCounterSpellEffect = (z: OccupiedSpellTrapZone) =>
-  !!counterSpellEffects[z.id];
-
-export const canActivateEffect = (z: OccupiedMonsterZone) =>
-  !z.isLocked && hasManualEffect(z) && z.orientation === Orientation.FaceDown;
+export const canActivateFlipEffect = (z: OccupiedMonsterZone) =>
+  !z.isLocked && z.orientation === Orientation.FaceDown;
 
 export const setDefMode = (z: OccupiedMonsterZone) => {
   z.battlePosition = BattlePosition.Defence;
@@ -185,10 +172,10 @@ export const destroyAtCoords = (
   coords: ZoneCoords,
   allowGodDestruction: boolean = false
 ) => {
-  const [dKey] = coords;
   const z = getZone(state, coords);
-  if (z.id === CARD_NONE || (!allowGodDestruction && isGodCard(z))) return;
+  if (!isOccupied(z) || (!allowGodDestruction && isGodCard(z))) return;
   if (isMonster(z)) {
+    const [dKey] = coords;
     addToGraveyard(state, dKey, z.id);
   }
   clearZone(state, coords);
@@ -210,9 +197,9 @@ export const clearZones = (
 
 export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {
   const targetDKey = getOtherDuellistKey(attackerCoords[0]);
-  const attackerZone = getZone(state, attackerCoords) as OccupiedMonsterZone;
-  attackerZone.orientation = Orientation.FaceUp;
-  burn(state, targetDKey, attackerZone.effAtk);
+  const z = getZone(state, attackerCoords) as OccupiedMonsterZone;
+  z.orientation = Orientation.FaceUp;
+  burn(state, targetDKey, z.effAtk);
 };
 
 export const attackMonster = (
@@ -298,6 +285,19 @@ export const getCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
   };
 };
 
+export const transformZone = (z: OccupiedZone, id: CardId) => {
+  z.id = id;
+};
+
+export const transformMonster = (
+  state: Duel,
+  zoneCoords: ZoneCoords,
+  id: Monster
+) => {
+  const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+  z.id = id;
+};
+
 export const setCardAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
@@ -319,19 +319,16 @@ export const specialSummon = (
   id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
-  try {
-    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
-    const destCoords: ZoneCoords = [dKey, RowKey.Monster, zoneIdx];
-    specialSummonAtCoords(state, destCoords, id, customProps);
+  const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
+  if (zoneIdx === -1) return; // no free zone
+  const destCoords: ZoneCoords = [dKey, RowKey.Monster, zoneIdx];
+  summonAtCoords(state, destCoords, id, customProps);
 
-    // sometimes we need to know which zone was just auto-summoned to
-    return destCoords;
-  } catch (e) {
-    return; // no free zone;
-  }
+  // sometimes we need to know which zone was just auto-summoned to
+  return destCoords;
 };
 
-export const specialSummonAtCoords = (
+export const summonAtCoords = (
   state: Duel,
   zoneCoords: ZoneCoords,
   id: Monster,
@@ -345,22 +342,15 @@ export const specialSummonAtCoords = (
   Object.assign(z, props);
 };
 
-export const transformMonster = (z: OccupiedMonsterZone, id: Monster) => {
-  z.id = id;
-};
-
 export const setSpellTrap = (
   state: Duel,
   dKey: DuellistKey,
   id: SpellTrapRitual,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
-  try {
-    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.SpellTrap]);
-    setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
-  } catch (e) {
-    return; // no free zone;
-  }
+  const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.SpellTrap]);
+  if (zoneIdx === -1) return; // no free zone
+  setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
 };
 
 export const addCardToHand = (
@@ -369,12 +359,9 @@ export const addCardToHand = (
   id: CardId,
   customProps: Partial<OccupiedZone> = {}
 ) => {
-  try {
-    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
-    setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
-  } catch (e) {
-    return; // no free zone;
-  }
+  const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
+  if (zoneIdx === -1) return; // no free zone
+  setCardAtCoords(state, [dKey, RowKey.SpellTrap, zoneIdx], id, customProps);
 };
 
 export const magnetWarriorMergeAttempt = (
@@ -406,7 +393,7 @@ export const magnetWarriorMergeAttempt = (
 
   // successful merge
   clearZones(state, rowCoords, [alphaIdx, betaIdx, gammaIdx]);
-  specialSummonAtCoords(state, zoneCoords, Monster.ValkyrionTheMagnaWarrior);
+  summonAtCoords(state, zoneCoords, Monster.ValkyrionTheMagnaWarrior);
 };
 
 export const xyzMergeAttempt = (
@@ -426,7 +413,7 @@ export const xyzMergeAttempt = (
         ...inputMons.map((m) => getFirstSpecficCardIdx(state, rowCoords, m)),
       ];
       clearZones(state, rowCoords, idxsToClear);
-      specialSummonAtCoords(state, zoneCoords, outputMon, { isLocked: true });
+      summonAtCoords(state, zoneCoords, outputMon, { isLocked: true });
       break; // stop looking for merge combos after a match succeeds
     }
   }
@@ -449,6 +436,9 @@ export const subsumeMonster = (
 };
 
 export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
+  // no zone to house converted target --> conversion fails
+  if (!hasEmptyZone(state, [originatorKey, RowKey.Monster])) return;
+
   const targetKey = getOtherDuellistKey(originatorKey);
   const targetIdx = getHighestAtkZoneIdx(
     state,
@@ -459,9 +449,6 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
 
   const targetCoords: ZoneCoords = [targetKey, RowKey.Monster, targetIdx];
   const targetZone = getZone(state, targetCoords) as OccupiedMonsterZone;
-
-  // no zone to house converted target --> conversion fails
-  if (!hasEmptyZone(state, [originatorKey, RowKey.Monster])) return;
 
   const conversionCoords = specialSummon(state, originatorKey, targetZone.id, {
     permPowerUpAtk: targetZone.permPowerUpAtk,
@@ -478,7 +465,7 @@ export const convertMonsterCurrentTurn = (
   originatorKey: DuellistKey
 ) => {
   const controlledMonCoords = convertMonster(state, originatorKey);
-  if (!controlledMonCoords) return; // conversion failed, no space to house monster
+  if (!controlledMonCoords) return; // conversion failed
 
   // converted monster must undo conversion on turn end
   const activeEffects = getActiveEffects(state, originatorKey);
@@ -523,12 +510,12 @@ export const postDirectMonsterAction = (
 
   // The exception is if the monster has destroyed/replaced itself
   // (e.g. special summoning another monster in its place).
-  const zonePostAction = getZone(state, zoneCoords);
-  if (!isSpecificMonster(zonePostAction, originalCardId)) return;
+  const z = getZone(state, zoneCoords);
+  if (!isSpecificMonster(z, originalCardId)) return;
 
-  zonePostAction.battlePosition = BattlePosition.Attack;
-  zonePostAction.orientation = Orientation.FaceUp;
-  zonePostAction.isLocked = true;
+  z.battlePosition = BattlePosition.Attack;
+  z.orientation = Orientation.FaceUp;
+  z.isLocked = true;
 };
 
 export const isCoordMatch = (c1: ZoneCoords, c2: ZoneCoords) => {

@@ -15,7 +15,7 @@ import {
   getZone,
   postDirectMonsterAction,
   setCardAtCoords,
-  specialSummonAtCoords,
+  summonAtCoords,
 } from "../util/zoneUtil";
 
 export const cardReducers = {
@@ -32,7 +32,7 @@ export const cardReducers = {
     // "unconverted" come turn end and wind up in the opponent's hands
     clearConvertedZoneFlag(state, targetCoords!);
 
-    specialSummonAtCoords(state, targetCoords!, id, { orientation });
+    summonAtCoords(state, targetCoords!, id, { orientation });
     state.activeTurn.hasNormalSummoned = true;
   },
   setSpellTrap: (state: Duel) => {

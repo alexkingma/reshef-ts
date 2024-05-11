@@ -1,3 +1,4 @@
+import { hasFlipEffect } from "../cardEffects/flipEffects";
 import { Field } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Spell } from "../enums/spellTrapRitual";
@@ -23,7 +24,6 @@ import { opponentIsUnderSoRL } from "./duellistUtil";
 import { isGraveyardEmpty } from "./graveyardUtil";
 import { countMatchesInRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
 import {
-  hasManualEffect,
   isDefMode,
   isFaceDown,
   isFaceUp,
@@ -177,10 +177,7 @@ export const spellUsageMap: Record<CardId, CardCondition> = {
     hasMatchInRow(
       state,
       ownMonsters,
-      (z) =>
-        isFaceUp(z) &&
-        hasManualEffect(z as OccupiedMonsterZone) &&
-        isUnlocked(z)
+      (z) => isFaceUp(z) && hasFlipEffect(z.id) && isUnlocked(z)
     ),
   [Spell.BrainControl]: (state, { ownMonsters, otherMonsters }) =>
     hasEmptyZone(state, ownMonsters) &&

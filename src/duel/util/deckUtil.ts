@@ -38,13 +38,8 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
 
 export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
   for (let i = 0; i < numCards; i++) {
-    let zoneIdx: number;
-    try {
-      zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
-    } catch (e) {
-      // no space available in hand, don't draw a card
-      return;
-    }
+    const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
+    if (zoneIdx === -1) return; // no space in hand
 
     const card = state[dKey].deck.shift();
     if (!card) {

@@ -3,7 +3,7 @@ import { DuellistKey, Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual";
 import { isInsect } from "../util/cardTypeUtil";
-import { shuffle } from "../util/common";
+import { always, shuffle } from "../util/common";
 import { draw } from "../util/deckUtil";
 import { burn, heal } from "../util/duellistUtil";
 import { effect_DirectAttack } from "../util/effectsUtil";
@@ -14,10 +14,10 @@ import {
   destroyFirstFound,
   destroyHighestAtk,
   destroyRow,
-  getHighestAtkZoneIdx,
   getRow,
   hasMatchInRow,
   immobiliseRow,
+  onHighestAtkZone,
   powerDownHighestAtk,
   rowContainsAnyCards,
   setRowFaceUp,
@@ -25,7 +25,6 @@ import {
 } from "../util/rowUtil";
 import {
   burnOther,
-  destroyHighestAtk as destroyHighestAtk_Wrapped,
   destroyMonsterAlignment,
   destroyMonsterType,
   destroyRows,
@@ -54,7 +53,7 @@ import {
   setSpellTrap,
   specialSummon,
   subsumeMonster,
-  transformMonster,
+  transformZone,
   xyzMergeAttempt,
 } from "../util/zoneUtil";
 
@@ -121,14 +120,10 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.MysticalBeastSerket]: {
     text: `${Pre.Manual}It will power up by enveloping one monster on the foe's field.`,
     effect: (state, { otherMonsters, zoneCoords }) => {
-      const targetIdx = getHighestAtkZoneIdx(
-        state,
-        otherMonsters,
-        isNotGodCard
-      );
-      if (targetIdx === -1) return;
-      destroyAtCoords(state, [...otherMonsters, targetIdx]);
-      permPowerUp(state, zoneCoords, 500, 500);
+      onHighestAtkZone(state, otherMonsters, isNotGodCard, (_, coords) => {
+        destroyAtCoords(state, coords);
+        permPowerUp(state, zoneCoords, 500, 500);
+      });
     },
   },
   [Monster.FGD]: {
@@ -158,7 +153,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.ChironTheMage]: {
     text: `${Pre.Manual}A monster on the opponent's field will be destroyed.`,
-    effect: destroyHighestAtk_Wrapped(),
+    effect: (state, { otherDKey }) => {
+      destroyHighestAtk(state, otherDKey);
+    },
   },
   [Monster.ReaperOfTheCards]: {
     text: `${Pre.Manual}A trap on the foe's field will be destroyed.`,
@@ -300,15 +297,12 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.PinchHopper]: {
     text: `${Pre.Sacrifice}In return, it summons an insect monster from the player's hand.`,
     effect: (state, { zoneCoords, ownHand, dKey }) => {
-      // For its own demise, it can summon (the strongest) insect from the own hand
       destroyAtCoords(state, zoneCoords);
 
-      const handIdx = getHighestAtkZoneIdx(state, ownHand, isInsect);
-      if (handIdx === -1) return; // no insect to summon
-      const z = getZone(state, [...ownHand, handIdx]);
-      specialSummon(state, dKey, z.id);
-
-      clearZone(state, [...ownHand, handIdx]);
+      onHighestAtkZone(state, ownHand, isInsect, (z, targetCoords) => {
+        specialSummon(state, dKey, z.id);
+        clearZone(state, targetCoords);
+      });
     },
   },
 
@@ -319,13 +313,13 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
       updateMonsters(
         state,
         ownMonsters,
-        (z) => transformMonster(z, Monster.DarkSage),
+        (z) => transformZone(z, Monster.DarkSage),
         (z) => isSpecificMonster(z, Monster.DarkMagician)
       );
       updateMonsters(
         state,
         ownMonsters,
-        (z) => transformMonster(z, Monster.ThousandDragon),
+        (z) => transformZone(z, Monster.ThousandDragon),
         (z) => isSpecificMonster(z, Monster.BabyDragon)
       );
     },
@@ -377,26 +371,16 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.ElectricLizard]: {
     text: `${Pre.Manual}One monster on the foe's field will be immobilised on the next turn.`,
     effect: (state, { otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-      if (targetIdx === -1) return;
-      const z = getZone(state, [
-        ...otherMonsters,
-        targetIdx,
-      ]) as OccupiedMonsterZone;
-      immobiliseZone(z);
+      onHighestAtkZone(state, otherMonsters, always, immobiliseZone);
     },
   },
   [Monster.RedArcheryGirl]: {
     text: `${Pre.Manual}A monster on the foe's field will be powered down and unable to move next turn.`,
     effect: (state, { otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-      if (targetIdx === -1) return;
-      const z = getZone(state, [
-        ...otherMonsters,
-        targetIdx,
-      ]) as OccupiedMonsterZone;
-      permPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
-      immobiliseZone(z);
+      onHighestAtkZone(state, otherMonsters, always, (z, targetCoords) => {
+        permPowerDown(state, targetCoords, 500, 500);
+        immobiliseZone(z);
+      });
     },
   },
   [Monster.InvitationToADarkSleep]: {
@@ -428,9 +412,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     text: `${Pre.Manual}It will shoot a flaming arrow at the foe to inflict 50LP damage.`,
     effect: burnOther(50),
   },
-  [Monster.MysticLamp]: effect_DirectAttack,
-  [Monster.Leghul]: effect_DirectAttack,
-  [Monster.PenguinTorpedo]: effect_DirectAttack,
+  [Monster.MysticLamp]: effect_DirectAttack(),
+  [Monster.Leghul]: effect_DirectAttack(),
+  [Monster.PenguinTorpedo]: effect_DirectAttack(),
   [Monster.ExarionUniverse]: {
     text: `${Pre.Manual}It will inflict LP damage on the foe equal to its ATK, then power down.`,
     effect: (state, { zoneCoords }) => {
@@ -449,14 +433,10 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.ReflectBounder]: {
     text: `${Pre.Sacrifice}In return, the ATK of a monster on the foe's field inflicts LP damage.`,
     effect: (state, { otherMonsters, otherDKey, zoneCoords }) => {
-      const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-      if (targetIdx === -1) return;
-      const z = getZone(state, [
-        ...otherMonsters,
-        targetIdx,
-      ]) as OccupiedMonsterZone;
-      burn(state, otherDKey, z.effAtk);
-      destroyAtCoords(state, zoneCoords);
+      onHighestAtkZone(state, otherMonsters, always, (z) => {
+        burn(state, otherDKey, z.effAtk);
+        destroyAtCoords(state, zoneCoords);
+      });
     },
   },
 
@@ -470,41 +450,27 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.Relinquished]: {
     text: `${Pre.Manual}A monster on the foe's field will be robbed of its abilities.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(
-        state,
-        otherMonsters,
-        isNotGodCard
-      );
-      if (targetIdx === -1) return; // no monsters to consume
-
-      subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
+      onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
+        subsumeMonster(state, zoneCoords, targetCoords);
+      });
     },
   },
   [Monster.ThousandEyesRestrict]: {
     text: `${Pre.Manual}The abilities of a foe will be stolen, and further powered up two levels.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(
-        state,
-        otherMonsters,
-        isNotGodCard
-      );
-      if (targetIdx === -1) return; // no monsters to consume
-
-      subsumeMonster(state, zoneCoords, [...otherMonsters, targetIdx]);
-      permPowerUp(state, zoneCoords, 1000, 1000);
+      onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
+        subsumeMonster(state, zoneCoords, targetCoords);
+        permPowerUp(state, zoneCoords, 1000, 1000);
+      });
     },
   },
   [Monster.ParasiteParacide]: {
     text: `${Pre.Manual}It infected a monster on the foe's field.`,
     effect: (state, { zoneCoords, otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(
-        state,
-        otherMonsters,
-        isNotGodCard
-      );
-      if (targetIdx === -1) return;
-
-      subsumeMonster(state, [...otherMonsters, targetIdx], zoneCoords);
+      onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
+        // reverse subsume: force opp mon to be replaced with self
+        subsumeMonster(state, targetCoords, zoneCoords);
+      });
     },
   },
 
@@ -654,3 +620,5 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
     },
   },
 };
+
+export const hasFlipEffect = (id: CardId) => id in flipEffects;

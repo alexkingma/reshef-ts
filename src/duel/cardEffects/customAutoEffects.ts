@@ -5,6 +5,7 @@ import { Spell, Trap } from "../enums/spellTrapRitual";
 import { isLight } from "../util/cardAlignmentUtil";
 import { getExodiaCards } from "../util/cardUtil";
 import { winByExodia } from "../util/duellistUtil";
+import { effect_SpiritMessage as requireDestinyBoard } from "../util/effectsUtil";
 import { clearGraveyard, graveyardContainsCards } from "../util/graveyardUtil";
 import {
   clearAllTraps,
@@ -13,7 +14,6 @@ import {
   hasMatchInRow,
   updateMonsters,
 } from "../util/rowUtil";
-import { getEffCon_requireDestinyBoard as requireDestinyBoard } from "../util/wrappedUtil";
 import {
   destroyAtCoords,
   getZone,

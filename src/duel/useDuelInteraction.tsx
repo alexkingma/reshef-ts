@@ -1,4 +1,5 @@
 import { useAppSelector } from "../hooks";
+import { hasFlipEffect } from "./cardEffects/flipEffects";
 import {
   selectActiveTurn,
   selectIsMyTurn,
@@ -9,7 +10,7 @@ import { InteractionMode, RowKey } from "./enums/duel";
 import { useCardActions, useInteractionActions } from "./useDuelActions";
 import { getCard, getNumTributesRequired } from "./util/cardUtil";
 import { spellHasTarget } from "./util/targetedSpellUtil";
-import { canActivateEffect, isMonster, isSpell } from "./util/zoneUtil";
+import { canActivateFlipEffect, isMonster, isSpell } from "./util/zoneUtil";
 
 interface InteractionProps {
   label: string;
@@ -140,7 +141,8 @@ export const useDuelInteraction = (
         isMyTurn &&
         isMonster(z) &&
         !z.isLocked &&
-        canActivateEffect(z) &&
+        hasFlipEffect(z.id) &&
+        canActivateFlipEffect(z) &&
         isRow(RowKey.Monster),
       effect: () => {
         setOriginZone(zoneCoords);

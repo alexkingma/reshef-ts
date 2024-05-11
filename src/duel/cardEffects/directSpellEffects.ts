@@ -15,6 +15,7 @@ import {
 import { clearGraveyard, resurrectEnemy } from "../util/graveyardUtil";
 import {
   countMatchesInRow,
+  destroyHighestAtk,
   getRow,
   rowContainsAnyCards,
   setRowFaceDown,
@@ -23,7 +24,6 @@ import {
 } from "../util/rowUtil";
 import {
   destroy1500PlusAtk,
-  destroyHighestAtk,
   destroyRows,
   draw,
   setOwnField,
@@ -36,6 +36,7 @@ import {
   setAtkMode,
   specialSummon,
   transformMonster,
+  transformZone,
 } from "../util/zoneUtil";
 
 export const spellEffects: CardEffectMap<DirectEffectReducer> = {
@@ -183,7 +184,9 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
     text: `${Pre.Manual}All spells and traps on the foe's field are eradicated.`,
   },
   [Spell.BeckonToDarkness]: {
-    effect: destroyHighestAtk(),
+    effect: (state, { otherDKey }) => {
+      destroyHighestAtk(state, otherDKey);
+    },
     text: `${Pre.Manual}It will carry off a monster on the foe's field to the afterlife.`,
   },
 
@@ -203,16 +206,11 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
       const { targetCoords } = state.interaction;
       const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
       if (z.id === Monster.Zoa) {
-        transformMonster(z, Monster.Metalzoa);
-        return;
-      }
-      if (z.id === Monster.JiraiGumo) {
-        transformMonster(z, Monster.LauncherSpider);
-        return;
-      }
-      if (z.id === Monster.RedEyesBDragon) {
-        transformMonster(z, Monster.RedEyesBlackMetalDragon);
-        return;
+        transformZone(z, Monster.Metalzoa);
+      } else if (z.id === Monster.JiraiGumo) {
+        transformZone(z, Monster.LauncherSpider);
+      } else if (z.id === Monster.RedEyesBDragon) {
+        transformZone(z, Monster.RedEyesBlackMetalDragon);
       }
     },
     text: `${Pre.Manual}A monster is made stronger through metalization.`,
@@ -220,8 +218,7 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   [Spell.ElegantEgotist]: {
     effect: (state) => {
       const { targetCoords } = state.interaction;
-      const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
-      transformMonster(z, Monster.HarpieLadySisters);
+      transformMonster(state, targetCoords!, Monster.HarpieLadySisters);
     },
     text: `${Pre.Manual}${Tag.TargetZone} will be transformed into Harpie Lady Sisters.`,
   },

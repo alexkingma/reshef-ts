@@ -31,7 +31,7 @@ export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
       );
     },
   },
-  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions,
+  [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions(),
   [Monster.BerserkDragon]: {
     row: RowKey.Monster,
     condition: always,
@@ -40,10 +40,7 @@ export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
     },
     text: `${Pre.Auto}Powered down.`,
   },
-  [Monster.LavaGolem]: {
-    row: RowKey.Hand,
-    ...effect_LavaGolem_Summon,
-  },
+  [Monster.LavaGolem]: effect_LavaGolem_Summon(),
   [Monster.Helpoemer]: {
     row: RowKey.Graveyard,
     condition: (state, { otherHand }) => {

@@ -10,21 +10,20 @@ import {
   isOneOfTypes,
   isPlant,
 } from "../util/cardTypeUtil";
-import { effCon_DarkMagicianGirl } from "../util/effectsUtil";
+import { always } from "../util/common";
+import {
+  effect_DarkMagicianGirl,
+  effect_PowerUpSelfFromOwnMonsters as powerUpSelfFromOwnMonsters,
+  effect_UpdateOtherMonsters as updateOtherMonsters,
+  effect_UpdateOwnMonsters as updateOwnMonsters,
+} from "../util/effectsUtil";
 import {
   countMatchesInRow,
-  getHighestAtkZoneIdx,
   hasMatchInRow,
+  onHighestAtkZone,
   updateMonsters,
 } from "../util/rowUtil";
-import {
-  isMon,
-  getEffCon_powerUpSelfFromOwnMonsters as powerUpSelfFromOwnMonsters,
-  tempDown,
-  tempUp,
-  getEffCon_updateOtherMonsters as updateOtherMonsters,
-  getEffCon_updateOwnMonsters as updateOwnMonsters,
-} from "../util/wrappedUtil";
+import { isMon, tempDown, tempUp } from "../util/wrappedUtil";
 import { isFaceUp, tempPowerDown, tempPowerUp } from "../util/zoneUtil";
 
 const tempDown500 = tempDown(500, 500);
@@ -42,9 +41,9 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
       return hasMatchInRow(state, otherMonsters);
     },
     effect: (state, { otherMonsters }) => {
-      const targetIdx = getHighestAtkZoneIdx(state, otherMonsters);
-      if (targetIdx === -1) return;
-      tempPowerDown(state, [...otherMonsters, targetIdx], 500, 500);
+      onHighestAtkZone(state, otherMonsters, always, (_, coords) => {
+        tempPowerDown(state, coords, 500, 500);
+      });
     },
     text: `${Pre.Auto}Weakened the enemy monster with the highest ATK.`,
   },
@@ -211,8 +210,8 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
     ...powerUpSelfFromOwnMonsters((z) => isDragon(z) && isFaceUp(z)),
     text: `${Pre.Auto}Powered up for all face-up dragons on own field.`,
   },
-  [Monster.DarkMagicianGirl]: effCon_DarkMagicianGirl,
-  [Monster.ToonDarkMagicianGirl]: effCon_DarkMagicianGirl,
+  [Monster.DarkMagicianGirl]: effect_DarkMagicianGirl(),
+  [Monster.ToonDarkMagicianGirl]: effect_DarkMagicianGirl(),
   [Monster.InsectQueen]: {
     ...powerUpSelfFromOwnMonsters((z) => isInsect(z) && isFaceUp(z)),
     text: `${Pre.Auto}Powered up for all face-up insects on own field.`,

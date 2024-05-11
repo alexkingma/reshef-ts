@@ -5,8 +5,8 @@ import {
 import { RowKey } from "../enums/duel";
 import { Trap } from "../enums/spellTrapRitual";
 import { always } from "../util/common";
+import { effect_TrapDestroyAttacker as trapDestroyAttacker } from "../util/effectsUtil";
 import { destroyRow } from "../util/rowUtil";
-import { getEffConDi_trapDestroyAttacker as trapDestroyAttacker } from "../util/wrappedUtil";
 import {
   getZone,
   immobiliseZone,
