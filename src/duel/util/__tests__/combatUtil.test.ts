@@ -1,8 +1,11 @@
-import { BattlePosition, RowKey } from "@/duel/enums/duel";
+import { BattlePosition, DuellistKey, RowKey } from "@/duel/enums/duel";
 import { Monster } from "@/duel/enums/monster";
 import { beforeEach, describe, expect, test } from "vitest";
 import { getNewDuel } from "../duelUtil";
-import { calculateAttack, generateOccupiedMonsterZone } from "../zoneUtil";
+import {
+  calculateAttack,
+  generateOccupiedMonsterZone as createZone,
+} from "../zoneUtil";
 
 let dark_700_600: OccupiedMonsterZone;
 let dark_800_700: OccupiedMonsterZone;
@@ -13,21 +16,17 @@ let light_700_600: OccupiedMonsterZone;
 let light_3000_2500: OccupiedMonsterZone;
 
 const getState = (
-  ownMonsters: OccupiedMonsterZone,
-  otherMonsters: OccupiedMonsterZone
+  ownMon: OccupiedMonsterZone,
+  otherMon: OccupiedMonsterZone
 ) => {
   const state = getNewDuel();
-  state.p1.monsterZones[0] = ownMonsters;
-  state.p2.monsterZones[0] = otherMonsters;
+  state.p1.monsterZones[0] = ownMon;
+  state.p2.monsterZones[0] = otherMon;
   return state;
 };
 
-const createZone = (id: CardId): OccupiedMonsterZone => ({
-  ...generateOccupiedMonsterZone(id),
-});
-
-const originCoords: ZoneCoords = ["p1", RowKey.Monster, 0];
-const targetCoords: ZoneCoords = ["p2", RowKey.Monster, 0];
+const originCoords: ZoneCoords = [DuellistKey.Player, RowKey.Monster, 0];
+const targetCoords: ZoneCoords = [DuellistKey.Opponent, RowKey.Monster, 0];
 
 beforeEach(() => {
   dark_700_600 = createZone(Monster.PhantomDewan);
