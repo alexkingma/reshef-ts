@@ -47,7 +47,7 @@ export const isEmpty = (z: Zone): z is EmptyZone => {
 };
 
 const isCategory = (z: Zone, c: CardCategory): z is OccupiedZone => {
-  if (!isOccupied(z)) return false;
+  if (isEmpty(z)) return false;
   const { category } = getCard(z.id);
   return category === c;
 };
@@ -176,7 +176,7 @@ export const destroyAtCoords = (
   allowGodDestruction: boolean = false
 ) => {
   const z = getZone(state, coords);
-  if (!isOccupied(z) || (!allowGodDestruction && isGodCard(z))) return;
+  if (!allowGodDestruction && isGodCard(z)) return;
   if (isMonster(z)) {
     const [dKey] = coords;
     addToGraveyard(state, dKey, z.id);
@@ -195,7 +195,7 @@ export const clearZones = (
   rowCoords: RowCoords,
   idxs: number[]
 ) => {
-  idxs.forEach((idx) => clearZone(state, [...rowCoords, idx] as ZoneCoords));
+  idxs.forEach((idx) => clearZone(state, [...rowCoords, idx]));
 };
 
 export const directAttack = (state: Duel, attackerCoords: ZoneCoords) => {
@@ -322,9 +322,9 @@ export const specialSummon = (
   id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
-  const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
-  if (zoneIdx === -1) return; // no free zone
-  const destCoords: ZoneCoords = [dKey, RowKey.Monster, zoneIdx];
+  const i = getFirstEmptyZoneIdx(state, [dKey, RowKey.Monster]);
+  if (i === -1) return; // no free zone
+  const destCoords: ZoneCoords = [dKey, RowKey.Monster, i];
   summonAtCoords(state, destCoords, id, customProps);
 
   // sometimes we need to know which zone was just auto-summoned to

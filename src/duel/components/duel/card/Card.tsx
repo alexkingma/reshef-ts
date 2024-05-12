@@ -2,12 +2,7 @@ import { selectZone } from "@/duel/duelSlice";
 import { RowKey } from "@/duel/enums/duel";
 import { getCard } from "@/duel/util/cardUtil";
 import { isPlayer } from "@/duel/util/duellistUtil";
-import {
-  isDefMode,
-  isFaceUp,
-  isMonster,
-  isOccupied,
-} from "@/duel/util/zoneUtil";
+import { isDefMode, isEmpty, isFaceUp, isMonster } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
 import classNames from "classnames";
 import "./Card.scss";
@@ -41,7 +36,7 @@ export const Card = ({ zoneCoords }: Props) => {
   const [dKey, rKey] = zoneCoords;
   const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
 
-  if (!isOccupied(z)) return null;
+  if (isEmpty(z)) return null;
 
   const card = getCard(z.id);
   const isPlayerZone = isPlayer(dKey);

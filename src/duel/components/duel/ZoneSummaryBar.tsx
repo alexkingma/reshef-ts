@@ -9,8 +9,8 @@ import {
 import { getCard } from "@/duel/util/cardUtil";
 import {
   getFinalPowerUpLevel,
+  isEmpty,
   isMonster,
-  isOccupied,
   isTrap,
 } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
@@ -22,7 +22,7 @@ export const ZoneSummaryBar = () => {
   const isHoverAllowed = useAppSelector(selectShouldHighlightCursorZone);
 
   // render empty bar for empty zones and opponent facedowns
-  if (!isOccupied(z) || !isHoverAllowed) {
+  if (isEmpty(z) || !isHoverAllowed) {
     return <div className="zoneSummaryBar" />;
   }
 

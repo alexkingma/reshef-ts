@@ -7,12 +7,7 @@ import { logEffectMessage } from "../util/logUtil";
 import { mergeMapsAndValues } from "./common";
 import { getOtherDuellistKey, isStartOfTurn } from "./duellistUtil";
 import { getRow, isRowCoordMatch, updateMonsters } from "./rowUtil";
-import {
-  getCombatStats,
-  getZone,
-  getZoneCoordsMap,
-  isOccupied,
-} from "./zoneUtil";
+import { getCombatStats, getZone, getZoneCoordsMap, isEmpty } from "./zoneUtil";
 
 const includeTurnStartEffects = mergeMapsAndValues(
   turnStartEffects,
@@ -108,7 +103,7 @@ const checkRowEffects = (
     const { zoneCoords, dKey } = coordsMap;
 
     const z = getZone(state, zoneCoords);
-    if (!isOccupied(z)) return;
+    if (isEmpty(z)) return;
 
     const temp = reducerMap[z.id];
     if (!temp) return;

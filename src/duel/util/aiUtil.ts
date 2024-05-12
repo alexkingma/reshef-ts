@@ -12,6 +12,7 @@ import {
 import {
   calculateAttack,
   getZone,
+  isEmpty,
   isFaceDown,
   isFaceUp,
   isMaxAtk,
@@ -169,7 +170,7 @@ export const getLethalAttackerTarget = (
     // If the opponent has faceup (attack pos) monsters, lethal must involve
     // dealing collateral lp damage through a mon-vs-mon attack.
     for (const [targetIdx, targetZone] of targetZones.entries()) {
-      if (!isOccupied(targetZone) || isFaceDown(targetZone)) continue;
+      if (isEmpty(targetZone) || isFaceDown(targetZone)) continue;
 
       const targetCoords: ZoneCoords = [...otherMonsters, targetIdx];
       const { targetLpLoss } = calculateAttack(

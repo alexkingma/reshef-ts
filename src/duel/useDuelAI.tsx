@@ -31,6 +31,7 @@ import {
 import { isValidSpellTarget, spellHasTarget } from "./util/targetedSpellUtil";
 import {
   getZoneCoordsMap,
+  isEmpty,
   isFaceDown,
   isLocked,
   isMonster,
@@ -89,7 +90,7 @@ export const useDuelAI = () => {
 
     const hand = getRow(state, ownHand);
     for (const [idx, z] of hand.entries()) {
-      if (!isOccupied(z) || isMonster(z) || !condition(z)) continue;
+      if (isEmpty(z) || isMonster(z) || !condition(z)) continue;
       const originCoords: ZoneCoords = [...ownHand, idx];
       setOriginZone(originCoords);
       setTargetZone([...ownSpellTrap, emptyZoneIdx]);

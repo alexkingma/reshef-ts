@@ -117,7 +117,7 @@ export const countMatchesInRow = (
   [dKey, rKey]: RowCoords,
   condition: (z: OccupiedZone, i: number) => boolean = always
 ) => {
-  const row = state.duellists[dKey][rKey];
+  const row = state.duellists[dKey][rKey] as OccupiedZone[];
   return row.filter((z, i) => isOccupied(z) && condition(z, i)).length;
 };
 
@@ -182,7 +182,7 @@ export const destroyRow = (
   condition: (zone: OccupiedZone) => boolean = always
 ) => {
   updateMatches(state, rowCoords, (z, i) => {
-    if (!isOccupied(z) || !condition(z)) return;
+    if (isEmpty(z) || !condition(z)) return;
     destroyAtCoords(state, [...rowCoords, i]);
   });
 };
@@ -194,7 +194,7 @@ export const updateMatches = (
   condition: (z: OccupiedZone, i: number) => boolean = always
 ) => {
   getRow(state, rowCoords).forEach((z, i, zones) => {
-    if (!isOccupied(z) || !condition(z, i)) return;
+    if (isEmpty(z) || !condition(z, i)) return;
     effect(zones[i] as OccupiedZone, i);
   });
 };

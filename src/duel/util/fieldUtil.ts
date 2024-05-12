@@ -3,7 +3,13 @@ import { DKey, Field, Orientation, RowKey } from "../enums/duel";
 import { Spell } from "../enums/spellTrapRitual";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
-import { clearZone, getZone, isOccupied, setCardAtCoords } from "./zoneUtil";
+import {
+  clearZone,
+  getZone,
+  isEmpty,
+  isOccupied,
+  setCardAtCoords,
+} from "./zoneUtil";
 
 export const getFieldCardId = (field: Field): Spell => {
   switch (field) {
@@ -52,18 +58,16 @@ export const setActiveField = (state: Duel, dKey: DKey, field: Field) => {
 };
 
 export const getActiveField = (state: Duel): Field => {
-  const pZone = state.duellists[DKey.Player].fieldZone[0];
-  const oZone = state.duellists[DKey.Opponent].fieldZone[0];
-  const pCard = isOccupied(pZone) ? getCard(pZone.id) : null;
-  const oCard = isOccupied(oZone) ? getCard(oZone.id) : null;
-  const pField = pCard ? (pCard.name as Field) : Field.Arena;
-  const oField = oCard ? (oCard.name as Field) : Field.Arena;
-  return pField === Field.Arena ? oField : pField;
+  return (
+    getFieldCard(state, DKey.Player) ??
+    getFieldCard(state, DKey.Opponent) ??
+    Field.Arena
+  );
 };
 
 export const getFieldCard = (state: Duel, dKey: DKey): Field | null => {
   const [z] = state.duellists[dKey].fieldZone;
-  if (!isOccupied(z)) return null;
+  if (isEmpty(z)) return null;
   const { name } = getCard(z.id);
   return name as Field;
 };

@@ -150,8 +150,7 @@ export const selectShouldHighlightCursorZone = ({ duel }: RootState) => {
   const { cursorCoords } = duel.interaction;
   const [dKey] = cursorCoords;
   const z = getZone(duel, cursorCoords);
-  if (!isOccupied(z)) return false;
-  return isFaceUp(z) || isPlayer(dKey);
+  return isOccupied(z) && (isFaceUp(z) || isPlayer(dKey));
 };
 
 export default duelSlice.reducer;

@@ -40,10 +40,10 @@ import {
   directAttack,
   getZone,
   immobiliseZone,
+  isEmpty,
   isFaceDown,
   isFaceUp,
   isNotGodCard,
-  isOccupied,
   isSpecificMonster,
   isSpell,
   magnetWarriorMergeAttempt,
@@ -139,7 +139,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
       // select up to 3 (random, occupied) enemy monster idxs
       const idxsToTarget = shuffle(
         getRow(state, otherMonsters).reduce((arr, z, idx) => {
-          if (!isOccupied(z)) return arr;
+          if (isEmpty(z)) return arr;
           return [...arr, idx];
         }, [] as number[])
       ).slice(0, 3);
@@ -533,7 +533,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
       let combinedAtk = 0;
       const row = getRow(state, ownMonsters) as MonsterZone[];
       row.forEach((z, idx) => {
-        if (!isOccupied(z) || z.isLocked || idx === monsterIdx) return;
+        if (isEmpty(z) || z.isLocked || idx === monsterIdx) return;
         combinedAtk += z.effAtk;
         destroyAtCoords(state, [...ownMonsters, idx]);
       });
@@ -579,7 +579,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
       // the hands of both players if there is space in the hands
       const returnRowToHand = (rowCoords: RowCoords) => {
         getRow(state, rowCoords).forEach((z, i) => {
-          if (!isOccupied(z)) return;
+          if (isEmpty(z)) return;
           returnCardToHand(state, [...rowCoords, i]);
         });
       };
@@ -598,7 +598,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
         // must re-get zone on each iteration of loop in order to check if
         // Berserk Dragon has destroyed itself before completing all attacks
         const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
-        if (!isOccupied(z) || !isOccupied(originZone)) {
+        if (isEmpty(z) || isEmpty(originZone)) {
           // don't attack if Berserk Dragon itself has been destroyed
           return;
         }
