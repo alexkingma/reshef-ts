@@ -1,4 +1,4 @@
-import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { DKey, RowKey } from "@/duel/enums/duel";
 import { Monster } from "@/duel/enums/monster";
 import { describe, expect, test } from "vitest";
 import { canAISummonMonster, getFaceUpTarget } from "../aiUtil";
@@ -12,11 +12,11 @@ describe("canAISummonMonster", () => {
     ownMonsters: (Monster | null)[]
   ) => {
     const state = getNewDuel();
-    state.p1.hand.forEach((_, i, zones) => {
+    state.duellists[DKey.Player].hand.forEach((_, i, zones) => {
       const c = hand[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
-    state.p1.monsterZones.forEach((_, i, zones) => {
+    state.duellists[DKey.Player].monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
@@ -24,7 +24,7 @@ describe("canAISummonMonster", () => {
   };
 
   const makeCoords = (idx: number): ZoneCoords => [
-    DuellistKey.Player,
+    DKey.Player,
     RowKey.Hand,
     idx,
   ];
@@ -97,11 +97,11 @@ describe("getFaceUpTarget", () => {
     otherMonsters: (Monster | null)[]
   ) => {
     const state: Duel = getNewDuel();
-    state.p1.monsterZones.forEach((_, i, zones) => {
+    state.duellists[DKey.Player].monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
-    state.p2.monsterZones.forEach((_, i, zones) => {
+    state.duellists[DKey.Opponent].monsterZones.forEach((_, i, zones) => {
       const c = otherMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
@@ -109,7 +109,7 @@ describe("getFaceUpTarget", () => {
   };
 
   const makeCoords = (idx: number): ZoneCoords => [
-    DuellistKey.Player,
+    DKey.Player,
     RowKey.Monster,
     idx,
   ];

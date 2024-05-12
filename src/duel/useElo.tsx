@@ -79,8 +79,10 @@ export const useElo = () => {
   const state = useAppSelector(selectDuel);
   const winnerKey = getVictorKey(state);
   const loserKey = getOtherDuellistKey(winnerKey);
-  const winnerDeck = cardQuantMapToDeck(state[winnerKey].deckTemplate);
-  const loserDeck = cardQuantMapToDeck(state[loserKey].deckTemplate);
+  const winner = state.duellists[winnerKey];
+  const loser = state.duellists[loserKey];
+  const winnerDeck = cardQuantMapToDeck(winner.deckTemplate);
+  const loserDeck = cardQuantMapToDeck(loser.deckTemplate);
 
   const calculateCardEloMap = () => {
     const { ratingGain, ratingLoss } = getRatingDelta(
@@ -102,8 +104,8 @@ export const useElo = () => {
   };
 
   const calculateDuellistEloMap = () => {
-    const winnerName = state[winnerKey].name as DuellableName;
-    const loserName = state[loserKey].name as DuellableName;
+    const winnerName = winner.name as DuellableName;
+    const loserName = loser.name as DuellableName;
     const winnerElo = duellistEloMap[winnerName];
     const loserElo = duellistEloMap[loserName];
 
@@ -115,11 +117,11 @@ export const useElo = () => {
   };
 
   const updateEloMap = () => {
-    if ([state.p1.name, state.p2.name].every((n) => !isDuellable(n))) {
+    if (!isDuellable(winner.name) && !isDuellable(loser.name)) {
       // two unnamed cardQuantMaps measures individual card Elo
       const newCardEloMap = calculateCardEloMap();
       console.log(newCardEloMap); // TODO: write to file
-    } else if ([state.p1.name, state.p2.name].every(isDuellable)) {
+    } else if (isDuellable(winner.name) && isDuellable(loser.name)) {
       // two dedicated duellist decks measures duellist Elo
       const newDuellistEloMap = calculateDuellistEloMap();
       console.log(newDuellistEloMap); // TODO: write to file

@@ -55,7 +55,7 @@ export const useDuelAI = () => {
     endTurn: endTurnAction,
     aiNormalSummon: aiNormalSummonAction,
   } = actions;
-  const { duellistKey: dKey } = useAppSelector(selectActiveTurn);
+  const { dKey: dKey } = useAppSelector(selectActiveTurn);
   const { setOriginZone, setTargetZone, resetInteractions } =
     useInteractionActions();
   const { ownHand, ownMonsters, ownSpellTrap, otherMonsters } =

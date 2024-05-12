@@ -1,5 +1,5 @@
 import { selectGraveyardZone } from "@/duel/duelSlice";
-import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { DKey, RowKey } from "@/duel/enums/duel";
 import { getCard } from "@/duel/util/cardUtil";
 import { isOccupied } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
@@ -8,7 +8,7 @@ import { InteractiveZone } from "./InteractiveZone";
 import { ZoneBackground } from "./ZoneBackground";
 
 interface Props {
-  duellistKey: DuellistKey;
+  duellistKey: DKey;
 }
 
 export const Graveyard = ({ duellistKey }: Props) => {

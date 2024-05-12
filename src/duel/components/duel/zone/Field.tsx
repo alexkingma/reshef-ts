@@ -1,5 +1,5 @@
 import { selectFieldCard } from "@/duel/duelSlice";
-import { RowKey } from "@/duel/enums/duel";
+import { DKey, RowKey } from "@/duel/enums/duel";
 import { getCard } from "@/duel/util/cardUtil";
 import { getFieldCardId } from "@/duel/util/fieldUtil";
 import { useAppSelector } from "@/hooks";
@@ -8,7 +8,7 @@ import { InteractiveZone } from "./InteractiveZone";
 import { ZoneBackground } from "./ZoneBackground";
 
 interface Props {
-  duellistKey: DuellistKey;
+  duellistKey: DKey;
 }
 
 export const Field = ({ duellistKey }: Props) => {

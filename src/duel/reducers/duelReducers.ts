@@ -31,6 +31,6 @@ export const duelReducers = {
 
     // displaying dialogue prompts and Draw Phase (in spirit)
     // takes place AFTER start-of-turn field checks
-    draw(state, activeTurn.duellistKey);
+    draw(state, activeTurn.dKey);
   },
 };

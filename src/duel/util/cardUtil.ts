@@ -77,9 +77,7 @@ export const getBurnSpells = () => {
   ];
 };
 
-export const getNumTributesRequired = ({
-  level,
-}: MonsterCard): 0 | 1 | 2 | 3 => {
+export const getNumTributesRequired = ({ level }: MonsterCard) => {
   return level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0;
 };
 

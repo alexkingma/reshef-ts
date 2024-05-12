@@ -68,8 +68,7 @@ interface DuelInteraction {
 
 interface Duel {
   config: DuelConfig;
-  p1: Duellist;
-  p2: Duellist;
+  duellists: [p1: Duellist, p2: Duellist];
   activeTurn: Turn;
   interaction: DuelInteraction;
 }
@@ -85,14 +84,13 @@ interface DuelConfig {
 }
 
 interface Turn {
-  duellistKey: DuellistKey;
+  dKey: number;
   isStartOfTurn: boolean;
   hasNormalSummoned: boolean;
   numTributedMonsters: number;
 }
 
 // recreate enums since they can't be imported in .d.ts files
-type DuellistKey = "p1" | "p2";
 type RowKey =
   | "hand"
   | "monsterZones"
@@ -101,16 +99,10 @@ type RowKey =
   | "graveyard"
   | "fieldZone";
 
-type ZoneCoords = [dKey: DuellistKey, rowKey: RowKey, colIdx: number];
+type ZoneCoords = [dKey: number, rowKey: RowKey, colIdx: number];
 type ZoneCoordsForDuellist = OmitFirst<ZoneCoords>;
 type RowCoords = OmitLast<ZoneCoords>;
 
-type DuellistStatus =
-  | "HEALTHY"
-  | "OUT_OF_LP"
-  | "DECK_OUT"
-  | "SURRENDER" // unused for now
-  | "EXODIA"
-  | "DESTINY_BOARD";
+type DuellistStatus = number;
 
 type PlayerType = "HUMAN" | "CPU";

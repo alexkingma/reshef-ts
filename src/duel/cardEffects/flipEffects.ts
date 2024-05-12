@@ -1,5 +1,5 @@
 import { CardTextPrefix as Pre } from "../enums/dialogue";
-import { DuellistKey, Field, RowKey } from "../enums/duel";
+import { DKey, Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Trap } from "../enums/spellTrapRitual";
 import { isInsect } from "../util/cardTypeUtil";
@@ -88,8 +88,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.BeastkingOfTheSwamps]: {
     text: `${Pre.Manual}It will drown all monsters on the field in a swamp.`,
     effect: destroyRows([
-      [DuellistKey.Player, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.Monster],
+      [DKey.Player, RowKey.Monster],
+      [DKey.Opponent, RowKey.Monster],
     ]),
   },
   [Monster.TheWingedDragonOfRaPhoenixMode]: {
@@ -115,7 +115,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.GilfordTheLightning]: {
     text: `${Pre.Manual}Every monster on the foe's field will be destroyed.`,
-    effect: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
+    effect: destroyRows([[DKey.Opponent, RowKey.Monster]]),
   },
   [Monster.MysticalBeastSerket]: {
     text: `${Pre.Manual}It will power up by enveloping one monster on the foe's field.`,
@@ -129,16 +129,16 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.FGD]: {
     text: `${Pre.Manual}All monsters, spells, and traps on the opponent's field will be destroyed.`,
     effect: destroyRows([
-      [DuellistKey.Opponent, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.SpellTrap],
+      [DKey.Opponent, RowKey.Monster],
+      [DKey.Opponent, RowKey.SpellTrap],
     ]),
   },
   [Monster.BarrelDragon]: {
     text: `${Pre.Manual}Up to three monsters on the foe's field will be wiped out at a 50% success rate.`,
-    effect: (state, { otherDKey, otherMonsters }) => {
+    effect: (state, { otherMonsters }) => {
       // select up to 3 (random, occupied) enemy monster idxs
       const idxsToTarget = shuffle(
-        state[otherDKey].monsterZones.reduce((arr, z, idx) => {
+        getRow(state, otherMonsters).reduce((arr, z, idx) => {
           if (!isOccupied(z)) return arr;
           return [...arr, idx];
         }, [] as number[])
@@ -425,7 +425,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.TheWingedDragonOfRaBattleMode]: {
     text: `${Pre.Manual}The player's LP was cut to 1. In return, the opponent loses an identical amount of LP.`,
     effect: (state, { dKey, otherDKey }) => {
-      const dmg = state[dKey].lp - 1;
+      const dmg = state.duellists[dKey].lp - 1;
       burn(state, dKey, dmg);
       burn(state, otherDKey, dmg);
     },
@@ -527,19 +527,16 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   // assorted
   [Monster.CatapultTurtle]: {
     text: `${Pre.Manual}All unused monsters on the own field will be launched by catapult.\nTheir combined ATK directly damages the opponent's LP.`,
-    effect: (state, { dKey, ownMonsters, otherDKey, colIdx: monsterIdx }) => {
+    effect: (state, { ownMonsters, otherDKey, colIdx: monsterIdx }) => {
       // make all the unused monsters on the player's
       // field disappear and hit the foe with their combined power
-      const idxsToClear: number[] = [];
       let combinedAtk = 0;
-      state[dKey].monsterZones.forEach((z, idx) => {
+      const row = getRow(state, ownMonsters) as MonsterZone[];
+      row.forEach((z, idx) => {
         if (!isOccupied(z) || z.isLocked || idx === monsterIdx) return;
-        idxsToClear.push(idx);
         combinedAtk += z.effAtk;
+        destroyAtCoords(state, [...ownMonsters, idx]);
       });
-      idxsToClear.forEach((idx) =>
-        destroyAtCoords(state, [...ownMonsters, idx])
-      );
       burn(state, otherDKey, combinedAtk);
     },
   },

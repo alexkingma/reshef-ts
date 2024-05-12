@@ -1,4 +1,4 @@
-import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { DKey, RowKey } from "@/duel/enums/duel";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import classNames from "classnames";
 import { Counterweight } from "../zone/Counterweight";
@@ -10,7 +10,7 @@ import { DuellistStatus } from "./DuellistStatus";
 import { Row } from "./Row";
 
 interface Props {
-  dKey: DuellistKey;
+  dKey: DKey;
 }
 
 export const Duellist = ({ dKey }: Props) => {

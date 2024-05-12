@@ -1,5 +1,5 @@
 import { default as fieldMultiplierMap } from "@/assets/data/fields.json";
-import { Field, Orientation, RowKey } from "../enums/duel";
+import { DKey, Field, Orientation, RowKey } from "../enums/duel";
 import { Spell } from "../enums/spellTrapRitual";
 import { getCard } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
@@ -36,11 +36,7 @@ export const getRandomFieldCard = () => {
   return fields[Math.floor(Math.random() * fields.length)];
 };
 
-export const setActiveField = (
-  state: Duel,
-  dKey: DuellistKey,
-  field: Field
-) => {
+export const setActiveField = (state: Duel, dKey: DKey, field: Field) => {
   // always clear the opponent's field slot on principle
   clearActiveField(state, getOtherDuellistKey(dKey));
 
@@ -56,8 +52,8 @@ export const setActiveField = (
 };
 
 export const getActiveField = (state: Duel): Field => {
-  const pZone = state.p1.fieldZone[0];
-  const oZone = state.p2.fieldZone[0];
+  const pZone = state.duellists[DKey.Player].fieldZone[0];
+  const oZone = state.duellists[DKey.Opponent].fieldZone[0];
   const pCard = isOccupied(pZone) ? getCard(pZone.id) : null;
   const oCard = isOccupied(oZone) ? getCard(oZone.id) : null;
   const pField = pCard ? (pCard.name as Field) : Field.Arena;
@@ -65,8 +61,8 @@ export const getActiveField = (state: Duel): Field => {
   return pField === Field.Arena ? oField : pField;
 };
 
-export const getFieldCard = (state: Duel, dKey: DuellistKey): Field | null => {
-  const [z] = state[dKey].fieldZone;
+export const getFieldCard = (state: Duel, dKey: DKey): Field | null => {
+  const [z] = state.duellists[dKey].fieldZone;
   if (!isOccupied(z)) return null;
   const { name } = getCard(z.id);
   return name as Field;
@@ -81,11 +77,11 @@ export const isBuffedByField = (type: CardType, field: Field): boolean => {
   return getFieldMultiplier(field, type) > 1;
 };
 
-export const hasActiveField = (state: Duel, dKey: DuellistKey) => {
+export const hasActiveField = (state: Duel, dKey: DKey) => {
   const z = getZone(state, [dKey, RowKey.Field, 0]);
   return isOccupied(z);
 };
 
-export const clearActiveField = (state: Duel, dKey: DuellistKey) => {
+export const clearActiveField = (state: Duel, dKey: DKey) => {
   clearZone(state, [dKey, RowKey.Field, 0]);
 };

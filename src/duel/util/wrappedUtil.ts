@@ -38,7 +38,7 @@ export const permPowerUp =
   };
 
 export const setOwnField = (newField: Field) => (state: Duel) => {
-  setActiveFieldDirect(state, state.activeTurn.duellistKey, newField);
+  setActiveFieldDirect(state, state.activeTurn.dKey, newField);
 };
 
 export const destroyRows = (rowsToDestroy: RowCoords[]) => (state: Duel) => {

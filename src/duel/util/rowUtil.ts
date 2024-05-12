@@ -1,4 +1,4 @@
-import { Orientation, RowKey } from "../enums/duel";
+import { DKey, Orientation, RowKey } from "../enums/duel";
 import { logEffectMessage } from "../util/logUtil";
 import { getCard, getExodiaCards, getFinalCards } from "./cardUtil";
 import { always } from "./common";
@@ -15,7 +15,7 @@ import {
 } from "./zoneUtil";
 
 export const getRow = (state: Duel, [dKey, rKey]: RowCoords) => {
-  return state[dKey][rKey];
+  return state.duellists[dKey][rKey];
 };
 
 export const hasFullExodia = (state: Duel, rowCoords: RowCoords) => {
@@ -50,7 +50,7 @@ export const getHighestAtkZoneIdx = (
 ) => {
   let idx = -1;
   let highestAtk = -1;
-  state[dKey][rKey].forEach((z, i) => {
+  state.duellists[dKey][rKey].forEach((z, i) => {
     if (!isMonster(z) || !condition(z, i)) return;
     if (z.effAtk > highestAtk) {
       highestAtk = z.effAtk;
@@ -67,7 +67,7 @@ export const getLowestAtkZoneIdx = (
 ) => {
   let idx = -1;
   let lowestAtk = Number.MAX_SAFE_INTEGER;
-  state[dKey][rKey].forEach((z, i) => {
+  state.duellists[dKey][rKey].forEach((z, i) => {
     if (!isMonster(z) || !condition(z, i)) return;
     if (z.effAtk < lowestAtk) {
       lowestAtk = z.effAtk;
@@ -82,7 +82,7 @@ export const getFirstSpecficCardIdx = (
   [dKey, rKey]: RowCoords,
   id: CardId
 ) => {
-  const row = state[dKey][rKey];
+  const row = state.duellists[dKey][rKey];
   return row.findIndex((z) => z.id === id);
 };
 
@@ -117,7 +117,7 @@ export const countMatchesInRow = (
   [dKey, rKey]: RowCoords,
   condition: (z: OccupiedZone, i: number) => boolean = always
 ) => {
-  const row = state[dKey][rKey];
+  const row = state.duellists[dKey][rKey];
   return row.filter((z, i) => isOccupied(z) && condition(z, i)).length;
 };
 
@@ -157,7 +157,7 @@ export const onHighestAtkZone = (
 
 export const destroyHighestAtk = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   condition: (z: OccupiedZone) => boolean = always
 ) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
@@ -172,6 +172,7 @@ export const destroyFirstFound = (
   condition: (z: OccupiedZone) => boolean = always
 ) => {
   const i = getFirstOccupiedZoneIdx(state, rowCoords, condition);
+  if (i === -1) return;
   destroyAtCoords(state, [...rowCoords, i]);
 };
 
@@ -212,17 +213,17 @@ export const updateMonsters = (
   );
 };
 
-export const clearFirstTrap = (state: Duel, targetKey: DuellistKey) => {
+export const clearFirstTrap = (state: Duel, targetKey: DKey) => {
   destroyFirstFound(state, [targetKey, RowKey.SpellTrap], isTrap);
 };
 
-export const clearAllTraps = (state: Duel, targetKey: DuellistKey) => {
+export const clearAllTraps = (state: Duel, targetKey: DKey) => {
   destroyRow(state, [targetKey, RowKey.SpellTrap], isTrap);
 };
 
 export const powerDownHighestAtk = (
   state: Duel,
-  targetKey: DuellistKey,
+  targetKey: DKey,
   atk: number = 500,
   def: number = 500
 ) => {

@@ -2,7 +2,7 @@ import {
   CardTextPrefix as Pre,
   EffectDialogueTag as Tag,
 } from "../enums/dialogue";
-import { DuellistKey, Field, RowKey } from "../enums/duel";
+import { DKey, Field, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { Spell } from "../enums/spellTrapRitual";
 import { burn, getActiveEffects } from "../util/duellistUtil";
@@ -146,33 +146,33 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   // card destruction
   [Spell.FinalDestiny]: {
     effect: destroyRows([
-      [DuellistKey.Player, RowKey.Hand],
-      [DuellistKey.Player, RowKey.SpellTrap],
-      [DuellistKey.Player, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.SpellTrap],
-      [DuellistKey.Opponent, RowKey.Hand],
+      [DKey.Player, RowKey.Hand],
+      [DKey.Player, RowKey.SpellTrap],
+      [DKey.Player, RowKey.Monster],
+      [DKey.Opponent, RowKey.Monster],
+      [DKey.Opponent, RowKey.SpellTrap],
+      [DKey.Opponent, RowKey.Hand],
     ]),
     text: `${Pre.Manual}Every monster, spell, and trap card on the field and in the hand will be destroyed.`,
   },
   [Spell.HeavyStorm]: {
     effect: destroyRows([
-      [DuellistKey.Player, RowKey.SpellTrap],
-      [DuellistKey.Player, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.SpellTrap],
+      [DKey.Player, RowKey.SpellTrap],
+      [DKey.Player, RowKey.Monster],
+      [DKey.Opponent, RowKey.Monster],
+      [DKey.Opponent, RowKey.SpellTrap],
     ]),
     text: `${Pre.Manual}Every monster, spell, and trap card on the field will be destroyed.`,
   },
   [Spell.DarkHole]: {
     effect: destroyRows([
-      [DuellistKey.Player, RowKey.Monster],
-      [DuellistKey.Opponent, RowKey.Monster],
+      [DKey.Player, RowKey.Monster],
+      [DKey.Opponent, RowKey.Monster],
     ]),
     text: `${Pre.Manual}All monsters on the field will be wiped out.`,
   },
   [Spell.Raigeki]: {
-    effect: destroyRows([[DuellistKey.Opponent, RowKey.Monster]]),
+    effect: destroyRows([[DKey.Opponent, RowKey.Monster]]),
     text: `${Pre.Manual}All enemies on the field will be wiped out.`,
   },
   [Spell.CrushCard]: {
@@ -180,7 +180,7 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
     text: `${Pre.Manual}All monsters on the foe's field with ATK of 1,500 or higher will be destroyed.`,
   },
   [Spell.HarpiesFeatherDuster]: {
-    effect: destroyRows([[DuellistKey.Opponent, RowKey.SpellTrap]]),
+    effect: destroyRows([[DKey.Opponent, RowKey.SpellTrap]]),
     text: `${Pre.Manual}All spells and traps on the foe's field are eradicated.`,
   },
   [Spell.BeckonToDarkness]: {

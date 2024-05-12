@@ -1,4 +1,4 @@
-import { BattlePosition, Orientation, RowKey } from "../enums/duel";
+import { BattlePosition, DKey, Orientation, RowKey } from "../enums/duel";
 import { Monster } from "../enums/monster";
 import { SpellTrapRitual } from "../enums/spellTrapRitual";
 import { getAlignmentResult, getCard } from "./cardUtil";
@@ -21,7 +21,7 @@ import {
 } from "./rowUtil";
 
 export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
-  return state[dKey][rKey][col];
+  return state.duellists[dKey][rKey][col];
 };
 
 export const getOriginZone = (state: Duel) => {
@@ -89,7 +89,10 @@ export const isLocked = (z: Zone): z is OccupiedMonsterZone =>
   isMonster(z) && z.isLocked;
 
 export const isMinAtk = (z: Zone, atk: number): z is OccupiedMonsterZone =>
-  isMonster(z) && z.effAtk <= atk;
+  isMonster(z) && z.effAtk >= atk;
+
+export const isMaxAtk = (z: Zone, atk: number): z is OccupiedMonsterZone =>
+  isMonster(z) && z.effAtk < atk;
 
 export const isGodCard = (z: Zone): z is OccupiedMonsterZone => {
   const godCards: Monster[] = [
@@ -183,7 +186,7 @@ export const destroyAtCoords = (
 
 export const clearZone = (state: Duel, [dKey, rKey, colIdx]: ZoneCoords) => {
   // does NOT send anything to graveyard
-  state[dKey][rKey][colIdx] = { id: CARD_NONE };
+  state.duellists[dKey][rKey][colIdx] = { id: CARD_NONE };
   clearConvertedZoneFlag(state, [dKey, rKey, colIdx]);
 };
 
@@ -315,7 +318,7 @@ export const setCardAtCoords = (
 
 export const specialSummon = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
@@ -344,7 +347,7 @@ export const summonAtCoords = (
 
 export const setSpellTrap = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   id: SpellTrapRitual,
   customProps: Partial<OccupiedSpellTrapZone> = {}
 ) => {
@@ -355,7 +358,7 @@ export const setSpellTrap = (
 
 export const addCardToHand = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   id: CardId,
   customProps: Partial<OccupiedZone> = {}
 ) => {
@@ -424,18 +427,18 @@ export const subsumeMonster = (
   recipientCoords: ZoneCoords,
   donorCoords: ZoneCoords
 ) => {
-  const [recipientDKey, recipientRKey, recipientIdx] = recipientCoords;
   const donorZone = getZone(state, donorCoords) as OccupiedMonsterZone;
-  state[recipientDKey][recipientRKey][recipientIdx] = {
+  const recipientZone = getZone(state, recipientCoords) as OccupiedMonsterZone;
+  Object.assign(recipientZone, {
     ...donorZone,
     orientation: Orientation.FaceUp,
     battlePosition: BattlePosition.Attack,
     isLocked: false,
-  };
+  });
   clearZone(state, donorCoords);
 };
 
-export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
+export const convertMonster = (state: Duel, originatorKey: DKey) => {
   // no zone to house converted target --> conversion fails
   if (!hasEmptyZone(state, [originatorKey, RowKey.Monster])) return;
 
@@ -460,10 +463,7 @@ export const convertMonster = (state: Duel, originatorKey: DuellistKey) => {
   return conversionCoords;
 };
 
-export const convertMonsterCurrentTurn = (
-  state: Duel,
-  originatorKey: DuellistKey
-) => {
+export const convertMonsterCurrentTurn = (state: Duel, originatorKey: DKey) => {
   const controlledMonCoords = convertMonster(state, originatorKey);
   if (!controlledMonCoords) return; // conversion failed
 

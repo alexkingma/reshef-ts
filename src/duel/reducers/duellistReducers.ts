@@ -13,7 +13,7 @@ import {
 
 export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
-    shuffle(state[dKey].deck);
+    shuffle(state.duellists[dKey].deck);
   },
   endTurn,
   aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {

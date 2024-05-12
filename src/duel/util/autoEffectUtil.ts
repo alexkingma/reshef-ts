@@ -2,7 +2,7 @@ import { customAutoEffects } from "../cardEffects/customAutoEffects";
 import { tempMonsterEffects } from "../cardEffects/tempMonsterEffects";
 import { turnEndEffects } from "../cardEffects/turnEndEffects";
 import { turnStartEffects } from "../cardEffects/turnStartEffects";
-import { Orientation, RowKey } from "../enums/duel";
+import { DKey, Orientation, RowKey } from "../enums/duel";
 import { logEffectMessage } from "../util/logUtil";
 import { mergeMapsAndValues } from "./common";
 import { getOtherDuellistKey, isStartOfTurn } from "./duellistUtil";
@@ -35,7 +35,7 @@ export const checkAutoEffects = (state: Duel) => {
 };
 
 const recalcCombatStats = (state: Duel) => {
-  const dKey = state.activeTurn.duellistKey;
+  const dKey = state.activeTurn.dKey;
   const otherDKey = getOtherDuellistKey(dKey);
 
   resetRowCombatStats(state, dKey);
@@ -59,7 +59,7 @@ const calcRowCombatStats = (state: Duel, rowCoords: RowCoords) => {
   });
 };
 
-const resetRowCombatStats = (state: Duel, dKey: DuellistKey) => {
+const resetRowCombatStats = (state: Duel, dKey: DKey) => {
   const rowCoords: RowCoords = [dKey, RowKey.Monster];
   updateMonsters(state, rowCoords, (z, i) => {
     z.tempPowerUpAtk = 0;
@@ -76,7 +76,7 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 };
 
 const checkPermAutoEffects = (state: Duel) => {
-  const dKey = state.activeTurn.duellistKey;
+  const dKey = state.activeTurn.dKey;
   const otherDKey = getOtherDuellistKey(dKey);
   const relevantEffects = isStartOfTurn(state, dKey)
     ? includeTurnStartEffects

@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { DuellistStatus, PlayerType, RowKey } from "./enums/duel";
+import { DKey, DStatus, PlayerType, RowKey } from "./enums/duel";
 import { cardReducers } from "./reducers/cardReducers";
 import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
@@ -102,23 +102,23 @@ export const selectZone =
 export const selectCursorZone = ({ duel }: RootState) =>
   getZone(duel, duel.interaction.cursorCoords);
 export const selectOpponentHasMonster =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
     hasMatchInRow(duel, [getOtherDuellistKey(dKey), RowKey.Monster]);
 export const selectIsMyTurn =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
-    duel.activeTurn.duellistKey === dKey;
+    duel.activeTurn.dKey === dKey;
 export const selectDuellist =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
-    duel[dKey];
+    duel.duellists[dKey];
 export const selectGraveyardZone =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
-    duel[dKey].graveyard[0];
+    duel.duellists[dKey].graveyard[0];
 export const selectFieldCard =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
     getFieldCard(duel, dKey);
 export const selectActiveField = ({ duel }: RootState) => getActiveField(duel);
@@ -126,7 +126,7 @@ export const selectInteraction = ({ duel }: RootState) => duel.interaction;
 export const selectActiveTurn = ({ duel }: RootState) => duel.activeTurn;
 export const selectConfig = ({ duel }: RootState) => duel.config;
 export const selectIsCPU =
-  (dKey: DuellistKey) =>
+  (dKey: DKey) =>
   ({ duel }: RootState) =>
     isPlayer(dKey)
       ? duel.config.p1Type === PlayerType.CPU
@@ -134,8 +134,8 @@ export const selectIsCPU =
 export const selectIsDuelOver = ({ duel }: RootState) => {
   // determine if either side has fulfilled a win/lose condition
   return (
-    duel.p1.status !== DuellistStatus.HEALTHY ||
-    duel.p2.status !== DuellistStatus.HEALTHY
+    duel.duellists[DKey.Player].status !== DStatus.HEALTHY ||
+    duel.duellists[DKey.Opponent].status !== DStatus.HEALTHY
   );
 };
 export const selectIsSimulation = ({ duel }: RootState) => {

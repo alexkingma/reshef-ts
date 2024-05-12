@@ -1,4 +1,4 @@
-import { DuellistStatus, Orientation, RowKey } from "../enums/duel";
+import { DKey, DStatus, Orientation, RowKey } from "../enums/duel";
 import { getRandomCardId } from "./cardUtil";
 import { shuffle } from "./common";
 import { getFirstEmptyZoneIdx } from "./rowUtil";
@@ -36,24 +36,24 @@ export const getTempCardQuantMap = (): CardQuantityMap => {
   return map;
 };
 
-export const draw = (state: Duel, dKey: DuellistKey, numCards: number = 1) => {
+export const draw = (state: Duel, dKey: DKey, numCards: number = 1) => {
   for (let i = 0; i < numCards; i++) {
     const zoneIdx = getFirstEmptyZoneIdx(state, [dKey, RowKey.Hand]);
     if (zoneIdx === -1) return; // no space in hand
 
-    const card = state[dKey].deck.shift();
+    const card = state.duellists[dKey].deck.shift();
     if (!card) {
       // player is out of cards, end game
-      state[dKey].status = DuellistStatus.DECK_OUT;
+      state.duellists[dKey].status = DStatus.DECK_OUT;
       return;
     }
 
-    state[dKey].hand[zoneIdx] = card;
+    state.duellists[dKey].hand[zoneIdx] = card;
   }
 };
 
-export const addToTopOfDeck = (state: Duel, dKey: DuellistKey, id: CardId) => {
-  state[dKey].deck.unshift({
+export const addToTopOfDeck = (state: Duel, dKey: DKey, id: CardId) => {
+  state.duellists[dKey].deck.unshift({
     id,
     orientation: Orientation.FaceDown,
   });

@@ -5,6 +5,7 @@ import {
   DuellistActionKey,
   actions as duelActions,
 } from "./duelSlice";
+import { DKey } from "./enums/duel";
 import { cardReducers } from "./reducers/cardReducers";
 import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
@@ -37,7 +38,7 @@ type DuellistActions = {
   [K in keyof typeof duellistReducers]: () => void;
 };
 
-export const useDuellistActions = (dKey: DuellistKey) => {
+export const useDuellistActions = (dKey: DKey) => {
   const dispatch = useAppDispatch();
 
   const map = {} as DuellistActions;

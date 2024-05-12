@@ -1,4 +1,4 @@
-import { BattlePosition, RowKey } from "../enums/duel";
+import { BattlePosition, DKey, RowKey } from "../enums/duel";
 import { getCard, getNumTributesRequired } from "./cardUtil";
 import { getOtherDuellistKey } from "./duellistUtil";
 import {
@@ -14,6 +14,7 @@ import {
   getZone,
   isFaceDown,
   isFaceUp,
+  isMaxAtk,
   isOccupied,
   isUnlocked,
 } from "./zoneUtil";
@@ -29,11 +30,11 @@ export const canAISummonMonster = (
   const handCard = getCard(handZone.id) as MonsterCard;
   const numTributesRequired = getNumTributesRequired(handCard);
   const currentTributes = state.activeTurn.numTributedMonsters;
-  const numTributesAvailable = getMonsterIdxsByTributeable(
+  const numTributesAvailable = countMatchesInRow(
     state,
-    dKey,
-    handZone.effAtk
-  ).length;
+    [dKey, RowKey.Monster],
+    (z) => isMaxAtk(z, handZone.effAtk - 1)
+  );
 
   // If AI has no space to summon, must have >= 1 mon weaker than it
   // to summon on top of. This is only really relevant when evaluating
@@ -41,7 +42,7 @@ export const canAISummonMonster = (
   // e.g. can't summon Kuriboh on a board of 5 Slifers, even though it
   // should require 0 tributes.
   const hasFreeMonsterZone = hasEmptyZone(state, [
-    state.activeTurn.duellistKey,
+    state.activeTurn.dKey,
     RowKey.Monster,
   ]);
 
@@ -53,7 +54,7 @@ export const canAISummonMonster = (
 
 export const getMonsterIdxsByTributeable = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   atkThreshold: number
 ) => {
   // Low-atk mons should be tributed before higher-atk mons.
@@ -62,7 +63,7 @@ export const getMonsterIdxsByTributeable = (
   return monsterZones
     .map((_, i) => i)
     .filter((i) => {
-      const z = monsterZones[i] as OccupiedMonsterZone;
+      const z = monsterZones[i] as MonsterZone;
       return isOccupied(z) && z.effAtk < atkThreshold;
     })
     .sort((aI, bI) => {
@@ -77,7 +78,7 @@ export const getMonsterIdxsByTributeable = (
 
 export const getFaceUpAttacker = (
   state: Duel,
-  dKey: DuellistKey,
+  dKey: DKey,
   rejectedIdxs: number[]
 ) => {
   return getLowestAtkZoneIdx(
@@ -140,7 +141,7 @@ export const getIdealBattlePos = (
 
 export const getLethalAttackerTarget = (
   state: Duel,
-  dKey: DuellistKey
+  dKey: DKey
 ): { attackerIdx: number; targetIdx?: number } | false => {
   const ownMonsters: RowCoords = [dKey, RowKey.Monster];
   const otherDKey = getOtherDuellistKey(dKey);
@@ -149,7 +150,7 @@ export const getLethalAttackerTarget = (
   // no monsters to attack with, lethal is impossible
   if (!hasMatchInRow(state, ownMonsters, isUnlocked)) return false;
 
-  const opponentLp = state[otherDKey].lp;
+  const opponentLp = state.duellists[otherDKey].lp;
   const attackerZones = getRow(state, ownMonsters) as OccupiedMonsterZone[];
   const targetZones = getRow(state, otherMonsters) as OccupiedMonsterZone[];
 

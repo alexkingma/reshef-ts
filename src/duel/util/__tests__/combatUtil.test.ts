@@ -1,4 +1,4 @@
-import { BattlePosition, DuellistKey, RowKey } from "@/duel/enums/duel";
+import { BattlePosition, DKey, RowKey } from "@/duel/enums/duel";
 import { Monster } from "@/duel/enums/monster";
 import { beforeEach, describe, expect, test } from "vitest";
 import { getNewDuel } from "../duelUtil";
@@ -20,13 +20,13 @@ const getState = (
   otherMon: OccupiedMonsterZone
 ) => {
   const state = getNewDuel();
-  state.p1.monsterZones[0] = ownMon;
-  state.p2.monsterZones[0] = otherMon;
+  state.duellists[DKey.Player].monsterZones[0] = ownMon;
+  state.duellists[DKey.Opponent].monsterZones[0] = otherMon;
   return state;
 };
 
-const originCoords: ZoneCoords = [DuellistKey.Player, RowKey.Monster, 0];
-const targetCoords: ZoneCoords = [DuellistKey.Opponent, RowKey.Monster, 0];
+const originCoords: ZoneCoords = [DKey.Player, RowKey.Monster, 0];
+const targetCoords: ZoneCoords = [DKey.Opponent, RowKey.Monster, 0];
 
 beforeEach(() => {
   dark_700_600 = createZone(Monster.PhantomDewan);

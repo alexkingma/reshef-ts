@@ -11,6 +11,7 @@ import {
 import { isFire } from "./cardAlignmentUtil";
 import { isDinosaur, isDragon, isInsect } from "./cardTypeUtil";
 import { always } from "./common";
+import { hasMinLp } from "./duellistUtil";
 import { graveyardContainsCards } from "./graveyardUtil";
 import { countMatchesInRow, hasEmptyZone, hasMatchInRow } from "./rowUtil";
 import {
@@ -54,7 +55,7 @@ export const monsterUsageMap: Record<CardId, CardCondition> = {
   [Monster.HourglassOfLife]: always,
   [Monster.ObeliskTheTormentor]: always,
   [Monster.TheWingedDragonOfRaBattleMode]: (state, { dKey, otherDKey }) =>
-    state[dKey].lp > state[otherDKey].lp,
+    hasMinLp(state, dKey, state.duellists[otherDKey].lp + 1),
   [Monster.RocketWarrior]: opponentHasMonster(),
   [Monster.BeastkingOfTheSwamps]: opponentHasMonster(isNotGodCard),
   [Monster.FairysGift]: always,
@@ -67,7 +68,7 @@ export const monsterUsageMap: Record<CardId, CardCondition> = {
   [Monster.MonsterEye]: (state, { otherHand }) =>
     hasMatchInRow(state, otherHand, isFaceDown),
   [Monster.TheWingedDragonOfRaPhoenixMode]: (state, { dKey, otherMonsters }) =>
-    state[dKey].lp > 1000 && hasMatchInRow(state, otherMonsters),
+    hasMinLp(state, dKey, 1000) && hasMatchInRow(state, otherMonsters),
   [Monster.GoddessOfWhim]: (state, { ownHand }) => hasEmptyZone(state, ownHand),
   [Monster.DragonSeeker]: opponentHasMonster(
     (z) => isDragon(z) && isNotGodCard(z)
@@ -101,7 +102,7 @@ export const monsterUsageMap: Record<CardId, CardCondition> = {
   [Monster.ByserShock]: opponentHasMonster(),
   [Monster.PuppetMaster]: (state, { dKey }) =>
     graveyardContainsCards(state, dKey, Monster.Gernia) &&
-    state[dKey].lp > 1000,
+    hasMinLp(state, dKey, 1000),
   [Monster.DarkPaladin]: opponentHasSpellTrap(
     (z) => isFaceDown(z) || (isFaceUp(z) && isSpell(z))
   ),

@@ -1,4 +1,4 @@
-import { DuellistKey, RowKey } from "@/duel/enums/duel";
+import { DKey, RowKey } from "@/duel/enums/duel";
 import { Monster } from "@/duel/enums/monster";
 import { describe, expect, test } from "vitest";
 import { CARD_NONE } from "../common";
@@ -9,13 +9,13 @@ import { generateOccupiedMonsterZone } from "../zoneUtil";
 describe("getHighestAtkZoneIdx", () => {
   const getState = (ownMonsters: (Monster | null)[]) => {
     const state = getNewDuel();
-    state.p1.monsterZones.forEach((_, i, zones) => {
+    state.duellists[DKey.Player].monsterZones.forEach((_, i, zones) => {
       const c = ownMonsters[i];
       zones[i] = c ? generateOccupiedMonsterZone(c) : { id: CARD_NONE };
     });
     return state;
   };
-  const makeCoords = (): RowCoords => [DuellistKey.Player, RowKey.Monster];
+  const makeCoords = (): RowCoords => [DKey.Player, RowKey.Monster];
 
   test("strong vs weak", () => {
     const state = getState([Monster.DarkMagician, Monster.Kuriboh]);

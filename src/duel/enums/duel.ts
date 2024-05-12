@@ -4,13 +4,13 @@ export enum PlayerType {
 }
 
 export enum BattlePosition {
-  Attack = "ATTACK_POSITION",
-  Defence = "DEFENCE_POSITION",
+  Attack,
+  Defence,
 }
 
 export enum Orientation {
-  FaceDown = "FACE_DOWN",
-  FaceUp = "FACE_UP",
+  FaceDown,
+  FaceUp,
 }
 
 export enum RowKey {
@@ -22,9 +22,10 @@ export enum RowKey {
   Field = "fieldZone",
 }
 
-export enum DuellistKey {
-  Player = "p1",
-  Opponent = "p2",
+// Duellist Key
+export enum DKey {
+  Player = 0,
+  Opponent = 1,
 }
 
 export enum Field {
@@ -38,20 +39,21 @@ export enum Field {
 }
 
 export enum InteractionMode {
-  Locked = "LOCKED", // cursor movement not allowed (animation playing, dialogue cued, opponent's turn)
-  FreeMovement = "FREE_MOVEMENT", // default state during own turn
-  ViewingOptions = "VIEWING_OPTIONS", // zone buttons/actions appear (attack, summon, discard)
-  ChoosingOwnMonster = "CHOOSING_OWN_MONSTER", // select a monster to target/power-up with a spell
-  ChoosingOwnMonsterZone = "CHOOSING_OWN_MONSTER_ZONE", // zone to summon at (empty or otherwise)
-  ChoosingOwnSpellTrapZone = "CHOOSING_OWN_SPELL_TRAP_ZONE", // zone to set at (empty or otherwise)
-  ChoosingOpponentMonster = "CHOOSING_OPPONENT_MONSTER", // monster to attack (non-direct attacks)
+  Locked, // cursor movement not allowed (animation playing, dialogue cued, opponent's turn)
+  FreeMovement, // default state during own turn
+  ViewingOptions, // zone buttons/actions appear (attack, summon, discard)
+  ChoosingOwnMonster, // select a monster to target/power-up with a spell
+  ChoosingOwnMonsterZone, // zone to summon at (empty or otherwise)
+  ChoosingOwnSpellTrapZone, // zone to set at (empty or otherwise)
+  ChoosingOpponentMonster, // monster to attack (non-direct attacks)
 }
 
-export enum DuellistStatus {
-  HEALTHY = "HEALTHY",
-  OUT_OF_LP = "OUT_OF_LP",
-  DECK_OUT = "DECK_OUT",
-  SURRENDER = "SURRENDER",
-  EXODIA = "EXODIA",
-  DESTINY_BOARD = "DESTINY_BOARD",
+// Duellist Status
+export enum DStatus {
+  HEALTHY,
+  OUT_OF_LP,
+  DECK_OUT,
+  SURRENDER,
+  EXODIA,
+  DESTINY_BOARD,
 }

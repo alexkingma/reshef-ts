@@ -1,7 +1,7 @@
 import duelStatsMap from "@/assets/data/duelStats.json";
 import { useAppSelector } from "@/hooks";
 import { selectActiveField, selectDuel } from "./duelSlice";
-import { DuellistStatus } from "./enums/duel";
+import { DKey, DStatus } from "./enums/duel";
 import { getCard } from "./util/cardUtil";
 import { getVictorKey } from "./util/duelUtil";
 import { getOtherDuellistKey, isDuellable } from "./util/duellistUtil";
@@ -20,20 +20,20 @@ export const useDuelStats = () => {
   const activeField = useAppSelector(selectActiveField);
   const winnerKey = getVictorKey(state);
   const loserKey = getOtherDuellistKey(winnerKey);
-  const winner = state[winnerKey];
-  const loser = state[loserKey];
+  const winner = state.duellists[winnerKey];
+  const loser = state.duellists[loserKey];
 
   const calculateStats = () => {
     (() => {
       duelStatsMap.winnerTurn[winnerKey]++;
-      const { p1, p2 } = duelStatsMap.winnerTurn;
+      const { "0": p1, "1": p2 } = duelStatsMap.winnerTurn;
       duelStatsMap.winnerTurn.p1Percent =
         Math.round((p1 / (p1 + p2)) * 10000) / 100;
     })();
 
     const duelEndCause =
-      winner.status === DuellistStatus.EXODIA ||
-      winner.status === DuellistStatus.DESTINY_BOARD
+      winner.status === DStatus.EXODIA ||
+      winner.status === DStatus.DESTINY_BOARD
         ? winner.status
         : loser.status;
     //@ts-expect-error
@@ -82,7 +82,10 @@ export const useDuelStats = () => {
   };
 
   const updateStatsMap = () => {
-    if ([state.p1.name, state.p2.name].every((n) => !isDuellable(n))) {
+    if (
+      !isDuellable(state.duellists[DKey.Player].name) &&
+      !isDuellable(state.duellists[DKey.Opponent].name)
+    ) {
       // only track stats for two unnamed cardQuantMaps duelling
       const newStats = calculateStats();
       console.log(newStats); // TODO: write to file

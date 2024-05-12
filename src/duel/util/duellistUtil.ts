@@ -1,7 +1,8 @@
 import { duellists } from "@/assets/data/duellists";
 import {
   BattlePosition,
-  DuellistStatus,
+  DKey,
+  DStatus,
   Orientation,
   RowKey,
 } from "../enums/duel";
@@ -66,7 +67,7 @@ export const getRandomDuellistState = (): Duellist => {
         orientation: Orientation.FaceUp,
       },
     ],
-    status: DuellistStatus.HEALTHY,
+    status: DStatus.HEALTHY,
   };
 };
 
@@ -99,12 +100,12 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
           }
         : { id: CARD_NONE },
     ],
-    status: DuellistStatus.HEALTHY,
+    status: DStatus.HEALTHY,
   };
 };
 
-export const getDuellistCoordsMap = (dKey: DuellistKey): DuellistCoordsMap => {
-  const otherDKey = getOtherDuellistKey(dKey) as DuellistKey;
+export const getDuellistCoordsMap = (dKey: DKey): DuellistCoordsMap => {
+  const otherDKey = getOtherDuellistKey(dKey) as DKey;
   return {
     dKey,
     otherDKey,
@@ -123,43 +124,46 @@ export const getDuellistCoordsMap = (dKey: DuellistKey): DuellistCoordsMap => {
   };
 };
 
-export const isOwnTurn = (state: Duel, dKey: DuellistKey) => {
-  return state.activeTurn.duellistKey === dKey;
+export const isOwnTurn = (state: Duel, dKey: DKey) => {
+  return state.activeTurn.dKey === dKey;
 };
 
-export const isStartOfTurn = (state: Duel, dKey: DuellistKey) => {
+export const isStartOfTurn = (state: Duel, dKey: DKey) => {
   return isStartOfEitherTurn(state) && isOwnTurn(state, dKey);
 };
 
-export const getOtherDuellistKey = (dKey: DuellistKey) => {
-  return isPlayer(dKey) ? "p2" : "p1";
+export const getOtherDuellistKey = (dKey: DKey): DKey => {
+  // toggle 0 <-> 1
+  return dKey ^ 1;
 };
 
-export const burn = (state: Duel, dKey: DuellistKey, amt: number) => {
-  if (amt >= state[dKey].lp) {
+export const burn = (state: Duel, dKey: DKey, amt: number) => {
+  const duellist = state.duellists[dKey];
+  if (amt >= duellist.lp) {
     // all LP wiped out, duel ends
-    state[dKey].lp = 0;
-    state[dKey].status = DuellistStatus.OUT_OF_LP;
+    duellist.lp = 0;
+    duellist.status = DStatus.OUT_OF_LP;
   } else {
     // target has LP remaining, duel continues
-    state[dKey].lp -= amt;
+    duellist.lp -= amt;
   }
 };
 
-export const heal = (state: Duel, dKey: DuellistKey, amt: number) => {
-  state[dKey].lp += amt;
+export const heal = (state: Duel, dKey: DKey, amt: number) => {
+  state.duellists[dKey].lp += amt;
 };
 
-export const getActiveEffects = (state: Duel, dKey: DuellistKey) => {
-  return state[dKey].activeEffects;
+export const getActiveEffects = (state: Duel, dKey: DKey) => {
+  return state.duellists[dKey].activeEffects;
 };
 
-export const opponentIsUnderSoRL = (state: Duel, dKey: DuellistKey) => {
-  return state[dKey].activeEffects.sorlTurnsRemaining > 0;
+export const opponentIsUnderSoRL = (state: Duel, dKey: DKey) => {
+  return state.duellists[dKey].activeEffects.sorlTurnsRemaining > 0;
 };
 
-export const selfUnderSoRL = (state: Duel, dKey: DuellistKey) => {
-  return state[getOtherDuellistKey(dKey)].activeEffects.sorlTurnsRemaining > 0;
+export const selfUnderSoRL = (state: Duel, dKey: DKey) => {
+  const otherDKey = getOtherDuellistKey(dKey);
+  return state.duellists[otherDKey].activeEffects.sorlTurnsRemaining > 0;
 };
 
 export const clearConvertedZoneFlag = (state: Duel, coords: ZoneCoords) => {
@@ -170,12 +174,12 @@ export const clearConvertedZoneFlag = (state: Duel, coords: ZoneCoords) => {
   );
 };
 
-export const winByExodia = (state: Duel, dKey: DuellistKey) => {
-  state[dKey].status = DuellistStatus.EXODIA;
+export const winByExodia = (state: Duel, dKey: DKey) => {
+  state.duellists[dKey].status = DStatus.EXODIA;
 };
 
-export const winByFINAL = (state: Duel, dKey: DuellistKey) => {
-  state[dKey].status = DuellistStatus.DESTINY_BOARD;
+export const winByFINAL = (state: Duel, dKey: DKey) => {
+  state.duellists[dKey].status = DStatus.DESTINY_BOARD;
 };
 
 export const getRandomDuellable = () => {
@@ -203,8 +207,8 @@ export const isDuellable = (name: string) => {
   }
 };
 
-export const isPlayer = (dKey: DuellistKey) => {
-  return dKey === "p1";
+export const isPlayer = (dKey: DKey) => {
+  return dKey === DKey.Player;
 };
 
 export const endTurn = (
@@ -244,9 +248,13 @@ export const endTurn = (
   // reset all turn-based params
   state.activeTurn = {
     ...state.activeTurn,
-    duellistKey: otherDKey,
+    dKey: otherDKey,
     isStartOfTurn: true,
     hasNormalSummoned: false,
     numTributedMonsters: 0,
   };
+};
+
+export const hasMinLp = (state: Duel, dKey: DKey, amt: number) => {
+  return state.duellists[dKey].lp >= amt;
 };

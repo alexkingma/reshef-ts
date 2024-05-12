@@ -1,6 +1,6 @@
 import {
-  DuellistKey,
-  DuellistStatus,
+  DKey,
+  DStatus,
   InteractionMode,
   PlayerType,
   RowKey,
@@ -15,8 +15,7 @@ import { clearActiveField, hasActiveField } from "./fieldUtil";
 export const getRandomDuel = (): Duel => {
   return removeSecondFieldSpell({
     config: getDefaultConfig(),
-    p1: getRandomDuellistState(),
-    p2: getRandomDuellistState(),
+    duellists: [getRandomDuellistState(), getRandomDuellistState()],
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   });
@@ -28,8 +27,7 @@ export const getNewDuel = (
 ): Duel => {
   return removeSecondFieldSpell({
     config: getDefaultConfig(),
-    p1: getFreshDuellistState(name1),
-    p2: getFreshDuellistState(name2),
+    duellists: [getFreshDuellistState(name1), getFreshDuellistState(name2)],
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   });
@@ -49,7 +47,7 @@ export const getDefaultConfig = (): DuelConfig => {
 
 export const getDefaultActiveTurn = (): Turn => {
   return {
-    duellistKey: "p1",
+    dKey: DKey.Player,
     isStartOfTurn: true,
     hasNormalSummoned: false,
     numTributedMonsters: 0,
@@ -58,7 +56,7 @@ export const getDefaultActiveTurn = (): Turn => {
 
 export const getDefaultInteraction = (): DuelInteraction => {
   return {
-    cursorCoords: ["p1", RowKey.Hand, 0],
+    cursorCoords: [DKey.Player, RowKey.Hand, 0],
     originCoords: null,
     targetCoords: null,
     mode: InteractionMode.FreeMovement,
@@ -70,24 +68,25 @@ export const isStartOfEitherTurn = (state: Duel) => {
   return state.activeTurn.isStartOfTurn;
 };
 
-export const getVictorKey = (state: Duel): DuellistKey => {
-  return state.p1.status === DuellistStatus.DECK_OUT ||
-    state.p1.status === DuellistStatus.OUT_OF_LP ||
-    state.p1.status === DuellistStatus.SURRENDER ||
-    state.p2.status === DuellistStatus.EXODIA ||
-    state.p2.status === DuellistStatus.DESTINY_BOARD
-    ? DuellistKey.Opponent
-    : DuellistKey.Player;
+export const getVictorKey = (state: Duel): DKey => {
+  const [p1, p2] = state.duellists;
+  return p1.status === DStatus.DECK_OUT ||
+    p1.status === DStatus.OUT_OF_LP ||
+    p1.status === DStatus.SURRENDER ||
+    p2.status === DStatus.EXODIA ||
+    p2.status === DStatus.DESTINY_BOARD
+    ? DKey.Opponent
+    : DKey.Player;
 };
 
 export const removeSecondFieldSpell = (state: Duel): Duel => {
   // RoD can only have one field active at a time, so if a duel spawns
   // with each duellist having a field spell active, remove p2's card.
   if (
-    hasActiveField(state, DuellistKey.Player) &&
-    hasActiveField(state, DuellistKey.Opponent)
+    hasActiveField(state, DKey.Player) &&
+    hasActiveField(state, DKey.Opponent)
   ) {
-    clearActiveField(state, DuellistKey.Opponent);
+    clearActiveField(state, DKey.Opponent);
   }
 
   // return for chaining purposes
