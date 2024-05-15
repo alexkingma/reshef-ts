@@ -41,6 +41,8 @@ import {
   isUnlocked,
 } from "./util/zoneUtil";
 
+const decisions: Record<string, number> = {};
+
 export const useDuelAI = (onDecision: () => void) => {
   const state = useAppSelector(selectDuel);
   const isDuelOver = useAppSelector(selectIsDuelOver);
@@ -298,30 +300,39 @@ export const useDuelAI = (onDecision: () => void) => {
     // if at any point in a turn a duellist wins/loses, the AI
     // stops making decisions and surrenders control up the chain
     // to display victory messages, quit the duel, etc.
-    if (isDuelOver) return;
+    if (isDuelOver) return "duelOver";
 
     // each fn returns true if a valid action was performed,
     // or false if no action was performed and the next priority task
     // should be moved onto in the same update cycle
-    if (executeLethal()) return;
-    if (setSpellTrap(isSpell)) return;
-    if (activateSpell()) return;
-    if (summonMonster()) return;
-    if (activateMonsterEffect()) return;
-    if (attackFaceUpTarget()) return;
-    if (attackFaceDownTarget()) return;
-    if (attackDirectly()) return;
-    if (defendIfWeak()) return;
-    if (setSpellTrap(isTrap)) return;
-    if (discardFromHand()) return;
+    if (executeLethal()) return "executeLethal";
+    if (setSpellTrap(isSpell)) return "setSpell";
+    if (activateSpell()) return "activateSpell";
+    if (summonMonster()) return "summonMonster";
+    if (activateMonsterEffect()) return "activateMonsterEffect";
+    if (attackFaceUpTarget()) return "attackFaceUpTarget";
+    if (attackFaceDownTarget()) return "attackFaceDownTarget";
+    if (attackDirectly()) return "attackDirectly";
+    if (defendIfWeak()) return "defendIfWeak";
+    if (setSpellTrap(isTrap)) return "setTrap";
+    if (discardFromHand()) return "discardFromHand";
     endTurn();
+    return "endTurn";
   };
+
+  useEffect(() => {
+    if (isDuelOver && Object.keys(decisions).length) {
+      console.log("AI decision count", decisions);
+    }
+  }, [isDuelOver]);
 
   useEffect(() => {
     let decisionMakingTimeout: NodeJS.Timeout;
     if (isCPU && isMyTurn && !isDuelOver) {
       decisionMakingTimeout = setTimeout(() => {
-        makeDecision();
+        const d = makeDecision();
+        decisions[d] ??= 0;
+        decisions[d]++;
         onDecision();
       }, cpuDelayMs);
     }
