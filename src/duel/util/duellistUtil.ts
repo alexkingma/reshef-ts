@@ -20,6 +20,10 @@ import {
   specialSummon,
 } from "./zoneUtil";
 
+const getEmptyRow = (): EmptyZone[] => {
+  return Array.from({ length: 5 }).map(() => ({ id: CARD_NONE }));
+};
+
 export const getRandomDuellistState = (): Duellist => {
   const rand = () => Math.random() > 0.5;
   const cardQuantMap = getTempCardQuantMap();
@@ -84,10 +88,8 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
     hand: deck.splice(0, 5).map((card) => card),
     deck: deck,
     graveyard: [{ id: CARD_NONE }],
-    monsterZones: Array.from({ length: 5 }).map(() => ({ id: CARD_NONE })),
-    spellTrapZones: Array.from({ length: 5 }).map(() => ({
-      id: CARD_NONE,
-    })),
+    monsterZones: getEmptyRow(),
+    spellTrapZones: getEmptyRow(),
     activeEffects: {
       sorlTurnsRemaining: 0,
       convertedZones: [],
@@ -100,6 +102,25 @@ export const getFreshDuellistState = (name?: DuellableName): Duellist => {
           }
         : { id: CARD_NONE },
     ],
+    status: DStatus.HEALTHY,
+  };
+};
+
+export const getEmptyDuellistState = (): Duellist => {
+  return {
+    name: "Empty State",
+    lp: 8000,
+    deckTemplate: {},
+    hand: getEmptyRow(),
+    deck: [],
+    graveyard: [{ id: CARD_NONE }],
+    monsterZones: getEmptyRow(),
+    spellTrapZones: getEmptyRow(),
+    activeEffects: {
+      sorlTurnsRemaining: 0,
+      convertedZones: [],
+    },
+    fieldZone: [{ id: CARD_NONE }],
     status: DStatus.HEALTHY,
   };
 };

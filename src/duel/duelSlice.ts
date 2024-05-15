@@ -7,7 +7,7 @@ import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
-import { getRandomDuel } from "./util/duelUtil";
+import { getEmptyDuel } from "./util/duelUtil";
 import { getOtherDuellistKey, isPlayer } from "./util/duellistUtil";
 import { getActiveField, getFieldCard } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
@@ -51,7 +51,7 @@ type DuelReducers = {
   ) => void;
 };
 
-const initialState: Duel = getRandomDuel();
+const initialState: Duel = getEmptyDuel();
 
 const transform = (map: CustomDuelReducers) => {
   const transformedMap = {} as DuelReducers;

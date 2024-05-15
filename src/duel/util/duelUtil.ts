@@ -6,6 +6,7 @@ import {
   RowKey,
 } from "../enums/duel";
 import {
+  getEmptyDuellistState,
   getFreshDuellistState,
   getRandomDuellable,
   getRandomDuellistState,
@@ -31,6 +32,15 @@ export const getNewDuel = (
     activeTurn: getDefaultActiveTurn(),
     interaction: getDefaultInteraction(),
   });
+};
+
+export const getEmptyDuel = (): Duel => {
+  return {
+    config: getDefaultConfig(),
+    duellists: [getEmptyDuellistState(), getEmptyDuellistState()],
+    activeTurn: getDefaultActiveTurn(),
+    interaction: getDefaultInteraction(),
+  };
 };
 
 export const getDefaultConfig = (): DuelConfig => {
