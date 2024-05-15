@@ -60,21 +60,25 @@ export const getMonsterIdxsByTributeable = (
 ) => {
   // Low-atk mons should be tributed before higher-atk mons.
   // Generate an array of mon idxs, sorted in desc order of how disposable they are.
-  const monsterZones = getRow(state, [dKey, RowKey.Monster]) as MonsterZone[];
-  return monsterZones
-    .map((_, i) => i)
-    .filter((i) => {
-      const z = monsterZones[i] as MonsterZone;
-      return isOccupied(z) && z.effAtk < atkThreshold;
-    })
-    .sort((aI, bI) => {
-      const a = monsterZones[aI] as OccupiedMonsterZone;
-      const b = monsterZones[bI] as OccupiedMonsterZone;
-      if (b.effAtk === a.effAtk) {
-        return a.effDef - b.effDef;
-      }
-      return a.effAtk - b.effAtk;
-    });
+  const row = getRow(state, [dKey, RowKey.Monster]);
+
+  // for-loop is 2x faster than map/filter
+  const idxs: number[] = [];
+  for (let i = 0; i < row.length; i++) {
+    const z = row[i] as MonsterZone;
+    if (isOccupied(z) && z.effAtk < atkThreshold) {
+      idxs.push(i);
+    }
+  }
+
+  return idxs.sort((aI, bI) => {
+    const a = row[aI] as OccupiedMonsterZone;
+    const b = row[bI] as OccupiedMonsterZone;
+    if (b.effAtk === a.effAtk) {
+      return a.effDef - b.effDef;
+    }
+    return a.effAtk - b.effAtk;
+  });
 };
 
 export const getFaceUpAttacker = (

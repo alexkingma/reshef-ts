@@ -17,7 +17,7 @@ import {
   countMatchesInRow,
   destroyHighestAtk,
   getRow,
-  rowContainsAnyCards,
+  rowContainsCard,
   setRowFaceDown,
   setRowFaceUp,
   updateMonsters,
@@ -285,7 +285,7 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Spell.Multiply]: {
     effect: (state, { ownMonsters, dKey }) => {
-      if (!rowContainsAnyCards(state, ownMonsters, Monster.Kuriboh)) return;
+      if (!rowContainsCard(state, ownMonsters, Monster.Kuriboh)) return;
 
       const monsterZones = getRow(state, ownMonsters) as MonsterZone[];
       monsterZones.forEach((z) => {

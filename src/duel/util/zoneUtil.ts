@@ -73,7 +73,7 @@ export const isSpecificMonster = (
   id: Monster
 ): z is OccupiedMonsterZone => z.id === id;
 
-export const isOrientation = (z: Zone, o: Orientation): z is OccupiedZone =>
+const isOrientation = (z: Zone, o: Orientation): z is OccupiedZone =>
   isOccupied(z) && z.orientation === o;
 
 export const isFaceDown = (z: Zone): z is OccupiedZone =>

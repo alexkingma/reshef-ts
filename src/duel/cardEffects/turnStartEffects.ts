@@ -16,7 +16,7 @@ import {
   hasEmptyZone,
   hasMatchInRow,
   powerDownHighestAtk,
-  rowContainsAnyCards,
+  rowContainsCard,
 } from "../util/rowUtil";
 import { burnSelf } from "../util/wrappedUtil";
 import {
@@ -60,7 +60,7 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
       // comes next based on the first letter that isn't in the row.
       for (const letter of getFinalCards()) {
         // letter already on board
-        if (rowContainsAnyCards(state, ownSpellTrap, letter)) continue;
+        if (rowContainsCard(state, ownSpellTrap, letter)) continue;
 
         setSpellTrap(state, dKey, letter, {
           orientation: Orientation.FaceUp,

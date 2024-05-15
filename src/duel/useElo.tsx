@@ -20,21 +20,20 @@ const cardQuantMapToDeck = (cardQuantMap: CardQuantityMap) => {
 const getUsedCards = ({ deckTemplate, deck }: Duellist) => {
   // remove cards that never made it out of the deck pile, since those
   // didn't contribute to the outcome of the duel one way or another
-  const unusedCards = deck.map((z) => z.id);
-  const entireDeck = cardQuantMapToDeck(deckTemplate);
+  const usedCards = cardQuantMapToDeck(deckTemplate);
 
-  unusedCards.forEach((c) => {
-    const idx = entireDeck.findIndex((card) => card === c);
+  deck.forEach((z) => {
+    const idx = usedCards.findIndex((card) => card === z.id);
     if (idx === -1) {
       console.log(
         "Card not found! This is probably due to a mismatch in the config deck and the working state deck.",
-        c
+        z
       );
       return;
     }
-    entireDeck.splice(idx, 1);
+    usedCards.splice(idx, 1);
   });
-  return entireDeck;
+  return usedCards;
 };
 
 const getAvgCardElo = (ids: CardId[]) => {

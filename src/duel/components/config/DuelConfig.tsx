@@ -30,7 +30,7 @@ export const DuelConfig = () => {
   const { updateConfig } = useDuelActions();
 
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.checked as boolean;
+    const val = e.target.checked;
     const key = e.target.name as keyof DuelConfig;
     updateConfig({ [key]: val });
   };

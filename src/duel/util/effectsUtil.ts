@@ -11,7 +11,7 @@ import {
   countMatchesInRow,
   destroyFirstFound,
   hasMatchInRow,
-  rowContainsAnyCards,
+  rowContainsCard,
   setRowFaceDown,
   updateMonsters,
 } from "./rowUtil";
@@ -96,7 +96,7 @@ export const effect_SpiritMessage = () => ({
   row: RowKey.SpellTrap,
   text: `${Pre.SpiritMessage}Disappeared because Destiny Board is missing.`,
   condition: (state: Duel, { ownSpellTrap }: ZoneCoordsMap) => {
-    return !rowContainsAnyCards(state, ownSpellTrap, Trap.DestinyBoard);
+    return !rowContainsCard(state, ownSpellTrap, Trap.DestinyBoard);
   },
   effect: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     // I/N/A/L letters require Destiny Board to also be

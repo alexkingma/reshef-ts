@@ -19,7 +19,7 @@ import {
   immobiliseRow,
   onHighestAtkZone,
   powerDownHighestAtk,
-  rowContainsAnyCards,
+  rowContainsCard,
   setRowFaceUp,
   updateMonsters,
 } from "../util/rowUtil";
@@ -265,9 +265,7 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.KingsKnight]: {
     text: `${Pre.Manual}A Jack's Knight is summoned if a Queen's Knight is on the player's field.`,
     effect: (state, { dKey, ownMonsters }) => {
-      if (!rowContainsAnyCards(state, ownMonsters, Monster.QueensKnight)) {
-        return;
-      }
+      if (!rowContainsCard(state, ownMonsters, Monster.QueensKnight)) return;
       specialSummon(state, dKey, Monster.JacksKnight);
     },
   },

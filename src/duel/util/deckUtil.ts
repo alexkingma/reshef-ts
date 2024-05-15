@@ -7,10 +7,7 @@ export const initialiseDeck = (cardQuantMap: CardQuantityMap) => {
   const deck = Object.entries(cardQuantMap).reduce((deck, [idStr, qty]) => {
     const id = parseInt(idStr);
     for (let i = 0; i < qty; i++) {
-      deck.push({
-        id,
-        orientation: Orientation.FaceDown,
-      });
+      deck.push({ id, orientation: Orientation.FaceDown });
     }
     return deck;
   }, [] as DeckZone[]);

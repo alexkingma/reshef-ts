@@ -30,9 +30,11 @@ export const DuelContainer = () => {
   const { p1Name, p2Name } = useAppSelector(selectConfig);
   const { setDuel, updateConfig, startTurn } = useDuelActions();
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
+  const [numActionsTaken, setNumActionsTaken] = useState(0);
+  const [msElapsed, setMsElapsed] = useState(0);
   const { updateStatsMap } = useDuelStats();
   const { updateEloMap } = useElo();
-  useDuelAI();
+  useDuelAI(() => setNumActionsTaken((n) => n + 1));
 
   const randomiseDuellists = useCallback(() => {
     const d1 = getRandomDuellable().name;
@@ -91,6 +93,18 @@ export const DuelContainer = () => {
     }
   }, [isStartOfTurn, startTurn]);
 
+  useEffect(() => {
+    if (mode !== GameMode.Duel) {
+      setMsElapsed(0);
+      setNumActionsTaken(0);
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      setMsElapsed((t) => t + 200);
+    }, 200);
+    return () => clearInterval(intervalId);
+  }, [mode]);
+
   return (
     <div className="duelContainer">
       {mode === GameMode.Duel && (
@@ -98,6 +112,18 @@ export const DuelContainer = () => {
           <>
             {numDuelsFinished}/{totalDuelsToPlay} (
             {Math.round((numDuelsFinished / totalDuelsToPlay) * 100)}%)
+          </>
+          <br />
+          <>Time Elapsed: {Math.round(msElapsed / 1000)}s</>
+          <br />
+          <>
+            Actions/sec:{" "}
+            {msElapsed > 0 && Math.round((numActionsTaken / msElapsed) * 1000)}
+          </>
+          <br />
+          <>
+            Duels/sec:{" "}
+            {msElapsed > 0 && Math.round((numDuelsFinished / msElapsed) * 1000)}
           </>
           <br />
           <br />

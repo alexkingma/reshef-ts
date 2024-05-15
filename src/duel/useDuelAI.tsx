@@ -41,7 +41,7 @@ import {
   isUnlocked,
 } from "./util/zoneUtil";
 
-export const useDuelAI = () => {
+export const useDuelAI = (onDecision: () => void) => {
   const state = useAppSelector(selectDuel);
   const isDuelOver = useAppSelector(selectIsDuelOver);
   const dispatch = useAppDispatch();
@@ -319,11 +319,12 @@ export const useDuelAI = () => {
 
   useEffect(() => {
     let decisionMakingTimeout: NodeJS.Timeout;
-    if (isCPU && isMyTurn) {
+    if (isCPU && isMyTurn && !isDuelOver) {
       decisionMakingTimeout = setTimeout(() => {
         makeDecision();
+        onDecision();
       }, cpuDelayMs);
     }
     return () => clearTimeout(decisionMakingTimeout);
-  }, [isCPU, isMyTurn, cpuDelayMs, makeDecision]);
+  }, [isCPU, isMyTurn, cpuDelayMs, isDuelOver, makeDecision, onDecision]);
 };
