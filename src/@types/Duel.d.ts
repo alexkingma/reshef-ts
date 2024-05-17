@@ -74,9 +74,10 @@ interface Duel {
 }
 
 interface DuelConfig {
+  duelType: DuelType;
   p1Type: PlayerType;
   p2Type: PlayerType;
-  p1Name: DuellableName; // TODO: need a way to also enable random cards/decks?
+  p1Name: DuellableName;
   p2Name: DuellableName;
   cpuDelayMs: number;
   totalDuelsToPlay: number;
@@ -106,3 +107,5 @@ type RowCoords = OmitLast<ZoneCoords>;
 type DuellistStatus = number;
 
 type PlayerType = "HUMAN" | "CPU";
+
+type DuelType = "Exhibition" | "Simulation";

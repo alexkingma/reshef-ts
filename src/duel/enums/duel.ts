@@ -57,3 +57,8 @@ export enum DStatus {
   EXODIA,
   DESTINY_BOARD,
 }
+
+export enum DuelType {
+  Exhibition = "Exhibition",
+  Simulation = "Simulation",
+}

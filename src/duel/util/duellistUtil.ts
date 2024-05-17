@@ -11,14 +11,7 @@ import { CARD_NONE } from "./common";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
 import { isStartOfEitherTurn } from "./duelUtil";
 import { getFieldCardId, getRandomFieldCard } from "./fieldUtil";
-import { updateMonsters } from "./rowUtil";
-import {
-  clearZone,
-  generateOccupiedMonsterZone,
-  getZone,
-  isCoordMatch,
-  specialSummon,
-} from "./zoneUtil";
+import { generateOccupiedMonsterZone, isCoordMatch } from "./zoneUtil";
 
 const getEmptyRow = (): EmptyZone[] => {
   return Array.from({ length: 5 }).map(() => ({ id: CARD_NONE }));
@@ -230,50 +223,6 @@ export const isDuellable = (name: string) => {
 
 export const isPlayer = (dKey: DKey) => {
   return dKey === DKey.Player;
-};
-
-export const endTurn = (
-  state: Duel,
-  { dKey, otherDKey, ownMonsters }: DuellistCoordsMap
-) => {
-  // restore ownership of any temp-converted monsters
-  const ownActiveEffects = getActiveEffects(state, dKey);
-  const opponentActiveEffects = getActiveEffects(state, otherDKey);
-  ownActiveEffects.convertedZones.forEach((zoneCoords) => {
-    const { id, permPowerUpAtk, permPowerUpDef } = getZone(
-      state,
-      zoneCoords
-    ) as OccupiedMonsterZone;
-    specialSummon(state, otherDKey, id, {
-      permPowerUpAtk,
-      permPowerUpDef,
-    });
-    clearZone(state, zoneCoords);
-  });
-  ownActiveEffects.convertedZones = [];
-
-  // decrement turns remaining for SoRL
-  // Note that we check the originator/opponent's effect flag
-  if (opponentActiveEffects.sorlTurnsRemaining > 0) {
-    opponentActiveEffects.sorlTurnsRemaining--;
-  }
-
-  // unlock all monster zones
-  updateMonsters(state, ownMonsters, (z) => {
-    if (z.battlePosition === BattlePosition.Attack) {
-      z.orientation = Orientation.FaceUp;
-    }
-    z.isLocked = false;
-  });
-
-  // reset all turn-based params
-  state.activeTurn = {
-    ...state.activeTurn,
-    dKey: otherDKey,
-    isStartOfTurn: true,
-    hasNormalSummoned: false,
-    numTributedMonsters: 0,
-  };
 };
 
 export const hasMinLp = (state: Duel, dKey: DKey, amt: number) => {

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   actions,
   selectActiveTurn,
@@ -58,7 +58,7 @@ export const useDuelAI = (onDecision: () => void) => {
     endTurn: endTurnAction,
     aiNormalSummon: aiNormalSummonAction,
   } = actions;
-  const { dKey: dKey } = useAppSelector(selectActiveTurn);
+  const { dKey } = useAppSelector(selectActiveTurn);
   const { setOriginZone, setTargetZone, resetInteractions } =
     useInteractionActions();
   const { ownHand, ownMonsters, ownSpellTrap, otherMonsters } =
@@ -295,8 +295,7 @@ export const useDuelAI = (onDecision: () => void) => {
     dispatch(endTurnAction(getDuellistCoordsMap(dKey)));
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const makeDecision = () => {
+  const makeDecision = useCallback(() => {
     // if at any point in a turn a duellist wins/loses, the AI
     // stops making decisions and surrenders control up the chain
     // to display victory messages, quit the duel, etc.
@@ -318,7 +317,9 @@ export const useDuelAI = (onDecision: () => void) => {
     if (discardFromHand()) return "discardFromHand";
     endTurn();
     return "endTurn";
-  };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   useEffect(() => {
     if (isDuelOver && Object.keys(decisions).length) {

@@ -1,6 +1,7 @@
 import {
   DKey,
   DStatus,
+  DuelType,
   InteractionMode,
   PlayerType,
   RowKey,
@@ -45,6 +46,7 @@ export const getEmptyDuel = (): Duel => {
 
 export const getDefaultConfig = (): DuelConfig => {
   return {
+    duelType: DuelType.Simulation,
     p1Type: PlayerType.CPU,
     p2Type: PlayerType.CPU,
     p1Name: getRandomDuellable().name,

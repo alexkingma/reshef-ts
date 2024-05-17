@@ -1,66 +1,56 @@
 import { useAppSelector } from "@/hooks";
 import { useCallback, useEffect, useState } from "react";
-import {
-  selectActiveTurn,
-  selectConfig,
-  selectIsDuelOver,
-  selectIsSimulation,
-} from "../duelSlice";
+import { selectConfig, selectIsDuelOver } from "../duelSlice";
+import { DuelType } from "../enums/duel";
 import { useDuelAI } from "../useDuelAI";
 import { useDuelActions } from "../useDuelActions";
 import { useDuelStats } from "../useDuelStats";
 import { useElo } from "../useElo";
-import { getNewDuel } from "../util/duelUtil";
-import { getRandomDuellable } from "../util/duellistUtil";
 import "./DuelContainer.scss";
+import { SimulationOverlay } from "./SimulationOverlay";
 import { DuelConfig } from "./config/DuelConfig";
 import { Duel } from "./duel/Duel";
 
-export enum GameMode {
-  Idle = "IDLE",
-  Duel = "DUEL",
+enum Page {
+  Config,
+  Simulation,
+  Exhibition,
 }
 
 export const DuelContainer = () => {
-  const [mode, setMode] = useState(GameMode.Idle);
-  const isSimulation = useAppSelector(selectIsSimulation);
-  const { totalDuelsToPlay, showDuelUI } = useAppSelector(selectConfig);
-  const { isStartOfTurn } = useAppSelector(selectActiveTurn);
+  const { totalDuelsToPlay, showDuelUI, duelType } =
+    useAppSelector(selectConfig);
   const isDuelOver = useAppSelector(selectIsDuelOver);
-  const { p1Name, p2Name } = useAppSelector(selectConfig);
-  const { setDuel, updateConfig, startTurn } = useDuelActions();
+
+  const [activePage, setActivePage] = useState(Page.Config);
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
   const [numActionsTaken, setNumActionsTaken] = useState(0);
-  const [msElapsed, setMsElapsed] = useState(0);
+
+  const { initDuel, randomiseDuellists } = useDuelActions();
   const { updateStatsMap } = useDuelStats();
   const { updateEloMap } = useElo();
-  useDuelAI(() => setNumActionsTaken((n) => n + 1));
 
-  const randomiseDuellists = useCallback(() => {
-    const d1 = getRandomDuellable().name;
-    let d2: DuellableName;
-    do {
-      // don't let a duellist play themselves, rating will never change
-      d2 = getRandomDuellable().name;
-    } while (d2 === d1);
-    updateConfig({ p1Name: d1, p2Name: d2 });
-    setDuel(getNewDuel(d1, d2));
-  }, [updateConfig, setDuel]);
+  const onAiAction = useCallback(() => {
+    setNumActionsTaken((n) => n + 1);
+  }, []);
+
+  useDuelAI(onAiAction);
 
   const onStartClicked = useCallback(() => {
-    // scrap the background duel, start a new duel with the duellists from config
     setNumDuelsFinished(0);
-    setDuel(getNewDuel(p1Name, p2Name));
-    setMode(GameMode.Duel);
-  }, [setDuel, p1Name, p2Name]);
+    initDuel();
+    setActivePage(
+      duelType === DuelType.Simulation ? Page.Simulation : Page.Exhibition
+    );
+  }, [duelType, initDuel]);
 
   useEffect(() => {
-    if (!isDuelOver || mode !== GameMode.Duel) return;
+    if (!isDuelOver || activePage === Page.Config) return;
 
     console.log(`%cDuel has ended!`, "color:#d4af37");
     setNumDuelsFinished((val) => val + 1);
 
-    if (isSimulation) {
+    if (duelType === DuelType.Simulation) {
       // two CPUs are playing, so we can use the result of this duel
       // to update the Elo records of each card/deck
       updateEloMap();
@@ -74,12 +64,12 @@ export const DuelContainer = () => {
       randomiseDuellists();
     } else {
       // all duels/simulations complete, quit duel view
-      setMode(GameMode.Idle);
+      setActivePage(Page.Config);
     }
   }, [
-    mode,
+    activePage,
     isDuelOver,
-    isSimulation,
+    duelType,
     totalDuelsToPlay,
     numDuelsFinished,
     randomiseDuellists,
@@ -87,64 +77,22 @@ export const DuelContainer = () => {
     updateStatsMap,
   ]);
 
-  useEffect(() => {
-    if (isStartOfTurn) {
-      startTurn();
-    }
-  }, [isStartOfTurn, startTurn]);
-
-  useEffect(() => {
-    if (mode !== GameMode.Duel) {
-      setMsElapsed(0);
-      setNumActionsTaken(0);
-      return;
-    }
-    const intervalId = window.setInterval(() => {
-      setMsElapsed((t) => t + 200);
-    }, 200);
-    return () => clearInterval(intervalId);
-  }, [mode]);
-
   return (
     <div className="duelContainer">
-      {mode === GameMode.Duel && (
-        <div className="overlay">
-          <>
-            {numDuelsFinished}/{totalDuelsToPlay} (
-            {Math.round((numDuelsFinished / totalDuelsToPlay) * 100)}%)
-          </>
-          <br />
-          <>Time Elapsed: {Math.round(msElapsed / 1000)}s</>
-          <br />
-          <>
-            Actions/sec:{" "}
-            {msElapsed > 0 && Math.round((numActionsTaken / msElapsed) * 1000)}
-          </>
-          <br />
-          <>
-            Duels/sec:{" "}
-            {msElapsed > 0 && Math.round((numDuelsFinished / msElapsed) * 1000)}
-          </>
-          <br />
-          <br />
-          {
-            <button onClick={() => updateConfig({ showDuelUI: !showDuelUI })}>
-              {showDuelUI ? "Hide" : "Show"} Duels
-            </button>
-          }
-        </div>
+      {activePage === Page.Simulation && (
+        <SimulationOverlay
+          numDuelsFinished={numDuelsFinished}
+          numActionsTaken={numActionsTaken}
+        />
       )}
 
       <div className="configContainer">
-        {mode === GameMode.Idle && (
-          <div className="config">
-            <DuelConfig />
-            <br />
-            <button onClick={onStartClicked}>Start Duel</button>
-          </div>
+        {activePage === Page.Config && (
+          <DuelConfig onDuelStart={onStartClicked} />
         )}
-        {mode === GameMode.Duel && showDuelUI && <Duel />}
       </div>
+
+      {activePage !== Page.Config && showDuelUI && <Duel />}
     </div>
   );
 };

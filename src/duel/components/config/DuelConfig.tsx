@@ -1,11 +1,15 @@
 import { selectConfig } from "@/duel/duelSlice";
-import { PlayerType } from "@/duel/enums/duel";
+import { DuelType, PlayerType } from "@/duel/enums/duel";
 import { useDuelActions } from "@/duel/useDuelActions";
 import { getDuellables } from "@/duel/util/duellistUtil";
 import { useAppSelector } from "@/hooks";
 import { ChangeEvent } from "react";
 import { NumberField } from "./NumberField";
 import { SelectField } from "./SelectField";
+
+interface Props {
+  onDuelStart: () => void;
+}
 
 const PLAYER_TYPE_OPTIONS = [
   { label: "Human", value: PlayerType.Human },
@@ -17,8 +21,9 @@ const DUELLABLE_OPTIONS = getDuellables().map((d) => ({
   value: d.name,
 }));
 
-export const DuelConfig = () => {
+export const DuelConfig = ({ onDuelStart }: Props) => {
   const {
+    duelType,
     cpuDelayMs,
     p1Name,
     p1Type,
@@ -29,70 +34,104 @@ export const DuelConfig = () => {
   } = useAppSelector(selectConfig);
   const { updateConfig } = useDuelActions();
 
-  const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.checked;
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const key = e.target.name as keyof DuelConfig;
+    let val;
+    switch (e.target.type) {
+      case "checkbox":
+        val = e.target.checked;
+        break;
+      case "radio":
+        val = e.target.value;
+        break;
+      default:
+        console.error(`Unexpected input type: ${e.target.type}`);
+        return;
+    }
     updateConfig({ [key]: val });
   };
 
   return (
-    <div style={{ color: "white" }}>
-      <h2 style={{ display: "flex", justifyContent: "center" }}>Config</h2>
+    <div className="config">
+      <div style={{ color: "white" }}>
+        <h2 style={{ display: "flex", justifyContent: "center" }}>Config</h2>
 
-      <NumberField
-        title="Delay (ms)"
-        name="cpuDelayMs"
-        value={cpuDelayMs}
-        min={0}
-        max={10000}
-      />
+        <div>
+          {Object.entries(DuelType).map(([key, val]) => (
+            <label key={key}>
+              <input
+                type="radio"
+                name="duelType"
+                value={val}
+                checked={duelType === val}
+                onChange={onInputChange}
+              />
+              {val}
+            </label>
+          ))}
+        </div>
 
-      <SelectField
-        title="P1"
-        name="p1Type"
-        value={p1Type}
-        options={PLAYER_TYPE_OPTIONS}
-      />
+        <SelectField
+          title="Deck 1"
+          name="p1Name"
+          value={p1Name}
+          options={DUELLABLE_OPTIONS}
+        />
 
-      <SelectField
-        title="P2"
-        name="p2Type"
-        value={p2Type}
-        options={PLAYER_TYPE_OPTIONS}
-      />
+        <SelectField
+          title="Deck 2"
+          name="p2Name"
+          value={p2Name}
+          options={DUELLABLE_OPTIONS}
+        />
 
-      <NumberField
-        title="Duels to play"
-        name="totalDuelsToPlay"
-        value={totalDuelsToPlay}
-        min={1}
-      />
+        {duelType === DuelType.Simulation && (
+          <>
+            <NumberField
+              title="Delay (ms)"
+              name="cpuDelayMs"
+              value={cpuDelayMs}
+              min={0}
+              max={10000}
+            />
 
-      <div>
-        <label>
-          Show Duel UI:{" "}
-          <input
-            name="showDuelUI"
-            type="checkbox"
-            onChange={onCheckboxChange}
-            checked={showDuelUI}
-          />
-        </label>
+            <SelectField
+              title="P1"
+              name="p1Type"
+              value={p1Type}
+              options={PLAYER_TYPE_OPTIONS}
+            />
+
+            <SelectField
+              title="P2"
+              name="p2Type"
+              value={p2Type}
+              options={PLAYER_TYPE_OPTIONS}
+            />
+
+            <NumberField
+              title="Duels to play"
+              name="totalDuelsToPlay"
+              value={totalDuelsToPlay}
+              min={1}
+            />
+
+            <div>
+              <label>
+                Show Duel UI:{" "}
+                <input
+                  name="showDuelUI"
+                  type="checkbox"
+                  onChange={onInputChange}
+                  checked={showDuelUI}
+                />
+              </label>
+            </div>
+          </>
+        )}
       </div>
-
-      <SelectField
-        title="Deck 1"
-        name="p1Name"
-        value={p1Name}
-        options={DUELLABLE_OPTIONS}
-      />
-
-      <SelectField
-        title="Deck 2"
-        name="p2Name"
-        value={p2Name}
-        options={DUELLABLE_OPTIONS}
-      />
+      <br />
+      <button onClick={onDuelStart}>Start Duel</button>
     </div>
   );
 };

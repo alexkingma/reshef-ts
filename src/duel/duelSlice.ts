@@ -138,12 +138,6 @@ export const selectIsDuelOver = ({ duel }: RootState) => {
     duel.duellists[DKey.Opponent].status !== DStatus.HEALTHY
   );
 };
-export const selectIsSimulation = ({ duel }: RootState) => {
-  return (
-    duel.config.p1Type === PlayerType.CPU &&
-    duel.config.p2Type === PlayerType.CPU
-  );
-};
 export const selectShouldHighlightCursorZone = ({ duel }: RootState) => {
   // Determine if the ZoneSummaryBar should highlight the hovered card.
   // Note that this is NOT the same as if a card is rendered as faceup or facedown.

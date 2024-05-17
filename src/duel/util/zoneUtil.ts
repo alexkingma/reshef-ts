@@ -180,6 +180,7 @@ export const destroyAtCoords = (
   if (isMonster(z)) {
     const [dKey] = coords;
     addToGraveyard(state, dKey, z.id);
+    clearConvertedZoneFlag(state, coords);
   }
   clearZone(state, coords);
 };
@@ -337,6 +338,11 @@ export const summonAtCoords = (
   id: Monster,
   customProps: Partial<OccupiedMonsterZone> = {}
 ) => {
+  // summoning a monster over the top of a BC-ed monster resets
+  // the flag, so that the newly summoned monster doesn't get
+  // "unconverted" come turn end and wind up in the opponent's hands
+  clearConvertedZoneFlag(state, zoneCoords);
+
   const z = getZone(state, zoneCoords) as MonsterZone;
   const props: Partial<OccupiedMonsterZone> = {
     ...generateOccupiedMonsterZone(id),

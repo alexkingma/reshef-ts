@@ -4,7 +4,7 @@ import { spellEffects } from "../cardEffects/directSpellEffects";
 import { flipEffects } from "../cardEffects/flipEffects";
 import { BattlePosition, Orientation } from "../enums/duel";
 import { getCard } from "../util/cardUtil";
-import { clearConvertedZoneFlag, getActiveEffects } from "../util/duellistUtil";
+import { getActiveEffects } from "../util/duellistUtil";
 import { logEffectMessage } from "../util/logUtil";
 import { checkTriggeredTraps } from "../util/rowUtil";
 import {
@@ -26,12 +26,6 @@ export const cardReducers = {
       originCoords!
     ) as OccupiedMonsterZone;
     clearZone(state, originCoords!);
-
-    // summoning a monster over the top of a BC-ed monster resets
-    // the flag, so that the newly summoned monster doesn't get
-    // "unconverted" come turn end and wind up in the opponent's hands
-    clearConvertedZoneFlag(state, targetCoords!);
-
     summonAtCoords(state, targetCoords!, id, { orientation });
     state.activeTurn.hasNormalSummoned = true;
   },
@@ -82,15 +76,9 @@ export const cardReducers = {
   tribute: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords, true);
     state.activeTurn.numTributedMonsters++;
-
-    // tributing a BC-ed monster removes the BC flag from that zone
-    clearConvertedZoneFlag(state, zoneCoords);
   },
   discard: (state: Duel, { zoneCoords }: ZoneCoordsMap) => {
     destroyAtCoords(state, zoneCoords, true);
-
-    // discarding a BC-ed monster removes the BC flag from that zone
-    clearConvertedZoneFlag(state, zoneCoords);
   },
   activateSpellEffect: (state: Duel, coordsMap: ZoneCoordsMap) => {
     const { zoneCoords } = coordsMap;

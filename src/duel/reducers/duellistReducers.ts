@@ -1,9 +1,11 @@
-import { RowKey } from "../enums/duel";
+import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
+import { checkAutoEffects } from "../util/autoEffectUtil";
 import { getCard, getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
-import { endTurn } from "../util/duellistUtil";
-import { hasEmptyZone } from "../util/rowUtil";
+import { draw } from "../util/deckUtil";
+import { getActiveEffects } from "../util/duellistUtil";
+import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
   clearZone,
   destroyAtCoords,
@@ -15,7 +17,56 @@ export const duellistReducers = {
   shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
     shuffle(state.duellists[dKey].deck);
   },
-  endTurn,
+  endTurn: (
+    state: Duel,
+    { dKey, otherDKey, ownMonsters }: DuellistCoordsMap
+  ) => {
+    // restore ownership of any temp-converted monsters
+    const ownActiveEffects = getActiveEffects(state, dKey);
+    const opponentActiveEffects = getActiveEffects(state, otherDKey);
+    ownActiveEffects.convertedZones.forEach((zoneCoords) => {
+      const { id, permPowerUpAtk, permPowerUpDef } = getZone(
+        state,
+        zoneCoords
+      ) as OccupiedMonsterZone;
+      specialSummon(state, otherDKey, id, {
+        permPowerUpAtk,
+        permPowerUpDef,
+      });
+      clearZone(state, zoneCoords);
+    });
+    ownActiveEffects.convertedZones = [];
+
+    // decrement turns remaining for SoRL
+    // Note that we check the originator/opponent's effect flag
+    if (opponentActiveEffects.sorlTurnsRemaining > 0) {
+      opponentActiveEffects.sorlTurnsRemaining--;
+    }
+
+    // unlock all monster zones
+    updateMonsters(state, ownMonsters, (z) => {
+      if (z.battlePosition === BattlePosition.Attack) {
+        z.orientation = Orientation.FaceUp;
+      }
+      z.isLocked = false;
+    });
+
+    // reset all turn-based params
+    state.activeTurn = {
+      ...state.activeTurn,
+      dKey: otherDKey,
+      isStartOfTurn: true,
+      hasNormalSummoned: false,
+      numTributedMonsters: 0,
+    };
+
+    // run any start-of-turn effects for the new turn
+    checkAutoEffects(state);
+
+    // the other duellist can now proceed with their turn as normal
+    state.activeTurn.isStartOfTurn = false;
+    draw(state, otherDKey);
+  },
   aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {
     // originCoords refers to the mon in hand to summon to the field.
     // Which tributes should be used need to be calced first,
@@ -56,7 +107,7 @@ export const duellistReducers = {
       // tribute as many monsters as is necessary to bring out the chosen mon
       idxsToTribute.forEach((i) => {
         destroyAtCoords(state, [...ownMonsters, i]);
-        state.activeTurn.numTributedMonsters++;
+        activeTurn.numTributedMonsters++;
       });
     }
 
