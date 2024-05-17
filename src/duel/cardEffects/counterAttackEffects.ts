@@ -10,7 +10,7 @@ import { destroyRow } from "../util/rowUtil";
 import {
   getZone,
   immobiliseZone,
-  isMinAtk,
+  isMaxAtk,
   permPowerDown,
 } from "../util/zoneUtil";
 
@@ -23,11 +23,11 @@ export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
     },
     text: `${Pre.Trap}The monster is powered down.`,
   },
-  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => isMinAtk(z, 500)),
-  [Trap.Eatgaboon]: trapDestroyAttacker((z) => isMinAtk(z, 1000)),
-  [Trap.BearTrap]: trapDestroyAttacker((z) => isMinAtk(z, 1500)),
-  [Trap.InvisibleWire]: trapDestroyAttacker((z) => isMinAtk(z, 2000)),
-  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => isMinAtk(z, 3000)),
+  [Trap.HouseOfAdhesiveTape]: trapDestroyAttacker((z) => isMaxAtk(z, 500)),
+  [Trap.Eatgaboon]: trapDestroyAttacker((z) => isMaxAtk(z, 1000)),
+  [Trap.BearTrap]: trapDestroyAttacker((z) => isMaxAtk(z, 1500)),
+  [Trap.InvisibleWire]: trapDestroyAttacker((z) => isMaxAtk(z, 2000)),
+  [Trap.AcidTrapHole]: trapDestroyAttacker((z) => isMaxAtk(z, 3000)),
   [Trap.WidespreadRuin]: trapDestroyAttacker(always),
   [Trap.TorrentialTribute]: {
     row: RowKey.SpellTrap,
