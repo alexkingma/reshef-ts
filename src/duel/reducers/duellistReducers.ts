@@ -1,9 +1,7 @@
 import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
-import { checkAutoEffects } from "../util/autoEffectUtil";
 import { getCard, getNumTributesRequired } from "../util/cardUtil";
 import { shuffle } from "../util/common";
-import { draw } from "../util/deckUtil";
 import { getActiveEffects } from "../util/duellistUtil";
 import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
@@ -59,13 +57,6 @@ export const duellistReducers = {
       hasNormalSummoned: false,
       numTributedMonsters: 0,
     };
-
-    // run any start-of-turn effects for the new turn
-    checkAutoEffects(state);
-
-    // the other duellist can now proceed with their turn as normal
-    state.activeTurn.isStartOfTurn = false;
-    draw(state, otherDKey);
   },
   aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {
     // originCoords refers to the mon in hand to summon to the field.

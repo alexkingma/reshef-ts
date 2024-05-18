@@ -1,13 +1,14 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { DKey, DStatus, PlayerType, RowKey } from "./enums/duel";
+import { DKey, PlayerType, RowKey } from "./enums/duel";
 import { cardReducers } from "./reducers/cardReducers";
 import { duelReducers } from "./reducers/duelReducers";
 import { duellistReducers } from "./reducers/duellistReducers";
 import { interactionReducers } from "./reducers/interactionReducers";
 import { checkAutoEffects } from "./util/autoEffectUtil";
-import { getEmptyDuel } from "./util/duelUtil";
+import { draw } from "./util/deckUtil";
+import { getEmptyDuel, isDuelOver, isStartOfEitherTurn } from "./util/duelUtil";
 import { getOtherDuellistKey, isPlayer } from "./util/duellistUtil";
 import { getActiveField, getFieldCard } from "./util/fieldUtil";
 import { getRow, hasMatchInRow } from "./util/rowUtil";
@@ -59,17 +60,18 @@ const transform = (map: CustomDuelReducers) => {
     transformedMap[key as UnionDuelActionKey] = (state, action) => {
       map[key as UnionDuelActionKey](state, action.payload as any);
 
-      if (key !== "endTurn" && !(key in interactionReducers)) {
-        // after every core dispatch to the field state as above,
-        // the entire field passive/auto effects need to be recalculated
+      // interaction actions don't modify board state
+      if (key in interactionReducers) return;
 
-        // However, once endTurn has been dispatched and isStartOfTurn is set,
-        // the target/originator states essentially get swapped, causing buggy
-        // behaviour until the cycle has been started fresh from a new dispatch.
-        // Since no events need to be reacted to immediately post-endTurn events,
-        // we can safely ignore this round of checks in favour of waiting for the
-        // start-of-turn dispatch, which prompts "It's my turn" dialogue, card-
-        // drawing, start-of-turn-only effects, etc.
+      // Automatic actions baked into the engine:
+      //   1. Draw a card at the start of each turn.
+      //   2. Recompute passive/auto effects of whole
+      //      board after each discrete action.
+      if (isStartOfEitherTurn(state)) {
+        draw(state, state.activeTurn.dKey);
+        checkAutoEffects(state);
+        state.activeTurn.isStartOfTurn = false;
+      } else {
         checkAutoEffects(state);
       }
     };
@@ -131,13 +133,7 @@ export const selectIsCPU =
     isPlayer(dKey)
       ? duel.config.p1Type === PlayerType.CPU
       : duel.config.p2Type === PlayerType.CPU;
-export const selectIsDuelOver = ({ duel }: RootState) => {
-  // determine if either side has fulfilled a win/lose condition
-  return (
-    duel.duellists[DKey.Player].status !== DStatus.HEALTHY ||
-    duel.duellists[DKey.Opponent].status !== DStatus.HEALTHY
-  );
-};
+export const selectIsDuelOver = ({ duel }: RootState) => isDuelOver(duel);
 export const selectShouldHighlightCursorZone = ({ duel }: RootState) => {
   // Determine if the ZoneSummaryBar should highlight the hovered card.
   // Note that this is NOT the same as if a card is rendered as faceup or facedown.

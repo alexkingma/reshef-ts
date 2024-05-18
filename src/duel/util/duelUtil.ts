@@ -104,3 +104,8 @@ export const removeSecondFieldSpell = (state: Duel): Duel => {
   // return for chaining purposes
   return state;
 };
+
+export const isDuelOver = (state: Duel): boolean => {
+  // determine if either side has fulfilled a win/lose condition
+  return state.duellists.some(({ status }) => status !== DStatus.HEALTHY);
+};
