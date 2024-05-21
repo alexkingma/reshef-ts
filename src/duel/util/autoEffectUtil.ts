@@ -5,9 +5,9 @@ import { turnStartEffects } from "../cardEffects/turnStartEffects";
 import { DKey, Orientation, RowKey } from "../enums/duel";
 import { logEffectMessage } from "../util/logUtil";
 import { mergeMapsAndValues } from "./common";
-import { getOtherDuellistKey, isStartOfTurn } from "./duellistUtil";
-import { getRow, isRowCoordMatch, updateMonsters } from "./rowUtil";
-import { getCombatStats, getZone, getZoneCoordsMap, isEmpty } from "./zoneUtil";
+import { isStartOfTurn, setOriginTarget } from "./duellistUtil";
+import { getRow, updateMonsters } from "./rowUtil";
+import { getCombatStats, getZone, isEmpty } from "./zoneUtil";
 
 const includeTurnStartEffects = mergeMapsAndValues(
   turnStartEffects,
@@ -30,22 +30,34 @@ export const checkAutoEffects = (state: Duel) => {
 };
 
 const recalcCombatStats = (state: Duel) => {
-  const dKey = state.activeTurn.dKey;
-  const otherDKey = getOtherDuellistKey(dKey);
+  const {
+    dKey,
+    otherDKey,
+    ownMonsters,
+    otherMonsters,
+    ownHand,
+    otherHand,
+    ownGraveyard,
+    otherGraveyard,
+  } = state.activeTurn;
 
   resetRowCombatStats(state, dKey);
   resetRowCombatStats(state, otherDKey);
 
-  checkRowEffects(state, [dKey, RowKey.Monster], tempMonsterEffects);
-  checkRowEffects(state, [otherDKey, RowKey.Monster], tempMonsterEffects);
+  checkRowEffects(state, ownMonsters, tempMonsterEffects);
+  checkRowEffects(state, otherMonsters, tempMonsterEffects);
 
-  calcRowCombatStats(state, [dKey, RowKey.Monster]);
-  calcRowCombatStats(state, [otherDKey, RowKey.Monster]);
+  calcRowCombatStats(state, ownMonsters);
+  calcRowCombatStats(state, otherMonsters);
 
   // Update the hand monster effAtk/effDef in case field has changed.
   // No "reset" call is needed since we never power up or down hand monsters.
-  calcRowCombatStats(state, [dKey, RowKey.Hand]);
-  calcRowCombatStats(state, [otherDKey, RowKey.Hand]);
+  calcRowCombatStats(state, ownHand);
+  calcRowCombatStats(state, otherHand);
+
+  // purely for visual purposes, to not have blank atk/def
+  calcRowCombatStats(state, ownGraveyard);
+  calcRowCombatStats(state, otherGraveyard);
 };
 
 const calcRowCombatStats = (state: Duel, rowCoords: RowCoords) => {
@@ -71,22 +83,32 @@ const calcZoneCombatStats = (state: Duel, zoneCoords: ZoneCoords) => {
 };
 
 const checkPermAutoEffects = (state: Duel) => {
-  const dKey = state.activeTurn.dKey;
-  const otherDKey = getOtherDuellistKey(dKey);
+  const {
+    dKey,
+    otherDKey,
+    ownGraveyard,
+    otherGraveyard,
+    ownMonsters,
+    otherMonsters,
+    ownSpellTrap,
+    otherSpellTrap,
+    ownHand,
+    otherHand,
+  } = state.activeTurn;
   const relevantEffects = isStartOfTurn(state, dKey)
     ? includeTurnStartEffects
     : isStartOfTurn(state, otherDKey)
       ? includeTurnEndEffects
       : customAutoEffects;
   const orderedRows: RowCoords[] = [
-    [dKey, RowKey.Graveyard],
-    [otherDKey, RowKey.Graveyard],
-    [dKey, RowKey.Monster],
-    [otherDKey, RowKey.Monster],
-    [dKey, RowKey.SpellTrap],
-    [otherDKey, RowKey.SpellTrap],
-    [dKey, RowKey.Hand],
-    [otherDKey, RowKey.Hand],
+    ownGraveyard,
+    otherGraveyard,
+    ownMonsters,
+    otherMonsters,
+    ownSpellTrap,
+    otherSpellTrap,
+    ownHand,
+    otherHand,
   ];
   orderedRows.forEach((rowCoords) => {
     checkRowEffects(state, rowCoords, relevantEffects);
@@ -99,10 +121,9 @@ const checkRowEffects = (
   reducerMap: CardEffectMap<AutoEffectReducer>
 ) => {
   getRow(state, rowCoords).forEach((_, i: number) => {
-    const coordsMap = getZoneCoordsMap([...rowCoords, i]);
-    const { zoneCoords, dKey } = coordsMap;
+    const originCoords: ZoneCoords = [...rowCoords, i];
 
-    const z = getZone(state, zoneCoords);
+    const z = getZone(state, originCoords);
     if (isEmpty(z)) return;
 
     const temp = reducerMap[z.id];
@@ -111,14 +132,18 @@ const checkRowEffects = (
     const effects = Array.isArray(temp) ? temp : [temp];
     effects.forEach(({ row, condition, effect, text }) => {
       // auto effects only activate in specific rows
-      if (!isRowCoordMatch(rowCoords, [dKey, row as RowKey])) return;
+      if (rowCoords[1] !== row) return;
+
       // if condition doesn't exist, it's an "always" effect
-      if (condition && !condition(state, coordsMap)) return;
+      if (condition && !condition(state, state.activeTurn)) return;
+
+      // an effect is guaranteed to happen at this point
+      setOriginTarget(state, { originCoords });
       // TODO: only log this once, not every time we re-update the duel state
-      logEffectMessage(state, zoneCoords, text);
+      logEffectMessage(state, originCoords, text);
 
       z.orientation = Orientation.FaceUp;
-      effect(state, coordsMap);
+      effect(state, state.activeTurn);
     });
   });
 };

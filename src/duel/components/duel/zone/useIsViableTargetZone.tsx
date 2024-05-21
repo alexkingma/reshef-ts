@@ -7,7 +7,7 @@ import { useAppSelector } from "@/hooks";
 
 export const useIsViableTargetZone = (zoneCoords: ZoneCoords) => {
   const state = useAppSelector(selectDuel);
-  const { originCoords, mode } = useAppSelector(selectInteraction);
+  const { mode, pendingCoords } = useAppSelector(selectInteraction);
   const targetZone = useAppSelector(selectZone(zoneCoords));
   const targetExists = isOccupied(targetZone);
   const [dKey, rKey] = zoneCoords;
@@ -16,11 +16,11 @@ export const useIsViableTargetZone = (zoneCoords: ZoneCoords) => {
   const isOriginSpellTrap = rKey === RowKey.SpellTrap;
 
   // if no origin exists, no zone can be a target
-  if (!originCoords) return false;
+  if (!pendingCoords) return false;
 
   // don't use selectZone here, because originCoords can be undefined
   // and we can't just conditionally fetch it with a hook, since React protests.
-  const originZone = getZone(state, originCoords) as OccupiedZone;
+  const originZone = getZone(state, pendingCoords) as OccupiedZone;
 
   switch (mode) {
     case InteractionMode.ChoosingOwnMonster:

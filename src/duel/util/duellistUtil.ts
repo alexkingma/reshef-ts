@@ -1,11 +1,5 @@
 import { duellists } from "@/assets/data/duellists";
-import {
-  BattlePosition,
-  DKey,
-  DStatus,
-  Orientation,
-  RowKey,
-} from "../enums/duel";
+import { BattlePosition, DKey, DStatus, Orientation } from "../enums/duel";
 import { getRandomCardId } from "./cardUtil";
 import { CARD_NONE } from "./common";
 import { getTempCardQuantMap, initialiseDeck } from "./deckUtil";
@@ -118,26 +112,6 @@ export const getEmptyDuellistState = (): Duellist => {
   };
 };
 
-export const getDuellistCoordsMap = (dKey: DKey): DuellistCoordsMap => {
-  const otherDKey = getOtherDuellistKey(dKey) as DKey;
-  return {
-    dKey,
-    otherDKey,
-
-    // own rows
-    ownMonsters: [dKey, RowKey.Monster],
-    ownSpellTrap: [dKey, RowKey.SpellTrap],
-    ownHand: [dKey, RowKey.Hand],
-    ownGraveyard: [dKey, RowKey.Graveyard],
-
-    // opponent rows
-    otherMonsters: [otherDKey, RowKey.Monster],
-    otherSpellTrap: [otherDKey, RowKey.SpellTrap],
-    otherHand: [otherDKey, RowKey.Hand],
-    otherGraveyard: [otherDKey, RowKey.Graveyard],
-  };
-};
-
 export const isOwnTurn = (state: Duel, dKey: DKey) => {
   return state.activeTurn.dKey === dKey;
 };
@@ -149,6 +123,24 @@ export const isStartOfTurn = (state: Duel, dKey: DKey) => {
 export const getOtherDuellistKey = (dKey: DKey): DKey => {
   // toggle 0 <-> 1
   return dKey ^ 1;
+};
+
+export const swapTurnRowCoords = (turn: Turn) => {
+  // dKeys
+  turn.dKey ^= 1;
+  turn.otherDKey ^= 1;
+
+  // own rows
+  turn.ownMonsters[0] ^= 1;
+  turn.ownSpellTrap[0] ^= 1;
+  turn.ownHand[0] ^= 1;
+  turn.ownGraveyard[0] ^= 1;
+
+  // opp rows
+  turn.otherMonsters[0] ^= 1;
+  turn.otherSpellTrap[0] ^= 1;
+  turn.otherHand[0] ^= 1;
+  turn.otherGraveyard[0] ^= 1;
 };
 
 export const burn = (state: Duel, dKey: DKey, amt: number) => {
@@ -227,4 +219,20 @@ export const isPlayer = (dKey: DKey) => {
 
 export const hasMinLp = (state: Duel, dKey: DKey, amt: number) => {
   return state.duellists[dKey].lp >= amt;
+};
+
+export const setOriginTarget = (
+  state: Duel,
+  {
+    originCoords,
+    targetCoords,
+  }: { originCoords?: ZoneCoords; targetCoords?: ZoneCoords }
+) => {
+  if (targetCoords) {
+    state.activeTurn.targetCoords = targetCoords;
+  }
+
+  if (originCoords) {
+    state.activeTurn.originCoords = originCoords;
+  }
 };

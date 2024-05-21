@@ -19,7 +19,7 @@ export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
     row: RowKey.SpellTrap,
     condition: always,
     effect: (state) => {
-      permPowerDown(state, state.interaction.originCoords!, 500, 500);
+      permPowerDown(state, state.activeTurn.originCoords!, 500, 500);
     },
     text: `${Pre.Trap}The monster is powered down.`,
   },
@@ -43,7 +43,7 @@ export const counterAttackEffects: CardEffectMap<AutoEffectReducer> = {
     effect: (state) => {
       const z = getZone(
         state,
-        state.interaction.originCoords!
+        state.activeTurn.originCoords!
       ) as OccupiedMonsterZone;
       immobiliseZone(z);
     },

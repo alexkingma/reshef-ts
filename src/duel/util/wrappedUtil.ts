@@ -14,26 +14,25 @@ import {
 
 export const burnOther =
   (amt: number) =>
-  (state: Duel, { otherDKey }: CoordsMap) => {
+  (state: Duel, { otherDKey }: Turn) => {
     burn(state, otherDKey, amt);
   };
 
 export const burnSelf =
   (amt: number) =>
-  (state: Duel, { dKey }: CoordsMap) => {
+  (state: Duel, { dKey }: Turn) => {
     burn(state, dKey, amt);
   };
 
 export const healSelf =
   (amt: number) =>
-  (state: Duel, { dKey }: CoordsMap) => {
+  (state: Duel, { dKey }: Turn) => {
     heal(state, dKey, amt);
   };
 
 export const permPowerUp =
   (atk: number = 500, def: number = 500) =>
-  (state: Duel) => {
-    const { targetCoords } = state.interaction;
+  (state: Duel, { targetCoords }: Turn) => {
     permPowerUpDirect(state, targetCoords!, atk, def);
   };
 
@@ -47,7 +46,7 @@ export const destroyRows = (rowsToDestroy: RowCoords[]) => (state: Duel) => {
 
 const destroyOppMonsters =
   (condition: (zone: OccupiedZone) => boolean) =>
-  (state: Duel, { otherMonsters }: CoordsMap) => {
+  (state: Duel, { otherMonsters }: Turn) => {
     destroyRow(state, otherMonsters, condition);
   };
 
@@ -62,7 +61,7 @@ export const destroyMonsterAlignment = (alignment: Alignment) =>
 
 export const draw =
   (numCards: number = 1) =>
-  (state: Duel, { dKey }: DuellistCoordsMap) => {
+  (state: Duel, { dKey }: Turn) => {
     drawDirect(state, dKey, numCards);
   };
 

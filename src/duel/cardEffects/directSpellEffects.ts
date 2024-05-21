@@ -31,7 +31,7 @@ import {
 import {
   convertMonster,
   convertMonsterCurrentTurn,
-  getZone,
+  getTargetZone,
   isOccupied,
   setAtkMode,
   specialSummon,
@@ -203,8 +203,7 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   // assorted
   [Spell.Metalmorph]: {
     effect: (state) => {
-      const { targetCoords } = state.interaction;
-      const z = getZone(state, targetCoords!) as OccupiedMonsterZone;
+      const z = getTargetZone(state) as OccupiedMonsterZone;
       if (z.id === Monster.Zoa) {
         transformZone(z, Monster.Metalzoa);
       } else if (z.id === Monster.JiraiGumo) {
@@ -217,7 +216,7 @@ export const spellEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Spell.ElegantEgotist]: {
     effect: (state) => {
-      const { targetCoords } = state.interaction;
+      const { targetCoords } = state.activeTurn;
       transformMonster(state, targetCoords!, Monster.HarpieLadySisters);
     },
     text: `${Pre.Manual}${Tag.TargetZone} will be transformed into Harpie Lady Sisters.`,

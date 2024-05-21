@@ -1,9 +1,9 @@
 import { selectGraveyardZone } from "@/duel/duelSlice";
 import { DKey, RowKey } from "@/duel/enums/duel";
-import { getCard } from "@/duel/util/cardUtil";
 import { isOccupied } from "@/duel/util/zoneUtil";
 import { useAppSelector } from "@/hooks";
-import { FaceUpCard } from "../card/FaceUpCard";
+import { useMemo } from "react";
+import { Card } from "../card/Card";
 import { InteractiveZone } from "./InteractiveZone";
 import { ZoneBackground } from "./ZoneBackground";
 
@@ -14,12 +14,15 @@ interface Props {
 export const Graveyard = ({ duellistKey }: Props) => {
   const z = useAppSelector(selectGraveyardZone(duellistKey));
 
+  const zoneCoords: ZoneCoords = useMemo(
+    () => [duellistKey, RowKey.Graveyard, 0],
+    [duellistKey]
+  );
+
   return (
-    <InteractiveZone zoneCoords={[duellistKey, RowKey.Graveyard, 0]}>
+    <InteractiveZone zoneCoords={zoneCoords}>
       {isOccupied(z) ? (
-        <div className="cardContainer">
-          <FaceUpCard card={getCard(z.id)} customClasses="alwaysVisible" />
-        </div>
+        <Card zoneCoords={zoneCoords} />
       ) : (
         <ZoneBackground customClasses="graveyardBackground" />
       )}

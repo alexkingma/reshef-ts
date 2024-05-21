@@ -152,11 +152,11 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
         hasMatchInRow(state, otherGraveyard, isDragon)
       );
     },
-    effect: (state, { zoneCoords, otherMonsters, otherGraveyard }) => {
+    effect: (state, { originCoords, otherMonsters, otherGraveyard }) => {
       const count =
         countMatchesInRow(state, otherMonsters, isDragon) +
         countMatchesInRow(state, otherGraveyard, isDragon);
-      tempPowerUp(state, zoneCoords, count * 500, count * 500);
+      tempPowerUp(state, originCoords!, count * 500, count * 500);
     },
     text: `${Pre.Auto}Powered up for all dragons on foe's field & graveyard.`,
   },
@@ -169,9 +169,9 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
     condition: (state, { ownMonsters }) => {
       return hasMatchInRow(state, ownMonsters, isMachine);
     },
-    effect: (state, { zoneCoords, ownMonsters }) => {
+    effect: (state, { originCoords, ownMonsters }) => {
       const count = countMatchesInRow(state, ownMonsters, isMachine);
-      tempPowerUp(state, zoneCoords, count * 500, count * 500);
+      tempPowerUp(state, originCoords!, count * 500, count * 500);
     },
     text: `${Pre.Auto}Powered up for every machine on both fields.`,
   },
@@ -183,11 +183,11 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
         hasMatchInRow(state, otherMonsters, isMachine)
       );
     },
-    effect: (state, { zoneCoords, ownMonsters, otherMonsters }) => {
+    effect: (state, { originCoords, ownMonsters, otherMonsters }) => {
       const count =
         countMatchesInRow(state, ownMonsters, isMachine) +
         countMatchesInRow(state, otherMonsters, isMachine);
-      tempPowerUp(state, zoneCoords, count * 1000, count * 1000);
+      tempPowerUp(state, originCoords!, count * 1000, count * 1000);
     },
     text: `${Pre.Auto}2X powered up for every machine on both fields.`,
   },
@@ -196,9 +196,9 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
     condition: (state, { ownHand }) => {
       return hasMatchInRow(state, ownHand);
     },
-    effect: (state, { zoneCoords, ownHand }) => {
+    effect: (state, { originCoords, ownHand }) => {
       const count = countMatchesInRow(state, ownHand);
-      tempPowerUp(state, zoneCoords, count * 1500, count * 1500);
+      tempPowerUp(state, originCoords!, count * 1500, count * 1500);
     },
     text: `${Pre.Auto}3X powered up for every card in the own hand.`,
   },
@@ -221,8 +221,8 @@ export const tempMonsterEffects: CardEffectMap<AutoEffectReducer> = {
     condition: (state, { ownHand }) => {
       return countMatchesInRow(state, ownHand) <= 1;
     },
-    effect: (state, { zoneCoords }) => {
-      tempPowerUp(state, zoneCoords, 500, 500);
+    effect: (state, { originCoords }) => {
+      tempPowerUp(state, originCoords!, 500, 500);
     },
     text: `${Pre.Auto}Powered up for having one or no cards in hand.`,
   },

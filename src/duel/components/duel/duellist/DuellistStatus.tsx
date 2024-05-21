@@ -1,19 +1,25 @@
-import { selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
+import { actions, selectDuellist, selectIsMyTurn } from "@/duel/duelSlice";
 import { DKey } from "@/duel/enums/duel";
-import { useDuellistActions } from "@/duel/useDuelActions";
 import { isPlayer } from "@/duel/util/duellistUtil";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import classNames from "classnames";
+import { useCallback } from "react";
 import "./DuellistStatus.scss";
+
+const { endTurn } = actions;
 
 interface Props {
   dKey: DKey;
 }
 
 export const DuellistStatus = ({ dKey }: Props) => {
-  const { endTurn } = useDuellistActions(dKey);
+  const dispatch = useAppDispatch();
   const { name, lp } = useAppSelector(selectDuellist(dKey));
   const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
+
+  const endTurnDispatch = useCallback(() => {
+    dispatch(endTurn());
+  }, [dispatch]);
 
   return (
     <div
@@ -22,7 +28,11 @@ export const DuellistStatus = ({ dKey }: Props) => {
         !isPlayer(dKey) && "opponentStatus"
       )}
     >
-      <button onClick={endTurn} disabled={!isMyTurn} className="endTurnButton">
+      <button
+        onClick={endTurnDispatch}
+        disabled={!isMyTurn}
+        className="endTurnButton"
+      >
         End Turn
       </button>
       <div className="spacer" />

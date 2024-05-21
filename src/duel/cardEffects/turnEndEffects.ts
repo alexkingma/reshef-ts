@@ -35,8 +35,8 @@ export const turnEndEffects: CardEffectMap<AutoEffectReducer> = {
   [Monster.BerserkDragon]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      permPowerDown(state, zoneCoords, 500, 500);
+    effect: (state, { originCoords }) => {
+      permPowerDown(state, originCoords!, 500, 500);
     },
     text: `${Pre.Auto}Powered down.`,
   },

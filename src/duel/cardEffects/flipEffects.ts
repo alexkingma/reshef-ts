@@ -38,7 +38,7 @@ import {
   convertMonster,
   destroyAtCoords,
   directAttack,
-  getZone,
+  getOriginZone,
   immobiliseZone,
   isEmpty,
   isFaceDown,
@@ -73,9 +73,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.FiendsHand]: {
     text: `${Pre.Manual}One monster on the foe's field will be taken to the world of the dead.`,
-    effect: (state, { otherDKey, zoneCoords }) => {
+    effect: (state, { otherDKey, originCoords }) => {
       destroyHighestAtk(state, otherDKey);
-      destroyAtCoords(state, zoneCoords);
+      destroyAtCoords(state, originCoords!);
     },
   },
   [Monster.ObeliskTheTormentor]: {
@@ -101,9 +101,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.ZombyraTheDark]: {
     text: `${Pre.Manual}In return for powereing down, a monster on the foe's field will be destroyed.`,
-    effect: (state, { zoneCoords, otherDKey }) => {
+    effect: (state, { originCoords, otherDKey }) => {
       destroyHighestAtk(state, otherDKey);
-      permPowerDown(state, zoneCoords, 500, 500);
+      permPowerDown(state, originCoords!, 500, 500);
     },
   },
   [Monster.DesVolstgalph]: {
@@ -119,10 +119,10 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.MysticalBeastSerket]: {
     text: `${Pre.Manual}It will power up by enveloping one monster on the foe's field.`,
-    effect: (state, { otherMonsters, zoneCoords }) => {
+    effect: (state, { otherMonsters, originCoords }) => {
       onHighestAtkZone(state, otherMonsters, isNotGodCard, (_, coords) => {
         destroyAtCoords(state, coords);
-        permPowerUp(state, zoneCoords, 500, 500);
+        permPowerUp(state, originCoords!, 500, 500);
       });
     },
   },
@@ -281,12 +281,12 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.ValkyrionTheMagnaWarrior]: {
     text: `${Pre.Manual}If there is room on the own field, it splits into Alpha, Beta, and Gamma.`,
-    effect: (state, { dKey, zoneCoords, ownMonsters }) => {
+    effect: (state, { dKey, originCoords, ownMonsters }) => {
       // separate into Alpha, Beta, and Gamma if there are two or more open spaces
       const numFreeZones = 5 - countMatchesInRow(state, ownMonsters);
       if (numFreeZones < 2) return; // separation fails
       const isLocked = { isLocked: true };
-      clearZone(state, zoneCoords);
+      clearZone(state, originCoords!);
       specialSummon(state, dKey, Monster.AlphaTheMagnetWarrior, isLocked);
       specialSummon(state, dKey, Monster.BetaTheMagnetWarrior, isLocked);
       specialSummon(state, dKey, Monster.GammaTheMagnetWarrior, isLocked);
@@ -294,8 +294,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.PinchHopper]: {
     text: `${Pre.Sacrifice}In return, it summons an insect monster from the player's hand.`,
-    effect: (state, { zoneCoords, ownHand, dKey }) => {
-      destroyAtCoords(state, zoneCoords);
+    effect: (state, { originCoords, ownHand, dKey }) => {
+      destroyAtCoords(state, originCoords!);
 
       onHighestAtkZone(state, ownHand, isInsect, (z, targetCoords) => {
         specialSummon(state, dKey, z.id);
@@ -348,8 +348,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.LegendaryFiend]: {
     text: `${Pre.Manual}Legendary Fiend will power up.`,
-    effect: (state, { zoneCoords }) => {
-      permPowerUp(state, zoneCoords, 500, 500);
+    effect: (state, { originCoords }) => {
+      permPowerUp(state, originCoords!, 500, 500);
     },
   },
 
@@ -399,9 +399,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.SkullMarkLadyBug]: {
     text: `${Pre.Sacrifice}In return, it restores the player's LP by 500.`,
-    effect: (state, { dKey, zoneCoords }) => {
+    effect: (state, { dKey, originCoords }) => {
       heal(state, dKey, 500);
-      destroyAtCoords(state, zoneCoords);
+      destroyAtCoords(state, originCoords!);
     },
   },
 
@@ -415,9 +415,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   [Monster.PenguinTorpedo]: effect_DirectAttack(),
   [Monster.ExarionUniverse]: {
     text: `${Pre.Manual}It will inflict LP damage on the foe equal to its ATK, then power down.`,
-    effect: (state, { zoneCoords }) => {
-      directAttack(state, zoneCoords);
-      permPowerDown(state, zoneCoords, 500, 500);
+    effect: (state, { originCoords }) => {
+      directAttack(state, originCoords!);
+      permPowerDown(state, originCoords!, 500, 500);
     },
   },
   [Monster.TheWingedDragonOfRaBattleMode]: {
@@ -430,10 +430,10 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.ReflectBounder]: {
     text: `${Pre.Sacrifice}In return, the ATK of a monster on the foe's field inflicts LP damage.`,
-    effect: (state, { otherMonsters, otherDKey, zoneCoords }) => {
+    effect: (state, { otherMonsters, otherDKey, originCoords }) => {
       onHighestAtkZone(state, otherMonsters, always, (z) => {
         burn(state, otherDKey, z.effAtk);
-        destroyAtCoords(state, zoneCoords);
+        destroyAtCoords(state, originCoords!);
       });
     },
   },
@@ -447,27 +447,27 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.Relinquished]: {
     text: `${Pre.Manual}A monster on the foe's field will be robbed of its abilities.`,
-    effect: (state, { zoneCoords, otherMonsters }) => {
+    effect: (state, { originCoords, otherMonsters }) => {
       onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
-        subsumeMonster(state, zoneCoords, targetCoords);
+        subsumeMonster(state, originCoords!, targetCoords);
       });
     },
   },
   [Monster.ThousandEyesRestrict]: {
     text: `${Pre.Manual}The abilities of a foe will be stolen, and further powered up two levels.`,
-    effect: (state, { zoneCoords, otherMonsters }) => {
+    effect: (state, { originCoords, otherMonsters }) => {
       onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
-        subsumeMonster(state, zoneCoords, targetCoords);
-        permPowerUp(state, zoneCoords, 1000, 1000);
+        subsumeMonster(state, originCoords!, targetCoords);
+        permPowerUp(state, originCoords!, 1000, 1000);
       });
     },
   },
   [Monster.ParasiteParacide]: {
     text: `${Pre.Manual}It infected a monster on the foe's field.`,
-    effect: (state, { zoneCoords, otherMonsters }) => {
+    effect: (state, { originCoords, otherMonsters }) => {
       onHighestAtkZone(state, otherMonsters, always, (_, targetCoords) => {
         // reverse subsume: force opp mon to be replaced with self
-        subsumeMonster(state, targetCoords, zoneCoords);
+        subsumeMonster(state, targetCoords, originCoords!);
       });
     },
   },
@@ -475,8 +475,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   // merge with own monsters
   [Monster.XHeadCannon]: {
     text: `${Pre.Manual}X will combine with Y and/or Z on the player's field.\nCombine with Y to become XY. Combine with Z to become XZ. Combine with Y and Z to become XYZ.`,
-    effect: (state, { zoneCoords }) => {
-      xyzMergeAttempt(state, zoneCoords, [
+    effect: (state, { originCoords }) => {
+      xyzMergeAttempt(state, originCoords!, [
         [[Monster.YDragonHead, Monster.ZMetalTank], Monster.XYZDragonCannon],
         [[Monster.YDragonHead], Monster.XYDragonCannon],
         [[Monster.ZMetalTank], Monster.XZTankCannon],
@@ -485,8 +485,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.YDragonHead]: {
     text: `${Pre.Manual}Y will combine with X and/or Z on the player's field.\nCombine with X to become XY. Combine with Z to become YZ. Combine with X and Z to become XYZ.`,
-    effect: (state, { zoneCoords }) => {
-      xyzMergeAttempt(state, zoneCoords, [
+    effect: (state, { originCoords }) => {
+      xyzMergeAttempt(state, originCoords!, [
         [[Monster.XHeadCannon, Monster.ZMetalTank], Monster.XYZDragonCannon],
         [[Monster.XHeadCannon], Monster.XYDragonCannon],
         [[Monster.ZMetalTank], Monster.YZTankDragon],
@@ -495,8 +495,8 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.ZMetalTank]: {
     text: `${Pre.Manual}Z will combine with X and/or Y on the player's field.\nCombine with X to become XZ. Combine with Y to become YZ. Combine with X and Z to become XYZ.`,
-    effect: (state, { zoneCoords }) => {
-      xyzMergeAttempt(state, zoneCoords, [
+    effect: (state, { originCoords }) => {
+      xyzMergeAttempt(state, originCoords!, [
         [[Monster.XHeadCannon, Monster.YDragonHead], Monster.XYZDragonCannon],
         [[Monster.XHeadCannon], Monster.XZTankCannon],
         [[Monster.YDragonHead], Monster.YZTankDragon],
@@ -505,33 +505,34 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.AlphaTheMagnetWarrior]: {
     text: `${Pre.Manual}If Beta and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
-    effect: (state, { zoneCoords }) => {
-      magnetWarriorMergeAttempt(state, zoneCoords);
+    effect: (state, { originCoords }) => {
+      magnetWarriorMergeAttempt(state, originCoords!);
     },
   },
   [Monster.BetaTheMagnetWarrior]: {
     text: `${Pre.Manual}If Alpha and Gamma are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
-    effect: (state, { zoneCoords }) => {
-      magnetWarriorMergeAttempt(state, zoneCoords);
+    effect: (state, { originCoords }) => {
+      magnetWarriorMergeAttempt(state, originCoords!);
     },
   },
   [Monster.GammaTheMagnetWarrior]: {
     text: `${Pre.Manual}If Alpha and Beta are on the field, the trio integrates as one. Valkyrion the Magna Warrior will appear.`,
-    effect: (state, { zoneCoords }) => {
-      magnetWarriorMergeAttempt(state, zoneCoords);
+    effect: (state, { originCoords }) => {
+      magnetWarriorMergeAttempt(state, originCoords!);
     },
   },
 
   // assorted
   [Monster.CatapultTurtle]: {
     text: `${Pre.Manual}All unused monsters on the own field will be launched by catapult.\nTheir combined ATK directly damages the opponent's LP.`,
-    effect: (state, { ownMonsters, otherDKey, colIdx: monsterIdx }) => {
+    effect: (state, { ownMonsters, otherDKey, originCoords }) => {
       // make all the unused monsters on the player's
       // field disappear and hit the foe with their combined power
+      const [, , selfIdx] = originCoords!;
       let combinedAtk = 0;
       const row = getRow(state, ownMonsters) as MonsterZone[];
       row.forEach((z, idx) => {
-        if (isEmpty(z) || z.isLocked || idx === monsterIdx) return;
+        if (isEmpty(z) || z.isLocked || idx === selfIdx) return;
         combinedAtk += z.effAtk;
         destroyAtCoords(state, [...ownMonsters, idx]);
       });
@@ -558,9 +559,9 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.GoddessOfWhim]: {
     text: `${Pre.Manual}It lets the player draw a card from the deck, then disappears.`,
-    effect: (state, { dKey, zoneCoords }) => {
+    effect: (state, { dKey, originCoords }) => {
       draw(state, dKey);
-      destroyAtCoords(state, zoneCoords);
+      destroyAtCoords(state, originCoords!);
     },
   },
   [Monster.Skelengel]: {
@@ -590,28 +591,28 @@ export const flipEffects: CardEffectMap<DirectEffectReducer> = {
   },
   [Monster.BerserkDragon]: {
     text: `${Pre.Manual}It will attack every monster on the opponent's field.`,
-    effect: (state, { otherMonsters, zoneCoords }) => {
+    effect: (state, { otherMonsters, originCoords }) => {
       // attack all enemy monsters from left to right in a single action
       getRow(state, otherMonsters).forEach((z, idx) => {
         // must re-get zone on each iteration of loop in order to check if
         // Berserk Dragon has destroyed itself before completing all attacks
-        const originZone = getZone(state, zoneCoords) as OccupiedMonsterZone;
+        const originZone = getOriginZone(state) as OccupiedMonsterZone;
         if (isEmpty(z) || isEmpty(originZone)) {
           // don't attack if Berserk Dragon itself has been destroyed
           return;
         }
-        attackMonster(state, zoneCoords, [...otherMonsters, idx]);
+        attackMonster(state, originCoords!, [...otherMonsters, idx]);
       });
     },
   },
   [Monster.BeastOfGilfer]: {
     text: `${Pre.Sacrifice}In return, it powers down every monster on the foe's field.`,
-    effect: (state, { zoneCoords, otherMonsters }) => {
+    effect: (state, { originCoords, otherMonsters }) => {
       updateMonsters(state, otherMonsters, (z: OccupiedMonsterZone) => {
         z.permPowerUpAtk -= 500;
         z.permPowerUpDef -= 500;
       });
-      destroyAtCoords(state, zoneCoords);
+      destroyAtCoords(state, originCoords!);
     },
   },
 };

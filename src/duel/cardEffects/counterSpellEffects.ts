@@ -75,7 +75,7 @@ export const counterSpellEffects: CardEffectMap<AutoEffectReducer> = {
       return isReflectablePowerUp(getOriginId(state));
     },
     effect: (state) => {
-      permPowerDown(state, state.interaction.targetCoords!, 500, 500);
+      permPowerDown(state, state.activeTurn.targetCoords!, 500, 500);
     },
     text: `${Pre.Trap}The monster is powered down.`,
   },

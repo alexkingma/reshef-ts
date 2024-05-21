@@ -1,8 +1,9 @@
-import { useAppSelector } from "@/hooks";
-import { useEffect, useState } from "react";
-import { selectConfig } from "../duelSlice";
-import { useDuelActions } from "../useDuelActions";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useCallback, useEffect, useState } from "react";
+import { actions, selectConfig } from "../duelSlice";
 import "./DuelContainer.scss";
+
+const { updateConfig } = actions;
 
 const MS_INTERVAL = 200;
 const MS_PER_SEC = 1000;
@@ -16,13 +17,18 @@ export const SimulationOverlay = ({
   numActionsTaken,
   numDuelsFinished,
 }: Props) => {
+  const dispatch = useAppDispatch();
   const { totalDuelsToPlay, showDuelUI } = useAppSelector(selectConfig);
-  const { updateConfig } = useDuelActions();
   const [msElapsed, setMsElapsed] = useState(0);
 
   const percComplete = Math.round((numDuelsFinished / totalDuelsToPlay) * 100);
   const actionsPerSec = Math.round((numActionsTaken / msElapsed) * MS_PER_SEC);
-  const duelsPerSec = Math.round((numDuelsFinished / msElapsed) * MS_PER_SEC);
+  const duelsPerSec =
+    Math.round((numDuelsFinished / msElapsed) * MS_PER_SEC * 10) / 10;
+
+  const toggleUI = useCallback(() => {
+    dispatch(updateConfig({ showDuelUI: !showDuelUI }));
+  }, [dispatch, showDuelUI]);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -44,11 +50,7 @@ export const SimulationOverlay = ({
       <>Duels/sec: {msElapsed > 0 && duelsPerSec}</>
       <br />
       <br />
-      {
-        <button onClick={() => updateConfig({ showDuelUI: !showDuelUI })}>
-          {showDuelUI ? "Hide" : "Show"} Duels
-        </button>
-      }
+      {<button onClick={toggleUI}>{showDuelUI ? "Hide" : "Show"} Duels</button>}
     </div>
   );
 };

@@ -1,25 +1,29 @@
+import { PayloadAction } from "@reduxjs/toolkit";
 import { InteractionMode } from "../enums/duel";
 
 export const interactionReducers = {
-  setCursorZone: ({ interaction }: Duel, zoneCoords: ZoneCoords) => {
-    interaction.cursorCoords = zoneCoords;
+  setCursorZone: (
+    { interaction }: Duel,
+    { payload }: PayloadAction<ZoneCoords>
+  ) => {
+    interaction.cursorCoords = payload;
   },
-  setOriginZone: ({ interaction }: Duel, zoneCoords: ZoneCoords) => {
-    interaction.originCoords = zoneCoords;
+  setPendingCoords: (
+    { interaction }: Duel,
+    { payload }: PayloadAction<ZoneCoords>
+  ) => {
+    interaction.pendingCoords = payload;
   },
-  setTargetZone: ({ interaction }: Duel, zoneCoords: ZoneCoords) => {
-    interaction.targetCoords = zoneCoords;
+  setInteractionMode: (
+    { interaction }: Duel,
+    { payload }: PayloadAction<InteractionMode>
+  ) => {
+    interaction.mode = payload;
   },
-  setInteractionMode: ({ interaction }: Duel, newMode: InteractionMode) => {
-    interaction.mode = newMode;
-  },
-  setPendingAction: ({ interaction }: Duel, action: () => void) => {
-    interaction.pendingAction = action;
-  },
-  resetInteractions: ({ interaction }: Duel) => {
+  resetInteractions: ({ interaction, activeTurn }: Duel) => {
     interaction.mode = InteractionMode.FreeMovement;
-    interaction.pendingAction = null;
-    interaction.originCoords = null;
-    interaction.targetCoords = null;
+    interaction.pendingCoords = null;
+    activeTurn.originCoords = null;
+    activeTurn.targetCoords = null;
   },
 };

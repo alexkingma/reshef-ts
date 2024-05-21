@@ -7,7 +7,6 @@ import {
   burn,
   clearConvertedZoneFlag,
   getActiveEffects,
-  getDuellistCoordsMap,
   getOtherDuellistKey,
 } from "./duellistUtil";
 import { getActiveField, getFieldMultiplier } from "./fieldUtil";
@@ -25,17 +24,17 @@ export const getZone = (state: Duel, [dKey, rKey, col]: ZoneCoords) => {
 };
 
 export const getOriginZone = (state: Duel) => {
-  if (!state.interaction.originCoords) {
+  if (!state.activeTurn.originCoords) {
     throw Error("Origin coords not set!");
   }
-  return getZone(state, state.interaction.originCoords);
+  return getZone(state, state.activeTurn.originCoords);
 };
 
 export const getTargetZone = (state: Duel) => {
-  if (!state.interaction.targetCoords) {
+  if (!state.activeTurn.targetCoords) {
     throw Error("Target coords not set!");
   }
-  return getZone(state, state.interaction.targetCoords);
+  return getZone(state, state.activeTurn.targetCoords);
 };
 
 export const isOccupied = (z: Zone): z is OccupiedZone => {
@@ -526,15 +525,6 @@ export const postDirectMonsterAction = (
 
 export const isCoordMatch = (c1: ZoneCoords, c2: ZoneCoords) => {
   return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2];
-};
-
-export const getZoneCoordsMap = (zoneCoords: ZoneCoords): ZoneCoordsMap => {
-  const [dKey, , colIdx] = zoneCoords;
-  return {
-    zoneCoords,
-    colIdx,
-    ...getDuellistCoordsMap(dKey),
-  };
 };
 
 export const getFinalPowerUpLevel = (z: OccupiedMonsterZone) => {

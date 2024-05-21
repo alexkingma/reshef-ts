@@ -10,7 +10,6 @@ import {
   selectIsMyTurn,
 } from "./duelSlice";
 import { BattlePosition } from "./enums/duel";
-import { useInteractionActions } from "./useDuelActions";
 import { monsterUsageMap } from "./util/aiMonsterFlipEffectUsageUtil";
 import { spellUsageMap } from "./util/aiSpellUsageUtil";
 import {
@@ -20,7 +19,7 @@ import {
   getIdealBattlePos,
   getLethalAttackerTarget,
 } from "./util/aiUtil";
-import { getDuellistCoordsMap, selfUnderSoRL } from "./util/duellistUtil";
+import { selfUnderSoRL } from "./util/duellistUtil";
 import {
   getFirstEmptyZoneIdx,
   getFirstOccupiedZoneIdx,
@@ -30,7 +29,6 @@ import {
 } from "./util/rowUtil";
 import { isValidSpellTarget, spellHasTarget } from "./util/targetedSpellUtil";
 import {
-  getZoneCoordsMap,
   isEmpty,
   isFaceDown,
   isLocked,
@@ -41,34 +39,57 @@ import {
   isUnlocked,
 } from "./util/zoneUtil";
 
+const {
+  // interaction
+  resetInteractions,
+
+  // zone
+  attackMonster: attackMonsterAction,
+  directAttack: directAttackAction,
+  setDefencePos: setDefencePosAction,
+  setAttackPos: setAttackPosAction,
+  flipMonster: flipMonsterAction,
+  setSpellTrap: setSpellTrapAction,
+  activateDirectSpell: activateDirectSpellAction,
+  activateTargetedSpell: activateTargetedSpellAction,
+  discard: discardAction,
+  endTurn: endTurnAction,
+  aiNormalSummon: aiNormalSummonAction,
+} = actions;
+
 const decisions: Record<string, number> = {};
 
 export const useDuelAI = (onDecision: () => void) => {
-  const state = useAppSelector(selectDuel);
-  const isDuelOver = useAppSelector(selectIsDuelOver);
   const dispatch = useAppDispatch();
-  const {
-    attack: attackAction,
-    setDefencePos: setDefencePosAction,
-    setAttackPos: setAttackPosAction,
-    activateMonsterFlipEffect: activateMonsterFlipEffectAction,
-    setSpellTrap: setSpellTrapAction,
-    activateSpellEffect: activateSpellEffectAction,
-    discard: discardAction,
-    endTurn: endTurnAction,
-    aiNormalSummon: aiNormalSummonAction,
-  } = actions;
-  const { dKey } = useAppSelector(selectActiveTurn);
-  const { setOriginZone, setTargetZone, resetInteractions } =
-    useInteractionActions();
-  const { ownHand, ownMonsters, ownSpellTrap, otherMonsters } =
-    getDuellistCoordsMap(dKey);
-
+  const state = useAppSelector(selectDuel);
+  const { dKey, ownHand, ownMonsters, ownSpellTrap, otherMonsters } =
+    useAppSelector(selectActiveTurn);
+  const isDuelOver = useAppSelector(selectIsDuelOver);
   const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
   const { cpuDelayMs } = useAppSelector(selectConfig);
   const isCPU = useAppSelector(selectIsCPU(dKey));
 
-  const executeLethal = (): boolean => {
+  const commitAttack = useCallback(
+    (attackerIdx: number, targetIdx?: number) => {
+      // this is a helper fn only
+      const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
+      if (Number.isInteger(targetIdx)) {
+        const targetCoords: ZoneCoords = [...otherMonsters, targetIdx!];
+        dispatch(
+          attackMonsterAction({
+            originCoords,
+            targetCoords,
+          })
+        );
+      } else {
+        dispatch(directAttackAction({ originCoords }));
+      }
+      dispatch(resetInteractions());
+    },
+    [dispatch, otherMonsters, ownMonsters]
+  );
+
+  const executeLethal = useCallback((): boolean => {
     // Attempt to end the duel in a single attack, to save time.
     // Note that burn spells are never left on the field unused, so
     // there's no need to consider them out of order.
@@ -84,36 +105,41 @@ export const useDuelAI = (onDecision: () => void) => {
       commitAttack(attackerIdx);
     }
     return true;
-  };
+  }, [commitAttack, dKey, state]);
 
-  const setSpellTrap = (condition: (z: OccupiedZone) => boolean): boolean => {
-    const emptyZoneIdx = getFirstEmptyZoneIdx(state, [...ownSpellTrap]);
-    if (emptyZoneIdx === -1) return false; // no space
+  const setSpellTrap = useCallback(
+    (condition: (z: OccupiedZone) => boolean): boolean => {
+      const emptyZoneIdx = getFirstEmptyZoneIdx(state, [...ownSpellTrap]);
+      if (emptyZoneIdx === -1) return false; // no space
 
-    const hand = getRow(state, ownHand);
-    for (const [idx, z] of hand.entries()) {
-      if (isEmpty(z) || isMonster(z) || !condition(z)) continue;
-      const originCoords: ZoneCoords = [...ownHand, idx];
-      setOriginZone(originCoords);
-      setTargetZone([...ownSpellTrap, emptyZoneIdx]);
-      dispatch(setSpellTrapAction(getZoneCoordsMap(originCoords)));
-      resetInteractions();
-      return true;
-    }
-    return false;
-  };
+      const hand = getRow(state, ownHand);
+      for (const [idx, z] of hand.entries()) {
+        if (isEmpty(z) || isMonster(z) || !condition(z)) continue;
+        const originCoords: ZoneCoords = [...ownHand, idx];
+        const targetCoords: ZoneCoords = [...ownSpellTrap, emptyZoneIdx];
+        dispatch(
+          setSpellTrapAction({
+            originCoords,
+            targetCoords,
+          })
+        );
+        dispatch(resetInteractions());
+        return true;
+      }
+      return false;
+    },
+    [dispatch, ownHand, ownSpellTrap, state]
+  );
 
-  const activateSpell = (): boolean => {
+  const activateSpell = useCallback((): boolean => {
     // activate all spells that the usage criteria are satisfied for
     for (const [i, originZone] of getRow(state, ownSpellTrap).entries()) {
       if (!isSpell(originZone)) continue;
 
       const originCoords: ZoneCoords = [...ownSpellTrap, i];
-      const coordsMap = getZoneCoordsMap(originCoords);
       const condition = spellUsageMap[originZone.id];
-      if (!condition || !condition(state, coordsMap)) continue;
+      if (!condition || !condition(state, state.activeTurn)) continue;
 
-      setOriginZone(originCoords);
       if (spellHasTarget(originZone.id)) {
         const targetIdx = getHighestAtkZoneIdx(
           state,
@@ -121,16 +147,23 @@ export const useDuelAI = (onDecision: () => void) => {
           (targetZone) => isValidSpellTarget(originZone.id, targetZone.id)
         );
         if (targetIdx === -1) continue;
-        setTargetZone([...ownMonsters, targetIdx]);
+        const targetCoords: ZoneCoords = [...ownMonsters, targetIdx];
+        dispatch(
+          activateTargetedSpellAction({
+            originCoords,
+            targetCoords,
+          })
+        );
+        return true;
       }
-      dispatch(activateSpellEffectAction(coordsMap));
-      resetInteractions();
+      dispatch(activateDirectSpellAction({ originCoords }));
+      dispatch(resetInteractions());
       return true;
     }
     return false;
-  };
+  }, [dispatch, ownMonsters, ownSpellTrap, state]);
 
-  const summonMonster = (): boolean => {
+  const summonMonster = useCallback((): boolean => {
     if (state.activeTurn.hasNormalSummoned) return false;
 
     // A mon is "unsummonable" if the AI would have to tribute/overwrite
@@ -151,18 +184,17 @@ export const useDuelAI = (onDecision: () => void) => {
         // Note that AI summoning is different from the player's summon.
         // Humans tribute mons one at a time, while the AI tributes and/or
         // summons all in one discrete step.
-        setOriginZone(originCoords);
-        dispatch(aiNormalSummonAction(getZoneCoordsMap(originCoords)));
-        resetInteractions();
+        dispatch(aiNormalSummonAction({ originCoords }));
+        dispatch(resetInteractions());
         return true;
       } else {
         // this mon can't be summoned, try the next one
         unsummonableIdxs.push(originIdx);
       }
     } while (true);
-  };
+  }, [dispatch, ownHand, state]);
 
-  const activateMonsterEffect = (): boolean => {
+  const activateMonsterEffect = useCallback((): boolean => {
     // activate all monster effects that fulfil activation criteria
     for (const [i, originZone] of getRow(state, ownMonsters).entries()) {
       if (
@@ -171,31 +203,17 @@ export const useDuelAI = (onDecision: () => void) => {
         !isLocked(originZone)
       ) {
         const originCoords: ZoneCoords = [...ownMonsters, i];
-        const coordsMap = getZoneCoordsMap(originCoords);
         const condition = monsterUsageMap[originZone.id];
-        if (!condition || !condition(state, coordsMap)) continue;
+        if (!condition || !condition(state, state.activeTurn)) continue;
 
-        setOriginZone(originCoords);
-        dispatch(activateMonsterFlipEffectAction(coordsMap));
-        resetInteractions();
+        dispatch(flipMonsterAction({ originCoords }));
         return true;
       }
     }
     return false;
-  };
+  }, [dispatch, ownMonsters, state]);
 
-  const commitAttack = (attackerIdx: number, targetIdx?: number) => {
-    // this is a helper fn only
-    const originCoords: ZoneCoords = [...ownMonsters, attackerIdx];
-    setOriginZone(originCoords);
-    if (Number.isInteger(targetIdx)) {
-      setTargetZone([...otherMonsters, targetIdx!]);
-    }
-    dispatch(attackAction(getZoneCoordsMap(originCoords)));
-    resetInteractions();
-  };
-
-  const attackFaceUpTarget = (): boolean => {
+  const attackFaceUpTarget = useCallback((): boolean => {
     if (selfUnderSoRL(state, dKey)) return false;
 
     // if a mon fails to find a target, blacklist it for future attacker lookups
@@ -221,9 +239,9 @@ export const useDuelAI = (onDecision: () => void) => {
       commitAttack(attackerIdx, targetIdx);
       return true;
     } while (true);
-  };
+  }, [commitAttack, dKey, ownMonsters, state]);
 
-  const attackFaceDownTarget = (): boolean => {
+  const attackFaceDownTarget = useCallback((): boolean => {
     if (selfUnderSoRL(state, dKey)) return false;
 
     // use strongest own mons to attack facedown opp mons left to right
@@ -236,9 +254,9 @@ export const useDuelAI = (onDecision: () => void) => {
     // valid attacker and target found, go ahead with attack
     commitAttack(attackerIdx, targetIdx);
     return true;
-  };
+  }, [commitAttack, dKey, otherMonsters, ownMonsters, state]);
 
-  const attackDirectly = (): boolean => {
+  const attackDirectly = useCallback((): boolean => {
     // Once there are no opponent monsters left, attack directly with remaining mons.
     if (selfUnderSoRL(state, dKey)) return false;
 
@@ -257,28 +275,25 @@ export const useDuelAI = (onDecision: () => void) => {
 
     commitAttack(attackerIdx);
     return true;
-  };
+  }, [commitAttack, dKey, otherMonsters, ownMonsters, state]);
 
-  const defendIfWeak = (): boolean => {
+  const defendIfWeak = useCallback((): boolean => {
     // Any unlocked mons at this point will not be able to attack this turn.
     // They should defend if they are stronger in DEF mode, or if an opponent
     // monster exists with higher atk than them.
-    const originIdx = getFirstOccupiedZoneIdx(state, ownMonsters, isUnlocked);
-    if (originIdx === -1) return false;
+    const i = getFirstOccupiedZoneIdx(state, ownMonsters, isUnlocked);
+    if (i === -1) return false;
 
-    const originCoords: ZoneCoords = [...ownMonsters, originIdx];
-    const coordsMap: ZoneCoordsMap = getZoneCoordsMap(originCoords);
-    setOriginZone(originCoords);
-    if (getIdealBattlePos(state, originCoords) === BattlePosition.Attack) {
-      dispatch(setAttackPosAction(coordsMap));
-    } else {
-      dispatch(setDefencePosAction(coordsMap));
-    }
-    resetInteractions();
+    const originCoords: ZoneCoords = [...ownMonsters, i];
+    const pendingAction =
+      getIdealBattlePos(state, originCoords) === BattlePosition.Attack
+        ? setAttackPosAction
+        : setDefencePosAction;
+    dispatch(pendingAction({ originCoords }));
     return true;
-  };
+  }, [dispatch, ownMonsters, state]);
 
-  const discardFromHand = (): boolean => {
+  const discardFromHand = useCallback((): boolean => {
     // before ending turn, ensure the hand has a free zone
     // so you have space to draw a card next turn
 
@@ -287,13 +302,13 @@ export const useDuelAI = (onDecision: () => void) => {
 
     // TODO: how does the AI determine which card to discard?
     // TODO: don't ever discard god cards
-    dispatch(discardAction(getZoneCoordsMap([...ownHand, 0] as ZoneCoords)));
+    dispatch(discardAction({ originCoords: [...ownHand, 0] }));
     return true;
-  };
+  }, [dispatch, ownHand, state]);
 
-  const endTurn = () => {
-    dispatch(endTurnAction(getDuellistCoordsMap(dKey)));
-  };
+  const endTurn = useCallback(() => {
+    dispatch(endTurnAction());
+  }, [dispatch]);
 
   const makeDecision = useCallback(() => {
     // if at any point in a turn a duellist wins/loses, the AI
@@ -317,9 +332,20 @@ export const useDuelAI = (onDecision: () => void) => {
     if (discardFromHand()) return "discardFromHand";
     endTurn();
     return "endTurn";
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [
+    activateMonsterEffect,
+    activateSpell,
+    attackDirectly,
+    attackFaceDownTarget,
+    attackFaceUpTarget,
+    defendIfWeak,
+    discardFromHand,
+    endTurn,
+    executeLethal,
+    isDuelOver,
+    setSpellTrap,
+    summonMonster,
+  ]);
 
   useEffect(() => {
     if (isDuelOver && Object.keys(decisions).length) {

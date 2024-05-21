@@ -1,3 +1,4 @@
+import { PayloadAction } from "@reduxjs/toolkit";
 import { DuelType, PlayerType } from "../enums/duel";
 import { getNewDuel } from "../util/duelUtil";
 import { getRandomDuellable } from "../util/duellistUtil";
@@ -32,7 +33,10 @@ export const duelReducers = {
 
     setDuel(state, getNewDuel(p1Name, p2Name));
   },
-  updateConfig: (state: Duel, newConfig: Partial<DuelConfig>) => {
+  updateConfig: (
+    state: Duel,
+    { payload: newConfig }: PayloadAction<Partial<DuelConfig>>
+  ) => {
     state.config = { ...state.config, ...newConfig };
   },
   randomiseDuellists: (state: Duel) => {
@@ -43,7 +47,8 @@ export const duelReducers = {
       d2 = getRandomDuellable().name;
     } while (d2 === d1);
 
-    duelReducers.updateConfig(state, { p1Name: d1, p2Name: d2 });
+    state.config.p1Name = d1;
+    state.config.p2Name = d2;
     setDuel(state, getNewDuel(d1, d2));
   },
 };

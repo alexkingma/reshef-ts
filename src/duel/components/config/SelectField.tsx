@@ -1,5 +1,8 @@
-import { useDuelActions } from "@/duel/useDuelActions";
-import React, { ChangeEvent } from "react";
+import { actions } from "@/duel/duelSlice";
+import { useAppDispatch } from "@/hooks";
+import React, { ChangeEvent, useCallback } from "react";
+
+const { updateConfig } = actions;
 
 interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
@@ -9,13 +12,16 @@ interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 export const SelectField = ({ title, options, ...props }: Props) => {
-  const { updateConfig } = useDuelActions();
+  const dispatch = useAppDispatch();
 
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    const key = e.target.name as keyof DuelConfig;
-    updateConfig({ [key]: val });
-  };
+  const onSelectChange = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      const val = e.target.value;
+      const key = e.target.name as keyof DuelConfig;
+      dispatch(updateConfig({ [key]: val }));
+    },
+    [dispatch]
+  );
 
   return (
     <div>

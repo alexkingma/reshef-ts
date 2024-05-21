@@ -21,7 +21,7 @@ import {
 import { burnSelf } from "../util/wrappedUtil";
 import {
   clearZone,
-  getZone,
+  getOriginZone,
   isNotGodCard,
   permPowerUp,
   setSpellTrap,
@@ -79,20 +79,20 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
   [Monster.ExodiaNecross]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      permPowerUp(state, zoneCoords, 500, 500);
+    effect: (state, { originCoords }) => {
+      permPowerUp(state, originCoords!, 500, 500);
     },
     text: `${Pre.Auto}Powered up one level.`,
   },
   [Monster.CastleOfDarkIllusions]: effect_CastleOfDarkIllusions(),
   [Monster.SatelliteCannon]: {
     row: RowKey.Monster,
-    condition: (state, { zoneCoords }) => {
-      const z = getZone(state, zoneCoords) as OccupiedMonsterZone;
+    condition: (state) => {
+      const z = getOriginZone(state) as OccupiedMonsterZone;
       return z.permPowerUpAtk < 3000 && z.permPowerUpDef < 3000;
     },
-    effect: (state, { zoneCoords }) => {
-      permPowerUp(state, zoneCoords, 1000, 1000);
+    effect: (state, { originCoords }) => {
+      permPowerUp(state, originCoords!, 1000, 1000);
     },
     text: `${Pre.Auto}Powered up two levels on own field to max six levels.`,
   },
@@ -120,8 +120,8 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
   [Monster.MirageKnight]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords, dKey }) => {
-      clearZone(state, zoneCoords);
+    effect: (state, { originCoords, dKey }) => {
+      clearZone(state, originCoords!);
       specialSummon(state, dKey, Monster.DarkMagician);
       specialSummon(state, dKey, Monster.FlameSwordsman);
     },
@@ -130,32 +130,36 @@ export const turnStartEffects: CardEffectMap<AutoEffectReducer> = {
   [Monster.PetitMoth]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      transformMonster(state, zoneCoords, Monster.LarvaeMoth);
+    effect: (state, { originCoords }) => {
+      transformMonster(state, originCoords!, Monster.LarvaeMoth);
     },
     text: `Petit Moth transformed into Larvae Moth!`,
   },
   [Monster.LarvaeMoth]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      transformMonster(state, zoneCoords, Monster.CocoonOfEvolution);
+    effect: (state, { originCoords }) => {
+      transformMonster(state, originCoords!, Monster.CocoonOfEvolution);
     },
     text: `Larvae Moth transformed into Cocoon of Evolution!`,
   },
   [Monster.CocoonOfEvolution]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      transformMonster(state, zoneCoords, Monster.GreatMoth);
+    effect: (state, { originCoords }) => {
+      transformMonster(state, originCoords!, Monster.GreatMoth);
     },
     text: `Cocoon of Evolution transformed into Great Moth!`,
   },
   [Monster.GreatMoth]: {
     row: RowKey.Monster,
     condition: always,
-    effect: (state, { zoneCoords }) => {
-      transformMonster(state, zoneCoords, Monster.PerfectlyUltimateGreatMoth);
+    effect: (state, { originCoords }) => {
+      transformMonster(
+        state,
+        originCoords!,
+        Monster.PerfectlyUltimateGreatMoth
+      );
     },
     text: `Great Moth transformed into Perfectly Ultimate Great Moth!`,
   },

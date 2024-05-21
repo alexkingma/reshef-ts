@@ -1,16 +1,31 @@
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { hasFlipEffect } from "./cardEffects/flipEffects";
 import {
+  actions,
   selectActiveTurn,
   selectIsMyTurn,
   selectOpponentHasMonster,
   selectZone,
 } from "./duelSlice";
 import { InteractionMode, RowKey } from "./enums/duel";
-import { useCardActions, useInteractionActions } from "./useDuelActions";
 import { getCard, getNumTributesRequired } from "./util/cardUtil";
 import { spellHasTarget } from "./util/targetedSpellUtil";
 import { canActivateFlipEffect, isMonster, isSpell } from "./util/zoneUtil";
+
+const {
+  // zone
+  directAttack: directAttackAction,
+  setDefencePos: defendAction,
+  tribute: tributeAction,
+  flipMonster: flipMonsterAction,
+  activateDirectSpell: activateDirectSpellAction,
+  discard: discardAction,
+
+  // interaction
+  setPendingCoords,
+  setInteractionMode,
+  resetInteractions,
+} = actions;
 
 interface InteractionProps {
   label: string;
@@ -36,14 +51,13 @@ type DuelInteractionMap = {
 export const useDuelInteraction = (
   zoneCoords: ZoneCoords
 ): DuelInteractionMap => {
-  const [duellistKey, rowKey] = zoneCoords;
+  const [dKey, rowKey] = zoneCoords;
   const isRow = (...rows: RowKey[]) => rows.includes(rowKey as RowKey);
 
+  const dispatch = useAppDispatch();
   const z = useAppSelector(selectZone(zoneCoords)) as OccupiedZone;
-  const opponentHasMonster = useAppSelector(
-    selectOpponentHasMonster(duellistKey)
-  );
-  const isMyTurn = useAppSelector(selectIsMyTurn(duellistKey));
+  const oppHasMonster = useAppSelector(selectOpponentHasMonster(dKey));
+  const isMyTurn = useAppSelector(selectIsMyTurn(dKey));
   const { hasNormalSummoned, numTributedMonsters } =
     useAppSelector(selectActiveTurn);
 
@@ -53,39 +67,20 @@ export const useDuelInteraction = (
     return numTributedMonsters >= getNumTributesRequired(card);
   };
 
-  const {
-    attack: attackAction,
-    setDefencePos: defendAction,
-    tribute: tributeAction,
-    activateMonsterFlipEffect: activateMonsterFlipEffectAction,
-    normalSummon: normalSummonAction,
-    setSpellTrap: setSpellTrapAction,
-    activateSpellEffect: activateSpellEffectAction,
-    discard: discardAction,
-  } = useCardActions(zoneCoords);
-  const {
-    setOriginZone,
-    setInteractionMode,
-    setPendingAction,
-    resetInteractions,
-  } = useInteractionActions();
-
   const interactionMap: DuelInteractionMap = {
     [InteractionKey.Attack]: {
       label: "Attack",
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
       effect: () => {
-        setOriginZone(zoneCoords);
-        if (opponentHasMonster) {
+        if (oppHasMonster) {
           // direct attack not possible, next step is to pick a monster to target
-          setPendingAction(attackAction);
-          setInteractionMode(InteractionMode.ChoosingOpponentMonster);
+          dispatch(setPendingCoords(zoneCoords));
+          dispatch(setInteractionMode(InteractionMode.ChoosingOpponentMonster));
           // TODO: set cursor to be on opponent's first monster
         } else {
           // no monsters to target, direct attack
-          attackAction();
-          resetInteractions();
+          dispatch(directAttackAction({ originCoords: zoneCoords }));
         }
       },
     },
@@ -94,9 +89,7 @@ export const useDuelInteraction = (
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
       effect: () => {
-        setOriginZone(zoneCoords);
-        defendAction();
-        resetInteractions();
+        dispatch(defendAction({ originCoords: zoneCoords }));
       },
     },
     [InteractionKey.Summon]: {
@@ -104,9 +97,8 @@ export const useDuelInteraction = (
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && canNormalSummon(z) && isRow(RowKey.Hand),
       effect: () => {
-        setOriginZone(zoneCoords);
-        setPendingAction(normalSummonAction);
-        setInteractionMode(InteractionMode.ChoosingOwnMonsterZone);
+        dispatch(setPendingCoords(zoneCoords));
+        dispatch(setInteractionMode(InteractionMode.ChoosingOwnMonsterZone));
         // TODO: set cursor to be on first free zone (or 0 idx)
       },
     },
@@ -114,9 +106,8 @@ export const useDuelInteraction = (
       label: "Set",
       condition: (z: Zone) => isMyTurn && !isMonster(z) && isRow(RowKey.Hand),
       effect: () => {
-        setOriginZone(zoneCoords);
-        setPendingAction(setSpellTrapAction);
-        setInteractionMode(InteractionMode.ChoosingOwnSpellTrapZone);
+        dispatch(setPendingCoords(zoneCoords));
+        dispatch(setInteractionMode(InteractionMode.ChoosingOwnSpellTrapZone));
         // TODO: set cursor to be on first free zone (or 0 idx)
       },
     },
@@ -124,14 +115,13 @@ export const useDuelInteraction = (
       label: "Activate",
       condition: (z: Zone) => isMyTurn && isSpell(z) && isRow(RowKey.SpellTrap),
       effect: () => {
-        setOriginZone(zoneCoords);
         if (spellHasTarget(z.id)) {
-          setPendingAction(activateSpellEffectAction);
-          setInteractionMode(InteractionMode.ChoosingOwnMonster);
+          dispatch(setPendingCoords(zoneCoords));
+          dispatch(setInteractionMode(InteractionMode.ChoosingOwnMonster));
           // TODO: set cursor to be on first monster
         } else {
-          activateSpellEffectAction();
-          resetInteractions();
+          dispatch(activateDirectSpellAction({ originCoords: zoneCoords }));
+          dispatch(resetInteractions());
         }
       },
     },
@@ -145,9 +135,7 @@ export const useDuelInteraction = (
         canActivateFlipEffect(z) &&
         isRow(RowKey.Monster),
       effect: () => {
-        setOriginZone(zoneCoords);
-        activateMonsterFlipEffectAction();
-        resetInteractions();
+        dispatch(flipMonsterAction({ originCoords: zoneCoords }));
       },
     },
     [InteractionKey.Tribute]: {
@@ -155,9 +143,7 @@ export const useDuelInteraction = (
       condition: (z: Zone) =>
         isMyTurn && isMonster(z) && !z.isLocked && isRow(RowKey.Monster),
       effect: () => {
-        setOriginZone(zoneCoords);
-        tributeAction();
-        resetInteractions();
+        dispatch(tributeAction({ originCoords: zoneCoords }));
       },
     },
     [InteractionKey.Discard]: {
@@ -165,9 +151,7 @@ export const useDuelInteraction = (
       condition: () =>
         isMyTurn && isRow(RowKey.Hand, RowKey.SpellTrap, RowKey.Monster),
       effect: () => {
-        setOriginZone(zoneCoords);
-        discardAction();
-        resetInteractions();
+        dispatch(discardAction({ originCoords: zoneCoords }));
       },
     },
   };

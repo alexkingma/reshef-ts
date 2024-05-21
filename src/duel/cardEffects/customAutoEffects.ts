@@ -16,7 +16,7 @@ import {
 } from "../util/rowUtil";
 import {
   destroyAtCoords,
-  getZone,
+  getOriginZone,
   immobiliseZone,
   isFaceDown,
   isMinAtk,
@@ -45,14 +45,14 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
   [Spell.JamBreedingMachine]: {
     row: RowKey.SpellTrap,
     text: `${Pre.Auto}No monsters can be summoned from the own deck.`,
-    condition: (state, { zoneCoords }) => {
+    condition: (state) => {
       // on initial set only
-      const z = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+      const z = getOriginZone(state) as OccupiedSpellTrapZone;
       return isFaceDown(z);
     },
-    effect: (state, { zoneCoords }) => {
+    effect: (state) => {
       state.activeTurn.hasNormalSummoned = true;
-      const z = getZone(state, zoneCoords) as OccupiedSpellTrapZone;
+      const z = getOriginZone(state) as OccupiedSpellTrapZone;
       z.orientation = Orientation.FaceUp;
     },
   },
@@ -66,8 +66,8 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
       const anyButLight = (z: Zone) => isMonster(z) && !isLight(z);
       return hasMatchInRow(state, ownMonsters, anyButLight);
     },
-    effect: (state, { zoneCoords }) => {
-      destroyAtCoords(state, zoneCoords);
+    effect: (state, { originCoords }) => {
+      destroyAtCoords(state, originCoords!);
     },
     text: `${Pre.Auto}It was sent to the graveyard because a non-light monster appeared on the own field.`,
   },
@@ -76,8 +76,8 @@ export const customAutoEffects: CardEffectMap<AutoEffectReducer> = {
     condition: (state, { dKey }) => {
       return !graveyardContainsCards(state, dKey, ...getExodiaCards());
     },
-    effect: (state, { zoneCoords }) => {
-      destroyAtCoords(state, zoneCoords);
+    effect: (state, { originCoords }) => {
+      destroyAtCoords(state, originCoords!);
     },
     text: `${Pre.Auto}It was sent to the graveyard because there were no Exodia parts in the own graveyard.`,
   },

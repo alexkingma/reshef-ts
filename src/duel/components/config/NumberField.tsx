@@ -1,5 +1,8 @@
-import { useDuelActions } from "@/duel/useDuelActions";
-import React, { ChangeEvent } from "react";
+import { actions } from "@/duel/duelSlice";
+import { useAppDispatch } from "@/hooks";
+import React, { ChangeEvent, useCallback } from "react";
+
+const { updateConfig } = actions;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -8,14 +11,17 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const NumberField = ({ title, ...props }: Props) => {
-  const { updateConfig } = useDuelActions();
+  const dispatch = useAppDispatch();
 
-  const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let val = Number(e.target.value);
-    if (Number.isNaN(val)) val = 0;
-    const key = e.target.name as keyof DuelConfig;
-    updateConfig({ [key]: val });
-  };
+  const onNumberChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      let val = Number(e.target.value);
+      if (Number.isNaN(val)) val = 0;
+      const key = e.target.name as keyof DuelConfig;
+      dispatch(updateConfig({ [key]: val }));
+    },
+    [dispatch]
+  );
 
   return (
     <div>

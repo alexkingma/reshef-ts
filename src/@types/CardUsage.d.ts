@@ -1,5 +1,8 @@
-type CardCondition = (state: Duel, coordsMap: ZoneCoordsMap) => boolean;
-type CardEffect = (state: Duel, coordsMap: ZoneCoordsMap) => void;
+type CardCondition = (
+  state: Duel,
+  coordsMap: Exclude<Turn, "originCoords" | "targetCoords">
+) => boolean;
+type CardEffect = (state: Duel, coordsMap: Turn) => void;
 
 type DirectEffectReducer = {
   effect: CardEffect;

@@ -8,7 +8,7 @@ import { isValidSpellTarget } from "./targetedSpellUtil";
 
 export const shouldUseField =
   (newField: Field) =>
-  (state: Duel, { ownMonsters, otherMonsters }: ZoneCoordsMap) => {
+  (state: Duel, { ownMonsters, otherMonsters }: Turn) => {
     const activeField = getActiveField(state);
     if (newField === activeField) return false;
 
@@ -31,28 +31,28 @@ export const shouldUseField =
 
 export const spellHasValidTarget =
   (spell: Spell) =>
-  (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
+  (state: Duel, { ownMonsters }: Turn) =>
     hasMatchInRow(state, ownMonsters, (z) => isValidSpellTarget(spell, z.id));
 
 export const opponentHasSpellTrap =
   (condition?: (z: OccupiedZone) => boolean) =>
-  (state: Duel, { otherSpellTrap }: ZoneCoordsMap) =>
+  (state: Duel, { otherSpellTrap }: Turn) =>
     hasMatchInRow(state, otherSpellTrap, condition);
 
 export const onlyOpponentHasMonster =
   (condition?: (z: OccupiedZone) => boolean) =>
-  (state: Duel, { ownMonsters, otherMonsters }: ZoneCoordsMap) =>
+  (state: Duel, { ownMonsters, otherMonsters }: Turn) =>
     hasMatchInRow(state, otherMonsters, condition) &&
     !hasMatchInRow(state, ownMonsters, condition);
 
 export const opponentHasMonster =
   (condition?: (z: OccupiedZone) => boolean) =>
-  (state: Duel, { otherMonsters }: ZoneCoordsMap) =>
+  (state: Duel, { otherMonsters }: Turn) =>
     hasMatchInRow(state, otherMonsters, condition);
 
 export const selfHasMonster =
   (condition?: (z: OccupiedZone) => boolean) =>
-  (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
+  (state: Duel, { ownMonsters }: Turn) =>
     hasMatchInRow(state, ownMonsters, condition);
 
 export const selfHasSpecificMonster = (...monsters: Monster[]) =>
@@ -63,5 +63,5 @@ export const selfHasAllSpecificMonsters = (...monsters: Monster[]) =>
 
 export const hasEmptyMonsterZones =
   (numFreeZones: number = 1) =>
-  (state: Duel, { ownMonsters }: ZoneCoordsMap) =>
+  (state: Duel, { ownMonsters }: Turn) =>
     5 - countMatchesInRow(state, ownMonsters) >= numFreeZones;

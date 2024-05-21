@@ -60,6 +60,23 @@ export const getDefaultConfig = (): DuelConfig => {
 export const getDefaultActiveTurn = (): Turn => {
   return {
     dKey: DKey.Player,
+    otherDKey: DKey.Opponent,
+
+    originCoords: null,
+    targetCoords: null,
+
+    // own rows
+    ownMonsters: [DKey.Player, RowKey.Monster],
+    ownSpellTrap: [DKey.Player, RowKey.SpellTrap],
+    ownHand: [DKey.Player, RowKey.Hand],
+    ownGraveyard: [DKey.Player, RowKey.Graveyard],
+
+    // opponent rows
+    otherMonsters: [DKey.Opponent, RowKey.Monster],
+    otherSpellTrap: [DKey.Opponent, RowKey.SpellTrap],
+    otherHand: [DKey.Opponent, RowKey.Hand],
+    otherGraveyard: [DKey.Opponent, RowKey.Graveyard],
+
     isStartOfTurn: true,
     hasNormalSummoned: false,
     numTributedMonsters: 0,
@@ -69,10 +86,8 @@ export const getDefaultActiveTurn = (): Turn => {
 export const getDefaultInteraction = (): DuelInteraction => {
   return {
     cursorCoords: [DKey.Player, RowKey.Hand, 0],
-    originCoords: null,
-    targetCoords: null,
     mode: InteractionMode.FreeMovement,
-    pendingAction: null,
+    pendingCoords: null,
   };
 };
 

@@ -1,16 +1,30 @@
-import { selectInteraction, selectZone } from "@/duel/duelSlice";
+import { actions, selectInteraction, selectZone } from "@/duel/duelSlice";
 import { InteractionMode, RowKey } from "@/duel/enums/duel";
-import { useInteractionActions } from "@/duel/useDuelActions";
+import { OriginTargetPayload } from "@/duel/reducers/zoneReducers";
 import { InteractionKey, useDuelInteraction } from "@/duel/useDuelInteraction";
 import { useZoneButtons } from "@/duel/useZoneButtons";
 import { isPlayer } from "@/duel/util/duellistUtil";
 import { isCoordMatch, isMonster, isOccupied } from "@/duel/util/zoneUtil";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { Zone } from "./Zone";
 import "./ZoneButtons.scss";
 import { useIsViableTargetZone } from "./useIsViableTargetZone";
+
+const {
+  // interaction
+  setCursorZone,
+  setInteractionMode,
+  resetInteractions,
+
+  // zone
+  attackMonster,
+  setSpellTrap,
+  normalSummon,
+  activateTargetedSpell,
+} = actions;
 
 interface Props {
   children?: ReactNode;
@@ -18,18 +32,13 @@ interface Props {
 }
 
 export const InteractiveZone = ({ zoneCoords, children }: Props) => {
-  const { cursorCoords, originCoords, mode, pendingAction } =
+  const dispatch = useAppDispatch();
+  const { cursorCoords, mode, pendingCoords } =
     useAppSelector(selectInteraction);
   const buttons = useZoneButtons(zoneCoords);
   const interactionMap = useDuelInteraction(zoneCoords);
 
-  const {
-    setCursorZone,
-    setTargetZone,
-    setInteractionMode,
-    resetInteractions,
-  } = useInteractionActions();
-  const isOrigin = !!originCoords && isCoordMatch(zoneCoords, originCoords);
+  const isOrigin = !!pendingCoords && isCoordMatch(zoneCoords, pendingCoords);
   const isCursor = !!cursorCoords && isCoordMatch(zoneCoords, cursorCoords);
   const isViableTarget = useIsViableTargetZone(zoneCoords);
   const targetIsCard = [
@@ -44,15 +53,16 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
   const handleMouseEnter = () => {
     if (mode === InteractionMode.Locked) return;
     if (!isCoordMatch(cursorCoords, zoneCoords)) {
-      setCursorZone(zoneCoords);
+      dispatch(setCursorZone(zoneCoords));
     }
     if (mode === InteractionMode.ViewingOptions) {
-      setInteractionMode(InteractionMode.FreeMovement);
+      dispatch(setInteractionMode(InteractionMode.FreeMovement));
     }
   };
 
   const handleZoneClick = () => {
     if (mode === InteractionMode.FreeMovement && isOwn && hasCard) {
+      // default actions to perform for left click
       let key: InteractionKey;
       switch (rKey) {
         case RowKey.Monster:
@@ -75,28 +85,54 @@ export const InteractiveZone = ({ zoneCoords, children }: Props) => {
     }
 
     if (isViableTarget) {
-      setTargetZone(zoneCoords);
-      pendingAction!();
-      resetInteractions();
+      // user has selected this zone as a target for a prior determined action
+      let pendingAction: ActionCreatorWithPayload<OriginTargetPayload>;
+      switch (mode) {
+        case InteractionMode.ChoosingOwnMonster:
+          pendingAction = activateTargetedSpell;
+          break;
+        case InteractionMode.ChoosingOpponentMonster:
+          pendingAction = attackMonster;
+          break;
+        case InteractionMode.ChoosingOwnSpellTrapZone:
+          pendingAction = setSpellTrap;
+          break;
+        case InteractionMode.ChoosingOwnMonsterZone:
+          pendingAction = normalSummon;
+          break;
+        default:
+          console.error(
+            `Could not infer pending action for InteractionMode ${mode} at coords: `,
+            pendingCoords
+          );
+          return;
+      }
+      dispatch(
+        pendingAction({
+          originCoords: pendingCoords!,
+          targetCoords: zoneCoords,
+        })
+      );
+      dispatch(resetInteractions());
       return;
     }
 
-    if (originCoords || mode === InteractionMode.ViewingOptions) {
+    if (pendingCoords || mode === InteractionMode.ViewingOptions) {
       // clicking an invalid zone cancels out of coord/mode selections so far
-      resetInteractions();
+      dispatch(resetInteractions());
     }
   };
 
   const handleRightClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (mode === InteractionMode.FreeMovement && isOwn && hasCard) {
-      setInteractionMode(InteractionMode.ViewingOptions);
+      dispatch(setInteractionMode(InteractionMode.ViewingOptions));
       return;
     }
 
-    if (originCoords || mode === InteractionMode.ViewingOptions) {
+    if (pendingCoords || mode === InteractionMode.ViewingOptions) {
       // player is likely in another menu
-      resetInteractions();
+      dispatch(resetInteractions());
     }
   };
 

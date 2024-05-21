@@ -1,11 +1,12 @@
-import { selectConfig } from "@/duel/duelSlice";
+import { actions, selectConfig } from "@/duel/duelSlice";
 import { DuelType, PlayerType } from "@/duel/enums/duel";
-import { useDuelActions } from "@/duel/useDuelActions";
 import { getDuellables } from "@/duel/util/duellistUtil";
-import { useAppSelector } from "@/hooks";
-import { ChangeEvent } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { ChangeEvent, useCallback } from "react";
 import { NumberField } from "./NumberField";
 import { SelectField } from "./SelectField";
+
+const { updateConfig } = actions;
 
 interface Props {
   onDuelStart: () => void;
@@ -22,6 +23,7 @@ const DUELLABLE_OPTIONS = getDuellables().map((d) => ({
 }));
 
 export const DuelConfig = ({ onDuelStart }: Props) => {
+  const dispatch = useAppDispatch();
   const {
     duelType,
     cpuDelayMs,
@@ -32,24 +34,26 @@ export const DuelConfig = ({ onDuelStart }: Props) => {
     totalDuelsToPlay,
     showDuelUI,
   } = useAppSelector(selectConfig);
-  const { updateConfig } = useDuelActions();
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.name as keyof DuelConfig;
-    let val;
-    switch (e.target.type) {
-      case "checkbox":
-        val = e.target.checked;
-        break;
-      case "radio":
-        val = e.target.value;
-        break;
-      default:
-        console.error(`Unexpected input type: ${e.target.type}`);
-        return;
-    }
-    updateConfig({ [key]: val });
-  };
+  const onInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const key = e.target.name as keyof DuelConfig;
+      let val;
+      switch (e.target.type) {
+        case "checkbox":
+          val = e.target.checked;
+          break;
+        case "radio":
+          val = e.target.value;
+          break;
+        default:
+          console.error(`Unexpected input type: ${e.target.type}`);
+          return;
+      }
+      dispatch(updateConfig({ [key]: val }));
+    },
+    [dispatch]
+  );
 
   return (
     <div className="config">

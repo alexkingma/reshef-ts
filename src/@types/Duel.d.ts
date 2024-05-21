@@ -51,26 +51,20 @@ interface DuelInteraction {
   // location of cursor; determines which card is being peeked/highlighted
   cursorCoords: ZoneCoords;
 
-  // origin card in an action, e.g. attacking monster, originating spell, hand card to summon/set
-  originCoords: ZoneCoords | null;
-
-  // target card in an action, e.g. monster to be attacked, to be powered-up by a spell, zone to summon/set at
-  targetCoords: ZoneCoords | null;
+  // If an action requires two selections (origin and target), store the first here.
+  // This is only used for UI purposes, to highlight the pending zone.
+  // See originCoords and targetCoords on `Turn` for more actionable effect props.
+  pendingCoords: ZoneCoords | null;
 
   // what style of movement/interactivity is the player currently permitted?
   mode: InteractionMode;
-
-  // Some actions require multiple, discrete zone selections.
-  // Store the deferred action here while the user selects the origin/target.
-  // This also gives a chance to cancel out of the action before a target is selected.
-  pendingAction: (() => void) | null;
 }
 
 interface Duel {
   config: DuelConfig;
   duellists: [p1: Duellist, p2: Duellist];
-  activeTurn: Turn;
   interaction: DuelInteraction;
+  activeTurn: Turn;
 }
 
 interface DuelConfig {
@@ -85,7 +79,27 @@ interface DuelConfig {
 }
 
 interface Turn {
-  dKey: number;
+  // active/inactive duellists
+  dKey: DuellistKey;
+  otherDKey: DuellistKey;
+
+  // the zones instigating/being targeted by an effect
+  originCoords: ZoneCoords | null;
+  targetCoords: ZoneCoords | null;
+
+  // own rows
+  ownMonsters: RowCoords;
+  ownSpellTrap: RowCoords;
+  ownHand: RowCoords;
+  ownGraveyard: RowCoords;
+
+  // opponent rows
+  otherMonsters: RowCoords;
+  otherSpellTrap: RowCoords;
+  otherHand: RowCoords;
+  otherGraveyard: RowCoords;
+
+  // other/assorted turn props
   isStartOfTurn: boolean;
   hasNormalSummoned: boolean;
   numTributedMonsters: number;

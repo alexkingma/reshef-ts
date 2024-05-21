@@ -240,10 +240,9 @@ export const powerDownHighestAtk = (
 
 export const checkTriggeredTraps = (
   state: Duel,
-  coordsMap: ZoneCoordsMap,
   trapReducers: CardEffectMap<AutoEffectReducer>
 ): boolean => {
-  const { otherSpellTrap } = coordsMap;
+  const { otherSpellTrap } = state.activeTurn;
   for (const [i, z] of getRow(state, otherSpellTrap).entries()) {
     if (!isTrap(z)) continue;
     const reducer = trapReducers[z.id];
@@ -255,11 +254,11 @@ export const checkTriggeredTraps = (
     }
 
     const { condition, effect, text, noDiscard } = reducer;
-    if (condition(state, coordsMap)) {
+    if (condition(state, state.activeTurn)) {
       // found valid trap, perform its effect instead of the original action
       const trapCoords = [...otherSpellTrap, i] as ZoneCoords;
       logEffectMessage(state, trapCoords, text);
-      effect(state, coordsMap);
+      effect(state, state.activeTurn);
       if (!noDiscard) {
         // some traps are continuous
         clearZone(state, trapCoords);

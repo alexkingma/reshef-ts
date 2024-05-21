@@ -1,15 +1,16 @@
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useCallback, useEffect, useState } from "react";
-import { selectConfig, selectIsDuelOver } from "../duelSlice";
+import { actions, selectConfig, selectIsDuelOver } from "../duelSlice";
 import { DuelType } from "../enums/duel";
 import { useDuelAI } from "../useDuelAI";
-import { useDuelActions } from "../useDuelActions";
 import { useDuelStats } from "../useDuelStats";
 import { useElo } from "../useElo";
 import "./DuelContainer.scss";
 import { SimulationOverlay } from "./SimulationOverlay";
 import { DuelConfig } from "./config/DuelConfig";
 import { Duel } from "./duel/Duel";
+
+const { initDuel, randomiseDuellists } = actions;
 
 enum Page {
   Config,
@@ -18,6 +19,7 @@ enum Page {
 }
 
 export const DuelContainer = () => {
+  const dispatch = useAppDispatch();
   const { totalDuelsToPlay, showDuelUI, duelType } =
     useAppSelector(selectConfig);
   const isDuelOver = useAppSelector(selectIsDuelOver);
@@ -26,7 +28,6 @@ export const DuelContainer = () => {
   const [numDuelsFinished, setNumDuelsFinished] = useState(0);
   const [numActionsTaken, setNumActionsTaken] = useState(0);
 
-  const { initDuel, randomiseDuellists } = useDuelActions();
   const { updateStatsMap } = useDuelStats();
   const { updateEloMap } = useElo();
 
@@ -38,11 +39,11 @@ export const DuelContainer = () => {
 
   const onStartClicked = useCallback(() => {
     setNumDuelsFinished(0);
-    initDuel();
+    dispatch(initDuel());
     setActivePage(
       duelType === DuelType.Simulation ? Page.Simulation : Page.Exhibition
     );
-  }, [duelType, initDuel]);
+  }, [duelType, dispatch]);
 
   useEffect(() => {
     if (!isDuelOver || activePage === Page.Config) return;
@@ -61,7 +62,7 @@ export const DuelContainer = () => {
     if (remainingDuels > 0) {
       // at least one more duel is needed, start it now
       console.log(`${remainingDuels} duels remaining.`);
-      randomiseDuellists();
+      dispatch(randomiseDuellists());
     } else {
       // all duels/simulations complete, quit duel view
       setActivePage(Page.Config);
@@ -72,7 +73,7 @@ export const DuelContainer = () => {
     duelType,
     totalDuelsToPlay,
     numDuelsFinished,
-    randomiseDuellists,
+    dispatch,
     updateEloMap,
     updateStatsMap,
   ]);

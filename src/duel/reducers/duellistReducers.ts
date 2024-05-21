@@ -1,25 +1,28 @@
 import { BattlePosition, Orientation, RowKey } from "../enums/duel";
 import { getMonsterIdxsByTributeable } from "../util/aiUtil";
+import { checkAutoEffects } from "../util/autoEffectUtil";
 import { getCard, getNumTributesRequired } from "../util/cardUtil";
-import { shuffle } from "../util/common";
-import { getActiveEffects } from "../util/duellistUtil";
+import { draw } from "../util/deckUtil";
+import { isStartOfEitherTurn } from "../util/duelUtil";
+import {
+  getActiveEffects,
+  setOriginTarget,
+  swapTurnRowCoords,
+} from "../util/duellistUtil";
 import { hasEmptyZone, updateMonsters } from "../util/rowUtil";
 import {
   clearZone,
   destroyAtCoords,
+  getOriginZone,
   getZone,
   specialSummon,
 } from "../util/zoneUtil";
+import { OriginPayloadAction } from "./zoneReducers";
 
 export const duellistReducers = {
-  shuffle: (state: Duel, { dKey }: DuellistCoordsMap) => {
-    shuffle(state.duellists[dKey].deck);
-  },
-  endTurn: (
-    state: Duel,
-    { dKey, otherDKey, ownMonsters }: DuellistCoordsMap
-  ) => {
+  endTurn: (state: Duel) => {
     // restore ownership of any temp-converted monsters
+    const { dKey, otherDKey, ownMonsters } = state.activeTurn;
     const ownActiveEffects = getActiveEffects(state, dKey);
     const opponentActiveEffects = getActiveEffects(state, otherDKey);
     ownActiveEffects.convertedZones.forEach((zoneCoords) => {
@@ -50,23 +53,32 @@ export const duellistReducers = {
     });
 
     // reset all turn-based params
-    state.activeTurn = {
-      ...state.activeTurn,
-      dKey: otherDKey,
-      isStartOfTurn: true,
-      hasNormalSummoned: false,
-      numTributedMonsters: 0,
-    };
+    swapTurnRowCoords(state.activeTurn);
+    state.activeTurn.isStartOfTurn = true;
+    state.activeTurn.hasNormalSummoned = false;
+    state.activeTurn.numTributedMonsters = 0;
   },
-  aiNormalSummon: (state: Duel, { dKey, ownMonsters }: DuellistCoordsMap) => {
+  updateAutoEffects: (state: Duel) => {
+    // Recompute duel state based on the latest set of auto effects.
+    // This happens after any action that modifies the board state.
+    if (isStartOfEitherTurn(state)) {
+      draw(state, state.activeTurn.dKey);
+      checkAutoEffects(state);
+      state.activeTurn.isStartOfTurn = false;
+    } else {
+      checkAutoEffects(state);
+    }
+  },
+  aiNormalSummon: (state: Duel, { payload }: OriginPayloadAction) => {
     // originCoords refers to the mon in hand to summon to the field.
     // Which tributes should be used need to be calced first,
     // and then saccing/summoning takes place all in one discrete step.
     // This cuts out unnecessary re-renders/setTimeouts in UI.
-    const { activeTurn, interaction } = state;
+    setOriginTarget(state, payload);
+    const { activeTurn } = state;
+    const { dKey, ownMonsters, originCoords } = activeTurn;
     activeTurn.hasNormalSummoned = true;
-    const { originCoords } = interaction;
-    const originZone = getZone(state, originCoords!) as OccupiedMonsterZone;
+    const originZone = getOriginZone(state) as OccupiedMonsterZone;
     const originCard = getCard(originZone.id) as MonsterCard;
     const numTributesRequired = getNumTributesRequired(originCard);
 
