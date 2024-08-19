@@ -3,22 +3,16 @@ import cards from "@/assets/data/cards";
 import { Monster } from "../enums/monster";
 import { Spell, Trap } from "../enums/spellTrapRitual";
 
-// Create a lookup map at runtime to avoid doing [].find()
-// every time card data needs to be fetched (100s of times per duel).
-// Measured to be on average 6-10x faster than array lookup, and
-// will scale better as new cards are added.
-const CARD_MAP: Record<CardId, Card> = cards.reduce((map, dbCard) => {
-  return {
-    ...map,
-    [dbCard.id]: dbCard,
-  };
-}, {});
-
 export const getCard = (id: CardId): Card => {
-  const card = CARD_MAP[id];
+  const card = cards[id - 1]; // id starts at 1
   if (!card) {
-    throw new Error(`Unknown card id: ${id}`);
+    throw new Error(`No card with id: ${id}`);
+  } else if (id !== card.id) {
+    throw new Error(
+      `Wanted card with id ${id}, but got card with id ${card.id}`
+    );
   }
+
   return card;
 };
 
