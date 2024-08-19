@@ -10,7 +10,7 @@ import levelImgSrc from "@/assets/images/level.png";
 import spellImgSrc from "@/assets/images/spell.png";
 import trapImgSrc from "@/assets/images/trap.png";
 import { Monster } from "@/duel/enums/monster";
-import { getCard } from "@/duel/util/cardUtil";
+import { getCard, getExodiaCards } from "@/duel/util/cardUtil";
 import { useState } from "react";
 import {
   getAlignmentImage,
@@ -41,13 +41,7 @@ const getCardBaseImgSrc = (card: Card) => {
     img = frame_ra;
   } else if (
     (card.category === "Monster" && card.effect) ||
-    [
-      Monster.ExodiaTheForbiddenOne,
-      Monster.LeftArmOfTheForbiddenOne,
-      Monster.LeftLegOfTheForbiddenOne,
-      Monster.RightArmOfTheForbiddenOne,
-      Monster.RightLegOfTheForbiddenOne,
-    ].includes(card.id)
+    getExodiaCards().includes(card.id)
   ) {
     img = frame_effectMonster;
   } else {
